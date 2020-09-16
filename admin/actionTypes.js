@@ -1,0 +1,4 @@
+export const getLesson = {
+    REQUEST:'FETCH_GET_LESSON_REQUEST',
+    RESPONSE:'FETCH_GET_LESSON_RESPONSE'
+};

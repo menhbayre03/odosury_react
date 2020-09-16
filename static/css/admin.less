@@ -1,0 +1,90 @@
+@import "../../node_modules/antd/dist/antd.less";
+@color-1 : #1890ff;
+@color-2 : #666262;
+@color-3 : #fff4ea;
+.ellipsisText(){
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.noSelect(){
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                        supported by Chrome, Edge, Opera and Firefox */
+}
+.scrollBar(){
+  &::-webkit-scrollbar-track {
+    background: #ececec;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: fade(#777777, 50%);
+    border: 2px solid rgba(255, 255, 255, 0);
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: fade(#777777, 70%);
+  }
+}
+
+.scrollBarX(@height){
+  &::-webkit-scrollbar {
+    height: @height;
+    background: #ececec;
+    border-left: 1px solid #dedede;
+  }
+  .scrollBar()
+}
+.scrollBarY(@width){
+  &::-webkit-scrollbar {
+    width: @width;
+    background: #ececec;
+    border-left: 1px solid #dedede;
+  }
+  .scrollBar()
+}
+.login-container {
+  height: 100vh;
+  overflow-y: hidden;
+  background-color: #f8f8f8;
+}
+.login-container .form___3Tq4m {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  margin: -160px 0 0 -160px;
+  width: 320px;
+  height: 320px;
+  padding: 36px;
+  box-shadow: 0 0 100px rgba(0, 0, 0, 0.08);
+}
+.login-container .form___3Tq4m .logo___3tfTW {
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 14px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+.login-container .form___3Tq4m .logo___3tfTW img {
+  width: 150px;
+}
+.login-container .form___3Tq4m .logo___3tfTW .logo___3tfTW span {
+  vertical-align: text-bottom;
+  font-size: 16px;
+  text-transform: uppercase;
+  display: inline-block;
+  font-weight: 700;
+  color: #1890ff;
+  background-image: -webkit-gradient(linear, 37.219838% 34.532506%, 36.425669% 93.178216%, from(#29cdff), to(#0a60ff), color-stop(0.37, #148eff));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.login-container button {
+  width: 100%;
+}
