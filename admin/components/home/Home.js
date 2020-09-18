@@ -4,10 +4,9 @@ import config from "../../config";
 import moment from "moment";
 
 
-import {  } from '@ant-design/icons';
-
-import { Card } from 'antd';
 const reducer = ({ main }) => ({ main });
+import { Card } from 'antd';
+import {  } from '@ant-design/icons';
 
 
 class Home extends React.Component {

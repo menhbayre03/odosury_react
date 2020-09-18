@@ -3,35 +3,15 @@ import {BrowserRouter} from 'react-router-dom';
 import {renderRoutes} from 'react-router-config';
 import Routes from './Routes';
 import RoutesLogin from './RoutesLogin';
-import {Layout, Menu, message} from 'antd';
-const { SubMenu } = Menu;
-const { Header, Content, Footer, Sider } = Layout;
-// import Layer from '../components/Layer'
+import { message} from 'antd';
 import {connect} from "react-redux";
-// import facebookLogin from 'facebook-login';
-import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 import config from "../config";
-// const api = facebookLogin({ appId: '1025498560826970' });
-// require("../../static/cssSchool/restaurant.less");
 
 const reducer = ({ main }) => ({ main });
 
 class index extends React.Component{
     constructor(props){
         super(props);
-        // config.config({
-        //     'fbApi': api,
-        //     history: this.props.history,
-        // });
-        if(!props.main.user) {
-            let aa = window.location.pathname.split('/').filter(function (el) {
-                return (el != null && el !== '');
-            });
-
-            if(aa && aa.length > 0) {
-                window.location.assign("/");
-            }
-        }
     }
 
     componentDidMount() {

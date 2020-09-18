@@ -21,7 +21,11 @@ import {
     MenuFoldOutlined,
     HomeFilled,
     LogoutOutlined,
-    ArrowLeftOutlined
+    ArrowLeftOutlined,
+    LayoutFilled,
+    FileSearchOutlined,
+    DatabaseFilled,
+    FileTextFilled
 } from '@ant-design/icons';
 import {Layout, Menu, message, Breadcrumb, Row, Button, Tooltip } from 'antd';
 const {Header, Content, Sider, Footer} = Layout;
@@ -36,25 +40,7 @@ class index extends React.Component {
             collapsed: false,
         };
     }
-
-    componentDidMount() {
-        this.onSuccessField = config.get('emitter').addListener('success', function (text) {
-            message.success(text);
-        });
-        this.onErrorField = config.get('emitter').addListener('error', function (text) {
-            message.warning(text);
-        });
-    }
-    componentWillUnmount() {
-        this.onErrorField.remove();
-        this.onSuccessField.remove();
-    }
     toggle() {
-        this.setState({
-            collapsed: !this.state.collapsed,
-        });
-    };
-    toggleCollapsed() {
         this.setState({
             collapsed: !this.state.collapsed,
         });
@@ -66,7 +52,10 @@ class index extends React.Component {
             let a = location.pathname.split('/');
             switch(a[2]){
                 case null: res = 'home'; break;
-                case 'students': res = 'students'; break;
+                case 'bundles': res = 'bundles'; break;
+                case 'teachers': res = 'teachers'; break;
+                case 'category': res = 'category'; break;
+                case 'lessons': res = 'lessons'; break;
                 // case 'tses':
                 //     if(a[3] === 'food'){
                 //         res = 'food'
@@ -106,9 +95,24 @@ class index extends React.Component {
                                     <span>Нүүр</span>
                                 </Link>
                             </Menu.Item>
-                            <Menu.Item key="students" icon={<UserOutlined />}>
-                                <Link to="/admin/students">
-                                    <span>Сурагчид</span>
+                            <Menu.Item key="teachers" icon={<UserOutlined />}>
+                                <Link to="/admin/teachers">
+                                    <span>Багш</span>
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item key="category" icon={<DatabaseFilled />}>
+                                <Link to="/admin/category">
+                                    <span>Ангилал</span>
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item key="lessons" icon={<FileTextFilled />}>
+                                <Link to="/admin/lessons">
+                                    <span>Хичээл</span>
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item key="bundles" icon={<LayoutFilled />}>
+                                <Link to="/admin/bundles">
+                                    <span>Багц</span>
                                 </Link>
                             </Menu.Item>
                         </Menu>
@@ -119,7 +123,7 @@ class index extends React.Component {
                     <Layout className="site-layout">
                         <Header className="site-layout-background" >
                             <Tooltip placement="bottom" title='Гарах'>
-                                <a href="/logout" className='logout-button'><LogoutOutlined /></a>
+                                <a href="/api/logout" className='logout-button'><LogoutOutlined /></a>
                             </Tooltip>
                         </Header>
 
