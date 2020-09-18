@@ -1,0 +1,212 @@
+.header {
+  height: 60px;
+  background: #313356;
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .section-1 {
+      button {
+        margin-left: 30px;
+        height: 30px;
+        padding: 0 20px;
+        border-radius: 4px;
+        text-transform: uppercase;
+        font-size: 12px;
+        font-weight: 700;
+        background: #64679a;
+        border: none;
+        outline: none;
+        ion-icon {
+          font-size: 14px;
+          position: relative;
+          top: 3px;
+          right: -9px;
+        }
+      }
+      display: inline-block;
+      .logo {
+        //background: #6e27c7;
+        height: 60px;
+        padding: 10px 0;
+        img {
+          height: 40px;
+        }
+      }
+    }
+    .section-2 {
+       display: inherit;
+      .section-1-1 {
+        display: inline-block;
+        position: relative;
+        width: 100%;
+        margin-left: 15px;
+        ion-icon {
+          font-size: 18px;
+          position: absolute;
+          right: 0px;
+          top: 0;
+          color: #000;
+          padding: 6px 10px;
+          border-top-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+          margin: 0;
+          background: #e5e5e5;
+        }
+        input {
+          font-size: 14px;
+          color: #777;
+          background: #fff;
+          border: 0;
+          border-radius: 3px;
+          height: 30px;
+          outline: none;
+          padding: 0 20px 0 20px;
+        }
+        input:focus, input:active {
+          outline: none;
+        }
+        ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+          color: #a7a8a8;
+          font-family: 'Nunito', sans-serif;
+          opacity: 1; /* Firefox */
+        }
+
+        :-ms-input-placeholder { /* Internet Explorer 10-11 */
+          color: #a7a8a8;
+          font-family: 'Nunito', sans-serif;
+        }
+
+        ::-ms-input-placeholder { /* Microsoft Edge */
+          color: #a7a8a8;
+          font-family: 'Nunito', sans-serif;
+        }
+      }
+      .header-menu {
+        ul {
+          padding-left: 0;
+          margin: 0;
+          a {
+            li {
+              display: inline-block;
+            }
+          }
+        }
+      }
+      ion-icon {
+        color: #fff;
+        font-size: 31px;
+        margin-left: 25px;
+        margin-right: 10px;
+        position: relative;
+      }
+    }
+  }
+}
+.header-bottom {
+  height: 30px;
+  background: #272840;
+  .section-1 {
+    display: inline-block;
+    ul {
+      padding-left: 0;
+      margin-bottom: 0;
+      li {
+        display: inline-block;
+        height: 30px;
+        padding: 1px 15px;
+        a {
+          color: #fff;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+  .section-2 {
+    float: right;
+    display: inline-block;
+    ul {
+      margin-top: 2px;
+      margin-bottom: 0;
+      li {
+        height: 15px;
+        padding: 0 15px;
+        display: inline-block;
+        border-right: 1px solid #595a77;
+        line-height: 13px;
+        a {
+          color: #fff;
+          font-size: 12px;
+        }
+      }
+      li:last-child {
+        border-right: 0;
+      }
+    }
+  }
+}
+.section-bundle {
+  margin-top: 60px;
+  h3 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 40px;
+  }
+  .bundle-item {
+    margin-bottom: 40px;
+    height: 72px;
+    box-shadow: -7.5pt 10px 14px -0.09375in rgba(25, 42, 70, 0.23);
+    -webkit-border-radius: 0.09375in;
+    -moz-border-radius: 0.09375in;
+    border-radius: 0.09375in;
+    background-color: #fff;
+    position: relative;
+    img {
+      box-shadow: 0 2.25pt 8.25pt -0.02083333in rgba(0, 0, 0, 0.33);
+      margin-top: -0.6pc;
+      height: 4.275pc;
+      margin-left: 0.6pc;
+      position: absolute;
+      border-radius: 10px;
+    }
+    .bundle-detail {
+      display: inline-block;
+      margin-left: 80px;
+      h4 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-top: 12px;
+      }
+      p {
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: 600;
+        color: #757575;
+      }
+    }
+  }
+}
+.home-hero {
+  height: 480px;
+  background-size: cover;
+  background-position: center center;
+  .hero-inner {
+    padding-top: 110px;
+    h1 {
+      color: #3e416d;
+      font-weight: 700;
+    }
+    h4 {
+      color: #3e416d;
+      font-weight: 600;
+      font-size: 26px;
+    }
+    .btn {
+      color: white;
+      background-color: #3e416d;
+      padding: 5px 20px;
+      border-radius: 5px;
+      font-weight: 700;
+    }
+  }
+}
