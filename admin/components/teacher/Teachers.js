@@ -187,7 +187,7 @@ class Teachers extends React.Component {
                 bordered={true}
                 loading={status}
                 extra={
-                    <Button type="primary" icon={<PlusOutlined />} onClick={this.openModal.bind(this)} >
+                    <Button type="primary" icon={<PlusOutlined />} onClick={this.openModal.bind(this, {})} >
                         Багш
                     </Button>
                 }

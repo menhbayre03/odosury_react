@@ -133,7 +133,7 @@ class Category extends React.Component {
                 bordered={true}
                 loading={false}
                 extra={
-                    <Button type="primary" icon={<PlusOutlined />} onClick={this.openModal.bind(this)} >
+                    <Button type="primary" icon={<PlusOutlined />} onClick={this.openModal.bind(this, {})} >
                         Ангилал
                     </Button>
                 }

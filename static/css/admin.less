@@ -142,58 +142,80 @@ body{
   }
 }
 .selected-member{
-  padding: 10px 10px 10px 0;
+  padding: 10px 10px 10px 10px;
+  text-align: left;
+  height: 100px;
+  border: 1px dashed #e9e9e9;
+  background-color: #fafafa;
+  margin-top: 10px;
+  .inline_block{
+    display: inline-block;
+  }
   img{
     width: 80px;
+    margin-right: 10px;
   }
-  .adf{
-    padding: 10px 0;
+  .ner{
+    //padding: 10px 0;
     font-weight: 600;
   }
-}
-
-.orts-outer{
-  border: 1px solid #d9d9d9;
-  width: 100%;
-  min-height: 34px;
-  max-height: 200px;
-  padding: 0 10px 0 0;
-  overflow: auto;
-  white-space: nowrap;
-  margin-bottom: 10px;
-  .scrollBarY(5px);
-  .scrollBarX(5px);
-  .orts-inner{
-    padding: 5px 0 5px 20px;
-    position: relative;
-    background-color: #ffffff;
-    .action{
-      position: absolute;
-      top: 5px;
-      left: 2px;
-      color: #c64646;
-      display: none;
-    }
-  }
-  .orts-inner:hover{
-    opacity: 0.5;
-    .action{
-      display: inline-block;
-    }
+  .error{
+    color: red;
   }
 }
 
-.steps-content {
-  margin-top: 16px;
-  //border: 1px dashed #e9e9e9;
-  border-radius: 2px;
-  //background-color: #fafafa;
-  min-height: 200px;
-  text-align: center;
-  padding-top: 80px;
-}
 
-.steps-action {
-  margin-top: 24px;
-  text-align: right;
+
+.lesson-edit{
+  .ant-form-item{
+    margin-bottom: 40px;
+  }
+  .ant-form-item-label{
+    width:174px;
+    text-align: left;
+  }
+  .orts-outer{
+    border: 1px solid #d9d9d9;
+    width: 100%;
+    min-height: 34px;
+    max-height: 200px;
+    padding: 0 10px 0 0;
+    overflow: auto;
+    white-space: nowrap;
+    margin-bottom: 10px;
+    text-align: left;
+    .scrollBarY(5px);
+    .scrollBarX(5px);
+    .orts-inner{
+      padding: 5px 0 5px 20px;
+      position: relative;
+      background-color: #ffffff;
+      .action{
+        position: absolute;
+        top: 5px;
+        left: 2px;
+        color: #c64646;
+        display: none;
+      }
+    }
+    .orts-inner:hover{
+      opacity: 0.5;
+      .action{
+        display: inline-block;
+      }
+    }
+  }
+  .steps-content {
+    margin-top: 20px;
+    border: 1px dashed #e9e9e9;
+    border-radius: 2px;
+    //background-color: #fafafa;
+    min-height: 200px;
+    padding-top: 50px;
+    text-align: left;
+  }
+  .steps-action {
+    margin-top: 20px;
+    text-align: right;
+  }
 }

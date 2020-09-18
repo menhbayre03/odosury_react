@@ -8,11 +8,11 @@ import LessonEdit from "./LessonEdit";
 
 const reducer = ({ main, lesson }) => ({ main, lesson });
 import { Card, Button, Avatar, Table, Modal, Form, Input, Select, Popconfirm, Spin, Row, Col, TreeSelect, InputNumber } from 'antd';
-import { EditOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, SearchOutlined, CloseCircleFilled } from '@ant-design/icons'
 const { Meta } = Card;
 const { TextArea } = Input;
 const { Option } = Select;
 const { TreeNode } = TreeSelect;
+import { EditOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, SearchOutlined, CloseCircleFilled, CaretLeftFilled, CloseOutlined } from '@ant-design/icons'
 
 class Lessons extends React.Component {
     constructor(props) {
@@ -34,7 +34,7 @@ class Lessons extends React.Component {
         this.props.dispatch(actions.getLesson({pageNum: this.state.pageNum, pageSize: this.state.pageSize}));
     }
     openModal(data) {
-        this.setState({ search_user: '', selectedMember: {}, foodRequirementsArray: [], requirement: '', learn_check_listArray: [], learn_check_list: '', });
+        this.setState({ search_user: '', selectedMember: {}, foodRequirementsArray: [], requirement: '', learn_check_listArray: [], learn_check_list: '' });
         this.props.dispatch(actions.openLessonModal(data));
     }
     closeModal() {
@@ -229,11 +229,11 @@ class Lessons extends React.Component {
         //         render: (text, record) => (
         //             <div style={{width: 240}}>
         //
-        //                 <Button size={"small"} style={{marginRight: 10}} key={record._id+'edit'} loading={!!record.loading}
-        //                         onClick = {this.openModal.bind(this, record._id, record.first_name, record.last_name, record.bio, record.email, record.phone, record.avatar, record.status )}
-        //                 >
-        //                     <EditFilled /> Засах
-        //                 </Button>
+                        {/*<Button size={"small"} style={{marginRight: 10}} key={record._id+'edit'} loading={!!record.loading}*/}
+                        {/*        onClick = {this.openModal.bind(this, record._id, record.first_name, record.last_name, record.bio, record.email, record.phone, record.avatar, record.status )}*/}
+                        {/*>*/}
+                        {/*    <EditFilled /> Засах*/}
+                        {/*</Button>*/}
         //                 {/*{record.status !== 'active'?*/}
         //                 {/*    <Button size={"small"} type={"primary"} style={{marginRight: 10}}*/}
         //                 {/*            onClick = {this.changeCategoryStatus.bind(this, record._id, 'active')}*/}
@@ -270,9 +270,11 @@ class Lessons extends React.Component {
                 loading={status}
                 extra={
                     openModal?
-                        null
+                        <Button type="default" key='backButton' icon={<CloseOutlined />} onClick={this.closeModal.bind(this)} >
+                            Болих
+                        </Button>
                         :
-                        <Button type="primary" icon={<PlusOutlined />} onClick={this.openModal.bind(this)} >
+                        <Button type="primary" key='forwardButton' icon={<PlusOutlined />} onClick={this.openModal.bind(this, {})} >
                             Хичээл
                         </Button>
                 }
