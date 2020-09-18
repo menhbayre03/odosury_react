@@ -16,7 +16,6 @@ class Home extends Component {
         return (
             <React.Fragment>
                 <div className="main-main">
-                    <Header/>
                     {renderRoutes(routes)}
                 </div>
             </React.Fragment>

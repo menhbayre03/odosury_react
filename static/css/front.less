@@ -1,4 +1,57 @@
 
+.ellipsisText(){
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.scrollBar(){
+  &::-webkit-scrollbar-track {
+    background: #ececec;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: fade(#777777, 50%);
+    border: 2px solid rgba(255, 255, 255, 0);
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: fade(#777777, 70%);
+  }
+}
+
+.scrollBarX(@width){
+  &::-webkit-scrollbar {
+    width: @width;
+    background: #ececec;
+    border-left: 1px solid #dedede;
+  }
+  .scrollBar()
+}
+.scrollBarY(@height){
+  &::-webkit-scrollbar {
+    height: @height;
+    background: #ececec;
+    border-left: 1px solid #dedede;
+  }
+  .scrollBar()
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active  {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+html {
+  overflow: auto;
+}
+body {
+  font-family: 'Nunito', sans-serif !important;
+  .scrollBarX(8px);
+  background:#edeff0;
+}
+ul {
+  list-style: none;
+}
 @import "mega";
 @import "batja";
 @import "daidi";
