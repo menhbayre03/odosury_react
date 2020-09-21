@@ -1,6 +1,9 @@
 import index from "../components/index";
 import Home from "../components/home/Home";
-import Students from "../components/students/Students";
+import Teachers from "../components/teacher/Teachers";
+import Category from "../components/category/Category";
+import Lessons from "../components/lesson/Lessons";
+import Bundles from "../components/bundle/Bundles";
 import NotFound from "../components/NotFound";
 export default [
     {
@@ -12,8 +15,23 @@ export default [
                 exact: true
             },
             {
-                component: Students,
-                path: '/admin/students',
+                component: Teachers,
+                path: '/admin/teachers',
+                exact: true
+            },
+            {
+                component: Category,
+                path: '/admin/category',
+                exact: true
+            },
+            {
+                component: Lessons,
+                path: '/admin/Lessons',
+                exact: true
+            },
+            {
+                component: Bundles,
+                path: '/admin/bundles',
                 exact: true
             },
             {
