@@ -79,6 +79,7 @@
     "react-textarea-autosize": "^7.1.2",
     "react-to-print": "^2.10.0",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "swiper": "^6.2.0"
   }
 }
