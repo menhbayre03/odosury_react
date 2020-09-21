@@ -24,23 +24,30 @@ class LessonEdit extends React.Component {
             pageSize: 50,
             search: '',
             search_user: '',
-            selectedMember: {},
-
-            foodRequirementsArray: [],
+            selectedMember: props.lesson.lesson.teacher,
+            requirementsArray: (props.lesson.lesson.requirements || []),
             requirement: '',
-            learn_check_listArray: [],
+            learn_check_listArray: (props.lesson.lesson.learn_check_list || []),
             learn_check_list: '',
             current: 0,
-
-
             //upload
             loading: false,
         };
     }
-    componentDidMount() {
-        // this.props.dispatch(actions.getLesson({pageNum: this.state.pageNum, pageSize: this.state.pageSize}));
-    }
     componentWillUnmount() {
+        this.setState({
+            pageNum: 0,
+            pageSize: 50,
+            search: '',
+            search_user: '',
+            selectedMember: {},
+            requirementsArray: [],
+            requirement: '',
+            learn_check_listArray: [],
+            learn_check_list: '',
+            current: 0,
+            loading: false,
+        });
         this.props.dispatch(actions.closeLessonModal());
     }
     openModalLevel(type, idx, data = {}) {
@@ -65,68 +72,6 @@ class LessonEdit extends React.Component {
         }
         this.props.dispatch(actions.lessonAddLevel());
     }
-    // submitTeacher() {
-    //     const {teacher:{teacher}} = this.props;
-    //     let emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    //     const phoneRegex = /^[0-9]{8}$/;
-    //     const nameRegex = /^[а-яА-Яa-zA-z үҮөӨёЁ-]*$/;
-    //     if(!teacher.last_name || (teacher.last_name && teacher.last_name.trim() === '' )){
-    //         return config.get('emitter').emit('warning', ("Овог оруулна уу!"));
-    //     } else if((!nameRegex.test(teacher.last_name))){
-    //         return config.get('emitter').emit('warning', ("Овог бичиглэл буруу байна!"));
-    //     }
-    //     if(!teacher.first_name || (teacher.first_name && teacher.first_name.trim() === '' )){
-    //         return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
-    //     } else if((!nameRegex.test(teacher.first_name))){
-    //         return config.get('emitter').emit('warning', ("Нэр бичиглэл буруу байна!"));
-    //     }
-    //     if(!teacher.email){
-    //         return config.get('emitter').emit('warning', ("Имэйл оруулна уу!"));
-    //     } else if((!emailRegex.test(teacher.email))){
-    //         return config.get('emitter').emit('warning', ("Имэйл бичиглэл буруу байна!"));
-    //     }
-    //     if(!teacher.phone){
-    //         return config.get('emitter').emit('warning', ("Утас оруулна уу!"));
-    //     } else if((!phoneRegex.test(teacher.phone))){
-    //         return config.get('emitter').emit('warning', ("Утас бичиглэл буруу байна!"));
-    //     }
-    //     let cc = {
-    //         _id: teacher._id,
-    //         first_name: teacher.first_name,
-    //         last_name: teacher.last_name,
-    //         bio: teacher.bio,
-    //         email: teacher.email,
-    //         phone: teacher.phone,
-    //         avatar: teacher.avatar,
-    //         status: teacher.status,
-    //     };
-    //     console.log('cc');
-    //     console.log(cc);
-    //     this.props.dispatch(actions.submitTeacher(cc));
-    // }
-    // tableOnChange(data){
-    //     const {dispatch } = this.props;
-    //     this.setState({pageNum : data.current - 1});
-    //     let cc = {
-    //         pageNum:data.current - 1,
-    //         pageSize:this.state.pageSize,
-    //         search: this.state.search
-    //     };
-    //     this.props.dispatch(actions.getTeachers(cc));
-    // }
-    // searchTeacher(){
-    //     const {dispatch } = this.props;
-    //     this.setState({pageNum: 0});
-    //     let cc = {
-    //         pageNum:0,
-    //         pageSize:this.state.pageSize,
-    //         search: this.state.search
-    //     };
-    //     this.props.dispatch(actions.getTeachers(cc));
-    // }
-    // delete(id){
-    //     this.props.dispatch(actions.deleteTeachers({_id:id, pageSize: this.state.pageSize, pageNum: this.state.pageNum}));
-    // }
     searchTeacher(event, value){
         const {dispatch} = this.props;
         function submitSearch(aa){
@@ -150,17 +95,14 @@ class LessonEdit extends React.Component {
         this.setState({selectedMember: ((searchTeachersResult || []).filter(run => run._id.toString() === item.toString())[0] || {}) });
     };
     onChangeHandle2(name, value) {
-        // let val = (value || '').split('-');
-        // let result = val[val.length - 1];
         this.props.dispatch(actions.lessonChangeHandler({name:name, value: value}));
     }
-
     removeSingleOrts(index, name){
         if(name === 'requirement'){
             let hold = [];
-            if(this.state.foodRequirementsArray && this.state.foodRequirementsArray.length>0){
-                hold = this.state.foodRequirementsArray.filter((run, idx) => idx !== index);
-                this.setState({foodRequirementsArray: hold})
+            if(this.state.requirementsArray && this.state.requirementsArray.length>0){
+                hold = this.state.requirementsArray.filter((run, idx) => idx !== index);
+                this.setState({requirementsArray: hold})
             }
         }
         if(name === 'learn_check_list'){
@@ -176,9 +118,9 @@ class LessonEdit extends React.Component {
             const {requirement} = this.state;
             let s = requirement.trim();
             if(s && s !== ''){
-                let hold = this.state.foodRequirementsArray;
+                let hold = this.state.requirementsArray;
                 hold.push(s);
-                this.setState({foodRequirementsArray: hold, requirement:''});
+                this.setState({requirementsArray: hold, requirement:''});
             }
         }
         if(name === 'learn_check_list'){
@@ -191,7 +133,6 @@ class LessonEdit extends React.Component {
             }
         }
     }
-
     changeState(e, value){
         if (typeof e === 'string' || e instanceof String) {
             this.setState({ [e]: value});
@@ -202,51 +143,60 @@ class LessonEdit extends React.Component {
     next() {
         const {lesson:{ lesson }} = this.props;
         const { selectedMember } = this.state;
-        // if(this.state.current === 0){
-        //     if(!lesson.title || (lesson.title && lesson.title.trim() === '' )){
-        //         return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
-        //     }
-        //     if(!lesson.description || (lesson.description && lesson.description.trim() === '' )){
-        //         return config.get('emitter').emit('warning', ("Танилцуулга оруулна уу!"));
-        //     }
-        //     if(!lesson.intro_desc || (lesson.intro_desc && lesson.intro_desc.trim() === '' )){
-        //         return config.get('emitter').emit('warning', ("Дэлгэрэнгүй танилцуулга оруулна уу!"));
-        //     }
-        // }
-        // if(this.state.current === 1){
-        //     if(!selectedMember || !selectedMember._id){
-        //         return config.get('emitter').emit('warning', ("Багш сонгоно уу!"));
-        //     }
-        //     if(!lesson.category || (lesson.category && lesson.category.trim() === '' )){
-        //         return config.get('emitter').emit('warning', ("Ангилал сонгоно уу!"));
-        //     }
-        //     if(!lesson.price || (lesson.price && lesson.price === 0 )){
-        //         return config.get('emitter').emit('warning', ("Үнэ оруулна уу!"));
-        //     }
-        //     if(lesson.sale && lesson.sale > lesson.price){
-        //         return config.get('emitter').emit('warning', ("Хямдрал үнэ-ээс их байж болохгүй!"));
-        //     }
-        // }
-        // if(this.state.current === 2){
-        //     if(!this.state.foodRequirementsArray || (this.state.foodRequirementsArray && this.state.foodRequirementsArray.length<1 )){
-        //         return config.get('emitter').emit('warning', ("Шаардлагатай зүйлс оруулна уу!"));
-        //     }
-        //     if(!this.state.learn_check_listArray || (this.state.learn_check_listArray && this.state.learn_check_listArray.length<1 )){
-        //         return config.get('emitter').emit('warning', ("Сурах зүйлс оруулна уу!"));
-        //     }
-        // }
+        if(this.state.current === 0){
+            if(!lesson.title || (lesson.title && lesson.title.trim() === '' )){
+                return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
+            }
+            if(!lesson.description || (lesson.description && lesson.description.trim() === '' )){
+                return config.get('emitter').emit('warning', ("Танилцуулга оруулна уу!"));
+            }
+            if(!lesson.intro_desc || (lesson.intro_desc && lesson.intro_desc.trim() === '' )){
+                return config.get('emitter').emit('warning', ("Дэлгэрэнгүй танилцуулга оруулна уу!"));
+            }
+        }
+        if(this.state.current === 1){
+            if(!selectedMember || !selectedMember._id){
+                return config.get('emitter').emit('warning', ("Багш сонгоно уу!"));
+            }
+            if(!lesson.category || (lesson.category && lesson.category.trim() === '' )){
+                return config.get('emitter').emit('warning', ("Ангилал сонгоно уу!"));
+            }
+            if(!lesson.price || (lesson.price && lesson.price === 0 )){
+                return config.get('emitter').emit('warning', ("Үнэ оруулна уу!"));
+            }
+            if(lesson.sale && lesson.sale > lesson.price){
+                return config.get('emitter').emit('warning', ("Хямдрал үнэ-ээс их байж болохгүй!"));
+            }
+        }
+        if(this.state.current === 2){
+            if(!this.state.requirementsArray || (this.state.requirementsArray && this.state.requirementsArray.length<1 )){
+                return config.get('emitter').emit('warning', ("Шаардлагатай зүйлс оруулна уу!"));
+            }
+            if(!this.state.learn_check_listArray || (this.state.learn_check_listArray && this.state.learn_check_listArray.length<1 )){
+                return config.get('emitter').emit('warning', ("Сурах зүйлс оруулна уу!"));
+            }
+        }
         const current = this.state.current + 1;
         this.setState({ current });
 
     }
     submitLesson(){
-        const {lesson:{lessonImage, lessonVideo}} = this.props;
+        const {lesson:{lesson, lessonImage, lessonVideo}} = this.props;
         if(!lessonImage || !lessonImage.path || lessonImage.path === '' || !lessonImage.type || lessonImage.type !== 'image' ){
             return config.get('emitter').emit('warning', ("Зураг оруулна уу!"));
         }
         if(!lessonVideo || !lessonVideo.path || lessonVideo.path === '' || !lessonVideo.type || lessonVideo.type !== 'video' ){
             return config.get('emitter').emit('warning', ("Бичлэг оруулна уу!"));
         }
+        let cc = {
+            ...lesson,
+            selectedMember: this.state.selectedMember,
+            lessonImage: lessonImage,
+            lessonVideo: lessonVideo,
+            requirementsArray: this.state.requirementsArray,
+            learn_check_listArray: this.state.learn_check_listArray
+        };
+        this.props.dispatch(actions.submitLesson(cc));
     }
     prev() {
         const current = this.state.current - 1;
@@ -301,85 +251,6 @@ class LessonEdit extends React.Component {
     }
     render() {
         let { main:{user}, lesson:{imageUploadLoading, lessonImage, videoUploadLoading, lessonVideo, status, openModal, lesson, lessons, submitLessonLoader, all, searchTeachersResult, searchTeacherLoader, categories, level, openModalLevel} } = this.props;
-        // let pagination = {
-        //     total : all,
-        //     current: this.state.pageNum + 1,
-        //     pageSize : this.state.pageSize,
-        //     position: 'bottom',
-        //     showSizeChanger: false
-        // };
-        // const columns = [
-        //     {
-        //         key: 'num',
-        //         title: '№',
-        //         render: (text, record, idx) => (
-        //             (this.state.pageNum * this.state.pageNum) + idx + 1
-        //         ),
-        //     },
-        //     {
-        //         key: 'last_name',
-        //         title: 'Овог',
-        //         render: (text, record) => (
-        //             record.last_name ? record.last_name : '-'
-        //         ),
-        //     },
-        //     {
-        //         key: 'first_name',
-        //         title: 'Нэр',
-        //         render: (text, record) => (
-        //             record.first_name ? record.first_name : '-'
-        //         ),
-        //     },
-        //     {
-        //         key: 'email',
-        //         title: 'Имэйл',
-        //         render: (text, record) => (
-        //             record.email ? record.email : '-'
-        //         ),
-        //     },
-        //     {
-        //         key: 'phone',
-        //         title: 'Утас',
-        //         render: (text, record) => (
-        //             record.phone ? record.phone : '-'
-        //         ),
-        //     },
-        //     {
-        //         title: 'Үйлдэл',
-        //         key: 'action',
-        //         render: (text, record) => (
-        //             <div style={{width: 240}}>
-        //
-        //                 <Button size={"small"} style={{marginRight: 10}} key={record._id+'edit'} loading={!!record.loading}
-        //                         onClick = {this.openModal.bind(this, record._id, record.first_name, record.last_name, record.bio, record.email, record.phone, record.avatar, record.status )}
-        //                 >
-        //                     <EditFilled /> Засах
-        //                 </Button>
-        //                 {/*{record.status !== 'active'?*/}
-        //                 {/*    <Button size={"small"} type={"primary"} style={{marginRight: 10}}*/}
-        //                 {/*            onClick = {this.changeCategoryStatus.bind(this, record._id, 'active')}*/}
-        //                 {/*    >*/}
-        //                 {/*        <EditFilled /> Идэвхжүүлэх*/}
-        //                 {/*    </Button>*/}
-        //                 {/*    :*/}
-        //                 {/*    null*/}
-        //                 {/*}*/}
-        //                 <Popconfirm
-        //                     title={`Та устгах гэж байна!`}
-        //                     onConfirm={this.delete.bind(this, record._id)}
-        //                     okText="Усгах"
-        //                     placement="left"
-        //                     cancelText="Болих"
-        //                 >
-        //                     <Button type={"primary"} key={record._id} danger size={"small"} loading={!!record.loading}>
-        //                         <DeleteFilled/> Устгах
-        //                     </Button>
-        //                 </Popconfirm>
-        //             </div>
-        //         ),
-        //         width: 240
-        //     },
-        // ];
         let avatar = '/images/default-avatar.png';
         if (this.state.selectedMember && this.state.selectedMember.avatar && this.state.selectedMember.avatar !== '') {
             avatar = this.state.selectedMember.avatar.indexOf('http') > -1 ? this.state.selectedMember.avatar : `https://amjilt.com${ this.state.selectedMember.avatar}`;
@@ -440,15 +311,11 @@ class LessonEdit extends React.Component {
         const uploadButton = (
             <div style={{fontSize: 24}}>
                 {imageUploadLoading ? <LoadingOutlined /> : <PlusOutlined />}
-                {/*{loading ? <LoadingOutlined /> : <PlusOutlined />}*/}
-                {/*<div style={{ marginTop: 8 }}>Upload</div>*/}
             </div>
         );
         const uploadButtonVideo = (
             <div style={{fontSize: 24}}>
                 {videoUploadLoading ? <LoadingOutlined /> : <PlusOutlined />}
-                {/*{loading ? <LoadingOutlined /> : <PlusOutlined />}*/}
-                {/*<div style={{ marginTop: 8 }}>Upload</div>*/}
             </div>
         );
         return (
@@ -460,17 +327,17 @@ class LessonEdit extends React.Component {
                 </Steps>
                 <div className="steps-action">
                     {current > 0 && (
-                        <Button style={{ margin: '0 8px' }} onClick={this.prev.bind(this)}>
+                        <Button style={{ margin: '0 8px' }} loading={submitLessonLoader} onClick={this.prev.bind(this)}>
                             <CaretLeftFilled /> Өмнөх
                         </Button>
                     )}
                     {current < steps.length - 1 && (
-                        <Button type="primary" onClick={this.next.bind(this)}>
+                        <Button type="primary" loading={submitLessonLoader} onClick={this.next.bind(this)}>
                             <CaretRightFilled /> Дараах
                         </Button>
                     )}
                     {current === steps.length - 1 && (
-                        <Button type="primary" onClick={this.submitLesson.bind(this)}>
+                        <Button type="primary" loading={submitLessonLoader} onClick={this.submitLesson.bind(this)}>
                             <CheckCircleFilled /> Хадгалах
                         </Button>
                     )}
@@ -481,7 +348,7 @@ class LessonEdit extends React.Component {
                                     <Col md={12}>
                                         {
                                             steps[current].content === 'description-content' ?
-                                                <React.Fragment>
+                                                <div className='description-content'>
                                                     <Form.Item
                                                         label='Нэр'
                                                         // labelCol={{span: 5}}
@@ -492,11 +359,7 @@ class LessonEdit extends React.Component {
                                                     </Form.Item>
                                                     <Form.Item
                                                         label='Танилцуулга'
-                                                        // labelCol={{span: 5}}
-                                                        // style={{marginBottom: 10}}
-                                                        // help="Богино танилцуулга"
                                                     >
-                                                        {/*<Input size="middle" maxLength={60} value={lesson.description? lesson.description : ''} name='description' onChange={this.onChangeHandler.bind(this)} />*/}
                                                         <TextArea size="middle" rows={2}
                                                                   value={lesson.description ? lesson.description : ''}
                                                                   name='description'
@@ -504,16 +367,13 @@ class LessonEdit extends React.Component {
                                                     </Form.Item>
                                                     <Form.Item
                                                         label='Дэлгэрэнгүй танилцуулга'
-                                                        // labelCol={{span: 5}}
-                                                        // style={{marginBottom: 10}}
-                                                        // help="Дэлгэрэнгүй танилцуулга"
                                                     >
                                                         <TextArea size="middle" rows={4}
                                                                   value={lesson.intro_desc ? lesson.intro_desc : ''}
                                                                   name='intro_desc'
                                                                   onChange={this.onChangeHandler.bind(this)}/>
                                                     </Form.Item>
-                                                </React.Fragment>
+                                                </div>
                                                 :
                                                 null
                                         }
@@ -522,9 +382,6 @@ class LessonEdit extends React.Component {
                                                 <div className='settings-content'>
                                                     <Form.Item
                                                         label='Багш'
-                                                        // labelCol={{span: 5}}
-                                                        // help="Овог нэр, имэйл"
-                                                        // style={{marginBottom: 10}}
                                                     >
                                                         <Select
                                                             size="middle"
@@ -544,7 +401,6 @@ class LessonEdit extends React.Component {
                                                                 searchTeachersResult && searchTeachersResult.length > 0 ? (
                                                                     searchTeachersResult.map(item => (
                                                                         <Select.Option
-                                                                            // onClick={this.chooseMember.bind(this, item)}
                                                                             key={item._id}
                                                                             value={item._id}> {`${item.last_name} ${item.first_name}`} </Select.Option>
                                                                     ))
@@ -579,7 +435,6 @@ class LessonEdit extends React.Component {
                                                     </Form.Item>
                                                     <Form.Item
                                                         label='Ангилал'
-                                                        // labelCol={{span: 5}}
                                                     >
                                                         <TreeSelect
                                                             size="middle"
@@ -593,7 +448,7 @@ class LessonEdit extends React.Component {
                                                         >
                                                             {categories && categories.length > 0 ?
                                                                 categories.map((run, idx) =>
-                                                                    <TreeNode value={`parent-${run._id}`}
+                                                                    <TreeNode value={`${run._id}`}
                                                                               title={run.title}>
                                                                         {run.child && run.child.length > 0 ?
                                                                             run.child.map(innerRun =>
@@ -613,8 +468,6 @@ class LessonEdit extends React.Component {
                                                     </Form.Item>
                                                     <Form.Item
                                                         label='Үнэ'
-                                                        // labelCol={{span: 5}}
-                                                        // help=""
                                                     >
                                                         <InputNumber
                                                             size="middle"
@@ -629,8 +482,6 @@ class LessonEdit extends React.Component {
                                                     </Form.Item>
                                                     <Form.Item
                                                         label='Хямдрал'
-                                                        // labelCol={{span: 5}}
-                                                        // help=""
                                                     >
                                                         <InputNumber
                                                             size="middle"
@@ -652,14 +503,11 @@ class LessonEdit extends React.Component {
                                                 <div className='requirement-content'>
                                                     <Form.Item
                                                         label='Шаардлагатай зүйлс'
-                                                        // labelCol={{span: 5}}
-                                                        // style={{marginBottom: 10}}
-                                                        // help='Хичээлийг үзэхэд шаардлагатай зүйлс'
                                                     >
                                                         <div>
                                                             <div className='orts-outer'>
-                                                                {this.state.foodRequirementsArray && this.state.foodRequirementsArray.length > 0 ?
-                                                                    this.state.foodRequirementsArray.map((run, idx) =>
+                                                                {this.state.requirementsArray && this.state.requirementsArray.length > 0 ?
+                                                                    this.state.requirementsArray.map((run, idx) =>
                                                                         <div className='orts-inner' key={idx + 'afro'}>
                                                                             {`${idx + 1}. ${run}`}
                                                                             <div className='action'
@@ -691,9 +539,6 @@ class LessonEdit extends React.Component {
                                                     </Form.Item>
                                                     <Form.Item
                                                         label='Сурах зүйлс'
-                                                        // help='Энэ хичээлээс юу юу сурах вэ?'
-                                                        // style={{marginBottom: 10}}
-                                                        // labelCol={{span: 5}}
                                                     >
                                                         <div>
                                                             <div className='orts-outer'>
@@ -737,9 +582,6 @@ class LessonEdit extends React.Component {
                                                 <div className='content-content'>
                                                     <Form.Item
                                                         label='Зураг'
-                                                        // labelCol={{span: 5}}
-                                                        // style={{marginBottom: 10}}
-                                                        // help='Хичээлийг үзэхэд шаардлагатай зүйлс'
                                                     >
                                                         <Upload
                                                             name="avatar"
@@ -755,9 +597,6 @@ class LessonEdit extends React.Component {
                                                     </Form.Item>
                                                     <Form.Item
                                                         label='Бичлэг'
-                                                        // labelCol={{span: 5}}
-                                                        // style={{marginBottom: 10}}
-                                                        // help='Хичээлийг үзэхэд шаардлагатай зүйлс'
                                                     >
                                                         <Upload
                                                             name="avatar"
@@ -782,17 +621,17 @@ class LessonEdit extends React.Component {
                 </div>
                 <div className="steps-action">
                     {current > 0 && (
-                        <Button style={{ margin: '0 8px' }} onClick={this.prev.bind(this)}>
+                        <Button style={{ margin: '0 8px' }} loading={submitLessonLoader} onClick={this.prev.bind(this)}>
                             <CaretLeftFilled /> Өмнөх
                         </Button>
                     )}
                     {current < steps.length - 1 && (
-                        <Button type="primary" onClick={this.next.bind(this)}>
+                        <Button type="primary" loading={submitLessonLoader} onClick={this.next.bind(this)}>
                             <CaretRightFilled /> Дараах
                         </Button>
                     )}
                     {current === steps.length - 1 && (
-                        <Button type="primary" onClick={this.submitLesson.bind(this)}>
+                        <Button type="primary" loading={submitLessonLoader} onClick={this.submitLesson.bind(this)}>
                             <CheckCircleFilled /> Хадгалах
                         </Button>
                     )}
@@ -809,7 +648,6 @@ class LessonEdit extends React.Component {
                     >
                         <Form.Item
                             label='Нэр'
-                            // labelCol={{span: 5}}
                         >
                             <Input autoFocus={true} size="middle" maxLength={60} value={level.title? level.title : ''} name='title' onChange={this.onChangeHandlerLevel.bind(this)} />
                         </Form.Item>
