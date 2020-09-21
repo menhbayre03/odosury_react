@@ -31,6 +31,12 @@ export function openLessonModalLevel(data){
         json: data
     }
 }
+export function orderLevels(data){
+    return {
+        type: constants.orderLevels.REQUEST,
+        json: data
+    }
+}
 export function closeLessonModalLevel(){
     return {
         type: constants.closeLessonModalLevel.REQUEST
@@ -56,4 +62,12 @@ export function deleteLesson(data) {
 export function searchTeacher(data) {
     let url = `/admin/api/searchTeacher`;
     return networkActions.requestGet(constants.searchTeacher,url, data);
+}
+export function uploadLessonImage(data, type, id) {
+    let url = `/admin/api/${type}/upload/${id}`;
+    return networkActions.requestUploadPostDirect(constants.uploadLessonImage, url,  {}, null, data );
+}
+export function uploadLessonVideo(data, type, id) {
+    let url = `/admin/api/${type}/upload/${id}`;
+    return networkActions.requestUploadPostDirect(constants.uploadLessonVideo, url,  {}, null, data );
 }

@@ -10,6 +10,9 @@ import {
     closeLessonModalLevel,
     lessonChangeHandlerLevel,
     lessonAddLevel,
+    uploadLessonImage,
+    uploadLessonVideo,
+    orderLevels,
 } from "../actionTypes";
 const initialState = {
     status: 1,
@@ -25,14 +28,62 @@ const initialState = {
     openModalLevel: false,
     levelType: '',
     levelIdx: null,
+    lessonImage: {},
+    imageUploadLoading: false,
+    lessonVideo: {},
+    videoUploadLoading: false
 };
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case uploadLessonVideo.REQUEST:
+            return {
+                ...state,
+                videoUploadLoading: true,
+                lessonVideo:{}
+            };
+        case uploadLessonVideo.RESPONSE:
+            if(action.json.success){
+                return {
+                    ...state,
+                    videoUploadLoading: false,
+                    lessonVideo: action.json.result
+                };
+            } else {
+                return {
+                    ...state,
+                    videoUploadLoading: false
+                };
+            }
+        case uploadLessonImage.REQUEST:
+            return {
+                ...state,
+                imageUploadLoading: true,
+                lessonImage:{}
+            };
+        case uploadLessonImage.RESPONSE:
+            if(action.json.success){
+                return {
+                    ...state,
+                    imageUploadLoading: false,
+                    lessonImage: action.json.image
+                };
+            } else {
+                return {
+                    ...state,
+                    imageUploadLoading: false
+                };
+            }
+        case orderLevels.REQUEST:
+            return {
+                ...state,
+                lesson: {
+                    ...state.lesson,
+                    levels: action.json
+                }
+            };
         case lessonAddLevel.REQUEST:
             let holdLesson = state.lesson;
-            console.log('state.level');
-            console.log(state.level);
             if(state.levelType === 'new'){
                 if(holdLesson && holdLesson.levels && holdLesson.levels.length>0){
                     holdLesson.levels.push(state.level);
@@ -56,8 +107,6 @@ export default(state = initialState, action) => {
             //         run.levels = [state.level];
             //     }
             // }
-            console.log('holdLesson');
-            console.log(holdLesson);
             return {
                 ...state,
                 lesson: holdLesson,

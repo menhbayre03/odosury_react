@@ -3,11 +3,13 @@ import { connect } from 'react-redux';
 import config from "../../config";
 import moment from "moment";
 import * as actions from "../../actions/lesson_actions";
+import arrayMove from 'array-move';
 
 
+import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 const reducer = ({ main, lesson }) => ({ main, lesson });
-import { Card, Button, Avatar, Table, Modal, Form, Input, Select, Popconfirm, Spin, Row, Col, TreeSelect, InputNumber, Steps } from 'antd';
-import { EditOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, SearchOutlined, CloseCircleFilled, SolutionOutlined, LoadingOutlined, SmileOutlined, CheckCircleFilled, CaretRightFilled, CaretLeftFilled } from '@ant-design/icons'
+import { Card, Button, List, Avatar, Table, Modal, Form, Input, Select, Popconfirm, Spin, Row, Col, TreeSelect, InputNumber, Steps, Upload, message } from 'antd';
+import { EditOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, DragOutlined, SearchOutlined, UploadOutlined, CloseCircleFilled, SolutionOutlined, LoadingOutlined, SmileOutlined, CheckCircleFilled, CaretRightFilled, CaretLeftFilled } from '@ant-design/icons'
 const { Meta } = Card;
 const { TextArea } = Input;
 const { Option } = Select;
@@ -28,7 +30,11 @@ class LessonEdit extends React.Component {
             requirement: '',
             learn_check_listArray: [],
             learn_check_list: '',
-            current: 0
+            current: 0,
+
+
+            //upload
+            loading: false,
         };
     }
     componentDidMount() {
@@ -125,7 +131,6 @@ class LessonEdit extends React.Component {
         const {dispatch} = this.props;
         function submitSearch(aa){
             dispatch(actions.searchTeacher({search_user:aa}));
-            // console.log('dis dis');
         }
         if (event === 'search_member' && value !== '') {
             this.setState({ search_user: value });
@@ -172,7 +177,7 @@ class LessonEdit extends React.Component {
             let s = requirement.trim();
             if(s && s !== ''){
                 let hold = this.state.foodRequirementsArray;
-                hold.unshift(s);
+                hold.push(s);
                 this.setState({foodRequirementsArray: hold, requirement:''});
             }
         }
@@ -181,7 +186,7 @@ class LessonEdit extends React.Component {
             let s = learn_check_list.trim();
             if(s && s !== ''){
                 let hold = this.state.learn_check_listArray;
-                hold.unshift(s);
+                hold.push(s);
                 this.setState({learn_check_listArray: hold, learn_check_list:''});
             }
         }
@@ -197,45 +202,105 @@ class LessonEdit extends React.Component {
     next() {
         const {lesson:{ lesson }} = this.props;
         const { selectedMember } = this.state;
-        if(this.state.current === 0){
-            // if(!lesson.title || (lesson.title && lesson.title.trim() === '' )){
-            //     return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
-            // }
-            // if(!lesson.description || (lesson.description && lesson.description.trim() === '' )){
-            //     return config.get('emitter').emit('warning', ("Танилцуулга оруулна уу!"));
-            // }
-            // if(!lesson.intro_desc || (lesson.intro_desc && lesson.intro_desc.trim() === '' )){
-            //     return config.get('emitter').emit('warning', ("Дэлгэрэнгүй танилцуулга оруулна уу!"));
-            // }
-            // if(!selectedMember || !selectedMember._id){
-            //     return config.get('emitter').emit('warning', ("Багш сонгоно уу!"));
-            // }
-            // if(!lesson.category || (lesson.category && lesson.category.trim() === '' )){
-            //     return config.get('emitter').emit('warning', ("Ангилал сонгоно уу!"));
-            // }
-            // if(!lesson.price || (lesson.price && lesson.price === 0 )){
-            //     return config.get('emitter').emit('warning', ("Үнэ оруулна уу!"));
-            // }
-            // if(!this.state.foodRequirementsArray || (this.state.foodRequirementsArray && this.state.foodRequirementsArray.length<1 )){
-            //     return config.get('emitter').emit('warning', ("Шаардлагатай зүйлс оруулна уу!"));
-            // }
-            // if(!this.state.learn_check_listArray || (this.state.learn_check_listArray && this.state.learn_check_listArray.length<1 )){
-            //     return config.get('emitter').emit('warning', ("Сурах зүйлс оруулна уу!"));
-            // }
-            const current = this.state.current + 1;
-            this.setState({ current });
-        } else {
-            const current = this.state.current + 1;
-            this.setState({ current });
+        // if(this.state.current === 0){
+        //     if(!lesson.title || (lesson.title && lesson.title.trim() === '' )){
+        //         return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
+        //     }
+        //     if(!lesson.description || (lesson.description && lesson.description.trim() === '' )){
+        //         return config.get('emitter').emit('warning', ("Танилцуулга оруулна уу!"));
+        //     }
+        //     if(!lesson.intro_desc || (lesson.intro_desc && lesson.intro_desc.trim() === '' )){
+        //         return config.get('emitter').emit('warning', ("Дэлгэрэнгүй танилцуулга оруулна уу!"));
+        //     }
+        // }
+        // if(this.state.current === 1){
+        //     if(!selectedMember || !selectedMember._id){
+        //         return config.get('emitter').emit('warning', ("Багш сонгоно уу!"));
+        //     }
+        //     if(!lesson.category || (lesson.category && lesson.category.trim() === '' )){
+        //         return config.get('emitter').emit('warning', ("Ангилал сонгоно уу!"));
+        //     }
+        //     if(!lesson.price || (lesson.price && lesson.price === 0 )){
+        //         return config.get('emitter').emit('warning', ("Үнэ оруулна уу!"));
+        //     }
+        //     if(lesson.sale && lesson.sale > lesson.price){
+        //         return config.get('emitter').emit('warning', ("Хямдрал үнэ-ээс их байж болохгүй!"));
+        //     }
+        // }
+        // if(this.state.current === 2){
+        //     if(!this.state.foodRequirementsArray || (this.state.foodRequirementsArray && this.state.foodRequirementsArray.length<1 )){
+        //         return config.get('emitter').emit('warning', ("Шаардлагатай зүйлс оруулна уу!"));
+        //     }
+        //     if(!this.state.learn_check_listArray || (this.state.learn_check_listArray && this.state.learn_check_listArray.length<1 )){
+        //         return config.get('emitter').emit('warning', ("Сурах зүйлс оруулна уу!"));
+        //     }
+        // }
+        const current = this.state.current + 1;
+        this.setState({ current });
+
+    }
+    submitLesson(){
+        const {lesson:{lessonImage, lessonVideo}} = this.props;
+        if(!lessonImage || !lessonImage.path || lessonImage.path === '' || !lessonImage.type || lessonImage.type !== 'image' ){
+            return config.get('emitter').emit('warning', ("Зураг оруулна уу!"));
+        }
+        if(!lessonVideo || !lessonVideo.path || lessonVideo.path === '' || !lessonVideo.type || lessonVideo.type !== 'video' ){
+            return config.get('emitter').emit('warning', ("Бичлэг оруулна уу!"));
         }
     }
-
     prev() {
         const current = this.state.current - 1;
         this.setState({ current });
     }
+    onSortEnd(e) {
+        const {dispatch, lesson:{lesson}} = this.props;
+        let aa = arrayMove((lesson.levels || []), e.oldIndex, e.newIndex);
+        dispatch(actions.orderLevels(aa));
+    };
+    removeItem(item, index){
+        const {dispatch, lesson:{lesson}} = this.props;
+        let aa = (lesson.levels || []).filter(function (lvl, idx) {
+            return idx !== index;
+        });
+        dispatch(actions.orderLevels(aa));
+    };
+    //upload
+    customRequest(files) {
+        const {main:{user}} = this.props;
+        var id = user._id;
+        files.file.path = files.file.name;
+        this.props.dispatch(actions.uploadLessonImage([files.file], 'image', id));
+    }
+    beforeUpload(file) {
+        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/JPEG' || file.type === 'image/PNG';
+        if (!isJpgOrPng) {
+            message.error('You can only upload JPG/PNG file!');
+        }
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+            message.error('Image must smaller than 2MB!');
+        }
+        return isJpgOrPng && isLt2M;
+    }
+    customRequestVideo(files) {
+        const {main:{user}} = this.props;
+        let id = user._id;
+        files.file.path = files.file.name;
+        this.props.dispatch(actions.uploadLessonVideo([files.file], 'video', id));
+    }
+    beforeUploadVideo(file) {
+        const isJpgOrPng = file.type === 'video/mp4' || file.type === 'image/MP4';
+        if (!isJpgOrPng) {
+            message.error('You can only upload mp4 file!');
+        }
+        const isLt2M = file.size / 1024 / 1024 < 200;
+        if (!isLt2M) {
+            message.error('Video must smaller than 200MB!');
+        }
+        return isJpgOrPng && isLt2M;
+    }
     render() {
-        let { main:{user}, lesson:{status, openModal, lesson, lessons, submitLessonLoader, all, searchTeachersResult, searchTeacherLoader, categories, level, openModalLevel} } = this.props;
+        let { main:{user}, lesson:{imageUploadLoading, lessonImage, videoUploadLoading, lessonVideo, status, openModal, lesson, lessons, submitLessonLoader, all, searchTeachersResult, searchTeacherLoader, categories, level, openModalLevel} } = this.props;
         // let pagination = {
         //     total : all,
         //     current: this.state.pageNum + 1,
@@ -322,18 +387,70 @@ class LessonEdit extends React.Component {
         const { current } = this.state;
         const steps = [
             {
-                title: 'Үндсэн тохиргоо',
-                content: 'main-content',
+                title: 'Танилцуулга',
+                content: 'description-content',
+            },
+            {
+                title: 'Тохиргоо',
+                content: 'settings-content',
+            },
+            {
+                title: 'Шаардлага',
+                content: 'requirement-content',
             },
             {
                 title: 'Контент',
-                content: 'upload-content',
-            },
-            {
-                title: 'Хичээл',
-                content: 'lesson-content',
+                content: 'content-content',
             },
         ];
+        const SortableItem = SortableElement(({value, index}) => (
+            <List.Item style={{cursor: 'move'}}>
+                <List.Item.Meta
+                    title={
+                        <p style={{marginBottom: -4}}>
+                            {/*<Icon type="drag" style={{marginRight: 10, fontSize: 18, position: 'relative', top: 3}}/>*/}
+                            <span style={{marginRight: 10, fontSize: 18, position: 'relative', top: 3}}>
+                                <DragOutlined />
+                            </span>
+                            {`${value.title}`}
+                            <Button size="small" style={{float: 'right'}} onClick={this.removeItem.bind(this, value, index)}>Хасах</Button>
+                        </p>
+                    }
+                />
+            </List.Item>
+        ));
+        const SortableList = SortableContainer(({items, loading}) => {
+            return (
+                <List
+                    header={'levels'}
+                    itemLayout="horizontal"
+                    dataSource={lesson.levels && lesson.levels.length>0 ? lesson.levels : [] }
+                    // dataSource={items}
+                    // loading={loading}
+                    renderItem={(item, index) => (
+                        <SortableItem key={`item-${item.title}-key-${index}`} index={index} value={item} />
+                    )}
+                />
+            );
+        });
+
+
+        //upload
+        const { loading, imageUrl } = this.state;
+        const uploadButton = (
+            <div style={{fontSize: 24}}>
+                {imageUploadLoading ? <LoadingOutlined /> : <PlusOutlined />}
+                {/*{loading ? <LoadingOutlined /> : <PlusOutlined />}*/}
+                {/*<div style={{ marginTop: 8 }}>Upload</div>*/}
+            </div>
+        );
+        const uploadButtonVideo = (
+            <div style={{fontSize: 24}}>
+                {videoUploadLoading ? <LoadingOutlined /> : <PlusOutlined />}
+                {/*{loading ? <LoadingOutlined /> : <PlusOutlined />}*/}
+                {/*<div style={{ marginTop: 8 }}>Upload</div>*/}
+            </div>
+        );
         return (
             <div className='lesson-edit'>
                 <Steps current={current}>
@@ -344,17 +461,17 @@ class LessonEdit extends React.Component {
                 <div className="steps-action">
                     {current > 0 && (
                         <Button style={{ margin: '0 8px' }} onClick={this.prev.bind(this)}>
-                            <CaretLeftFilled /> Previous
+                            <CaretLeftFilled /> Өмнөх
                         </Button>
                     )}
                     {current < steps.length - 1 && (
                         <Button type="primary" onClick={this.next.bind(this)}>
-                            <CaretRightFilled /> Next
+                            <CaretRightFilled /> Дараах
                         </Button>
                     )}
                     {current === steps.length - 1 && (
-                        <Button type="primary" onClick={() => message.success('Processing complete!')}>
-                            <CheckCircleFilled /> Done
+                        <Button type="primary" onClick={this.submitLesson.bind(this)}>
+                            <CheckCircleFilled /> Хадгалах
                         </Button>
                     )}
                 </div>
@@ -362,244 +479,302 @@ class LessonEdit extends React.Component {
                                 <Row>
                                     <Col md={6} />
                                     <Col md={12}>
-                                    {
-                                        steps[current].content === 'main-content'?
-                                            <React.Fragment>
-                                                <Form.Item
-                                                    label='Нэр'
-                                                    // labelCol={{span: 5}}
-                                                >
-                                                    <Input autoFocus={true} size="middle" maxLength={60} value={lesson.title? lesson.title : ''} name='title' onChange={this.onChangeHandler.bind(this)} />
-                                                </Form.Item>
-                                                <Form.Item
-                                                    label='Танилцуулга'
-                                                    // labelCol={{span: 5}}
-                                                    // style={{marginBottom: 10}}
-                                                    // help="Богино танилцуулга"
-                                                >
-                                                    {/*<Input size="middle" maxLength={60} value={lesson.description? lesson.description : ''} name='description' onChange={this.onChangeHandler.bind(this)} />*/}
-                                                    <TextArea size="middle" rows={2} value={lesson.description? lesson.description : ''} name='description' onChange={this.onChangeHandler.bind(this)} />
-                                                </Form.Item>
-                                                <Form.Item
-                                                    label='Дэлгэрэнгүй танилцуулга'
-                                                    // labelCol={{span: 5}}
-                                                    // style={{marginBottom: 10}}
-                                                    // help="Дэлгэрэнгүй танилцуулга"
-                                                >
-                                                    <TextArea size="middle" rows={4} value={lesson.intro_desc? lesson.intro_desc : ''} name='intro_desc' onChange={this.onChangeHandler.bind(this)} />
-                                                </Form.Item>
-                                                <Form.Item
-                                                    label='Багш'
-                                                    // labelCol={{span: 5}}
-                                                    // help="Овог нэр, имэйл"
-                                                    // style={{marginBottom: 10}}
-                                                >
-                                                    <Select
-                                                        size="middle"
-                                                        showSearch
-                                                        style={{width: '100%'}}
-                                                        value={this.state.search_user}
-                                                        defaultActiveFirstOption={false}
-                                                        placeholder="Овог нэр, имэйл "
-                                                        showArrow={false}
-                                                        filterOption={false}
-                                                        onSearch={this.searchTeacher.bind(this, 'search_member')}
-                                                        onChange={this.chooseMember.bind(this)}
-                                                        notFoundContent={searchTeacherLoader? <Spin size="middle" /> :'Багш олдсонгүй'}
+                                        {
+                                            steps[current].content === 'description-content' ?
+                                                <React.Fragment>
+                                                    <Form.Item
+                                                        label='Нэр'
+                                                        // labelCol={{span: 5}}
                                                     >
-                                                        {
-                                                            searchTeachersResult && searchTeachersResult.length > 0 ? (
-                                                                searchTeachersResult.map(item => (
-                                                                    <Select.Option
-                                                                        // onClick={this.chooseMember.bind(this, item)}
-                                                                        key={item._id} value={item._id}> {`${item.last_name} ${item.first_name}`} </Select.Option>
-                                                                ))
-                                                            ) : null
-                                                        }
-                                                    </Select>
-                                                    {this.state.selectedMember && this.state.selectedMember._id?
-                                                        <div className='selected-member'>
-                                                            <div className='inline_block'>
-                                                                <img onError={(e) => e.target.src = `/images/default-avatar.png`} src={avatar} />
-                                                            </div>
-                                                            <div className='inline_block'>
-                                                                <div className='ner'>{(this.state.selectedMember.last_name || '')} {(this.state.selectedMember.first_name || '')}</div>
-                                                                <div>{(this.state.selectedMember.phone || '')}</div>
-                                                            </div>
-                                                        </div>
-                                                        :
-                                                        <div className='selected-member'>
-                                                            <div className='inline_block'>
-                                                                <img onError={(e) => e.target.src = `/images/default-avatar.png`} src={avatar} />
-                                                            </div>
-                                                            <div className='inline_block'>
-                                                                <div className='error'>Багш сонгоогүй байна!</div>
-                                                            </div>
-                                                        </div>
-                                                    }
-                                                </Form.Item>
-                                                <Form.Item
-                                                    label='Ангилал'
-                                                    // labelCol={{span: 5}}
-                                                >
-                                                    <TreeSelect
-                                                        size="middle"
-                                                        showSearch
-                                                        style={{ width: '100%' }}
-                                                        value={lesson.category}
-                                                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                                        placeholder="Please select"
-                                                        allowClear
-                                                        onChange={this.onChangeHandle2.bind(this, 'category')}
+                                                        <Input autoFocus={true} size="middle" maxLength={60}
+                                                               value={lesson.title ? lesson.title : ''} name='title'
+                                                               onChange={this.onChangeHandler.bind(this)}/>
+                                                    </Form.Item>
+                                                    <Form.Item
+                                                        label='Танилцуулга'
+                                                        // labelCol={{span: 5}}
+                                                        // style={{marginBottom: 10}}
+                                                        // help="Богино танилцуулга"
                                                     >
-                                                        {categories && categories.length>0?
-                                                            categories.map((run, idx) =>
-                                                                <TreeNode value={`parent-${run._id}`} title={run.title}>
-                                                                    {run.child && run.child.length > 0?
-                                                                        run.child.map(innerRun =>
-                                                                            <TreeNode value={`parent-${run._id}-${innerRun._id}`} title={innerRun.title} />
-                                                                        )
-                                                                        :
-                                                                        null
-                                                                    }
-                                                                </TreeNode>
-                                                            )
-                                                            :
-                                                            null
-                                                        }
-                                                    </TreeSelect>
-                                                </Form.Item>
-                                                <Form.Item
-                                                    label='Үнэ'
-                                                    // labelCol={{span: 5}}
-                                                    // help=""
-                                                >
-                                                    <InputNumber
-                                                        size="middle"
-                                                        style={{width: '100%'}}
-                                                        name='price'
-                                                        min={0}
-                                                        max={1000000000}
-                                                        value={lesson.price? lesson.price.toString().replace(/\$\s?|(,*)/g, '') : '0'.replace(/\$\s?|(,*)/g, '')}
-                                                        formatter={value => `${value}₮`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                                        onChange={this.onChangeHandle2.bind(this, 'price')}
-                                                    />
-                                                </Form.Item>
-                                                <Form.Item
-                                                    label='Хямдрал'
-                                                    // labelCol={{span: 5}}
-                                                    // help=""
-                                                >
-                                                    <InputNumber
-                                                        size="middle"
-                                                        style={{width: '100%'}}
-                                                        name='sale'
-                                                        min={0}
-                                                        max={1000000000}
-                                                        value={lesson.sale? lesson.sale.toString().replace(/\$\s?|(,*)/g, '') : '0'.replace(/\$\s?|(,*)/g, '')}
-                                                        formatter={value => `${value}₮`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                                        onChange={this.onChangeHandle2.bind(this, 'sale')}
-                                                    />
-                                                </Form.Item>
-                                                <Form.Item
-                                                    label='Шаардлагатай зүйлс'
-                                                    // labelCol={{span: 5}}
-                                                    // style={{marginBottom: 10}}
-                                                    // help='Хичээлийг үзэхэд шаардлагатай зүйлс'
-                                                >
-                                                    <div>
-                                                        <div className='orts-outer'>
-                                                            {this.state.foodRequirementsArray && this.state.foodRequirementsArray.length>0?
-                                                                this.state.foodRequirementsArray.map((run, idx) =>
-                                                                    <div className='orts-inner' key={idx+'afro'}>
-                                                                        {`${idx+1}. ${run}`}
-                                                                        <div className='action' onClick={this.removeSingleOrts.bind(this, idx, 'requirement' )}><CloseCircleFilled /></div>
-                                                                    </div>
-                                                                )
-                                                                :
-                                                                <div className='orts-inner' key='no-orts' style={{opacity: '0.7'}}>
-                                                                    Шаардлагатай зүйлсийг оруулаагүй байна.
-                                                                </div>
-                                                            }
-                                                        </div>
-                                                        <Input
-                                                            type="text"
-                                                            ref="textInput"
-                                                            name="requirement"
-                                                            placeholder='Javascript'
-                                                            style={{width: '100%', marginBottom: 10}}
-                                                            value={this.state.requirement}
-                                                            onChange={this.changeState.bind(this)}
-                                                        />
-                                                        <Button size='small' style={{width:120, float:'right'}} onClick={this.addSingleOrts.bind(this, 'requirement')}>
-                                                            <PlusOutlined /> Нэмэх
-                                                        </Button>
-                                                    </div>
-                                                </Form.Item>
-                                                <Form.Item
-                                                    label='Сурах зүйлс'
-                                                    // help='Энэ хичээлээс юу юу сурах вэ?'
-                                                    // style={{marginBottom: 10}}
-                                                    // labelCol={{span: 5}}
-                                                >
-                                                    <div>
-                                                        <div className='orts-outer'>
-                                                            {this.state.learn_check_listArray && this.state.learn_check_listArray.length>0?
-                                                                this.state.learn_check_listArray.map((run, idx) =>
-                                                                    <div className='orts-inner' key={idx+'afro'}>
-                                                                        {`${idx+1}. ${run}`}
-                                                                        <div className='action' onClick={this.removeSingleOrts.bind(this, idx, 'learn_check_list')}><CloseCircleFilled /></div>
-                                                                    </div>
-                                                                )
-                                                                :
-                                                                <div className='orts-inner' key='no-orts' style={{opacity: '0.7'}}>
-                                                                    Сурах зүйлсийг оруулаагүй байна.
-                                                                </div>
-                                                            }
-                                                        </div>
-                                                        <Input
-                                                            type="text"
-                                                            ref="textInput"
-                                                            name="learn_check_list"
-                                                            placeholder='React'
-                                                            style={{width: '100%', marginBottom: 10}}
-                                                            value={this.state.learn_check_list}
-                                                            onChange={this.changeState.bind(this)}
-                                                        />
-                                                        <Button size='small' style={{width:120, float:'right'}} onClick={this.addSingleOrts.bind(this, 'learn_check_list')}>
-                                                            <PlusOutlined /> Нэмэх
-                                                        </Button>
-                                                    </div>
-                                                </Form.Item>
-                                            </React.Fragment>
-                                            :
-                                            steps[current].content === 'upload-content'?
-                                                steps[current].content
+                                                        {/*<Input size="middle" maxLength={60} value={lesson.description? lesson.description : ''} name='description' onChange={this.onChangeHandler.bind(this)} />*/}
+                                                        <TextArea size="middle" rows={2}
+                                                                  value={lesson.description ? lesson.description : ''}
+                                                                  name='description'
+                                                                  onChange={this.onChangeHandler.bind(this)}/>
+                                                    </Form.Item>
+                                                    <Form.Item
+                                                        label='Дэлгэрэнгүй танилцуулга'
+                                                        // labelCol={{span: 5}}
+                                                        // style={{marginBottom: 10}}
+                                                        // help="Дэлгэрэнгүй танилцуулга"
+                                                    >
+                                                        <TextArea size="middle" rows={4}
+                                                                  value={lesson.intro_desc ? lesson.intro_desc : ''}
+                                                                  name='intro_desc'
+                                                                  onChange={this.onChangeHandler.bind(this)}/>
+                                                    </Form.Item>
+                                                </React.Fragment>
                                                 :
-                                                steps[current].content === 'lesson-content'?
-                                                    <div className='levels'>
-                                                        <div style={{textAlign: "right"}}>
-                                                            <Button type="primary" key='newLevel' icon={<PlusOutlined />} onClick={this.openModalLevel.bind(this, 'new', null, {})} >
-                                                                Level
-                                                            </Button>
-                                                        </div>
-                                                        {
-                                                            lesson.levels && lesson.levels.length>0?
-                                                                lesson.levels.map((lvl, idx) =>
-                                                                    <div className='level'>
-                                                                        {lvl.title}
-                                                                        <Button type="primary" key='updateLevel' icon={<EditFilled />} onClick={this.openModalLevel.bind(this, 'update', idx, lvl)} >
-                                                                            Засах
-                                                                        </Button>
-                                                                    </div>
+                                                null
+                                        }
+                                        {
+                                            steps[current].content === 'settings-content' ?
+                                                <div className='settings-content'>
+                                                    <Form.Item
+                                                        label='Багш'
+                                                        // labelCol={{span: 5}}
+                                                        // help="Овог нэр, имэйл"
+                                                        // style={{marginBottom: 10}}
+                                                    >
+                                                        <Select
+                                                            size="middle"
+                                                            showSearch
+                                                            style={{width: '100%'}}
+                                                            value={this.state.search_user}
+                                                            defaultActiveFirstOption={false}
+                                                            placeholder="Овог нэр, имэйл "
+                                                            showArrow={false}
+                                                            filterOption={false}
+                                                            onSearch={this.searchTeacher.bind(this, 'search_member')}
+                                                            onChange={this.chooseMember.bind(this)}
+                                                            notFoundContent={searchTeacherLoader ?
+                                                                <Spin size="middle"/> : 'Багш олдсонгүй'}
+                                                        >
+                                                            {
+                                                                searchTeachersResult && searchTeachersResult.length > 0 ? (
+                                                                    searchTeachersResult.map(item => (
+                                                                        <Select.Option
+                                                                            // onClick={this.chooseMember.bind(this, item)}
+                                                                            key={item._id}
+                                                                            value={item._id}> {`${item.last_name} ${item.first_name}`} </Select.Option>
+                                                                    ))
+                                                                ) : null
+                                                            }
+                                                        </Select>
+                                                        {this.state.selectedMember && this.state.selectedMember._id ?
+                                                            <div className='selected-member'>
+                                                                <div className='inline_block'>
+                                                                    <img
+                                                                        onError={(e) => e.target.src = `/images/default-avatar.png`}
+                                                                        src={avatar}/>
+                                                                </div>
+                                                                <div className='inline_block'>
+                                                                    <div
+                                                                        className='ner'>{(this.state.selectedMember.last_name || '')} {(this.state.selectedMember.first_name || '')}</div>
+                                                                    <div>{(this.state.selectedMember.phone || '')}</div>
+                                                                </div>
+                                                            </div>
+                                                            :
+                                                            <div className='selected-member'>
+                                                                <div className='inline_block'>
+                                                                    <img
+                                                                        onError={(e) => e.target.src = `/images/default-avatar.png`}
+                                                                        src={avatar}/>
+                                                                </div>
+                                                                <div className='inline_block'>
+                                                                    <div className='error'>Багш сонгоогүй байна!</div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </Form.Item>
+                                                    <Form.Item
+                                                        label='Ангилал'
+                                                        // labelCol={{span: 5}}
+                                                    >
+                                                        <TreeSelect
+                                                            size="middle"
+                                                            showSearch
+                                                            style={{width: '100%'}}
+                                                            value={lesson.category}
+                                                            dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                                                            placeholder="Please select"
+                                                            allowClear
+                                                            onChange={this.onChangeHandle2.bind(this, 'category')}
+                                                        >
+                                                            {categories && categories.length > 0 ?
+                                                                categories.map((run, idx) =>
+                                                                    <TreeNode value={`parent-${run._id}`}
+                                                                              title={run.title}>
+                                                                        {run.child && run.child.length > 0 ?
+                                                                            run.child.map(innerRun =>
+                                                                                <TreeNode
+                                                                                    value={`parent-${run._id}-${innerRun._id}`}
+                                                                                    title={innerRun.title}/>
+                                                                            )
+                                                                            :
+                                                                            null
+                                                                        }
+                                                                    </TreeNode>
                                                                 )
                                                                 :
                                                                 null
-                                                        }
-                                                    </div>
-                                                    :
-                                                    null
-                                    }
+                                                            }
+                                                        </TreeSelect>
+                                                    </Form.Item>
+                                                    <Form.Item
+                                                        label='Үнэ'
+                                                        // labelCol={{span: 5}}
+                                                        // help=""
+                                                    >
+                                                        <InputNumber
+                                                            size="middle"
+                                                            style={{width: '100%'}}
+                                                            name='price'
+                                                            min={0}
+                                                            max={1000000000}
+                                                            value={lesson.price ? lesson.price.toString().replace(/\$\s?|(,*)/g, '') : '0'.replace(/\$\s?|(,*)/g, '')}
+                                                            formatter={value => `${value}₮`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                            onChange={this.onChangeHandle2.bind(this, 'price')}
+                                                        />
+                                                    </Form.Item>
+                                                    <Form.Item
+                                                        label='Хямдрал'
+                                                        // labelCol={{span: 5}}
+                                                        // help=""
+                                                    >
+                                                        <InputNumber
+                                                            size="middle"
+                                                            style={{width: '100%'}}
+                                                            name='sale'
+                                                            min={0}
+                                                            max={1000000000}
+                                                            value={lesson.sale ? lesson.sale.toString().replace(/\$\s?|(,*)/g, '') : '0'.replace(/\$\s?|(,*)/g, '')}
+                                                            formatter={value => `${value}₮`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                            onChange={this.onChangeHandle2.bind(this, 'sale')}
+                                                        />
+                                                    </Form.Item>
+                                                </div>
+                                                :
+                                                null
+                                        }
+                                        {
+                                            steps[current].content === 'requirement-content' ?
+                                                <div className='requirement-content'>
+                                                    <Form.Item
+                                                        label='Шаардлагатай зүйлс'
+                                                        // labelCol={{span: 5}}
+                                                        // style={{marginBottom: 10}}
+                                                        // help='Хичээлийг үзэхэд шаардлагатай зүйлс'
+                                                    >
+                                                        <div>
+                                                            <div className='orts-outer'>
+                                                                {this.state.foodRequirementsArray && this.state.foodRequirementsArray.length > 0 ?
+                                                                    this.state.foodRequirementsArray.map((run, idx) =>
+                                                                        <div className='orts-inner' key={idx + 'afro'}>
+                                                                            {`${idx + 1}. ${run}`}
+                                                                            <div className='action'
+                                                                                 onClick={this.removeSingleOrts.bind(this, idx, 'requirement')}>
+                                                                                <CloseCircleFilled/></div>
+                                                                        </div>
+                                                                    )
+                                                                    :
+                                                                    <div className='orts-inner' key='no-orts'
+                                                                         style={{opacity: '0.7'}}>
+                                                                        Шаардлагатай зүйлсийг оруулаагүй байна.
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                            <Input
+                                                                type="text"
+                                                                ref="textInput"
+                                                                name="requirement"
+                                                                placeholder='Javascript'
+                                                                style={{width: '100%', marginBottom: 10}}
+                                                                value={this.state.requirement}
+                                                                onChange={this.changeState.bind(this)}
+                                                            />
+                                                            <Button size='small' style={{width: 120, float: 'right'}}
+                                                                    onClick={this.addSingleOrts.bind(this, 'requirement')}>
+                                                                <PlusOutlined/> Нэмэх
+                                                            </Button>
+                                                        </div>
+                                                    </Form.Item>
+                                                    <Form.Item
+                                                        label='Сурах зүйлс'
+                                                        // help='Энэ хичээлээс юу юу сурах вэ?'
+                                                        // style={{marginBottom: 10}}
+                                                        // labelCol={{span: 5}}
+                                                    >
+                                                        <div>
+                                                            <div className='orts-outer'>
+                                                                {this.state.learn_check_listArray && this.state.learn_check_listArray.length > 0 ?
+                                                                    this.state.learn_check_listArray.map((run, idx) =>
+                                                                        <div className='orts-inner' key={idx + 'afro'}>
+                                                                            {`${idx + 1}. ${run}`}
+                                                                            <div className='action'
+                                                                                 onClick={this.removeSingleOrts.bind(this, idx, 'learn_check_list')}>
+                                                                                <CloseCircleFilled/></div>
+                                                                        </div>
+                                                                    )
+                                                                    :
+                                                                    <div className='orts-inner' key='no-orts'
+                                                                         style={{opacity: '0.7'}}>
+                                                                        Сурах зүйлсийг оруулаагүй байна.
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                            <Input
+                                                                type="text"
+                                                                ref="textInput"
+                                                                name="learn_check_list"
+                                                                placeholder='React'
+                                                                style={{width: '100%', marginBottom: 10}}
+                                                                value={this.state.learn_check_list}
+                                                                onChange={this.changeState.bind(this)}
+                                                            />
+                                                            <Button size='small' style={{width: 120, float: 'right'}}
+                                                                    onClick={this.addSingleOrts.bind(this, 'learn_check_list')}>
+                                                                <PlusOutlined/> Нэмэх
+                                                            </Button>
+                                                        </div>
+                                                    </Form.Item>
+                                                </div>
+                                                :
+                                                null
+                                        }
+                                        {
+                                            steps[current].content === 'content-content' ?
+                                                <div className='content-content'>
+                                                    <Form.Item
+                                                        label='Зураг'
+                                                        // labelCol={{span: 5}}
+                                                        // style={{marginBottom: 10}}
+                                                        // help='Хичээлийг үзэхэд шаардлагатай зүйлс'
+                                                    >
+                                                        <Upload
+                                                            name="avatar"
+                                                            listType="picture-card"
+                                                            className="avatar-uploader"
+                                                            showUploadList={false}
+                                                            disabled={imageUploadLoading}
+                                                            beforeUpload={this.beforeUpload.bind(this)}
+                                                            customRequest={this.customRequest.bind(this)}
+                                                        >
+                                                            {lessonImage && lessonImage.path ? <img src={lessonImage.path} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                                                        </Upload>
+                                                    </Form.Item>
+                                                    <Form.Item
+                                                        label='Бичлэг'
+                                                        // labelCol={{span: 5}}
+                                                        // style={{marginBottom: 10}}
+                                                        // help='Хичээлийг үзэхэд шаардлагатай зүйлс'
+                                                    >
+                                                        <Upload
+                                                            name="avatar"
+                                                            listType="picture-card"
+                                                            className="avatar-uploader"
+                                                            showUploadList={false}
+                                                            disabled={videoUploadLoading}
+                                                            beforeUpload={this.beforeUploadVideo.bind(this)}
+                                                            customRequest={this.customRequestVideo.bind(this)}
+                                                        >
+                                                            {lessonVideo && lessonVideo.path ? 'бичлэг энд байн аа' : uploadButtonVideo}
+                                                        </Upload>
+                                                    </Form.Item>
+                                                </div>
+                                                :
+                                                null
+                                        }
                                     </Col>
                                     <Col md={6}/>
                                 </Row>
@@ -608,32 +783,20 @@ class LessonEdit extends React.Component {
                 <div className="steps-action">
                     {current > 0 && (
                         <Button style={{ margin: '0 8px' }} onClick={this.prev.bind(this)}>
-                            <CaretLeftFilled /> Previous
+                            <CaretLeftFilled /> Өмнөх
                         </Button>
                     )}
                     {current < steps.length - 1 && (
                         <Button type="primary" onClick={this.next.bind(this)}>
-                            <CaretRightFilled /> Next
+                            <CaretRightFilled /> Дараах
                         </Button>
                     )}
                     {current === steps.length - 1 && (
-                        <Button type="primary" onClick={() => message.success('Processing complete!')}>
-                            <CheckCircleFilled /> Done
+                        <Button type="primary" onClick={this.submitLesson.bind(this)}>
+                            <CheckCircleFilled /> Хадгалах
                         </Button>
                     )}
                 </div>
-                {/*<Modal*/}
-                {/*    title="Хичээл"*/}
-                {/*    visible={openModal}*/}
-                {/*    // onOk={this.submitTeacher.bind(this)}*/}
-                {/*    onCancel={this.closeModal.bind(this)}*/}
-                {/*    okText="Хадгалах"*/}
-                {/*    cancelText="Болих"*/}
-                {/*    confirmLoading={submitLessonLoader}*/}
-                {/*    maskClosable={false}*/}
-                {/*>*/}
-                {/*</Modal>*/}
-
                 {openModalLevel?
                     <Modal
                         title="Level"
@@ -654,6 +817,41 @@ class LessonEdit extends React.Component {
                     :
                     null
                 }
+
+
+
+
+                {/*<div className='levels'>*/}
+                {/*    <div style={{textAlign: "right"}}>*/}
+                {/*        <Button type="primary" key='newLevel' icon={<PlusOutlined />} onClick={this.openModalLevel.bind(this, 'new', null, {})} >*/}
+                {/*            Level*/}
+                {/*        </Button>*/}
+                {/*    </div>*/}
+                {/*    {*/}
+                {/*        lesson.levels && lesson.levels.length>0?*/}
+                {/*            lesson.levels.map((lvl, idx) =>*/}
+                {/*                <div className='level'>*/}
+                {/*                    {lvl.title}*/}
+                {/*                    <Button type="primary" key='updateLevel' icon={<EditFilled />} onClick={this.openModalLevel.bind(this, 'update', idx, lvl)} >*/}
+                {/*                        Засах*/}
+                {/*                    </Button>*/}
+                {/*                </div>*/}
+                {/*            )*/}
+                {/*            :*/}
+                {/*            null*/}
+                {/*    }*/}
+                {/*    /!*sortable start*!/*/}
+                {/*    {lesson.levels && lesson.levels.length>0?*/}
+                {/*        <SortableList*/}
+                {/*            // items={lesson.levels && lesson.levels.length>0? lesson.levels : []}*/}
+                {/*            // loading={customTopStudentsLoading}*/}
+                {/*            onSortEnd={this.onSortEnd.bind(this)}*/}
+                {/*        />*/}
+                {/*        :*/}
+                {/*        null*/}
+                {/*    }*/}
+                {/*    /!*sortable end*!/*/}
+                {/*</div>*/}
             </div>
 
         );

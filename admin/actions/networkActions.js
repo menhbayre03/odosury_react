@@ -3,6 +3,7 @@ import querystring from 'querystring';
 import config from '../config';
 import Cookies from "js-cookie";
 import axios from 'axios';
+import reduxConf from "../../../amjilt_react/amjilt_redux/src/reduxConfig";
 
 export function requestGet(requestActions,url, requestParams = null,header={}) {
     return dispatch => {
@@ -279,5 +280,82 @@ export function requestMediaUploadEnd(json,requestParams,type, data) {
         mediaType: type,
         json,
         data
+    }
+}
+
+
+
+
+export function requestUploadPostDirect(requestActions,url,header, requestParams = null,files,type=null,threadID = 'main') {
+    var data = new FormData();
+    var id = Date.now();
+    data.append('image', files[0]);
+    data.append('id',id);
+    return dispatch => {
+        dispatch(requestUploadDirectStart({id:id, file:files[0]},threadID,requestActions,type));
+        if(reduxConf.get('token') !== undefined){
+            header = {
+                ...header,
+                token:reduxConf.get('token')
+            }
+        }
+        header = {
+            ...header,
+            'Accept': 'application/json'
+        };
+        // let currentUrl = `${reduxConf.get('host')}${url}`;
+        let currentUrl = `${url}`;
+        if(requestParams){
+            currentUrl +='?'+querystring.stringify(requestParams)
+        }
+        return fetch(currentUrl, {
+            method: 'post',
+            credentials: 'same-origin',
+            headers: header,
+            body: data
+        })
+            .then(function (response) {
+                if (response.status == 200) {
+                    return response.json();
+                } else {
+                    if(response.status == 401){
+                        if(reduxConf.get('emitter'))
+                            reduxConf.get('emitter').emit('auth-error');
+                    }
+                    return {
+                        success:false,
+                        status:response.status
+                    }
+                }
+            })
+            .then(json => {
+                if(!json.success){
+                    reduxConf.get('emitter').emit('error',json.msg);
+                }
+                dispatch(requestUploadDirectEnd(json,threadID,requestActions,type));
+            })
+            .catch(error => {
+                dispatch(requestUploadDirectEnd({
+                    success:false
+                },threadID,requestActions,type))
+
+            });
+
+    }
+}
+function requestUploadDirectStart(json,threadID,requestParams,type){
+    return {
+        type: requestParams.REQUEST,
+        threadID,
+        mediaType: type,
+        json
+    }
+}
+function requestUploadDirectEnd(json,threadID,requestParams,type){
+    return {
+        type: requestParams.RESPONSE,
+        threadID,
+        mediaType: type,
+        json
     }
 }

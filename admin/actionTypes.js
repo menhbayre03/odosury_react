@@ -57,6 +57,9 @@ export const lessonChangeHandlerLevel = {
 export const openLessonModalLevel = {
     REQUEST:'openLessonModalLevel_REQUEST',
 };
+export const orderLevels = {
+    REQUEST:'orderLevels_REQUEST',
+};
 export const closeLessonModalLevel = {
     REQUEST:'closeLessonModalLevel_REQUEST',
 };
@@ -80,4 +83,12 @@ export const deleteLesson = {
 export const searchTeacher = {
     REQUEST:'searchTeacher_REQUEST',
     RESPONSE:'searchTeacher_RESPONSE',
+}
+export const uploadLessonImage = {
+    REQUEST:'uploadLessonImage_REQUEST',
+    RESPONSE:'uploadLessonImage_RESPONSE',
+};
+export const uploadLessonVideo = {
+    REQUEST:'uploadLessonVideo_REQUEST',
+    RESPONSE:'uploadLessonVideo_RESPONSE',
 };
