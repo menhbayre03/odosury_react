@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import {renderRoutes} from 'react-router-config';
-import Header from "../components/include/Header";
 import config from "../config";
 
 const reducer = ({ main}) => ({ main});

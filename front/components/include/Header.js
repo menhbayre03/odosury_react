@@ -8,14 +8,33 @@ class Header extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showNotf: false
+            showNotf: false,
+            trans: false
+        }
+        this.handleScroll = this.handleScroll.bind(this);
+    }
+
+    componentDidMount() {
+        window.addEventListener('scroll', this.handleScroll);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.handleScroll);
+    }
+
+    handleScroll(event) {
+        if(window.scrollY > 100 && !this.state.trans) {
+            this.setState({trans: true})
+        } else if(window.scrollY < 100 && this.state.trans) {
+            this.setState({trans: false})
         }
     }
 
     render() {
+        console.log(this.state.trans)
         return (
             <div>
-                <div className="header">
+                <div className={`header ${this.state.trans ? 'trans' : ''}`}>
                     <Container>
                         <Row className="header-top">
                             <Col md={6} className="section-1">
