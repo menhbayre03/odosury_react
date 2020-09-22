@@ -66,6 +66,12 @@ export const closeLessonModalLevel = {
 export const lessonAddLevel = {
     REQUEST:'lessonAddLevel_REQUEST',
 };
+export const openLevelSingle = {
+    REQUEST:'openLevelSingle_REQUEST',
+};
+export const closeLevelSingle = {
+    REQUEST:'closeLevelSingle_REQUEST',
+};
 export const submitLesson = {
     REQUEST:'submitLesson_REQUEST',
     RESPONSE:'submitLesson_RESPONSE',

@@ -4,6 +4,7 @@ import config from "../../config";
 import moment from "moment";
 import * as actions from "../../actions/lesson_actions";
 import LessonEdit from "./LessonEdit";
+import LessonLevels from "./LessonLevels";
 
 
 const reducer = ({ main, lesson }) => ({ main, lesson });
@@ -12,21 +13,21 @@ const { Meta } = Card;
 const { TextArea } = Input;
 const { Option } = Select;
 const { TreeNode } = TreeSelect;
-import { EditOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, SearchOutlined, CloseCircleFilled, CaretLeftFilled, CloseOutlined } from '@ant-design/icons'
+import { EditOutlined, DeleteFilled, PlusOutlined, UserOutlined, UnorderedListOutlined, EditFilled, SearchOutlined, CloseCircleFilled, CaretLeftFilled, CloseOutlined } from '@ant-design/icons'
 
 class Lessons extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             pageNum: 0,
-            pageSize: 50,
-            search: '',
-            search_user: '',
-            selectedMember: {},
-            foodRequirementsArray: [],
-            requirement: '',
-            learn_check_listArray: [],
-            learn_check_list: '',
+            pageSize:50,
+            // search: '',
+            // search_user: '',
+            // selectedMember: {},
+            // foodRequirementsArray: [],
+            // requirement: '',
+            // learn_check_listArray: [],
+            // learn_check_list: '',
         };
     }
     componentDidMount() {
@@ -47,88 +48,40 @@ class Lessons extends React.Component {
     closeModal() {
         this.props.dispatch(actions.closeLessonModal());
     }
-    onChangeHandler(e) {
-        this.props.dispatch(actions.lessonChangeHandler({name:e.target.name, value: e.target.value}));
-    }
+    // onChangeHandler(e) {
+    //     this.props.dispatch(actions.lessonChangeHandler({name:e.target.name, value: e.target.value}));
+    // }
     tableOnChange(data){
         const {dispatch } = this.props;
         this.setState({pageNum : data.current - 1});
         let cc = {
             pageNum:data.current - 1,
             pageSize:this.state.pageSize,
-            search: this.state.search
+            // search: this.state.search
         };
-        // this.props.dispatch(actions.getTeachers(cc));
+        this.props.dispatch(actions.getLesson(cc));
     }
     delete(id){
         this.props.dispatch(actions.deleteLesson({_id:id, pageSize: this.state.pageSize, pageNum: this.state.pageNum}));
     }
-    searchTeacher(event, value){
-        const {dispatch} = this.props;
-        function submitSearch(aa){
-            dispatch(actions.searchTeacher({search_user:aa}));
-            // console.log('dis dis');
-        }
-        if (event === 'search_member' && value !== '') {
-            this.setState({ search_user: value });
-            clearTimeout(this.state.timeOut);
-            let text = value;
-            let timeOut = setTimeout(function(){
-                submitSearch(text)
-            }, 300);
-            this.setState({
-                timeOut:timeOut
-            });
-        }
-    }
-
-    chooseMember(item) {
-        const {lesson:{searchTeachersResult}} = this.props;
-        this.setState({selectedMember: ((searchTeachersResult || []).filter(run => run._id.toString() === item.toString())[0] || {}) });
-    };
-    onChangeHandle2(name, value) {
-        // let val = (value || '').split('-');
-        // let result = val[val.length - 1];
-        this.props.dispatch(actions.lessonChangeHandler({name:name, value: value}));
-    }
-
-    removeSingleOrts(index, name){
-        if(name === 'requirement'){
-            let hold = [];
-            if(this.state.foodRequirementsArray && this.state.foodRequirementsArray.length>0){
-                hold = this.state.foodRequirementsArray.filter((run, idx) => idx !== index);
-                this.setState({foodRequirementsArray: hold})
-            }
-        }
-        if(name === 'learn_check_list'){
-            let hold = [];
-            if(this.state.learn_check_listArray && this.state.learn_check_listArray.length>0){
-                hold = this.state.learn_check_listArray.filter((run, idx) => idx !== index);
-                this.setState({learn_check_listArray: hold})
-            }
-        }
-    }
-    addSingleOrts(name){
-        if(name === 'requirement'){
-            const {requirement} = this.state;
-            let s = requirement.trim();
-            if(s && s !== ''){
-                let hold = this.state.foodRequirementsArray;
-                hold.unshift(s);
-                this.setState({foodRequirementsArray: hold, requirement:''});
-            }
-        }
-        if(name === 'learn_check_list'){
-            const {learn_check_list} = this.state;
-            let s = learn_check_list.trim();
-            if(s && s !== ''){
-                let hold = this.state.learn_check_listArray;
-                hold.unshift(s);
-                this.setState({learn_check_listArray: hold, learn_check_list:''});
-            }
-        }
-    }
-
+    // searchTeacher(event, value){
+    //     const {dispatch} = this.props;
+    //     function submitSearch(aa){
+    //         dispatch(actions.searchTeacher({search_user:aa}));
+    //         // console.log('dis dis');
+    //     }
+    //     if (event === 'search_member' && value !== '') {
+    //         this.setState({ search_user: value });
+    //         clearTimeout(this.state.timeOut);
+    //         let text = value;
+    //         let timeOut = setTimeout(function(){
+    //             submitSearch(text)
+    //         }, 300);
+    //         this.setState({
+    //             timeOut:timeOut
+    //         });
+    //     }
+    // }
     changeState(e, value){
         if (typeof e === 'string' || e instanceof String) {
             this.setState({ [e]: value});
@@ -136,14 +89,22 @@ class Lessons extends React.Component {
             this.setState({ [e.target.name]: e.target.value});
         }
     }
+    //levels
+    openLevelSingle(data) {
+        this.props.dispatch(actions.openLevelSingle(data));
+    }
+    closeLessonModalLevel() {
+        this.props.dispatch(actions.closeLevelSingle());
+    }
     render() {
-        let { main:{user}, lesson:{status, openModal, lesson, lessons, submitLessonLoader, all, searchTeachersResult, searchTeacherLoader, categories} } = this.props;
+        let { main:{user}, lesson:{status, openModal, lesson, lessons, submitLessonLoader, all, searchTeachersResult, searchTeacherLoader, categories, openLevelSingle} } = this.props;
         let pagination = {
             total : all,
             current: this.state.pageNum + 1,
             pageSize : this.state.pageSize,
             position: 'bottom',
-            showSizeChanger: false
+            showSizeChanger: false,
+            key: 'pagin'
         };
         const columns = [
             {
@@ -168,11 +129,16 @@ class Lessons extends React.Component {
                 ),
             },
             {
-                title: 'Үйлдэл',
                 key: 'action',
+                title: 'Үйлдэл',
                 render: (text, record) => (
-                    <div style={{width: 240}}>
+                    <div style={{width: 250}} key='action-div'>
 
+                        <Button size={"small"} style={{marginRight: 10}} key={record._id+'levels'} loading={!!record.loading}
+                                onClick={this.openLevelSingle.bind(this, record)}
+                        >
+                            <UnorderedListOutlined /> Levels
+                        </Button>
                         <Button size={"small"} style={{marginRight: 10}} key={record._id+'edit'} loading={!!record.loading}
                                 onClick = {this.openModal.bind(this, record )}
                         >
@@ -191,16 +157,12 @@ class Lessons extends React.Component {
                         </Popconfirm>
                     </div>
                 ),
-                width: 240
+                width: 250
             },
         ];
-        let avatar = '/images/default-avatar.png';
-        if (this.state.selectedMember && this.state.selectedMember.avatar && this.state.selectedMember.avatar !== '') {
-            avatar = this.state.selectedMember.avatar.indexOf('http') > -1 ? this.state.selectedMember.avatar : `https://amjilt.com${ this.state.selectedMember.avatar}`;
-        }
         return (
             <Card
-                title="Хичээл"
+                title={`${openLevelSingle? 'Levels' : 'Хичээл'}`}
                 bordered={true}
                 loading={status}
                 extra={
@@ -208,6 +170,11 @@ class Lessons extends React.Component {
                         <Button type="default" key='backButton' icon={<CloseOutlined />} onClick={this.closeModal.bind(this)} >
                             Болих
                         </Button>
+                        :
+                        openLevelSingle?
+                            <Button type="default" key='openLevels' icon={<CloseOutlined />} onClick={this.closeLessonModalLevel.bind(this)} >
+                                Болих
+                            </Button>
                         :
                         <Button type="primary" key='forwardButton' icon={<PlusOutlined />} onClick={this.openModal.bind(this, {})} >
                             Хичээл
@@ -217,13 +184,16 @@ class Lessons extends React.Component {
                 {openModal?
                     <LessonEdit />
                     :
-                    <React.Fragment>
-                        {/*<div style={{marginBottom: 20}}>*/}
-                        {/*    <Input maxLength={60} size='small' placeholder='Нэр, имэйл' style={{width: 200, marginRight: 20}} value={this.state.search} name='search' onChange={(e) => this.setState({search: e.target.value})} />*/}
-                        {/*    <Button type="primary" size='small' icon={<SearchOutlined />} onClick={this.searchTeacher.bind(this)} >Хайх</Button>*/}
-                        {/*</div>*/}
-                        <Table size="small" dataSource={lessons} columns={columns} onChange={this.tableOnChange.bind(this)} pagination={pagination} />
-                    </React.Fragment>
+                    openLevelSingle?
+                        <LessonLevels closeLessonModalLevel={this.closeLessonModalLevel.bind(this)} />
+                        :
+                        <React.Fragment>
+                            {/*<div style={{marginBottom: 20}}>*/}
+                            {/*    <Input maxLength={60} size='small' placeholder='Нэр, имэйл' style={{width: 200, marginRight: 20}} value={this.state.search} name='search' onChange={(e) => this.setState({search: e.target.value})} />*/}
+                            {/*    <Button type="primary" size='small' icon={<SearchOutlined />} onClick={this.searchTeacher.bind(this)} >Хайх</Button>*/}
+                            {/*</div>*/}
+                            <Table size="small" dataSource={lessons} columns={columns} onChange={this.tableOnChange.bind(this)} pagination={pagination} />
+                        </React.Fragment>
                 }
             </Card>
         );

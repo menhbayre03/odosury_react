@@ -46,6 +46,15 @@ export function lessonAddLevel(){
     return {
         type: constants.lessonAddLevel.REQUEST
     }
+}export function openLevelSingle(data){
+    return {
+        type: constants.openLevelSingle.REQUEST,
+        json: data
+    }
+}export function closeLevelSingle(){
+    return {
+        type: constants.closeLevelSingle.REQUEST
+    }
 }
 export function submitLesson(data) {
     let url = `/admin/api/submitLesson`;

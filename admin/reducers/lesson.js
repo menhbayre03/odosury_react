@@ -13,6 +13,8 @@ import {
     uploadLessonImage,
     uploadLessonVideo,
     orderLevels,
+    openLevelSingle,
+    closeLevelSingle,
 } from "../actionTypes";
 const initialState = {
     status: 1,
@@ -32,11 +34,24 @@ const initialState = {
     lessonImage: {},
     imageUploadLoading: false,
     lessonVideo: {},
-    videoUploadLoading: false
+    videoUploadLoading: false,
+    openLevelSingle: false,
 };
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case openLevelSingle.REQUEST:
+            return {
+                ...state,
+                openLevelSingle: true,
+                lesson: action.json
+            };
+        case closeLevelSingle.REQUEST:
+            return {
+                ...state,
+                openLevelSingle: false,
+                lesson:{}
+            };
         case uploadLessonVideo.REQUEST:
             return {
                 ...state,
