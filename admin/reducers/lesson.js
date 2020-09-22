@@ -9,10 +9,8 @@ import {
     openLessonModalLevel,
     closeLessonModalLevel,
     lessonChangeHandlerLevel,
-    lessonAddLevel,
     uploadLessonImage,
     uploadLessonVideo,
-    orderLevels,
     openLevelSingle,
     closeLevelSingle,
 } from "../actionTypes";
@@ -50,6 +48,9 @@ export default(state = initialState, action) => {
             return {
                 ...state,
                 openLevelSingle: false,
+                // lessons: (state.lessons || []).map(function (run) {
+                //     if(){}
+                // }),
                 lesson:{}
             };
         case uploadLessonVideo.REQUEST:
@@ -90,61 +91,6 @@ export default(state = initialState, action) => {
                     imageUploadLoading: false
                 };
             }
-        case orderLevels.REQUEST:
-            return {
-                ...state,
-                lesson: {
-                    ...state.lesson,
-                    levels: action.json
-                }
-            };
-        case lessonAddLevel.REQUEST:
-            let holdLesson = state.lesson;
-            if(state.levelType === 'new'){
-                if(holdLesson && holdLesson.levels && holdLesson.levels.length>0){
-                    holdLesson.levels.push(state.level);
-                } else {
-                    holdLesson.levels = [state.level];
-                }
-            } else if(state.levelType === 'update') {
-                holdLesson.levels[state.levelIdx] = state.level;
-            }
-            // if(state.lesson && state.lesson.levels && run.lesson.levels.length>0){
-            //     let holdLevels = run.lesson.levels.map(function (run) {
-            //         if(state.levelType === 'new'){
-            //             run.levels.push(state.level);
-            //         } else if(state.levelType === 'update'){
-            //             run.levels[state.levelIdx] = state.level;
-            //         }
-            //         return run;
-            //     });
-            // } else {
-            //     if(state.levelType === 'new'){
-            //         run.levels = [state.level];
-            //     }
-            // }
-            return {
-                ...state,
-                lesson: holdLesson,
-                level:{},
-                openModalLevel: false,
-            };
-        case openLessonModalLevel.REQUEST:
-            return {
-                ...state,
-                openModalLevel: true,
-                level:action.json.level,
-                levelType: action.json.type,
-                levelIdx: action.json.idx,
-            };
-        case closeLessonModalLevel.REQUEST:
-            return {
-                ...state,
-                openModalLevel: false,
-                level: {},
-                levelType: '',
-                levelIdx: null,
-            };
         case deleteLesson.REQUEST:
             if(action.json._id){
                 return {
@@ -254,14 +200,6 @@ export default(state = initialState, action) => {
                 ...state,
                 lesson:{
                     ...state.lesson,
-                    [action.json.name]:action.json.value
-                },
-            };
-        case lessonChangeHandlerLevel.REQUEST:
-            return {
-                ...state,
-                level:{
-                    ...state.level,
                     [action.json.name]:action.json.value
                 },
             };

@@ -54,8 +54,24 @@ export const lessonChangeHandler = {
 export const lessonChangeHandlerLevel = {
     REQUEST:'lessonChangeHandlerLevel_REQUEST',
 };
+export const onChangeHandlerLevelTimelineSelect = {
+    REQUEST:'onChangeHandlerLevelTimelineSelect_REQUEST',
+};
+export const submitTimeline = {
+    REQUEST:'submitTimeline_REQUEST',
+    RESPONSE:'submitTimeline_RESPONSE',
+};
+export const onChangeHandlerLevelTimeline = {
+    REQUEST:'onChangeHandlerLevelTimeline_REQUEST',
+};
 export const openLessonModalLevel = {
     REQUEST:'openLessonModalLevel_REQUEST',
+};
+export const openModalLevelTimline = {
+    REQUEST:'openModalLevelTimline_REQUEST',
+};
+export const closeModalLevelTimline = {
+    REQUEST:'closeModalLevelTimline_REQUEST',
 };
 export const orderLevels = {
     REQUEST:'orderLevels_REQUEST',
@@ -65,6 +81,7 @@ export const closeLessonModalLevel = {
 };
 export const lessonAddLevel = {
     REQUEST:'lessonAddLevel_REQUEST',
+    RESPONSE:'lessonAddLevel_RESPONSE',
 };
 export const openLevelSingle = {
     REQUEST:'openLevelSingle_REQUEST',
@@ -97,4 +114,18 @@ export const uploadLessonImage = {
 export const uploadLessonVideo = {
     REQUEST:'uploadLessonVideo_REQUEST',
     RESPONSE:'uploadLessonVideo_RESPONSE',
+};
+
+
+export const getLessonSingle = {
+    REQUEST:'getLessonSingle_REQUEST',
+    RESPONSE:'getLessonSingle_RESPONSE',
+};
+export const deleteLevel = {
+    REQUEST:'deleteLevel_REQUEST',
+    RESPONSE:'deleteLevel_RESPONSE',
+};
+export const removeTimeline = {
+    REQUEST:'removeTimeline_REQUEST',
+    RESPONSE:'removeTimeline_RESPONSE',
 };

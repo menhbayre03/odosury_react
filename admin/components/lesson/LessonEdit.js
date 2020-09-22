@@ -50,27 +50,11 @@ class LessonEdit extends React.Component {
         });
         this.props.dispatch(actions.closeLessonModal());
     }
-    openModalLevel(type, idx, data = {}) {
-        this.props.dispatch(actions.openLessonModalLevel({type:type, idx:idx, level:data}));
-    }
-    closeLessonModalLevel() {
-        this.props.dispatch(actions.closeLessonModalLevel());
-    }
     closeModal() {
         this.props.dispatch(actions.closeLessonModal());
     }
     onChangeHandler(e) {
         this.props.dispatch(actions.lessonChangeHandler({name:e.target.name, value: e.target.value}));
-    }
-    onChangeHandlerLevel(e) {
-        this.props.dispatch(actions.lessonChangeHandlerLevel({name:e.target.name, value: e.target.value}));
-    }
-    addLevel(){
-        const {lesson:{level}} = this.props;
-        if(!level.title || (level.title && level.title.trim() === '' )){
-            return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
-        }
-        this.props.dispatch(actions.lessonAddLevel());
     }
     searchTeacher(event, value){
         const {dispatch} = this.props;
@@ -202,18 +186,6 @@ class LessonEdit extends React.Component {
         const current = this.state.current - 1;
         this.setState({ current });
     }
-    onSortEnd(e) {
-        const {dispatch, lesson:{lesson}} = this.props;
-        let aa = arrayMove((lesson.levels || []), e.oldIndex, e.newIndex);
-        dispatch(actions.orderLevels(aa));
-    };
-    removeItem(item, index){
-        const {dispatch, lesson:{lesson}} = this.props;
-        let aa = (lesson.levels || []).filter(function (lvl, idx) {
-            return idx !== index;
-        });
-        dispatch(actions.orderLevels(aa));
-    };
     //upload
     customRequest(files) {
         const {main:{user}} = this.props;
@@ -250,7 +222,7 @@ class LessonEdit extends React.Component {
         return isJpgOrPng && isLt2M;
     }
     render() {
-        let { main:{user}, lesson:{imageUploadLoading, lessonImage, videoUploadLoading, lessonVideo, status, openModal, lesson, lessons, submitLessonLoader, all, searchTeachersResult, searchTeacherLoader, categories, level, openModalLevel} } = this.props;
+        let { main:{user}, lesson:{imageUploadLoading, lessonImage, videoUploadLoading, lessonVideo, status, openModal, lesson, lessons, submitLessonLoader, all, searchTeachersResult, searchTeacherLoader, categories, level} } = this.props;
         let avatar = '/images/default-avatar.png';
         if (this.state.selectedMember && this.state.selectedMember.avatar && this.state.selectedMember.avatar !== '') {
             avatar = this.state.selectedMember.avatar.indexOf('http') > -1 ? this.state.selectedMember.avatar : `https://amjilt.com${ this.state.selectedMember.avatar}`;
@@ -274,38 +246,6 @@ class LessonEdit extends React.Component {
                 content: 'content-content',
             },
         ];
-        const SortableItem = SortableElement(({value, index}) => (
-            <List.Item style={{cursor: 'move'}}>
-                <List.Item.Meta
-                    title={
-                        <p style={{marginBottom: -4}}>
-                            {/*<Icon type="drag" style={{marginRight: 10, fontSize: 18, position: 'relative', top: 3}}/>*/}
-                            <span style={{marginRight: 10, fontSize: 18, position: 'relative', top: 3}}>
-                                <DragOutlined />
-                            </span>
-                            {`${value.title}`}
-                            <Button size="small" style={{float: 'right'}} onClick={this.removeItem.bind(this, value, index)}>Хасах</Button>
-                        </p>
-                    }
-                />
-            </List.Item>
-        ));
-        const SortableList = SortableContainer(({items, loading}) => {
-            return (
-                <List
-                    header={'levels'}
-                    itemLayout="horizontal"
-                    dataSource={lesson.levels && lesson.levels.length>0 ? lesson.levels : [] }
-                    // dataSource={items}
-                    // loading={loading}
-                    renderItem={(item, index) => (
-                        <SortableItem key={`item-${item.title}-key-${index}`} index={index} value={item} />
-                    )}
-                />
-            );
-        });
-
-
         //upload
         const { loading, imageUrl } = this.state;
         const uploadButton = (
@@ -636,60 +576,6 @@ class LessonEdit extends React.Component {
                         </Button>
                     )}
                 </div>
-                {openModalLevel?
-                    <Modal
-                        title="Level"
-                        visible={openModalLevel}
-                        onOk={this.addLevel.bind(this)}
-                        onCancel={this.closeLessonModalLevel.bind(this)}
-                        okText="Хадгалах"
-                        cancelText="Болих"
-                        maskClosable={false}
-                    >
-                        <Form.Item
-                            label='Нэр'
-                        >
-                            <Input autoFocus={true} size="middle" maxLength={60} value={level.title? level.title : ''} name='title' onChange={this.onChangeHandlerLevel.bind(this)} />
-                        </Form.Item>
-                    </Modal>
-                    :
-                    null
-                }
-
-
-
-
-                {/*<div className='levels'>*/}
-                {/*    <div style={{textAlign: "right"}}>*/}
-                {/*        <Button type="primary" key='newLevel' icon={<PlusOutlined />} onClick={this.openModalLevel.bind(this, 'new', null, {})} >*/}
-                {/*            Level*/}
-                {/*        </Button>*/}
-                {/*    </div>*/}
-                {/*    {*/}
-                {/*        lesson.levels && lesson.levels.length>0?*/}
-                {/*            lesson.levels.map((lvl, idx) =>*/}
-                {/*                <div className='level'>*/}
-                {/*                    {lvl.title}*/}
-                {/*                    <Button type="primary" key='updateLevel' icon={<EditFilled />} onClick={this.openModalLevel.bind(this, 'update', idx, lvl)} >*/}
-                {/*                        Засах*/}
-                {/*                    </Button>*/}
-                {/*                </div>*/}
-                {/*            )*/}
-                {/*            :*/}
-                {/*            null*/}
-                {/*    }*/}
-                {/*    /!*sortable start*!/*/}
-                {/*    {lesson.levels && lesson.levels.length>0?*/}
-                {/*        <SortableList*/}
-                {/*            // items={lesson.levels && lesson.levels.length>0? lesson.levels : []}*/}
-                {/*            // loading={customTopStudentsLoading}*/}
-                {/*            onSortEnd={this.onSortEnd.bind(this)}*/}
-                {/*        />*/}
-                {/*        :*/}
-                {/*        null*/}
-                {/*    }*/}
-                {/*    /!*sortable end*!/*/}
-                {/*</div>*/}
             </div>
 
         );

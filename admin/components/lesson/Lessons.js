@@ -5,7 +5,7 @@ import moment from "moment";
 import * as actions from "../../actions/lesson_actions";
 import LessonEdit from "./LessonEdit";
 import LessonLevels from "./LessonLevels";
-
+import { Link } from 'react-router-dom';
 
 const reducer = ({ main, lesson }) => ({ main, lesson });
 import { Card, Button, Avatar, Table, Modal, Form, Input, Select, Popconfirm, Spin, Row, Col, TreeSelect, InputNumber } from 'antd';
@@ -68,7 +68,6 @@ class Lessons extends React.Component {
     //     const {dispatch} = this.props;
     //     function submitSearch(aa){
     //         dispatch(actions.searchTeacher({search_user:aa}));
-    //         // console.log('dis dis');
     //     }
     //     if (event === 'search_member' && value !== '') {
     //         this.setState({ search_user: value });
@@ -93,7 +92,7 @@ class Lessons extends React.Component {
     openLevelSingle(data) {
         this.props.dispatch(actions.openLevelSingle(data));
     }
-    closeLessonModalLevel() {
+    closeLevelSingle() {
         this.props.dispatch(actions.closeLevelSingle());
     }
     render() {
@@ -133,12 +132,13 @@ class Lessons extends React.Component {
                 title: 'Үйлдэл',
                 render: (text, record) => (
                     <div style={{width: 250}} key='action-div'>
-
-                        <Button size={"small"} style={{marginRight: 10}} key={record._id+'levels'} loading={!!record.loading}
-                                onClick={this.openLevelSingle.bind(this, record)}
-                        >
-                            <UnorderedListOutlined /> Levels
-                        </Button>
+                        <Link to={`/admin/lessons/levels/${record._id}`}>
+                            <Button size={"small"} style={{marginRight: 10}} key={record._id+'levels'} loading={!!record.loading}
+                                    // onClick={this.openLevelSingle.bind(this, record)}
+                            >
+                                <UnorderedListOutlined /> Levels
+                            </Button>
+                        </Link>
                         <Button size={"small"} style={{marginRight: 10}} key={record._id+'edit'} loading={!!record.loading}
                                 onClick = {this.openModal.bind(this, record )}
                         >
@@ -162,7 +162,7 @@ class Lessons extends React.Component {
         ];
         return (
             <Card
-                title={`${openLevelSingle? 'Levels' : 'Хичээл'}`}
+                title={`${openLevelSingle? lesson.title : 'Хичээл'}`}
                 bordered={true}
                 loading={status}
                 extra={
@@ -172,20 +172,18 @@ class Lessons extends React.Component {
                         </Button>
                         :
                         openLevelSingle?
-                            <Button type="default" key='openLevels' icon={<CloseOutlined />} onClick={this.closeLessonModalLevel.bind(this)} >
-                                Болих
+                            <Button type="default" key='openLevels' icon={<CloseOutlined />} onClick={this.closeLevelSingle.bind(this)}  > Болих </Button>
+                            :
+                            <Button type="primary" key='forwardButton' icon={<PlusOutlined />} onClick={this.openModal.bind(this, {})} >
+                                Хичээл
                             </Button>
-                        :
-                        <Button type="primary" key='forwardButton' icon={<PlusOutlined />} onClick={this.openModal.bind(this, {})} >
-                            Хичээл
-                        </Button>
                 }
             >
                 {openModal?
                     <LessonEdit />
                     :
                     openLevelSingle?
-                        <LessonLevels closeLessonModalLevel={this.closeLessonModalLevel.bind(this)} />
+                        <LessonLevels closeLevelSingle={this.closeLevelSingle.bind(this)} />
                         :
                         <React.Fragment>
                             {/*<div style={{marginBottom: 20}}>*/}
