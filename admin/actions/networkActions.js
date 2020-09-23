@@ -3,7 +3,6 @@ import querystring from 'querystring';
 import config from '../config';
 import Cookies from "js-cookie";
 import axios from 'axios';
-import reduxConf from "../../../amjilt_react/amjilt_redux/src/reduxConfig";
 
 export function requestGet(requestActions,url, requestParams = null,header={}) {
     return dispatch => {
@@ -293,17 +292,17 @@ export function requestUploadPostDirect(requestActions,url,header, requestParams
     data.append('id',id);
     return dispatch => {
         dispatch(requestUploadDirectStart({id:id, file:files[0]},threadID,requestActions,type));
-        if(reduxConf.get('token') !== undefined){
+        if(config.get('token') !== undefined){
             header = {
                 ...header,
-                token:reduxConf.get('token')
+                token:config.get('token')
             }
         }
         header = {
             ...header,
             'Accept': 'application/json'
         };
-        // let currentUrl = `${reduxConf.get('host')}${url}`;
+        // let currentUrl = `${config.get('host')}${url}`;
         let currentUrl = `${url}`;
         if(requestParams){
             currentUrl +='?'+querystring.stringify(requestParams)
@@ -319,8 +318,8 @@ export function requestUploadPostDirect(requestActions,url,header, requestParams
                     return response.json();
                 } else {
                     if(response.status == 401){
-                        if(reduxConf.get('emitter'))
-                            reduxConf.get('emitter').emit('auth-error');
+                        if(config.get('emitter'))
+                            config.get('emitter').emit('auth-error');
                     }
                     return {
                         success:false,
@@ -330,7 +329,7 @@ export function requestUploadPostDirect(requestActions,url,header, requestParams
             })
             .then(json => {
                 if(!json.success){
-                    reduxConf.get('emitter').emit('error',json.msg);
+                    config.get('emitter').emit('error',json.msg);
                 }
                 dispatch(requestUploadDirectEnd(json,threadID,requestActions,type));
             })

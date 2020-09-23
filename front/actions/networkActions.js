@@ -1,6 +1,3 @@
-/**
- * Created by battumur on 11/4/2016.
- */
 import fetch from 'fetch-everywhere';
 import querystring from 'querystring';
 import config from '../config';
@@ -9,11 +6,6 @@ import axios from 'axios';
 
 export function requestGet(requestActions,url, requestParams = null,header={}) {
     return dispatch => {
-        let init = {
-            initErp: config.get('erp') || null,
-            initErpRole: config.get('erp_role') || null,
-            initErpStudent: config.get('erp_student') || null
-        };
         dispatch(requestStart(requestParams,requestActions));
         if(Cookies.get('token') != null){
             header = {
@@ -28,9 +20,7 @@ export function requestGet(requestActions,url, requestParams = null,header={}) {
         };
         let currentUrl = `${url}`;
         if(requestParams){
-            currentUrl +='?'+querystring.stringify({...requestParams, ...init})
-        } else {
-            currentUrl +='?'+querystring.stringify(init)
+            currentUrl +='?'+querystring.stringify(requestParams)
         }
         return fetch(currentUrl, {
             method: 'get',
@@ -95,11 +85,6 @@ function requestEnd(json,requestActions) {
 
 export function requestPost(requestActions,url,data,requestParams = null,header={}) {
     return dispatch => {
-        let init = {
-            initErp: config.get('erp') || null,
-            initErpRole: config.get('erp_role') || null,
-            initErpStudent: config.get('erp_student') || null
-        };
         dispatch(requestStart(data,requestActions));
         if(Cookies.get('token') != null){
             header = {
@@ -120,12 +105,7 @@ export function requestPost(requestActions,url,data,requestParams = null,header=
         if(typeof data == 'object'){
             option = {
                 ...option,
-                body: JSON.stringify({...data, ...init})
-            }
-        } else {
-            option = {
-                ...option,
-                body: JSON.stringify(init)
+                body: JSON.stringify(data)
             }
         }
         let currentUrl = `${url}`;

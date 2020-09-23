@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import Header from "./include/Header";
+import Footer from "./include/Footer";
 import GridItem from "./include/GridItem";
 import { Container, Row, Col } from "react-bootstrap";
 import Swiper from "react-id-swiper";
+import * as actions from '../actions/home_actions';
 const reducer = ({ main }) => ({ main });
 
 class Home extends Component {
@@ -12,9 +14,11 @@ class Home extends Component {
         this.state = {
         };
         this.swiper = React.createRef();
+        this.swiperWatching = React.createRef();
     }
     componentDidMount() {
-
+        const {dispatch} = this.props;
+        dispatch(actions.getHome());
     }
 
     goNext() {
@@ -26,6 +30,18 @@ class Home extends Component {
     goPrev() {
         if (this.swiper.current != null && this.swiper.current.swiper != null) {
             this.swiper.current.swiper.slidePrev();
+        }
+    };
+
+    goNextWatching() {
+        if (this.swiperWatching.current && this.swiperWatching.current.swiper) {
+            this.swiperWatching.current.swiper.slideNext();
+        }
+    };
+
+    goPrevWatching() {
+        if (this.swiperWatching.current != null && this.swiperWatching.current.swiper != null) {
+            this.swiperWatching.current.swiper.slidePrev();
         }
     };
 
@@ -68,7 +84,7 @@ class Home extends Component {
                 <div className="section-watching">
                     <Container style={{position: 'relative'}}>
                         <div>
-                            <Swiper ref={this.swiper} {...gridSlider}>
+                            <Swiper ref={this.swiperWatching} {...gridSlider}>
                                 {
                                     [1,2,3,4,5,6,7,8].map((item, index) => (
                                         <div key={index}>
@@ -78,10 +94,10 @@ class Home extends Component {
                                 }
                             </Swiper>
                         </div>
-                        <div onClick={this.goNext.bind(this)} className="grid-next">
+                        <div onClick={this.goNextWatching.bind(this)} className="grid-next">
                             <ion-icon name="chevron-forward"/>
                         </div>
-                        <div onClick={this.goPrev.bind(this)} className="grid-prev">
+                        <div onClick={this.goPrevWatching.bind(this)} className="grid-prev">
                             <ion-icon name="chevron-back"/>
                         </div>
                     </Container>
@@ -129,6 +145,23 @@ class Home extends Component {
                         </div>
                     </Container>
                 </div>
+                <div className="section-new">
+                    <Container style={{position: 'relative'}}>
+                        <h3>Онцлох хичээлүүд</h3>
+                        <Row>
+                            {
+                                [1,2,3,4,5,6,7,8].map((item, index) => (
+                                    <Col md={3} style={{marginBottom: 30}}>
+                                        <div key={index}>
+                                            <GridItem item={item}/>
+                                        </div>
+                                    </Col>
+                                ))
+                            }
+                        </Row>
+                    </Container>
+                </div>
+                <Footer/>
             </React.Fragment>
         );
     }

@@ -9,6 +9,7 @@ class Header extends Component {
         super(props);
         this.state = {
             showNotf: false,
+            cate: false,
             trans: false
         }
         this.handleScroll = this.handleScroll.bind(this);
@@ -22,7 +23,7 @@ class Header extends Component {
         window.removeEventListener('scroll', this.handleScroll);
     }
 
-    handleScroll(event) {
+    handleScroll() {
         if(window.scrollY > 100 && !this.state.trans) {
             this.setState({trans: true})
         } else if(window.scrollY < 100 && this.state.trans) {
@@ -31,7 +32,8 @@ class Header extends Component {
     }
 
     render() {
-        console.log(this.state.trans)
+        const {main : {user, categories}} = this.props;
+        console.log(categories)
         return (
             <div>
                 <div className={`header ${this.state.trans ? 'trans' : ''}`}>
@@ -41,27 +43,21 @@ class Header extends Component {
                                 <div className="logo" style={{display: 'inline-block'}}>
                                     <img src="/images/logo.png" alt=""/>
                                 </div>
-                                <div className="category-menu" style={{display: 'inline-block'}}>
-                                    <Button>
+                                <div className="category-menu" style={{display: 'inline-block', position: 'relative'}}>
+                                    <Button onClick={() => this.setState({cate: !this.state.cate})}>
                                         <span>Ангилал</span>
                                         <ion-icon name="caret-down-outline"/>
                                     </Button>
-                                    <ul style={{display: 'none'}}>
-                                        <Link to={'#'}>
-                                            <li>
-                                                3D + Animation
-                                            </li>
-                                        </Link>
-                                        <Link to={'#'}>
-                                            <li>
-                                                3D + Animation
-                                            </li>
-                                        </Link>
-                                        <Link to={'#'}>
-                                            <li>
-                                                3D + Animation
-                                            </li>
-                                        </Link>
+                                    <ul style={{visibility: this.state.cate ? 'visible': 'hidden', opacity: this.state.cate ? 1 : 0}}>
+                                        {
+                                            categories.map(item => (
+                                                <li>
+                                                    <Link to={`/lessons/${item.slug}`}>
+                                                        {item.title}
+                                                    </Link>
+                                                </li>
+                                            ))
+                                        }
                                     </ul>
                                 </div>
                             </Col>
@@ -111,7 +107,7 @@ class Header extends Component {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to={'#'}>
+                                        <Link to={`/lessons/all`}>
                                             Хичээлүүд
                                         </Link>
                                     </li>
@@ -130,6 +126,7 @@ class Header extends Component {
                         </div>
                     </Container>
                 </div>
+                <div onClick={() => this.setState({cate: false})} style={{visibility: this.state.cate ? 'visible': 'hidden', opacity: this.state.cate ? 0.5 : 0}} className="cate-back"/>
             </div>
         );
     }
