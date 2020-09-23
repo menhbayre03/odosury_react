@@ -31,3 +31,8 @@ export function deleteTeachers(data) {
     let url = `/admin/api/deleteTeachers`;
     return networkActions.requestPost(constants.deleteTeachers,url, data);
 }
+
+export function uploadTeacherAvatar(data, type, id) {
+    let url = `/admin/api/${type}/upload/uploadTeacherAvatar/${id}`;
+    return networkActions.requestUploadPostDirect(constants.uploadTeacherAvatar, url,  {}, null, data );
+}

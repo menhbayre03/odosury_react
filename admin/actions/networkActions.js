@@ -3,7 +3,7 @@ import querystring from 'querystring';
 import config from '../config';
 import Cookies from "js-cookie";
 import axios from 'axios';
-import reduxConf from "../../../amjilt_react/amjilt_redux/src/reduxConfig";
+// import reduxConf from "../../../amjilt_react/amjilt_redux/src/reduxConfig";
 
 export function requestGet(requestActions,url, requestParams = null,header={}) {
     return dispatch => {
@@ -164,13 +164,11 @@ export function requestPost(requestActions,url,data,requestParams = null,header=
 }
 
 
-export function uploadProgress(requestActions, data,type, neededData = {},requestParams = null, header=null) {
-    let url = `/api/${type}/upload`;
+export function uploadProgress(requestActions, url, data, type, neededData = {},requestParams = null, header=null) {
+    // let url = `/api/${type}/upload`;
     let fd = new FormData();
     let id = Date.now();
     fd.append('image', data[0]);
-    fd.append('id', id);
-    fd.append('free', true);
     if(type == 'image'){
         neededData.fake_image = window.URL.createObjectURL(data[0]);
     }
@@ -182,7 +180,7 @@ export function uploadProgress(requestActions, data,type, neededData = {},reques
                 token: Cookies.get('token')
             }
         }
-        let currentUrl = `${config.get('hostMedia')}${url}`;
+        let currentUrl = `${config.get('hostMedia')}/api${url}`;
         axios.post(currentUrl, fd, {
             onUploadProgress: progressEvent => {
                 let percent;
@@ -206,55 +204,21 @@ export function uploadProgress(requestActions, data,type, neededData = {},reques
                     }
                     return {
                         success: false,
-                        id: id,
                         status: response.status
                     }
                 }
             })
             .then(json => {
-                if (json.success) {
-                    let currentUrl1 = `${config.get('host')}${url}`;
-                    return fetch(currentUrl1, {
-                        method: 'post',
-                        credentials: 'same-origin',
-                        headers: {
-                            ...header,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(json)
-                    })
-                        .then(function (response) {
-                            if (response.status == 200) {
-                                return response.json();
-                            } else {
-                                if (response.status == 401) {
-                                    if (config.get('emitter'))
-                                        config.get('emitter').emit('auth-error');
-                                }
-                                return {
-                                    success: false,
-                                    id: id,
-                                    status: response.status
-                                }
-                            }
-                        })
-                        .then(json => {
-                            if (!json.success) {
-                                config.get('emitter').emit('error', json.msg);
-                            }
-                            dispatch(requestMediaUploadEnd(json, requestActions, type, neededData));
-                        })
-                        .catch(error => {
-                            dispatch(requestMediaUploadEnd({success:false}, requestActions, type, neededData));
-
-                        });
-                } else {
-                    config.get('emitter').emit('error', json.msg || 'Алдаа гарлаа');
-                    dispatch(requestMediaUploadEnd(json, requestActions, type, neededData));
+                console.log(json.success)
+                if (!json.success) {
+                    config.get('emitter').emit('error', json.msg);
+                } else if(json.success && json.sucmod){
+                    config.get('emitter').emit('success', json.msg);
                 }
+                dispatch(requestMediaUploadEnd(json, requestActions, type, neededData));
             })
             .catch(error => {
-                dispatch(requestMediaUploadEnd({success:false,id: id}, threadID, requestActions, type, neededData));
+                dispatch(requestMediaUploadEnd({success:false}, requestActions, type, neededData));
             });
     }
 }
@@ -283,9 +247,6 @@ export function requestMediaUploadEnd(json,requestParams,type, data) {
     }
 }
 
-
-
-
 export function requestUploadPostDirect(requestActions,url,header, requestParams = null,files,type=null,threadID = 'main') {
     var data = new FormData();
     var id = Date.now();
@@ -293,17 +254,17 @@ export function requestUploadPostDirect(requestActions,url,header, requestParams
     data.append('id',id);
     return dispatch => {
         dispatch(requestUploadDirectStart({id:id, file:files[0]},threadID,requestActions,type));
-        if(reduxConf.get('token') !== undefined){
+        if(config.get('token') !== undefined){
             header = {
                 ...header,
-                token:reduxConf.get('token')
+                token:config.get('token')
             }
         }
         header = {
             ...header,
             'Accept': 'application/json'
         };
-        // let currentUrl = `${reduxConf.get('host')}${url}`;
+        // let currentUrl = `${config.get('host')}${url}`;
         let currentUrl = `${url}`;
         if(requestParams){
             currentUrl +='?'+querystring.stringify(requestParams)
@@ -319,8 +280,8 @@ export function requestUploadPostDirect(requestActions,url,header, requestParams
                     return response.json();
                 } else {
                     if(response.status == 401){
-                        if(reduxConf.get('emitter'))
-                            reduxConf.get('emitter').emit('auth-error');
+                        if(config.get('emitter'))
+                            config.get('emitter').emit('auth-error');
                     }
                     return {
                         success:false,
@@ -330,7 +291,7 @@ export function requestUploadPostDirect(requestActions,url,header, requestParams
             })
             .then(json => {
                 if(!json.success){
-                    reduxConf.get('emitter').emit('error',json.msg);
+                    config.get('emitter').emit('error',json.msg);
                 }
                 dispatch(requestUploadDirectEnd(json,threadID,requestActions,type));
             })

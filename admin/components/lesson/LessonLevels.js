@@ -4,6 +4,7 @@ import config from "../../config";
 import moment from "moment";
 import * as actions from "../../actions/lessonLevel_actions";
 import arrayMove from 'array-move';
+import { Link } from 'react-router-dom';
 
 
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
@@ -209,7 +210,12 @@ class LessonLevels extends React.Component {
                 loading={status}
                 extra={
                     <React.Fragment>
-                        <Button style={{marginRight: 10}} type="default" key='newLevel' icon={<PlusOutlined />} onClick={this.openModalLevel.bind(this, 'new', null, {})} >
+                        <Link to='/admin/lessons'>
+                            <Button style={{marginRight: 10}} type="default" key='newLevel' icon={<CaretLeftFilled />} >
+                                Буцах
+                            </Button>
+                        </Link>
+                        <Button style={{marginRight: 10}} type="primary" key='newLevel' icon={<PlusOutlined />} onClick={this.openModalLevel.bind(this, 'new', null, {})} >
                             Түвшин
                         </Button>
                         {/*<Button loading={timelineSubmitLoader} type="primary" key='hadhad' icon={<CheckOutlined />} onClick={this.complete.bind(this)}>*/}

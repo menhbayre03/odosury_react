@@ -4,7 +4,8 @@ import {
     teacherChangeHandler,
     submitTeacher,
     deleteTeachers,
-    getTeachers
+    getTeachers,
+    uploadTeacherAvatar
 } from "../actionTypes";
 const initialState = {
     status: 1,
@@ -12,11 +13,35 @@ const initialState = {
     teachers:[],
     all:0,
     submitTeacherLoader: false,
-    teacher: {}
+    teacher: {},
+    imageUploadLoading: false,
 };
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case uploadTeacherAvatar.REQUEST:
+            return {
+                ...state,
+                imageUploadLoading: true,
+            };
+        case uploadTeacherAvatar.RESPONSE:
+            if(action.json.success){
+                console.log('action.json.avatar');
+                console.log(action.json.avatar);
+                return {
+                    ...state,
+                    imageUploadLoading: false,
+                    teacher: {
+                        ...state.teacher,
+                        avatar: action.json.avatar
+                    }
+                };
+            } else {
+                return {
+                    ...state,
+                    imageUploadLoading: false
+                };
+            }
         case deleteTeachers.REQUEST:
             if(action.json._id){
                 return {
@@ -49,7 +74,7 @@ export default(state = initialState, action) => {
                                 run.loading = false;
                             }
                             return run;
-                        } ),
+                        }),
                         all: state.all - 1
                     };
                 } else {

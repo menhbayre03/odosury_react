@@ -19,6 +19,10 @@ export const deleteTeachers = {
     REQUEST:'deleteTeachers_REQUEST',
     RESPONSE:'deleteTeachers_RESPONSE',
 };
+export const uploadTeacherAvatar = {
+    REQUEST:'uploadTeacherAvatar_REQUEST',
+    RESPONSE:'uploadTeacherAvatar_RESPONSE',
+};
 
 export const openCategoryModal = {
     REQUEST:'openCategoryModal_REQUEST',
@@ -109,6 +113,7 @@ export const searchTeacher = {
 }
 export const uploadLessonImage = {
     REQUEST:'uploadLessonImage_REQUEST',
+    PROGRESS:'uploadLessonImage_PROGRESS',
     RESPONSE:'uploadLessonImage_RESPONSE',
 };
 export const uploadLessonVideo = {

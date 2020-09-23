@@ -169,14 +169,14 @@ class LessonEdit extends React.Component {
         if(!lessonImage || !lessonImage.path || lessonImage.path === '' || !lessonImage.type || lessonImage.type !== 'image' ){
             return config.get('emitter').emit('warning', ("Зураг оруулна уу!"));
         }
-        if(!lessonVideo || !lessonVideo.path || lessonVideo.path === '' || !lessonVideo.type || lessonVideo.type !== 'video' ){
-            return config.get('emitter').emit('warning', ("Бичлэг оруулна уу!"));
-        }
+        // if(!lessonVideo || !lessonVideo.path || lessonVideo.path === '' || !lessonVideo.type || lessonVideo.type !== 'video' ){
+        //     return config.get('emitter').emit('warning', ("Бичлэг оруулна уу!"));
+        // }
         let cc = {
             ...lesson,
             selectedMember: this.state.selectedMember,
             lessonImage: lessonImage,
-            lessonVideo: lessonVideo,
+            lessonVideo: (lessonVideo || {}),
             requirementsArray: this.state.requirementsArray,
             learn_check_listArray: this.state.learn_check_listArray
         };
@@ -198,9 +198,9 @@ class LessonEdit extends React.Component {
         if (!isJpgOrPng) {
             message.error('You can only upload JPG/PNG file!');
         }
-        const isLt2M = file.size / 1024 / 1024 < 2;
+        const isLt2M = file.size / 1024 / 1024 < 5;
         if (!isLt2M) {
-            message.error('Image must smaller than 2MB!');
+            message.error('Image must smaller than 5MB!');
         }
         return isJpgOrPng && isLt2M;
     }
@@ -225,7 +225,7 @@ class LessonEdit extends React.Component {
         let { main:{user}, lesson:{imageUploadLoading, lessonImage, videoUploadLoading, lessonVideo, status, openModal, lesson, lessons, submitLessonLoader, all, searchTeachersResult, searchTeacherLoader, categories, level} } = this.props;
         let avatar = '/images/default-avatar.png';
         if (this.state.selectedMember && this.state.selectedMember.avatar && this.state.selectedMember.avatar !== '') {
-            avatar = this.state.selectedMember.avatar.indexOf('http') > -1 ? this.state.selectedMember.avatar : `https://amjilt.com${ this.state.selectedMember.avatar}`;
+            avatar = this.state.selectedMember.avatar;
         }
         const { current } = this.state;
         const steps = [
@@ -532,7 +532,7 @@ class LessonEdit extends React.Component {
                                                             beforeUpload={this.beforeUpload.bind(this)}
                                                             customRequest={this.customRequest.bind(this)}
                                                         >
-                                                            {lessonImage && lessonImage.path ? <img src={lessonImage.path} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                                                            {lessonImage && lessonImage.path ? <img src={`${config.get('hostMedia')}${lessonImage.path}`} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
                                                         </Upload>
                                                     </Form.Item>
                                                     <Form.Item

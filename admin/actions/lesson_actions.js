@@ -46,10 +46,10 @@ export function searchTeacher(data) {
     return networkActions.requestGet(constants.searchTeacher,url, data);
 }
 export function uploadLessonImage(data, type, id) {
-    let url = `/admin/api/${type}/upload/${id}`;
-    return networkActions.requestUploadPostDirect(constants.uploadLessonImage, url,  {}, null, data );
+    let url = `/lesson/image/upload`;
+    return networkActions.uploadProgress(constants.uploadLessonImage, url, data, type);
 }
 export function uploadLessonVideo(data, type, id) {
-    let url = `/admin/api/${type}/upload/${id}`;
-    return networkActions.requestUploadPostDirect(constants.uploadLessonVideo, url,  {}, null, data );
+    let url = `http://cdn.odosury.mn/api/${type}/upload/${id}`;
+    return networkActions.uploadProgress(constants.uploadLessonVideo, data, type );
 }

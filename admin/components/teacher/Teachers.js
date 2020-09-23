@@ -6,8 +6,8 @@ import * as actions from "../../actions/teacher_actions";
 
 
 const reducer = ({ main, teacher }) => ({ main, teacher });
-import { Card, Button, Avatar, Table, Modal, Form, Input, Select, Popconfirm } from 'antd';
-import { EditOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, SearchOutlined } from '@ant-design/icons'
+import {Card, Button, Avatar, Table, Modal, Form, Input, Select, Popconfirm, Upload, message} from 'antd';
+import { EditOutlined, LoadingOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, SearchOutlined } from '@ant-design/icons'
 const { Meta } = Card;
 const { TextArea } = Input;
 const { Option } = Select;
@@ -48,6 +48,9 @@ class Teachers extends React.Component {
         let emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         const phoneRegex = /^[0-9]{8}$/;
         const nameRegex = /^[а-яА-Яa-zA-z үҮөӨёЁ-]*$/;
+        // if(!teacher.avatar || (teacher.avatar && teacher.avatar.trim() === '' )){
+        //     return config.get('emitter').emit('warning', ("Зураг оруулна уу!"));
+        // }
         if(!teacher.last_name || (teacher.last_name && teacher.last_name.trim() === '' )){
             return config.get('emitter').emit('warning', ("Овог оруулна уу!"));
         } else if((!nameRegex.test(teacher.last_name))){
@@ -68,7 +71,7 @@ class Teachers extends React.Component {
         } else if((!phoneRegex.test(teacher.phone))){
             return config.get('emitter').emit('warning', ("Утас бичиглэл буруу байна!"));
         }
-        this.props.dispatch(actions.submitTeacher(teacher));
+        this.props.dispatch(actions.submitTeacher({...teacher}));
     }
     tableOnChange(data){
         const {dispatch } = this.props;
@@ -93,8 +96,26 @@ class Teachers extends React.Component {
     delete(id){
         this.props.dispatch(actions.deleteTeachers({_id:id, pageSize: this.state.pageSize, pageNum: this.state.pageNum}));
     }
+    //upload
+    customRequest(files) {
+        const {main:{user}} = this.props;
+        var id = user._id;
+        files.file.path = files.file.name;
+        this.props.dispatch(actions.uploadTeacherAvatar([files.file], 'image', id));
+    }
+    beforeUpload(file) {
+        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/JPEG' || file.type === 'image/PNG';
+        if (!isJpgOrPng) {
+            message.error('You can only upload JPG/PNG file!');
+        }
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+            message.error('Image must smaller than 2MB!');
+        }
+        return isJpgOrPng && isLt2M;
+    }
     render() {
-        let { main:{user}, teacher:{status, openModal, teacher, teachers, submitTeacherLoader, all} } = this.props;
+        let { main:{user}, teacher:{status, openModal, teacher, teachers, submitTeacherLoader, all, imageUploadLoading} } = this.props;
         let pagination = {
             total : all,
             current: this.state.pageNum + 1,
@@ -181,6 +202,16 @@ class Teachers extends React.Component {
                 width: 240
             },
         ];
+        //upload
+        const uploadButton = (
+            <div style={{fontSize: 24}}>
+                {imageUploadLoading ? <LoadingOutlined /> : <PlusOutlined />}
+            </div>
+        );
+        let avatar = '/images/default-avatar.png';
+        if (teacher.avatar && teacher.avatar !== '') {
+            avatar = teacher.avatar;
+        }
         return (
             <Card
                 title="Багш нар"
@@ -208,6 +239,31 @@ class Teachers extends React.Component {
                     confirmLoading={submitTeacherLoader}
                     maskClosable={false}
                 >
+
+                    <Form.Item
+                        label='Зураг'
+                        labelCol={{span: 5}}
+                    >
+                        <Upload
+                            name="avatar"
+                            listType="picture-card"
+                            className="avatar-uploader"
+                            showUploadList={false}
+                            disabled={imageUploadLoading}
+                            beforeUpload={this.beforeUpload.bind(this)}
+                            customRequest={this.customRequest.bind(this)}
+                        >
+                            {teacher && teacher.avatar ?
+                                <img
+                                    onError={(e) => e.target.src = `/images/default-avatar.png`}
+                                    src={avatar}
+                                    style={{ width: '100%' }}
+                                />
+                                :
+                                uploadButton
+                            }
+                        </Upload>
+                    </Form.Item>
                     <Form.Item
                         label='Овог'
                         labelCol={{span: 5}}
@@ -242,22 +298,6 @@ class Teachers extends React.Component {
                     >
                         <Input maxLength={8} type='text' value={teacher.phone? teacher.phone : ''} name='phone' onChange={this.onChangeHandler.bind(this)} />
                     </Form.Item>
-                    {/*{teacher._id?*/}
-                    {/*    null*/}
-                    {/*    :*/}
-                    {/*    <Form.Item*/}
-                    {/*        label='Төлөв'*/}
-                    {/*        labelCol={{span: 5}}*/}
-                    {/*        // help=""*/}
-                    {/*    >*/}
-                    {/*        <Input maxLength={8} type='text' value={teacher.phone? teacher.phone : ''} name='status' onChange={this.onChangeHandler.bind(this)} />*/}
-                    {/*        <Select value={teacher.status? teacher.status: ''} name='status' onChange={this.onChangeHandler.bind(this)}>*/}
-                    {/*            <Option value=''>Төлөв</Option>*/}
-                    {/*            <Option value=''>Идэвхитэй</Option>*/}
-                    {/*            <Option value=''>Устгах</Option>*/}
-                    {/*        </Select>*/}
-                    {/*    </Form.Item>*/}
-                    {/*}*/}
                 </Modal>
 
             </Card>

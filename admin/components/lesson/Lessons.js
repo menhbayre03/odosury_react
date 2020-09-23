@@ -171,9 +171,9 @@ class Lessons extends React.Component {
                             Болих
                         </Button>
                         :
-                        openLevelSingle?
-                            <Button type="default" key='openLevels' icon={<CloseOutlined />} onClick={this.closeLevelSingle.bind(this)}  > Болих </Button>
-                            :
+                        // openLevelSingle?
+                        //     <Button type="default" key='openLevels' icon={<CloseOutlined />} onClick={this.closeLevelSingle.bind(this)}  > Болих </Button>
+                        //     :
                             <Button type="primary" key='forwardButton' icon={<PlusOutlined />} onClick={this.openModal.bind(this, {})} >
                                 Хичээл
                             </Button>
@@ -182,9 +182,9 @@ class Lessons extends React.Component {
                 {openModal?
                     <LessonEdit />
                     :
-                    openLevelSingle?
-                        <LessonLevels closeLevelSingle={this.closeLevelSingle.bind(this)} />
-                        :
+                    // openLevelSingle?
+                    //     <LessonLevels closeLevelSingle={this.closeLevelSingle.bind(this)} />
+                    //     :
                         <React.Fragment>
                             {/*<div style={{marginBottom: 20}}>*/}
                             {/*    <Input maxLength={60} size='small' placeholder='Нэр, имэйл' style={{width: 200, marginRight: 20}} value={this.state.search} name='search' onChange={(e) => this.setState({search: e.target.value})} />*/}
