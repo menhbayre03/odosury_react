@@ -3,7 +3,6 @@ import querystring from 'querystring';
 import config from '../config';
 import Cookies from "js-cookie";
 import axios from 'axios';
-// import reduxConf from "../../../amjilt_react/amjilt_redux/src/reduxConfig";
 
 export function requestGet(requestActions,url, requestParams = null,header={}) {
     return dispatch => {
