@@ -2,17 +2,17 @@ import {
     openLessonModal,
     closeLessonModal,
     lessonChangeHandler,
-    submitTeacher,
-    deleteTeachers,
+    submitLesson,
+    deleteLesson,
     getLesson,
     searchTeacher,
     openLessonModalLevel,
     closeLessonModalLevel,
     lessonChangeHandlerLevel,
-    lessonAddLevel,
     uploadLessonImage,
     uploadLessonVideo,
-    orderLevels,
+    openLevelSingle,
+    closeLevelSingle,
 } from "../actionTypes";
 const initialState = {
     status: 1,
@@ -20,6 +20,7 @@ const initialState = {
     lessons:[],
     categories:[],
     all:0,
+    teacherCount:0,
     submitLessonLoader: false,
     lesson: {},
     searchTeachersResult:[],
@@ -31,11 +32,27 @@ const initialState = {
     lessonImage: {},
     imageUploadLoading: false,
     lessonVideo: {},
-    videoUploadLoading: false
+    videoUploadLoading: false,
+    openLevelSingle: false,
 };
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case openLevelSingle.REQUEST:
+            return {
+                ...state,
+                openLevelSingle: true,
+                lesson: action.json
+            };
+        case closeLevelSingle.REQUEST:
+            return {
+                ...state,
+                openLevelSingle: false,
+                // lessons: (state.lessons || []).map(function (run) {
+                //     if(){}
+                // }),
+                lesson:{}
+            };
         case uploadLessonVideo.REQUEST:
             return {
                 ...state,
@@ -74,102 +91,47 @@ export default(state = initialState, action) => {
                     imageUploadLoading: false
                 };
             }
-        case orderLevels.REQUEST:
-            return {
-                ...state,
-                lesson: {
-                    ...state.lesson,
-                    levels: action.json
-                }
-            };
-        case lessonAddLevel.REQUEST:
-            let holdLesson = state.lesson;
-            if(state.levelType === 'new'){
-                if(holdLesson && holdLesson.levels && holdLesson.levels.length>0){
-                    holdLesson.levels.push(state.level);
-                } else {
-                    holdLesson.levels = [state.level];
-                }
-            } else if(state.levelType === 'update') {
-                holdLesson.levels[state.levelIdx] = state.level;
+        case deleteLesson.REQUEST:
+            if(action.json._id){
+                return {
+                    ...state,
+                    lessons: state.lessons.map( function (run) {
+                        if(run._id.toString() === action.json._id.toString()){
+                            run.loading = true;
+                        }
+                        return run;
+                    } )
+                };
+            } else {
+                return {
+                    ...state
+                };
             }
-            // if(state.lesson && state.lesson.levels && run.lesson.levels.length>0){
-            //     let holdLevels = run.lesson.levels.map(function (run) {
-            //         if(state.levelType === 'new'){
-            //             run.levels.push(state.level);
-            //         } else if(state.levelType === 'update'){
-            //             run.levels[state.levelIdx] = state.level;
-            //         }
-            //         return run;
-            //     });
-            // } else {
-            //     if(state.levelType === 'new'){
-            //         run.levels = [state.level];
-            //     }
-            // }
-            return {
-                ...state,
-                lesson: holdLesson,
-                level:{},
-                openModalLevel: false,
-            };
-        case openLessonModalLevel.REQUEST:
-            return {
-                ...state,
-                openModalLevel: true,
-                level:action.json.level,
-                levelType: action.json.type,
-                levelIdx: action.json.idx,
-            };
-        case closeLessonModalLevel.REQUEST:
-            return {
-                ...state,
-                openModalLevel: false,
-                level: {},
-                levelType: '',
-                levelIdx: null,
-            };
-        // case deleteTeachers.REQUEST:
-        //     if(action.json._id){
-        //         return {
-        //             ...state,
-        //             lessons: state.lessons.map( function (run) {
-        //                 if(run._id.toString() === action.json._id.toString()){
-        //                     run.loading = true;
-        //                 }
-        //                 return run;
-        //             } )
-        //         };
-        //     } else {
-        //         return {
-        //             ...state
-        //         };
-        //     }
-        // case deleteTeachers.RESPONSE:
-        //     if(action.json.success){
-        //         return {
-        //             ...state,
-        //             lessons: (action.json.lessons || []),
-        //             all: state.all - 1
-        //         };
-        //     } else {
-        //         if(action.json._id){
-        //             return {
-        //                 ...state,
-        //                 lessons: state.lessons.map( function (run) {
-        //                     if(run._id.toString() === action.json._id.toString()){
-        //                         run.loading = false;
-        //                     }
-        //                     return run;
-        //                 } ),
-        //                 all: state.all - 1
-        //             };
-        //         } else {
-        //             return {
-        //                 ...state
-        //             };
-        //         }
-        //     }
+        case deleteLesson.RESPONSE:
+            if(action.json.success){
+                return {
+                    ...state,
+                    lessons: (action.json.lessons || []),
+                    all: state.all - 1
+                };
+            } else {
+                if(action.json._id){
+                    return {
+                        ...state,
+                        lessons: state.lessons.map( function (run) {
+                            if(run._id.toString() === action.json._id.toString()){
+                                run.loading = false;
+                            }
+                            return run;
+                        } ),
+                        all: state.all - 1
+                    };
+                } else {
+                    return {
+                        ...state
+                    };
+                }
+            }
         case searchTeacher.REQUEST:
             return {
                 ...state,
@@ -230,7 +192,8 @@ export default(state = initialState, action) => {
                 status: 0,
                 lessons: (action.json.lessons || []),
                 categories: (hold || []),
-                all: (action.json.all || 0)
+                all: (action.json.all || 0),
+                teacherCount: (action.json.teacherCount || 0),
             };
         case lessonChangeHandler.REQUEST:
             return {
@@ -240,80 +203,86 @@ export default(state = initialState, action) => {
                     [action.json.name]:action.json.value
                 },
             };
-        case lessonChangeHandlerLevel.REQUEST:
-            return {
-                ...state,
-                level:{
-                    ...state.level,
-                    [action.json.name]:action.json.value
-                },
-            };
         case openLessonModal.REQUEST:
             return {
                 ...state,
                 openModal: true,
                 lesson:action.json,
+                lessonImage:action.json.thumbnail,
+                lessonVideo:action.json.video,
                 searchTeachersResult:[],
             };
         case closeLessonModal.REQUEST:
             return {
                 ...state,
                 openModal: false,
-                lesson:{}
+                lesson:{},
+                lessonImage: {},
+                lessonVideo: {}
             };
-        // case submitTeacher.REQUEST:
-        //     return {
-        //         ...state,
-        //         submitLessonLoader: true,
-        //     };
-        // case submitTeacher.RESPONSE:
-        //     if(action.json.success){
-        //         if(action.json._id){
-        //             return {
-        //                 ...state,
-        //                 submitLessonLoader: false,
-        //                 openModal: false,
-        //                 lessons: state.lessons.map(function (run) {
-        //                     if(run._id === action.json._id){
-        //                         run.first_name =  action.json.data.first_name;
-        //                         run.last_name = action.json.data.last_name;
-        //                         run.bio = action.json.data.bio;
-        //                         run.email = action.json.data.email;
-        //                         run.phone = action.json.data.phone;
-        //                         run.avatar = action.json.data.avatar;
-        //                     }
-        //                     return run;
-        //                 })
-        //             };
-        //         } else {
-        //             let lesson={
-        //                 _id: action.json.data._id,
-        //                 first_name: action.json.data.first_name,
-        //                 last_name: action.json.data.last_name,
-        //                 bio: action.json.data.bio,
-        //                 email: action.json.data.email,
-        //                 phone: action.json.data.phone,
-        //                 avatar: action.json.data.avatar,
-        //                 status: action.json.data.status,
-        //                 created: action.json.data.created
-        //             };
-        //             return {
-        //                 ...state,
-        //                 submitLessonLoader: false,
-        //                 openModal: false,
-        //                 all: state.all + 1,
-        //                 lessons:[
-        //                     lesson,
-        //                     ...state.lessons,
-        //                 ]
-        //             };
-        //         }
-        //     } else {
-        //         return {
-        //             ...state,
-        //             submitLessonLoader: false
-        //         };
-        //     }
+        case submitLesson.REQUEST:
+            return {
+                ...state,
+                submitLessonLoader: true,
+            };
+        case submitLesson.RESPONSE:
+            if(action.json.success){
+                if(action.json._id){ // update
+                    return {
+                        ...state,
+                        submitLessonLoader: false,
+                        openModal: false,
+                        lessons: state.lessons.map(function (run) {
+                            if(run._id === action.json._id){
+                                run.category= action.json.data.category;
+                                run.description= action.json.data.description;
+                                run.intro_desc= action.json.data.intro_desc;
+                                run.learn_check_list= action.json.data.learn_check_listArray;
+                                run.thumbnail= action.json.data.lessonImage;
+                                run.video= action.json.data.lessonVideo;
+                                run.price= action.json.data.price;
+                                run.requirements= action.json.data.requirementsArray;
+                                run.sale= action.json.data.sale;
+                                run.teacher= action.json.data.selectedMember;
+                                run.title= action.json.data.title;
+                                run.created= action.json.data.created;
+                            }
+                            return run;
+                        })
+                    };
+                } else { // new
+                    let lesson={
+                        _id: action.json.data._id,
+                        category: action.json.data.category,
+                        description: action.json.data.description,
+                        intro_desc: action.json.data.intro_desc,
+                        learn_check_list: action.json.data.learn_check_listArray,
+                        thumbnail: action.json.data.lessonImage,
+                        video: action.json.data.lessonVideo,
+                        price: action.json.data.price,
+                        requirements: action.json.data.requirementsArray,
+                        sale: action.json.data.sale,
+                        teacher: action.json.data.selectedMember,
+                        title: action.json.data.title,
+                        created: action.json.data.created,
+                    };
+                    return {
+                        ...state,
+                        submitLessonLoader: false,
+                        openModal: false,
+                        all: state.all + 1,
+                        lessons:[
+                            lesson,
+                            ...state.lessons,
+                        ],
+                    };
+                }
+            } else {
+                return {
+                    ...state,
+                    submitLessonLoader: false
+                };
+            }
         default:
             return state;
     }

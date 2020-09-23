@@ -19,32 +19,14 @@ export function lessonChangeHandler(data){
         json: data
     }
 }
-export function lessonChangeHandlerLevel(data){
+export function openLevelSingle(data){
     return {
-        type: constants.lessonChangeHandlerLevel.REQUEST,
+        type: constants.openLevelSingle.REQUEST,
         json: data
     }
-}
-export function openLessonModalLevel(data){
+}export function closeLevelSingle(){
     return {
-        type: constants.openLessonModalLevel.REQUEST,
-        json: data
-    }
-}
-export function orderLevels(data){
-    return {
-        type: constants.orderLevels.REQUEST,
-        json: data
-    }
-}
-export function closeLessonModalLevel(){
-    return {
-        type: constants.closeLessonModalLevel.REQUEST
-    }
-}
-export function lessonAddLevel(){
-    return {
-        type: constants.lessonAddLevel.REQUEST
+        type: constants.closeLevelSingle.REQUEST
     }
 }
 export function submitLesson(data) {
