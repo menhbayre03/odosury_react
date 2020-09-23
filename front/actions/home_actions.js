@@ -3,5 +3,5 @@ import * as constants from '../actionTypes';
 
 export function getHome() {
     let url = `/api/home/get`;
-    return networkActions.requestGet(constants.register, url);
+    return networkActions.requestGet(constants.getHome, url);
 }

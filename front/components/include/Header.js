@@ -33,7 +33,6 @@ class Header extends Component {
 
     render() {
         const {main : {user, categories}} = this.props;
-        console.log(categories)
         return (
             <div>
                 <div className={`header ${this.state.trans ? 'trans' : ''}`}>
@@ -41,7 +40,7 @@ class Header extends Component {
                         <Row className="header-top">
                             <Col md={6} className="section-1">
                                 <div className="logo" style={{display: 'inline-block'}}>
-                                    <img src="/images/logo.png" alt=""/>
+                                    <Link to={'/'}><img src="/images/logo.png" alt=""/></Link>
                                 </div>
                                 <div className="category-menu" style={{display: 'inline-block', position: 'relative'}}>
                                     <Button onClick={() => this.setState({cate: !this.state.cate})}>
