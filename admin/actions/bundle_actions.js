@@ -19,14 +19,32 @@ export function bundleChangeHandler(data){
         json: data
     }
 }
-// export function submitTeacher(data) {
-//     let url = `/admin/api/submitTeacher`;
-//     return networkActions.requestPost(constants.submitTeacher,url, data);
-// }
-// export function getTeachers(data) {
-//     let url = `/admin/api/getTeachers`;
-//     return networkActions.requestGet(constants.getTeachers,url, data);
-// }
+export function bundleLevelOnChange(data){
+    return {
+        type: constants.bundleLevelOnChange.REQUEST,
+        json: data
+    }
+}
+export function addLessonToBundleLevels(data){
+    return {
+        type: constants.addLessonToBundleLevels.REQUEST,
+        json: data
+    }
+}
+export function addBundleLevel(data){
+    return {
+        type: constants.addBundleLevel.REQUEST,
+        json: data
+    }
+}
+export function submitBundle(data) {
+    let url = `/admin/api/submitBundle`;
+    return networkActions.requestPost(constants.submitBundle,url, data);
+}
+export function getBundle(data) {
+    let url = `/admin/api/getBundle`;
+    return networkActions.requestGet(constants.getBundle,url, data);
+}
 // export function deleteTeachers(data) {
 //     let url = `/admin/api/deleteTeachers`;
 //     return networkActions.requestPost(constants.deleteTeachers,url, data);

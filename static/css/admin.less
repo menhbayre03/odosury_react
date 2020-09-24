@@ -168,6 +168,37 @@ body{
 
 
 
+.bundle-level-outer{
+  border: 1px solid #d9d9d9;
+  width: 100%;
+  min-height: 34px;
+  max-height: 200px;
+  padding: 0 10px 0 0;
+  overflow: auto;
+  white-space: nowrap;
+  margin-bottom: 10px;
+  text-align: left;
+  .scrollBarY(5px);
+  .scrollBarX(5px);
+  .orts-inner{
+    padding: 5px 0 5px 20px;
+    position: relative;
+    background-color: #ffffff;
+    .action{
+      position: absolute;
+      top: 5px;
+      left: 2px;
+      color: #c64646;
+      display: none;
+    }
+  }
+  .orts-inner:hover{
+    opacity: 0.5;
+    .action{
+      display: inline-block;
+    }
+  }
+}
 .lesson-edit{
   .ant-form-item{
     margin-bottom: 40px;

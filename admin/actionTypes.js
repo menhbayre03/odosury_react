@@ -34,14 +34,23 @@ export const closeBundleModal = {
 export const bundleChangeHandler = {
     REQUEST:'bundleChangeHandler_REQUEST',
 };
-// export const submitTeacher = {
-//     REQUEST:'submitTeacher_REQUEST',
-//     RESPONSE:'submitTeacher_RESPONSE',
-// };
-// export const getTeachers = {
-//     REQUEST:'getTeachers_REQUEST',
-//     RESPONSE:'getTeachers_RESPONSE',
-// };
+export const bundleLevelOnChange = {
+    REQUEST:'bundleLevelOnChange_REQUEST',
+};
+export const addBundleLevel = {
+    REQUEST:'addBundleLevel_REQUEST',
+};
+export const addLessonToBundleLevels = {
+    REQUEST:'addLessonToBundleLevels_REQUEST',
+};
+export const getBundle = {
+    REQUEST:'getBundle_REQUEST',
+    RESPONSE:'getBundle_RESPONSE',
+};
+export const submitBundle = {
+    REQUEST:'submitBundle_REQUEST',
+    RESPONSE:'submitBundle_RESPONSE',
+};
 // export const deleteTeachers = {
 //     REQUEST:'deleteTeachers_REQUEST',
 //     RESPONSE:'deleteTeachers_RESPONSE',

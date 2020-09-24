@@ -127,39 +127,39 @@ class LessonEdit extends React.Component {
     next() {
         const {lesson:{ lesson }} = this.props;
         const { selectedMember } = this.state;
-        // if(this.state.current === 0){
-        //     if(!lesson.title || (lesson.title && lesson.title.trim() === '' )){
-        //         return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
-        //     }
-        //     if(!lesson.description || (lesson.description && lesson.description.trim() === '' )){
-        //         return config.get('emitter').emit('warning', ("Танилцуулга оруулна уу!"));
-        //     }
-        //     if(!lesson.intro_desc || (lesson.intro_desc && lesson.intro_desc.trim() === '' )){
-        //         return config.get('emitter').emit('warning', ("Дэлгэрэнгүй танилцуулга оруулна уу!"));
-        //     }
-        // }
-        // if(this.state.current === 1){
-        //     if(!selectedMember || !selectedMember._id){
-        //         return config.get('emitter').emit('warning', ("Багш сонгоно уу!"));
-        //     }
-        //     if(!lesson.category || (lesson.category && lesson.category.trim() === '' )){
-        //         return config.get('emitter').emit('warning', ("Ангилал сонгоно уу!"));
-        //     }
-        //     if(!lesson.price || (lesson.price && lesson.price === 0 )){
-        //         return config.get('emitter').emit('warning', ("Үнэ оруулна уу!"));
-        //     }
-        //     if(lesson.sale && lesson.sale > lesson.price){
-        //         return config.get('emitter').emit('warning', ("Хямдрал үнэ-ээс их байж болохгүй!"));
-        //     }
-        // }
-        // if(this.state.current === 2){
-        //     if(!this.state.requirementsArray || (this.state.requirementsArray && this.state.requirementsArray.length<1 )){
-        //         return config.get('emitter').emit('warning', ("Шаардлагатай зүйлс оруулна уу!"));
-        //     }
-        //     if(!this.state.learn_check_listArray || (this.state.learn_check_listArray && this.state.learn_check_listArray.length<1 )){
-        //         return config.get('emitter').emit('warning', ("Сурах зүйлс оруулна уу!"));
-        //     }
-        // }
+        if(this.state.current === 0){
+            if(!lesson.title || (lesson.title && lesson.title.trim() === '' )){
+                return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
+            }
+            if(!lesson.description || (lesson.description && lesson.description.trim() === '' )){
+                return config.get('emitter').emit('warning', ("Танилцуулга оруулна уу!"));
+            }
+            if(!lesson.intro_desc || (lesson.intro_desc && lesson.intro_desc.trim() === '' )){
+                return config.get('emitter').emit('warning', ("Дэлгэрэнгүй танилцуулга оруулна уу!"));
+            }
+        }
+        if(this.state.current === 1){
+            if(!selectedMember || !selectedMember._id){
+                return config.get('emitter').emit('warning', ("Багш сонгоно уу!"));
+            }
+            if(!lesson.category || (lesson.category && lesson.category.trim() === '' )){
+                return config.get('emitter').emit('warning', ("Ангилал сонгоно уу!"));
+            }
+            if(!lesson.price || (lesson.price && lesson.price === 0 )){
+                return config.get('emitter').emit('warning', ("Үнэ оруулна уу!"));
+            }
+            if(lesson.sale && lesson.sale > lesson.price){
+                return config.get('emitter').emit('warning', ("Хямдрал үнэ-ээс их байж болохгүй!"));
+            }
+        }
+        if(this.state.current === 2){
+            if(!this.state.requirementsArray || (this.state.requirementsArray && this.state.requirementsArray.length<1 )){
+                return config.get('emitter').emit('warning', ("Шаардлагатай зүйлс оруулна уу!"));
+            }
+            if(!this.state.learn_check_listArray || (this.state.learn_check_listArray && this.state.learn_check_listArray.length<1 )){
+                return config.get('emitter').emit('warning', ("Сурах зүйлс оруулна уу!"));
+            }
+        }
         const current = this.state.current + 1;
         this.setState({ current });
 

@@ -19,9 +19,9 @@ import {
     Upload,
     message,
     InputNumber,
-    Progress
+    Progress,
 } from 'antd';
-import { EditOutlined, LoadingOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, SearchOutlined } from '@ant-design/icons'
+import { EditOutlined, LoadingOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, SearchOutlined, CloseCircleFilled } from '@ant-design/icons'
 const { Meta } = Card;
 const { TextArea } = Input;
 const { Option } = Select;
@@ -36,13 +36,18 @@ class Bundle extends React.Component {
         };
     }
     componentDidMount() {
-        // this.props.dispatch(actions.getTeachers({pageNum: this.state.pageNum, pageSize: this.state.pageSize}));
+        this.props.dispatch(actions.getBundle({pageNum: this.state.pageNum, pageSize: this.state.pageSize}));
     }
     // componentWillUnmount() {
     //     this.props.dispatch(actions.closeTeacherModal());
     // }
     openModal(data) {
-        this.props.dispatch(actions.openBundleModal(data));
+        const {bundle:{lessons}} = this.props;
+        if(lessons && lessons.length>0){
+            this.props.dispatch(actions.openBundleModal(data));
+        } else {
+            return config.get('emitter').emit('warning', ("Хичээл үүсгэнэ уу!"));
+        }
     }
     closeModal() {
         this.props.dispatch(actions.closeBundleModal());
@@ -53,36 +58,37 @@ class Bundle extends React.Component {
     onChangeHandle2(name, value) {
         this.props.dispatch(actions.bundleChangeHandler({name:name, value: value}));
     }
-    // submitTeacher() {
-    //     const {bundle:{bundle}} = this.props;
-    //     let emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    //     const phoneRegex = /^[0-9]{8}$/;
-    //     const nameRegex = /^[а-яА-Яa-zA-z үҮөӨёЁ-]*$/;
-    //     // if(!bundle.avatar || (bundle.avatar && bundle.avatar.trim() === '' )){
-    //     //     return config.get('emitter').emit('warning', ("Зураг оруулна уу!"));
-    //     // }
-    //     if(!bundle.last_name || (bundle.last_name && bundle.last_name.trim() === '' )){
-    //         return config.get('emitter').emit('warning', ("Овог оруулна уу!"));
-    //     } else if((!nameRegex.test(bundle.last_name))){
-    //         return config.get('emitter').emit('warning', ("Овог бичиглэл буруу байна!"));
-    //     }
-    //     if(!bundle.first_name || (bundle.first_name && bundle.first_name.trim() === '' )){
-    //         return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
-    //     } else if((!nameRegex.test(bundle.first_name))){
-    //         return config.get('emitter').emit('warning', ("Нэр бичиглэл буруу байна!"));
-    //     }
-    //     if(!bundle.email){
-    //         return config.get('emitter').emit('warning', ("Имэйл оруулна уу!"));
-    //     } else if((!emailRegex.test(bundle.email))){
-    //         return config.get('emitter').emit('warning', ("Имэйл бичиглэл буруу байна!"));
-    //     }
-    //     if(!bundle.phone){
-    //         return config.get('emitter').emit('warning', ("Утас оруулна уу!"));
-    //     } else if((!phoneRegex.test(bundle.phone))){
-    //         return config.get('emitter').emit('warning', ("Утас бичиглэл буруу байна!"));
-    //     }
-    //     this.props.dispatch(actions.submitTeacher({...bundle}));
-    // }
+    submitTeacher() {
+        const {bundle:{bundle, bundleThumbnail}} = this.props;
+        if(!bundleThumbnail || (bundleThumbnail && bundleThumbnail.path && bundleThumbnail.path.trim() === '')){
+            return config.get('emitter').emit('warning', ("Зураг оруулна уу!"));
+        }
+        if(!bundle.title || (bundle.title && bundle.title.trim() === '')){
+            return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
+        }
+        if(!bundle.price || (bundle.price && bundle.price === 0)){
+            return config.get('emitter').emit('warning', ("Үнэ оруулна уу!"));
+        }
+        if(!bundle.levels || (bundle.levels && bundle.levels.length < 1)){
+            return config.get('emitter').emit('warning', ("Түвшин оруулна уу!"));
+        } else {
+            let check = false;
+            bundle.levels.map(function (run) {
+                if(!run.lessons || (run.lessons && run.lessons.length < 1)){
+                    check = true;
+                }
+            });
+            if(check){
+                return config.get('emitter').emit('warning', ("Түвшиндээ хичээл оруулна уу!"));
+            }
+        }
+        let cc = {
+            ...bundle,
+            thumbnail: bundleThumbnail._id,
+            bundleThumbnail: bundleThumbnail,
+        };
+        this.props.dispatch(actions.submitBundle(cc));
+    }
     // tableOnChange(data){
     //     const {dispatch } = this.props;
     //     this.setState({pageNum : data.current - 1});
@@ -124,8 +130,47 @@ class Bundle extends React.Component {
         }
         return isJpgOrPng && isLt2M;
     }
+
+    // levels
+    addBundleLevel(){
+        const {bundle:{bundleLevelName}} = this.props;
+        if(!bundleLevelName || (bundleLevelName && bundleLevelName==='')){
+            return config.get('emitter').emit('warning', ("Түвшний нэр оруулна уу!"));
+        }
+        this.props.dispatch(actions.addBundleLevel());
+    }
+    removeSingleOrts(index, name){
+        if(name === 'requirement'){
+            let hold = [];
+            if(this.state.requirementsArray && this.state.requirementsArray.length>0){
+                hold = this.state.requirementsArray.filter((run, idx) => idx !== index);
+                this.setState({requirementsArray: hold})
+            }
+        }
+        if(name === 'learn_check_list'){
+            let hold = [];
+            if(this.state.learn_check_listArray && this.state.learn_check_listArray.length>0){
+                hold = this.state.learn_check_listArray.filter((run, idx) => idx !== index);
+                this.setState({learn_check_listArray: hold})
+            }
+        }
+    }
+    addSingleOrts(idx){
+        const {bundle:{lessonValue}} = this.props;
+        if(!lessonValue || (lessonValue && lessonValue.value && lessonValue.value === '')){
+            return config.get('emitter').emit('warning', ("Хичээл сонгоно уу!"));
+        }
+        this.props.dispatch(actions.addLessonToBundleLevels({index: idx}));
+    }
+    changeState(e, value, idx){
+        if(e === 'bundleLevelName'){
+            this.props.dispatch(actions.bundleLevelOnChange({name:e, value: value.target.value}));
+        } else if(e === 'lessons'){
+            this.props.dispatch(actions.bundleLevelOnChange({name:e, value: idx, index:value}));
+        }
+    }
     render() {
-        let { main:{user}, bundle:{status, openModal, bundle, bundles, submitBundleLoader, all, imageUploadLoading, bundleThumbnail, bundleThumbnailProgress} } = this.props;
+        let { main:{user}, bundle:{status, openModal, bundleLevelName, bundle, bundles, lessonValue, submitBundleLoader, all, imageUploadLoading, lessons, bundleThumbnail, bundleThumbnailProgress} } = this.props;
         // let pagination = {
         //     total : all,
         //     current: this.state.pageNum + 1,
@@ -233,8 +278,8 @@ class Bundle extends React.Component {
         if (bundleThumbnail && bundleThumbnail.path !== '') {
             avatar = `${config.get('hostMedia')}${bundleThumbnail.path}`;
         }
-        console.log('avatar');
-        console.log(avatar);
+        console.log('lessonValue')
+        console.log(lessonValue)
         return (
             <Card
                 title="Багц"
@@ -249,46 +294,36 @@ class Bundle extends React.Component {
                 }
             >
 
-                <Card
-                    style={{ width: 300, display: 'inline-block', marginRight: 40 }}
-                    hoverable
-                    cover={
-                        <img
-                            alt="example"
-                            src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                        />
-                    }
-                    actions={[
-                        <EditOutlined key="edit" />,
-                        <DeleteFilled key='delete' />
-                    ]}
-                >
-                    <Meta
-                        // avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                        title="Card title"
-                        description="This is the description"
-                    />
-                </Card>
-                <Card
-                    style={{ width: 300, display: 'inline-block', marginRight: 40 }}
-                    hoverable
-                    cover={
-                        <img
-                            alt="example"
-                            src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                        />
-                    }
-                    actions={[
-                        <EditOutlined key="edit" />,
-                        <DeleteFilled key='delete' />
-                    ]}
-                >
-                    <Meta
-                        // avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                        title="Card title"
-                        description="This is the description"
-                    />
-                </Card>
+                {bundles && bundles.length>0?
+                    bundles.map(run =>
+                        <Card
+                            style={{ width: 200, display: 'inline-block', marginRight: 40 }}
+                            hoverable
+                            cover={
+                                <img
+                                    // alt="example"
+                                    style={{width: '100%'}}
+                                    src={`${config.get('hostMedia')}${run.thumbnail.path}`}
+                                />
+                            }
+                            actions={[
+                                <EditOutlined key="edit" />,
+                                <DeleteFilled key='delete' />
+                            ]}
+                        >
+                            <Meta
+                                // avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                                title={run.title}
+                                description={`Үнэ: ${run.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}₮`}
+
+                            />
+                        </Card>
+                    )
+                    :
+                    null
+                }
+
+
 
 
                 {/*<div style={{marginBottom: 20}}>*/}
@@ -300,7 +335,7 @@ class Bundle extends React.Component {
                 <Modal
                     title="Багш"
                     visible={openModal}
-                    // onOk={this.submitTeacher.bind(this)}
+                    onOk={this.submitTeacher.bind(this)}
                     onCancel={this.closeModal.bind(this)}
                     okText="Хадгалах"
                     cancelText="Болих"
@@ -368,34 +403,80 @@ class Bundle extends React.Component {
                             onChange={this.onChangeHandle2.bind(this, 'sale')}
                         />
                     </Form.Item>
-                    {/*<Form.Item*/}
-                    {/*    label='Нэр'*/}
-                    {/*    labelCol={{span: 5}}*/}
-                    {/*    // help=""*/}
-                    {/*>*/}
-                    {/*    <Input maxLength={60} value={bundle.first_name? bundle.first_name : ''} name='first_name' onChange={this.onChangeHandler.bind(this)} />*/}
-                    {/*</Form.Item>*/}
-                    {/*<Form.Item*/}
-                    {/*    label='Танилцуулга'*/}
-                    {/*    labelCol={{span: 5}}*/}
-                    {/*    // help=""*/}
-                    {/*>*/}
-                    {/*    <TextArea rows={4} value={bundle.bio? bundle.bio : ''} name='bio' onChange={this.onChangeHandler.bind(this)} />*/}
-                    {/*</Form.Item>*/}
-                    {/*<Form.Item*/}
-                    {/*    label='Имэйл'*/}
-                    {/*    labelCol={{span: 5}}*/}
-                    {/*    // help=""*/}
-                    {/*>*/}
-                    {/*    <Input maxLength={60} value={bundle.email? bundle.email : ''} name='email' onChange={this.onChangeHandler.bind(this)} />*/}
-                    {/*</Form.Item>*/}
-                    {/*<Form.Item*/}
-                    {/*    label='Утас'*/}
-                    {/*    labelCol={{span: 5}}*/}
-                    {/*    // help=""*/}
-                    {/*>*/}
-                    {/*    <Input maxLength={8} type='text' value={bundle.phone? bundle.phone : ''} name='phone' onChange={this.onChangeHandler.bind(this)} />*/}
-                    {/*</Form.Item>*/}
+                    <Form.Item
+                            label='Түвшин'
+                        labelCol={{span: 5}}
+                    >
+                        <Input
+                            type="text"
+                            ref="textInput"
+                            name="bundleLevelName"
+                            placeholder='Түвшний нэр'
+                            style={{width: '100%', marginBottom: 10}}
+                            value={bundleLevelName}
+                            onChange={this.changeState.bind(this, 'bundleLevelName')}
+                        />
+                        <Button size='small' style={{width: 120, float: 'right'}}
+                                onClick={this.addBundleLevel.bind(this, 'bundleLevelName')}>
+                            <PlusOutlined/> Түвшин
+                        </Button>
+
+                        {bundle.levels && bundle.levels.length>0?
+                            bundle.levels.map((run, idx) =>
+                                <div key={idx+'levels'}>
+                                    <div>{run.title}</div>
+                                    <div className='bundle-level-outer'>
+                                        {run.lessons && run.lessons.length > 0 ?
+                                            run.lessons.map((run, idx) =>
+                                                <div className='orts-inner' key={idx + 'afro'}>
+                                                    {`${idx + 1}. ${run}`}
+                                                    <div className='action'
+                                                         // onClick={this.removeSingleOrts.bind(this, idx, 'lesson')}
+                                                    >
+                                                        <CloseCircleFilled/></div>
+                                                </div>
+                                            )
+                                            :
+                                            <div className='orts-inner' key='no-orts'
+                                                 style={{opacity: '0.7'}}>
+                                                Хичээл оруулна уу
+                                            </div>
+                                        }
+                                    </div>
+                                    {/*<Input*/}
+                                    {/*    type="text"*/}
+                                    {/*    ref="textInput"*/}
+                                    {/*    name="learn_check_list"*/}
+                                    {/*    placeholder='React'*/}
+                                    {/*    style={{width: '100%', marginBottom: 10}}*/}
+                                    {/*    value={this.state.learn_check_list}*/}
+                                    {/*    onChange={this.changeState.bind(this)}*/}
+                                    {/*/>*/}
+                                    <Select
+                                        value={lessonValue.value && lessonValue.index === idx ? lessonValue.value : ''}
+                                        // onChange={this.onChangeHandlerLevelTimelineSelect.bind(this)}
+                                        name="lessons"
+                                        onChange={this.changeState.bind(this, 'lessons', idx)}
+                                    >
+                                        <Option value="">Хичээл сонгоно уу</Option>
+                                        {lessons.length>0?
+                                            lessons.map(les =>
+                                                <Option value={les._id}>{les.title}</Option>
+                                            )
+                                            :
+                                            null
+                                        }
+                                    </Select>
+                                    <Button size='small' style={{width: 120, float: 'right'}}
+                                            onClick={this.addSingleOrts.bind(this, idx)}>
+                                        <PlusOutlined/> Нэмэх
+                                    </Button>
+                                </div>
+                            )
+                            :
+                            null
+                        }
+                    </Form.Item>
                 </Modal>
 
             </Card>
