@@ -278,8 +278,6 @@ class Bundle extends React.Component {
         if (bundleThumbnail && bundleThumbnail.path !== '') {
             avatar = `${config.get('hostMedia')}${bundleThumbnail.path}`;
         }
-        console.log('lessonValue')
-        console.log(lessonValue)
         return (
             <Card
                 title="Багц"
@@ -293,7 +291,6 @@ class Bundle extends React.Component {
                     </Button>
                 }
             >
-
                 {bundles && bundles.length>0?
                     bundles.map(run =>
                         <Card
@@ -302,6 +299,7 @@ class Bundle extends React.Component {
                             cover={
                                 <img
                                     // alt="example"
+                                    onError={(e) => e.target.src = `/images/default-bundle.png`}
                                     style={{width: '100%'}}
                                     src={`${config.get('hostMedia')}${run.thumbnail.path}`}
                                 />

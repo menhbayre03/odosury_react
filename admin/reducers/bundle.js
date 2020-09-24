@@ -205,8 +205,6 @@ export default(state = initialState, action) => {
                         })
                     };
                 } else {
-                    console.log('action.json.data')
-                    console.log(action.json.data)
                     return {
                         ...state,
                         submitBundleLoader: false,
