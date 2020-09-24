@@ -8,7 +8,7 @@ import arrayMove from 'array-move';
 
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 const reducer = ({ main, lesson }) => ({ main, lesson });
-import { Card, Button, List, Avatar, Table, Modal, Form, Input, Select, Popconfirm, Spin, Row, Col, TreeSelect, InputNumber, Steps, Upload, message } from 'antd';
+import { Card, Button, List, Avatar, Table, Modal, Form, Input, Select, Popconfirm, Progress, Spin, Row, Col, TreeSelect, InputNumber, Steps, Upload, message } from 'antd';
 import { EditOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, DragOutlined, SearchOutlined, UploadOutlined, CloseCircleFilled, SolutionOutlined, LoadingOutlined, SmileOutlined, CheckCircleFilled, CaretRightFilled, CaretLeftFilled } from '@ant-design/icons'
 const { Meta } = Card;
 const { TextArea } = Input;
@@ -127,39 +127,39 @@ class LessonEdit extends React.Component {
     next() {
         const {lesson:{ lesson }} = this.props;
         const { selectedMember } = this.state;
-        if(this.state.current === 0){
-            if(!lesson.title || (lesson.title && lesson.title.trim() === '' )){
-                return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
-            }
-            if(!lesson.description || (lesson.description && lesson.description.trim() === '' )){
-                return config.get('emitter').emit('warning', ("Танилцуулга оруулна уу!"));
-            }
-            if(!lesson.intro_desc || (lesson.intro_desc && lesson.intro_desc.trim() === '' )){
-                return config.get('emitter').emit('warning', ("Дэлгэрэнгүй танилцуулга оруулна уу!"));
-            }
-        }
-        if(this.state.current === 1){
-            if(!selectedMember || !selectedMember._id){
-                return config.get('emitter').emit('warning', ("Багш сонгоно уу!"));
-            }
-            if(!lesson.category || (lesson.category && lesson.category.trim() === '' )){
-                return config.get('emitter').emit('warning', ("Ангилал сонгоно уу!"));
-            }
-            if(!lesson.price || (lesson.price && lesson.price === 0 )){
-                return config.get('emitter').emit('warning', ("Үнэ оруулна уу!"));
-            }
-            if(lesson.sale && lesson.sale > lesson.price){
-                return config.get('emitter').emit('warning', ("Хямдрал үнэ-ээс их байж болохгүй!"));
-            }
-        }
-        if(this.state.current === 2){
-            if(!this.state.requirementsArray || (this.state.requirementsArray && this.state.requirementsArray.length<1 )){
-                return config.get('emitter').emit('warning', ("Шаардлагатай зүйлс оруулна уу!"));
-            }
-            if(!this.state.learn_check_listArray || (this.state.learn_check_listArray && this.state.learn_check_listArray.length<1 )){
-                return config.get('emitter').emit('warning', ("Сурах зүйлс оруулна уу!"));
-            }
-        }
+        // if(this.state.current === 0){
+        //     if(!lesson.title || (lesson.title && lesson.title.trim() === '' )){
+        //         return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
+        //     }
+        //     if(!lesson.description || (lesson.description && lesson.description.trim() === '' )){
+        //         return config.get('emitter').emit('warning', ("Танилцуулга оруулна уу!"));
+        //     }
+        //     if(!lesson.intro_desc || (lesson.intro_desc && lesson.intro_desc.trim() === '' )){
+        //         return config.get('emitter').emit('warning', ("Дэлгэрэнгүй танилцуулга оруулна уу!"));
+        //     }
+        // }
+        // if(this.state.current === 1){
+        //     if(!selectedMember || !selectedMember._id){
+        //         return config.get('emitter').emit('warning', ("Багш сонгоно уу!"));
+        //     }
+        //     if(!lesson.category || (lesson.category && lesson.category.trim() === '' )){
+        //         return config.get('emitter').emit('warning', ("Ангилал сонгоно уу!"));
+        //     }
+        //     if(!lesson.price || (lesson.price && lesson.price === 0 )){
+        //         return config.get('emitter').emit('warning', ("Үнэ оруулна уу!"));
+        //     }
+        //     if(lesson.sale && lesson.sale > lesson.price){
+        //         return config.get('emitter').emit('warning', ("Хямдрал үнэ-ээс их байж болохгүй!"));
+        //     }
+        // }
+        // if(this.state.current === 2){
+        //     if(!this.state.requirementsArray || (this.state.requirementsArray && this.state.requirementsArray.length<1 )){
+        //         return config.get('emitter').emit('warning', ("Шаардлагатай зүйлс оруулна уу!"));
+        //     }
+        //     if(!this.state.learn_check_listArray || (this.state.learn_check_listArray && this.state.learn_check_listArray.length<1 )){
+        //         return config.get('emitter').emit('warning', ("Сурах зүйлс оруулна уу!"));
+        //     }
+        // }
         const current = this.state.current + 1;
         this.setState({ current });
 
@@ -222,7 +222,7 @@ class LessonEdit extends React.Component {
         return isJpgOrPng && isLt2M;
     }
     render() {
-        let { main:{user}, lesson:{imageUploadLoading, lessonImage, videoUploadLoading, lessonVideo, status, openModal, lesson, lessons, submitLessonLoader, all, searchTeachersResult, searchTeacherLoader, categories, level} } = this.props;
+        let { main:{user}, lesson:{imageUploadLoading, lessonImage, videoUploadLoading, lessonVideo, status, openModal, lessonVideoProgress, lessonImageProgress, lesson, lessons, submitLessonLoader, all, searchTeachersResult, searchTeacherLoader, categories, level} } = this.props;
         let avatar = '/images/default-avatar.png';
         if (this.state.selectedMember && this.state.selectedMember.avatar && this.state.selectedMember.avatar !== '') {
             avatar = this.state.selectedMember.avatar;
@@ -250,12 +250,34 @@ class LessonEdit extends React.Component {
         const { loading, imageUrl } = this.state;
         const uploadButton = (
             <div style={{fontSize: 24}}>
-                {imageUploadLoading ? <LoadingOutlined /> : <PlusOutlined />}
+                {imageUploadLoading ?
+                    <React.Fragment>
+                        <LoadingOutlined />
+                        {lessonImageProgress && lessonImageProgress.percent?
+                            <Progress percent={lessonImageProgress.percent} size="small" />
+                            :
+                            <Progress percent={0} size="small" />
+                        }
+                    </React.Fragment>
+                    :
+                    <PlusOutlined />
+                }
             </div>
         );
         const uploadButtonVideo = (
             <div style={{fontSize: 24}}>
-                {videoUploadLoading ? <LoadingOutlined /> : <PlusOutlined />}
+                {videoUploadLoading ?
+                    <React.Fragment>
+                        <LoadingOutlined />
+                        {lessonVideoProgress && lessonVideoProgress.percent?
+                            <Progress percent={lessonVideoProgress.percent} size="small" />
+                            :
+                            <Progress percent={0} size="small" />
+                        }
+                    </React.Fragment>
+                    :
+                    <PlusOutlined />
+                }
             </div>
         );
         return (
@@ -522,6 +544,8 @@ class LessonEdit extends React.Component {
                                                 <div className='content-content'>
                                                     <Form.Item
                                                         label='Зураг'
+                                                        help='Зурагны хэмжээ хамгийн багадаа 1200 x 450 байх'
+                                                        style={{marginBottom: 10}}
                                                     >
                                                         <Upload
                                                             name="avatar"
@@ -547,7 +571,17 @@ class LessonEdit extends React.Component {
                                                             beforeUpload={this.beforeUploadVideo.bind(this)}
                                                             customRequest={this.customRequestVideo.bind(this)}
                                                         >
-                                                            {lessonVideo && lessonVideo.path ? 'бичлэг энд байн аа' : uploadButtonVideo}
+                                                            {lessonVideo && lessonVideo.path ?
+                                                                lessonVideoProgress && lessonVideoProgress.percent?
+                                                                    <React.Fragment>
+                                                                        <div>{lessonVideo.original_name ? lessonVideo.original_name : ''}</div>
+                                                                        <Progress percent={lessonVideoProgress.percent} size="small" />
+                                                                    </React.Fragment>
+                                                                    :
+                                                                    <Progress percent={0} size="small" />
+                                                                :
+                                                                uploadButtonVideo
+                                                            }
                                                         </Upload>
                                                     </Form.Item>
                                                 </div>

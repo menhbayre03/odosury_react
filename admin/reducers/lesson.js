@@ -34,6 +34,8 @@ const initialState = {
     lessonVideo: {},
     videoUploadLoading: false,
     openLevelSingle: false,
+    lessonVideoProgress: {},
+    lessonImageProgress: {},
 };
 
 export default(state = initialState, action) => {
@@ -59,6 +61,11 @@ export default(state = initialState, action) => {
                 videoUploadLoading: true,
                 lessonVideo:{}
             };
+        case uploadLessonVideo.PROGRESS:
+            return {
+                ...state,
+                lessonVideoProgress: (action.json || {})
+            };
         case uploadLessonVideo.RESPONSE:
             if(action.json.success){
                 return {
@@ -77,6 +84,11 @@ export default(state = initialState, action) => {
                 ...state,
                 imageUploadLoading: true,
                 lessonImage:{}
+            };
+        case uploadLessonImage.PROGRESS:
+            return {
+                ...state,
+                lessonImageProgress: (action.json || {})
             };
         case uploadLessonImage.RESPONSE:
             if(action.json.success){

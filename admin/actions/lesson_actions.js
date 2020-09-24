@@ -50,6 +50,6 @@ export function uploadLessonImage(data, type, id) {
     return networkActions.uploadProgress(constants.uploadLessonImage, url, data, type);
 }
 export function uploadLessonVideo(data, type, id) {
-    let url = `http://cdn.odosury.mn/api/${type}/upload/${id}`;
-    return networkActions.uploadProgress(constants.uploadLessonVideo, data, type );
+    let url = `/lesson/video/upload`;
+    return networkActions.uploadProgress(constants.uploadLessonVideo, url, data, type );
 }

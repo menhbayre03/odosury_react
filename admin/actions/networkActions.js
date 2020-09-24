@@ -208,7 +208,6 @@ export function uploadProgress(requestActions, url, data, type, neededData = {},
                 }
             })
             .then(json => {
-                console.log(json.success)
                 if (!json.success) {
                     config.get('emitter').emit('error', json.msg);
                 } else if(json.success && json.sucmod){

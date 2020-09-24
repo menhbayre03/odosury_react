@@ -26,8 +26,6 @@ export default(state = initialState, action) => {
             };
         case uploadTeacherAvatar.RESPONSE:
             if(action.json.success){
-                console.log('action.json.avatar');
-                console.log(action.json.avatar);
                 return {
                     ...state,
                     imageUploadLoading: false,

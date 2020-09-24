@@ -148,8 +148,6 @@ class LessonLevels extends React.Component {
         // let aa = (lesson.levels || []).filter(function (lvl, idx) {
         //     return idx !== index;
         // });
-        // console.log(2)
-        // console.log(aa)
         // dispatch(actions.orderLevels(aa));
     };
     onChangeHandlerLevelTimelineSelect(value){
@@ -160,8 +158,6 @@ class LessonLevels extends React.Component {
     }
     complete() {
         const {dispatch, lessonLevel:{lesson}} = this.props;
-        console.log('lesson');
-        console.log(lesson);
     }
     deleteLevel(id) {
         const {dispatch, lessonLevel:{lesson}} = this.props;
