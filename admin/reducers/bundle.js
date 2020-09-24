@@ -3,7 +3,7 @@ import {
     openBundleModal,
     bundleChangeHandler,
     submitBundle,
-    deleteTeachers,
+    deleteBundle,
     getBundle,
     uploadBundleThumbnail,
     bundleLevelOnChange,
@@ -90,47 +90,47 @@ export default(state = initialState, action) => {
                     imageUploadLoading: false
                 };
             }
-        // case deleteTeachers.REQUEST:
-        //     if(action.json._id){
-        //         return {
-        //             ...state,
-        //             bundles: state.bundles.map( function (run) {
-        //                 if(run._id.toString() === action.json._id.toString()){
-        //                     run.loading = true;
-        //                 }
-        //                 return run;
-        //             } )
-        //         };
-        //     } else {
-        //         return {
-        //             ...state
-        //         };
-        //     }
-        // case deleteTeachers.RESPONSE:
-        //     if(action.json.success){
-        //         return {
-        //             ...state,
-        //             bundles: (action.json.bundles || []),
-        //             all: state.all - 1
-        //         };
-        //     } else {
-        //         if(action.json._id){
-        //             return {
-        //                 ...state,
-        //                 bundles: state.bundles.map( function (run) {
-        //                     if(run._id.toString() === action.json._id.toString()){
-        //                         run.loading = false;
-        //                     }
-        //                     return run;
-        //                 }),
-        //                 all: state.all - 1
-        //             };
-        //         } else {
-        //             return {
-        //                 ...state
-        //             };
-        //         }
-        //     }
+        case deleteBundle.REQUEST:
+            if(action.json._id){
+                return {
+                    ...state,
+                    bundles: state.bundles.map( function (run) {
+                        if(run._id.toString() === action.json._id.toString()){
+                            run.loading = true;
+                        }
+                        return run;
+                    } )
+                };
+            } else {
+                return {
+                    ...state
+                };
+            }
+        case deleteBundle.RESPONSE:
+            if(action.json.success){
+                return {
+                    ...state,
+                    bundles: (action.json.bundles || []),
+                    all: state.all - 1
+                };
+            } else {
+                if(action.json._id){
+                    return {
+                        ...state,
+                        bundles: state.bundles.map( function (run) {
+                            if(run._id.toString() === action.json._id.toString()){
+                                run.loading = false;
+                            }
+                            return run;
+                        }),
+                        all: state.all - 1
+                    };
+                } else {
+                    return {
+                        ...state
+                    };
+                }
+            }
         case getBundle.REQUEST:
             return {
                 ...state,

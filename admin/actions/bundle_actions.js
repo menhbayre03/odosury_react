@@ -45,10 +45,10 @@ export function getBundle(data) {
     let url = `/admin/api/getBundle`;
     return networkActions.requestGet(constants.getBundle,url, data);
 }
-// export function deleteTeachers(data) {
-//     let url = `/admin/api/deleteTeachers`;
-//     return networkActions.requestPost(constants.deleteTeachers,url, data);
-// }
+export function deleteBundle(data) {
+    let url = `/admin/api/deleteBundle`;
+    return networkActions.requestPost(constants.deleteBundle,url, data);
+}
 
 export function uploadBundleThumbnail(data, type, id) {
     let url = `/uploadBundleThumbnail/image/upload`;

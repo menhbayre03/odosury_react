@@ -51,10 +51,10 @@ export const submitBundle = {
     REQUEST:'submitBundle_REQUEST',
     RESPONSE:'submitBundle_RESPONSE',
 };
-// export const deleteTeachers = {
-//     REQUEST:'deleteTeachers_REQUEST',
-//     RESPONSE:'deleteTeachers_RESPONSE',
-// };
+export const deleteBundle = {
+    REQUEST:'deleteBundle_REQUEST',
+    RESPONSE:'deleteBundle_RESPONSE',
+};
 export const uploadBundleThumbnail = {
     REQUEST:'uploadBundleThumbnail_REQUEST',
     PROGRESS:'uploadBundleThumbnail_PROGRESS',

@@ -69,6 +69,9 @@ class Bundle extends React.Component {
         if(!bundle.price || (bundle.price && bundle.price === 0)){
             return config.get('emitter').emit('warning', ("Үнэ оруулна уу!"));
         }
+        if(bundle.sale > bundle.price){
+            return config.get('emitter').emit('warning', ("Хямдрал үнэ-ээс их байж болохгүй!"));
+        }
         if(!bundle.levels || (bundle.levels && bundle.levels.length < 1)){
             return config.get('emitter').emit('warning', ("Түвшин оруулна уу!"));
         } else {
@@ -109,9 +112,9 @@ class Bundle extends React.Component {
     //     };
     //     this.props.dispatch(actions.getTeachers(cc));
     // }
-    // delete(id){
-    //     this.props.dispatch(actions.deleteTeachers({_id:id, pageSize: this.state.pageSize, pageNum: this.state.pageNum}));
-    // }
+    delete(id){
+        this.props.dispatch(actions.deleteBundle({_id:id, pageSize: this.state.pageSize, pageNum: this.state.pageNum}));
+    }
     //upload
     customRequest(files) {
         const {main:{user}} = this.props;
@@ -296,6 +299,7 @@ class Bundle extends React.Component {
                         <Card
                             style={{ width: 200, display: 'inline-block', marginRight: 40 }}
                             hoverable
+                            loading={run.loading}
                             cover={
                                 <img
                                     // alt="example"
@@ -306,7 +310,16 @@ class Bundle extends React.Component {
                             }
                             actions={[
                                 <EditOutlined key="edit" />,
-                                <DeleteFilled key='delete' />
+
+                                <Popconfirm
+                                    title={`Та устгах гэж байна!`}
+                                    onConfirm={this.delete.bind(this, run._id)}
+                                    okText="Усгах"
+                                    placement="left"
+                                    cancelText="Болих"
+                                >
+                                    <span><DeleteFilled key='delete' /></span>
+                                </Popconfirm>
                             ]}
                         >
                             <Meta
