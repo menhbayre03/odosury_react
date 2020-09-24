@@ -223,6 +223,8 @@ export default(state = initialState, action) => {
                 lessonImage:action.json.thumbnail,
                 lessonVideo:action.json.video,
                 searchTeachersResult:[],
+                lessonVideoProgress: {},
+                lessonImageProgress: {},
             };
         case closeLessonModal.REQUEST:
             return {
@@ -230,7 +232,10 @@ export default(state = initialState, action) => {
                 openModal: false,
                 lesson:{},
                 lessonImage: {},
-                lessonVideo: {}
+                lessonVideo: {},
+                lessonVideoProgress: {},
+                lessonImageProgress: {},
+                searchTeachersResult:[],
             };
         case submitLesson.REQUEST:
             return {

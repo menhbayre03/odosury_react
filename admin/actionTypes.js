@@ -24,6 +24,36 @@ export const uploadTeacherAvatar = {
     RESPONSE:'uploadTeacherAvatar_RESPONSE',
 };
 
+
+export const openBundleModal = {
+    REQUEST:'openBundleModal_REQUEST',
+};
+export const closeBundleModal = {
+    REQUEST:'closeBundleModal_REQUEST',
+};
+export const bundleChangeHandler = {
+    REQUEST:'bundleChangeHandler_REQUEST',
+};
+// export const submitTeacher = {
+//     REQUEST:'submitTeacher_REQUEST',
+//     RESPONSE:'submitTeacher_RESPONSE',
+// };
+// export const getTeachers = {
+//     REQUEST:'getTeachers_REQUEST',
+//     RESPONSE:'getTeachers_RESPONSE',
+// };
+// export const deleteTeachers = {
+//     REQUEST:'deleteTeachers_REQUEST',
+//     RESPONSE:'deleteTeachers_RESPONSE',
+// };
+export const uploadBundleThumbnail = {
+    REQUEST:'uploadBundleThumbnail_REQUEST',
+    PROGRESS:'uploadBundleThumbnail_PROGRESS',
+    RESPONSE:'uploadBundleThumbnail_RESPONSE',
+};
+
+
+
 export const openCategoryModal = {
     REQUEST:'openCategoryModal_REQUEST',
 };
@@ -118,6 +148,7 @@ export const uploadLessonImage = {
 };
 export const uploadLessonVideo = {
     REQUEST:'uploadLessonVideo_REQUEST',
+    PROGRESS:'uploadLessonVideo_PROGRESS',
     RESPONSE:'uploadLessonVideo_RESPONSE',
 };
 

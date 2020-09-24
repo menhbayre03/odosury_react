@@ -572,13 +572,7 @@ class LessonEdit extends React.Component {
                                                             customRequest={this.customRequestVideo.bind(this)}
                                                         >
                                                             {lessonVideo && lessonVideo.path ?
-                                                                lessonVideoProgress && lessonVideoProgress.percent?
-                                                                    <React.Fragment>
-                                                                        <div>{lessonVideo.original_name ? lessonVideo.original_name : ''}</div>
-                                                                        <Progress percent={lessonVideoProgress.percent} size="small" />
-                                                                    </React.Fragment>
-                                                                    :
-                                                                    <Progress percent={0} size="small" />
+                                                                <img src={`${config.get('hostMedia')}${lessonVideo.thumbnail}`} alt="avatar" style={{ width: '100%' }} />
                                                                 :
                                                                 uploadButtonVideo
                                                             }
