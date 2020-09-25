@@ -5,8 +5,6 @@ import moment from "moment";
 import * as actions from "../../actions/lessonLevel_actions";
 import arrayMove from 'array-move';
 import { Link } from 'react-router-dom';
-
-
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 const reducer = ({ main, lessonLevel }) => ({ main, lessonLevel });
 import {
@@ -38,58 +36,35 @@ const { TextArea } = Input;
 const { Option } = Select;
 const { TreeNode } = TreeSelect;
 const { Step } = Steps;
-
-// const SortableItem = SortableElement(({value, index, removeProgram}) => (
-//     <List.Item style={{cursor: 'move'}}>
-//         <List.Item.Meta
-//             title={
-//                 <p style={{marginBottom: -4}}>
-//                     {/*<Icon type="drag" style={{marginRight: 10, fontSize: 18, position: 'relative', top: 3}}/>*/}
-//                     <span style={{marginRight: 10, fontSize: 18, position: 'relative', top: 3}}>
-//                                 <DragOutlined />
-//                             </span>
-//                     {`${value.title}`}
-//                     {/*removeProgram.bind(this,{inx:needRemove.levelIndex, index:value})*/}
-//                     <Button key={'delete-level'} size="small" style={{float: 'right'}} onClick={removeProgram.bind(this, value, index)}>Хасах</Button>
-//                     {/*<button onClick={this.removeItem.bind(this, value, index)}>Хасах</button>*/}
-//                 </p>
-//             }
-//         />
-//     </List.Item>
-// ));
-// const SortableList = SortableContainer(({items, loading, removeProgram}) => {
-//     return (
-//         <List
-//             header={'levels'}
-//             itemLayout="horizontal"
-//             // dataSource={lesson.levels && lesson.levels.length>0 ? lesson.levels : [] }
-//             dataSource={items}
-//             // loading={loading}
-//             renderItem={(item, index) => (
-//                 <SortableItem key={`item-${item.title}-key-${index}`} index={index} value={item} removeProgram={removeProgram} />
-//             )}
-//         />
-//     );
-// });
-
-// const SortableItem = SortableElement(( {value,removeProgram,index,needRemove}) => {
-//     return (
-//         <div>
-//             <span>{value.title}</span>
-//             <button style={{margin: 0, padding: 0, outline: 'none', border: 'none', background: 'transparent'}}>
-//                 <span style={{cursor: 'pointer', marginRight: 10, color: 'red'}} onClick={removeProgram.bind(this,value, index)}>
-//                     <DeleteFilled />
-//                 </span>
-//                 {/*<ion-icon style={{cursor: 'pointer', marginRight: 10, color: 'red'}} name="trash" onClick={removeProgram.bind(this,{inx:needRemove.levelIndex, index:value})}/>*/}
-//             </button>
-//             <DragOutlined />
-//         </div>
-//     )
-// });
-//
-// const SortableContainera = SortableContainer(({children}) => {
-//     return <div>{children}</div>;
-// });
+const SortableItem = SortableElement(( {value ,needRemove, removeTimeline, openEditTimeline, dis, indexes}) => {
+    return (
+        <div className='sortable-item'>
+            {indexes.progIdx+1}. {value.timeline.title}
+            <span>
+                <Button loading={value.timeline.loading || dis.props.editTimelineLoader} style={{marginRight: 10}} size='small' type="default" key='updateTimeline' icon={<EditFilled />}
+                        // onClick={this.openModalLevelTimline.bind(this, 'update', run._id, prog.timeline)}
+                        onClick={openEditTimeline.bind(this, 'update', needRemove.levelIndex, value.timeline)}
+                >
+                    Засах
+                </Button>
+                <Popconfirm
+                    title={`Та устгах гэж байна!`}
+                    onConfirm={removeTimeline.bind(this,needRemove.levelIndex, needRemove.program)}
+                    okText="Усгах"
+                    placement="left"
+                    cancelText="Болих"
+                >
+                    <Button loading={value.loading} type={"primary"} style={{marginRight: 10}} key={`deleteTimeline-${value._id}`} danger size={"small"}>
+                        <DeleteFilled/> Устгах
+                    </Button>
+                </Popconfirm>
+            </span>
+        </div>
+    )
+});
+const SortableContainera = SortableContainer(({children}) => {
+    return <div>{children}</div>;
+});
 
 class LessonLevels extends React.Component {
     constructor(props) {
@@ -99,6 +74,8 @@ class LessonLevels extends React.Component {
             //upload
             loading: false,
         };
+        this.removeTimeline = this.removeTimeline.bind(this);
+        this.openEditTimeline = this.openEditTimeline.bind(this);
         this.onSortEnd = this.onSortEnd.bind(this);
     }
     componentDidMount() {
@@ -178,11 +155,6 @@ class LessonLevels extends React.Component {
         };
         this.props.dispatch(actions.submitTimeline(cc));
     }
-    onSortEnd(e) {
-        const {dispatch, lessonLevel:{lesson}} = this.props;
-        let aa = arrayMove((lesson.levels || []), e.oldIndex, e.newIndex);
-        dispatch(actions.orderLevels(aa));
-    };
     removeItem(item, index){
         const {dispatch, lessonLevel:{lesson}} = this.props;
         // let aa = (lesson.levels || []).filter(function (lvl, idx) {
@@ -260,38 +232,20 @@ class LessonLevels extends React.Component {
         }
         return isJpgOrPng && isLt2M;
     }
+
+
+
+    onSortEnd({oldIndex, newIndex, collection}) {
+        const {dispatch, lessonLevel:{lesson}} = this.props;
+        if(oldIndex !== newIndex){
+            let aa = arrayMove((lesson.levels[collection].programs || []), oldIndex, newIndex);
+            dispatch(actions.orderLevels({collection: collection, sineLevel:aa}));
+        }
+    };
     render() {
         let { main:{user}, lessonLevel:{editTimelineLoader, openEditTimeline, status, lesson, openModalLevel, level, openModalLevelTimline, timeline, timelineSubmitLoader, timelineVideo, timelineVideoProgress, videoUploadLoadingT, timelineAudio, timelineAudioProgress, audioUploadLoadingT , timelineFile, timelineFileProgress, fileUploadLoadingT } } = this.props;
 
 
-        // const SortableItem = SortableElement(({value}) => (
-        //     <List.Item style={{cursor: 'move'}}>
-        //         <List.Item.Meta
-        //             title={
-        //                 <p style={{marginBottom: -4}}>
-        //                     <span>{value.title}</span>
-        //                     {/*<Icon type="drag" style={{marginRight: 10, fontSize: 18, position: 'relative', top: 3}}/>*/}
-        //                     {/*{`${value.last_name} ${value.name}: ${value.registration_num}`}*/}
-        //                     <Button icon="delete" size="small" style={{float: 'right'}} onClick={() => this.removeItem(value)}>Хасах</Button>
-        //                 </p>
-        //             }
-        //         />
-        //     </List.Item>
-        // ));
-        //
-        // const SortableList = SortableContainer(({items, loading}) => {
-        //     return (
-        //         <List
-        //             header={<h3>Levels: </h3>}
-        //             itemLayout="horizontal"
-        //             dataSource={items}
-        //             // loading={loading}
-        //             renderItem={(item, index) => (
-        //                 <SortableItem key={`item-${item.name}`} index={index} value={item} />
-        //             )}
-        //         />
-        //     );
-        // });
         const uploadButtonVideo = (
             <div style={{fontSize: 24}}>
                 {videoUploadLoadingT ?
@@ -368,125 +322,63 @@ class LessonLevels extends React.Component {
                 }
             >
                 <div className='lesson-levels'>
-
                     <div className='levels'>
-                        {/*<div style={{textAlign: "right"}}>*/}
-                        {/*    <Button type="primary" key='newLevel' icon={<PlusOutlined />} onClick={this.openModalLevel.bind(this, 'new', null, {})} >*/}
-                        {/*        Level*/}
-                        {/*    </Button>*/}
-                        {/*</div>*/}
-                        {/*{*/}
-                        {/*    lesson.levels && lesson.levels.length>0?*/}
-                        {/*        lesson.levels.map((lvl, idx) =>*/}
-                        {/*            <div className='level'>*/}
-                        {/*                {lvl.title}*/}
-                        {/*                <Button type="primary" key='updateLevel' icon={<EditFilled />} onClick={this.openModalLevel.bind(this, 'update', idx, lvl)} >*/}
-                        {/*                    Засах*/}
-                        {/*                </Button>*/}
-                        {/*            </div>*/}
-                        {/*        )*/}
-                        {/*        :*/}
-                        {/*        null*/}
-                        {/*}*/}
-                        {/*sortable start*/}
-                        {lesson.levels && lesson.levels.length>0?
-                            lesson.levels.map((run, idx) =>
-                                <div key={run._id+'lvls'}>
-                                    <Card
-                                        style={{marginBottom: 20}}
-                                        size='small'
-                                        title={run.title ? run.title : ''}
-                                        extra={
-                                            <React.Fragment>
-                                                <Button loading={run.loading} style={{marginRight: 10}} size='small' type="default" key='updateLevel' icon={<EditFilled />} onClick={this.openModalLevel.bind(this, 'update', idx, run)} >
-                                                    Засах
-                                                </Button>
-                                                <Popconfirm
-                                                    title={`Та устгах гэж байна!`}
-                                                    onConfirm={this.deleteLevel.bind(this, run._id)}
-                                                    okText="Усгах"
-                                                    placement="left"
-                                                    cancelText="Болих"
-                                                >
-                                                    <Button loading={run.loading} type={"primary"} style={{marginRight: 10}} key='deleteLevel' danger size={"small"}>
-                                                        <DeleteFilled/> Устгах
+                        <SortableContainera onSortEnd={this.onSortEnd.bind(this)}>
+                            {lesson.levels && lesson.levels.length>0?
+                                lesson.levels.map((run, idx) =>
+                                    <div key={run._id+'lvls'}>
+                                        <Card
+                                            style={{marginBottom: 20}}
+                                            size='small'
+                                            title={run.title ? run.title : ''}
+                                            extra={
+                                                <React.Fragment>
+                                                    <Button loading={run.loading} style={{marginRight: 10}} size='small' type="default" key='updateLevel' icon={<EditFilled />} onClick={this.openModalLevel.bind(this, 'update', idx, run)} >
+                                                        Засах
                                                     </Button>
-                                                </Popconfirm>
-                                                <Button loading={run.loading} size='small' type="primary" key='newTimeline' icon={<PlusOutlined />} onClick={this.openModalLevelTimline.bind(this, 'new', run._id, {})} >
-                                                    Хөтөлбөр
-                                                </Button>
-                                            </React.Fragment>
-                                        }
-                                    >
-                                        <table border={'1'} >
-                                            <tr>
-                                                <td>№</td>
-                                                <td>Нэр</td>
-                                                <td>Минут</td>
-                                                <td>Үйлдэл</td>
-                                            </tr>
+                                                    <Popconfirm
+                                                        title={`Та устгах гэж байна!`}
+                                                        onConfirm={this.deleteLevel.bind(this, run._id)}
+                                                        okText="Усгах"
+                                                        placement="left"
+                                                        cancelText="Болих"
+                                                    >
+                                                        <Button loading={run.loading} type={"primary"} style={{marginRight: 10}} key='deleteLevel' danger size={"small"}>
+                                                            <DeleteFilled/> Устгах
+                                                        </Button>
+                                                    </Popconfirm>
+                                                    <Button loading={run.loading} size='small' type="primary" key='newTimeline' icon={<PlusOutlined />} onClick={this.openModalLevelTimline.bind(this, 'new', run._id, {})} >
+                                                        Хөтөлбөр
+                                                    </Button>
+                                                </React.Fragment>
+                                            }
+                                        >
                                             {run.programs && run.programs.length>0?
-                                                run.programs.map((prog, inn) =>
-                                                    <tr>
-                                                        <td>{inn+1}</td>
-                                                        <td>{prog.timeline.title}</td>
-                                                        <td>{prog.timeline.minutes}</td>
-                                                        <td>
-                                                            <Button loading={prog.timeline.loading || editTimelineLoader} style={{marginRight: 10}} size='small' type="default" key='updateTimeline' icon={<EditFilled />}
-                                                                    // onClick={this.openModalLevelTimline.bind(this, 'update', run._id, prog.timeline)}
-                                                                    onClick={this.openEditTimeline.bind(this, 'update', run._id, prog.timeline)}
-                                                            >
-                                                                Засах
-                                                            </Button>
-                                                            <Popconfirm
-                                                                title={`Та устгах гэж байна!`}
-                                                                onConfirm={this.removeTimeline.bind(this, run._id, prog.timeline._id)}
-                                                                okText="Усгах"
-                                                                placement="left"
-                                                                cancelText="Болих"
-                                                            >
-                                                                <Button loading={prog.timeline.loading || editTimelineLoader} type={"primary"} style={{marginRight: 10}} key='deleteLevel' danger size={"small"} >
-                                                                    <DeleteFilled/> Устгах
-                                                                </Button>
-                                                            </Popconfirm>
-                                                        </td>
-                                                    </tr>
+                                                run.programs.map((prog, index) =>
+                                                    <SortableItem
+                                                        key={prog._id}
+                                                        value={prog}
+                                                        index={index}
+                                                        collection={idx}
+                                                        removeTimeline={this.removeTimeline}
+                                                        openEditTimeline={this.openEditTimeline}
+                                                        dis={this}
+                                                        needRemove={{levelIndex:run._id, program:prog.timeline._id}}
+                                                        indexes={{levelIdx: idx, progIdx: index}}
+                                                    />
                                                 )
                                                 :
                                                 <tr>
                                                     <td colSpan={4}>Хоосон түвшин</td>
                                                 </tr>
                                             }
-                                        </table>
-                                    </Card>
-                                </div>
-                            )
-                            :
-                            null
-                        }
-                        {/*sortable end*/}
-                        {/*<SortableContainera onSortEnd={this.onSortEnd.bind(this)}>*/}
-                        {/*    {lesson.levels && lesson.levels.length>0?*/}
-                        {/*        lesson.levels.map((run, index) =>*/}
-                        {/*            <SortableItem*/}
-                        {/*                key={run._id}*/}
-                        {/*                value={run}*/}
-                        {/*                index={index}*/}
-                        {/*                removeProgram={this.removeProgram}*/}
-                        {/*                needRemove={{levelIndex:0, program:index}}*/}
-                        {/*            />*/}
-                        {/*        )*/}
-                        {/*        :*/}
-                        {/*        null*/}
-                        {/*    }*/}
-                        {/*</SortableContainera>*/}
-
-
-                        {/*<SortableList*/}
-                        {/*    items={lesson.levels? lesson.levels : []}*/}
-                        {/*    // loading={customTopStudentsLoading}*/}
-                        {/*    onSortEnd={this.onSortEnd}*/}
-                        {/*/>*/}
+                                        </Card>
+                                    </div>
+                                )
+                                :
+                                null
+                            }
+                        </SortableContainera>
                     </div>
 
                     {openModalLevel?

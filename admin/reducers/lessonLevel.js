@@ -354,11 +354,18 @@ export default(state = initialState, action) => {
                 timelineVideo : {},
             };
         case orderLevels.REQUEST:
+            let holdLvl = (state.lesson.levels || []);
+            holdLvl = holdLvl.map(function (run, idx) {
+                if(idx === action.json.collection){
+                    run.programs = action.json.sineLevel
+                }
+                return run;
+            });
             return {
                 ...state,
                 lesson: {
                     ...state.lesson,
-                    levels: action.json
+                    levels: holdLvl
                 }
             };
         case lessonAddLevel.REQUEST:
