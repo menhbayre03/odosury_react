@@ -1,6 +1,7 @@
 import Main from "../components/Main";
 import Home from "../components/Home";
 import Lesson from "../components/lesson/Lesson";
+import Login from "../components/Login";
 import NotFound from "../components/NotFound";
 export default [
     {
@@ -9,6 +10,11 @@ export default [
             {
                 component: Home,
                 path: '/',
+                exact: true
+            },
+            {
+                component: Login,
+                path: '/login',
                 exact: true
             },
             {

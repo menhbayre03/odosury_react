@@ -65,21 +65,26 @@ class Header extends Component {
                                     <input style={{width: '100%'}} placeholder="Хичээл хайх ..."/>
                                     <ion-icon name="search-outline"/>
                                 </div>
-                                <div>
-                                    {/*<ion-icon name="person-circle-outline"/>*/}
-                                    <span style={{
-                                        width: 158,
-                                        display: 'block',
-                                        fontSize: 12,
-                                        color: '#fff',
-                                        padding: '6px 0px 6px 15px',
-                                        marginRight: -25,
-                                        marginLeft: 15,
-                                        cursor: 'pointer'
-                                    }}>
-                                        Нэвтрэх / Бүртгүүлэх
-                                    </span>
-                                </div>
+                                {
+                                    user ? (
+                                        <a href="/logout">garah</a>
+                                    ) : (
+                                        <Link to="/login">
+                                            <span style={{
+                                                width: 158,
+                                                display: 'block',
+                                                fontSize: 12,
+                                                color: '#fff',
+                                                padding: '6px 0px 6px 15px',
+                                                marginRight: -25,
+                                                marginLeft: 15,
+                                                cursor: 'pointer'
+                                            }}>
+                                                Нэвтрэх / Бүртгүүлэх
+                                            </span>
+                                        </Link>
+                                    )
+                                }
                             </Col>
                         </Row>
                     </Container>
