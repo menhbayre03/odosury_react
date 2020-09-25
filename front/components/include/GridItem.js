@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import ReactStars from "react-rating-stars-component";
 import { Link } from 'react-router-dom';
+import config from '../../config';
 const reducer = ({ main }) => ({ main });
 
 class Header extends Component {
@@ -43,7 +44,7 @@ class Header extends Component {
             <div className={`grid-item ${watching ? 'watching' : ''}`}>
                 <div title={item.title}>
                     <div className="grid-item-box">
-                        <img src="http://demo.foxthemes.net/courseplusv3.3/assets/images/course/p-1.png" alt=""/>
+                        <img src={(item.thumbnail || {}).path ? `${config.get('hostMedia')}${(item.thumbnail || {}).path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
                             <div className="contents">
                                 <Link to={`/lesson/${item.slug}`} title={item.title}>
                                     <h3>{item.title}</h3>
@@ -58,14 +59,44 @@ class Header extends Component {
                                             <Link className="teacher" to={`/teacher/${item.slug}`} title={`${(item.teacher || {}).last_name} ${(item.teacher || {}).first_name}`}>
                                                 {((item.teacher || {}).last_name || '').slice(0, 1)}. {(item.teacher || {}).first_name}
                                             </Link>
-                                            <div style={{display: 'flex', justifyContent: 'start', alignItems: 'center'}}>
-                                                <ReactStars
-                                                    count={5}
-                                                    value={rating}
-                                                    edit={false}
-                                                    size={18}
-                                                />
-                                                <span style={{fontSize: 12, color: '#909090', marginLeft: 5}}>({(item.rating || []).length})</span>
+                                            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end'}}>
+                                                <div style={{display: 'flex', justifyContent: 'start', alignItems: 'center'}}>
+                                                    <ReactStars
+                                                        count={5}
+                                                        value={rating}
+                                                        edit={false}
+                                                        size={16}
+                                                    />
+                                                    <span style={{fontSize: 12, color: '#909090', marginLeft: 5}}>({(item.rating || []).length})</span>
+                                                </div>
+                                                {
+                                                    item.sale > 0 ? (
+                                                        <div style={{
+                                                            textAlign: 'right',
+                                                            marginTop: 2,
+                                                            height: 43,
+                                                            alignItems: 'flex-end',
+                                                            display: 'flex',
+                                                            flexDirection: 'column',
+                                                            justifyContent: 'flex-end',
+                                                        }}>
+                                                            <span style={{fontSize: 12, color: '#909090', display: 'block', fontWeight: 600 , textDecoration: 'line-through'}}>{config.formatMoney(item.price)}₮</span>
+                                                            <span style={{fontSize: 14, color: '#000000', display: 'block', fontWeight: 600}}>{config.formatMoney(item.sale)}₮</span>
+                                                        </div>
+                                                    ) : (
+                                                        <div style={{
+                                                            textAlign: 'right',
+                                                            marginTop: 2,
+                                                            height: 43,
+                                                            alignItems: 'flex-end',
+                                                            display: 'flex',
+                                                            flexDirection: 'column',
+                                                            justifyContent: 'flex-end',
+                                                        }}>
+                                                            <span style={{fontSize: 14, color: '#000000', display: 'block', fontWeight: 600}}>{config.formatMoney(item.price)}₮</span>
+                                                        </div>
+                                                    )
+                                                }
                                             </div>
                                         </div>
                                     )

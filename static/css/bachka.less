@@ -492,3 +492,102 @@
   z-index: 2;
   transition: 0.3s
 }
+.login-container {
+  min-height: calc(100vh - 185px);
+  padding: 100px 0;
+  .forgot {
+    font-size: 12px;
+    font-weight: 600;
+    color: #313356;
+    margin-top: -5px;
+    display: block;
+    margin-bottom: 20px;
+  }
+  h4 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    display: block;
+  }
+  label {
+    font-weight: 600;
+    font-size: 14px;
+  }
+  input {
+    font-size: 0.9rem;
+    padding: 10px 20px;
+    height: 40px;
+    border: none;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+  }
+  button {
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #313356;
+    text-align: center;
+    border: 1px solid transparent;
+    padding: 10px 20px;
+    line-height: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+  }
+}
+.ReactPasswordStrength {
+  box-sizing: border-box;
+  color: #090809;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1;
+  position: relative;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  height: 40px;
+  border: none;
+  font-size: 0.9rem;
+}
+.ReactPasswordStrength-strength-bar {
+  box-sizing: border-box;
+  height: 2px;
+  position: relative;
+  top: -40px;
+  right: -5px;
+  transition: width 300ms ease-out;
+  width: 0;
+}
+.ReactPasswordStrength-strength-desc {
+  color: transparent;
+  font-style: italic;
+  padding: 0;
+  position: absolute;
+  top: -16px;
+  right: 0;
+  text-align: right;
+  transition: color 250ms ease-in-out;
+  font-size: 12px;
+  width: unset;
+}
+.ReactPasswordStrength.is-strength-0 .ReactPasswordStrength-strength-bar {
+  background: #D1462F;
+  width: calc(20% - 12px);
+}
+.ReactPasswordStrength.is-strength-1 .ReactPasswordStrength-strength-bar {
+  background: #D1462F;
+  width: calc(40% - 32px);
+}
+.ReactPasswordStrength.is-strength-2 .ReactPasswordStrength-strength-bar {
+  background: #57B8FF;
+  width: calc(60% - 12px);
+}
+.ReactPasswordStrength.is-strength-3 .ReactPasswordStrength-strength-bar {
+  background: #57B8FF;
+  width: calc(80% - 12px);
+}
+.ReactPasswordStrength.is-strength-4 .ReactPasswordStrength-strength-bar {
+  background: #2FBF71;
+  width: calc(100% + -12px);
+}
