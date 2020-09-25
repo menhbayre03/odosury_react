@@ -15,6 +15,8 @@ import {
     uploadTimelineVideo,
     uploadTimelineAudio,
     uploadTimelineFile,
+    openEditTimeline,
+    closeEditTimeline,
 } from "../actionTypes";
 const initialState = {
     status: 1,
@@ -44,10 +46,37 @@ const initialState = {
     timelineFile: {},
     timelineFileProgress: {},
     fileUploadLoadingT: false,
+
+    editTimelineLoader: false,
+    openEditTimeline: false,
 };
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case openEditTimeline.REQUEST:
+            return {
+                ...state,
+                editTimelineLoader: true,
+            };
+        case openEditTimeline.RESPONSE:
+            return {
+                ...state,
+                editTimelineLoader: false,
+                openEditTimeline: true,
+                timelineVideo: (action.json.timeline.video || null),
+                timelineAudio: (action.json.timeline.audio || null),
+                timelineFile: (action.json.timeline.include_zip || null),
+                timeline:action.json.timeline,
+                timelineType: action.json.type,
+                level_id: action.json.level_id,
+            };
+        case closeEditTimeline.REQUEST:
+            return {
+                ...state,
+                openEditTimeline: false,
+                editTimelineLoader: false,
+                timeline: {},
+            };
         case uploadTimelineFile.REQUEST:
             return {
                 ...state,
@@ -265,8 +294,8 @@ export default(state = initialState, action) => {
                     });
                     return {
                         ...state,
-                        timelineSubmitLoader: false,
-                        openModalLevelTimline: false,
+                        editTimelineLoader: false,
+                        openEditTimeline: false,
                         lesson:{
                             ...state.lesson,
                             levels: levels

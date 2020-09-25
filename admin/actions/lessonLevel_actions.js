@@ -30,6 +30,16 @@ export function openModalLevelTimline(data){
         json: data
     }
 }
+export function openEditTimeline(data){
+    let url = `/admin/api/openEditTimeline`;
+    return networkActions.requestGet(constants.openEditTimeline,url, data);
+}
+export function closeEditTimeline(data){
+    return {
+        type: constants.closeEditTimeline.REQUEST,
+        json: data
+    }
+}
 export function closeLessonModalLevel(){
     return {
         type: constants.closeLessonModalLevel.REQUEST

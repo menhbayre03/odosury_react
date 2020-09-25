@@ -32,6 +32,7 @@ import {
 } from 'antd';
 import { EditOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, DragOutlined, SearchOutlined, CheckOutlined, UploadOutlined, CloseCircleFilled, SolutionOutlined, LoadingOutlined, SmileOutlined, CheckCircleFilled, CaretRightFilled, CaretLeftFilled } from '@ant-design/icons'
 import LessonEdit from "./LessonEdit";
+import {closeEditTimeline} from "../../actionTypes";
 const { Meta } = Card;
 const { TextArea } = Input;
 const { Option } = Select;
@@ -105,20 +106,27 @@ class LessonLevels extends React.Component {
     }
 
     componentWillUnmount() {
-        this.props.closeModalLevelTimline();
-        this.props.closeLessonModalLevel();
+        this.closeModalLevelTimline();
+        this.closeLessonModalLevel();
+        this.closeEditTimeline();
     }
     openModalLevel(type, idx, data = {}) {
         this.props.dispatch(actions.openLessonModalLevel({type:type, idx:idx, level:data}));
     }
     openModalLevelTimline(type, level_id, timeline) {
-        this.props.dispatch(actions.openModalLevelTimline({type:type, level_id:level_id, timeline}));
+        this.props.dispatch(actions.openModalLevelTimline({type:type, level_id:level_id, timeline: timeline}));
+    }
+    openEditTimeline(type, level_id, timeline) {
+        this.props.dispatch(actions.openEditTimeline({type:type, level_id:level_id, timelineId:timeline._id}));
     }
     closeModalLevelTimline(type, idx, data = {}) {
         this.props.dispatch(actions.closeModalLevelTimline());
     }
     closeLessonModalLevel() {
         this.props.dispatch(actions.closeLessonModalLevel());
+    }
+    closeEditTimeline() {
+        this.props.dispatch(actions.closeEditTimeline());
     }
     onChangeHandlerLevel(e) {
         this.props.dispatch(actions.lessonChangeHandlerLevel({name:e.target.name, value: e.target.value}));
@@ -253,7 +261,7 @@ class LessonLevels extends React.Component {
         return isJpgOrPng && isLt2M;
     }
     render() {
-        let { main:{user}, lessonLevel:{status, lesson, openModalLevel, level, openModalLevelTimline, timeline, timelineSubmitLoader, timelineVideo, timelineVideoProgress, videoUploadLoadingT, timelineAudio, timelineAudioProgress, audioUploadLoadingT , timelineFile, timelineFileProgress, fileUploadLoadingT } } = this.props;
+        let { main:{user}, lessonLevel:{editTimelineLoader, openEditTimeline, status, lesson, openModalLevel, level, openModalLevelTimline, timeline, timelineSubmitLoader, timelineVideo, timelineVideoProgress, videoUploadLoadingT, timelineAudio, timelineAudioProgress, audioUploadLoadingT , timelineFile, timelineFileProgress, fileUploadLoadingT } } = this.props;
 
 
         // const SortableItem = SortableElement(({value}) => (
@@ -424,8 +432,9 @@ class LessonLevels extends React.Component {
                                                         <td>{prog.timeline.title}</td>
                                                         <td>{prog.timeline.minutes}</td>
                                                         <td>
-                                                            <Button loading={prog.timeline.loading} style={{marginRight: 10}} size='small' type="default" key='updateTimeline' icon={<EditFilled />}
-                                                                    onClick={this.openModalLevelTimline.bind(this, 'update', run._id, prog.timeline)}
+                                                            <Button loading={prog.timeline.loading || editTimelineLoader} style={{marginRight: 10}} size='small' type="default" key='updateTimeline' icon={<EditFilled />}
+                                                                    // onClick={this.openModalLevelTimline.bind(this, 'update', run._id, prog.timeline)}
+                                                                    onClick={this.openEditTimeline.bind(this, 'update', run._id, prog.timeline)}
                                                             >
                                                                 Засах
                                                             </Button>
@@ -436,7 +445,7 @@ class LessonLevels extends React.Component {
                                                                 placement="left"
                                                                 cancelText="Болих"
                                                             >
-                                                                <Button loading={prog.timeline.loading} type={"primary"} style={{marginRight: 10}} key='deleteLevel' danger size={"small"} >
+                                                                <Button loading={prog.timeline.loading || editTimelineLoader} type={"primary"} style={{marginRight: 10}} key='deleteLevel' danger size={"small"} >
                                                                     <DeleteFilled/> Устгах
                                                                 </Button>
                                                             </Popconfirm>
@@ -506,6 +515,152 @@ class LessonLevels extends React.Component {
                             confirmLoading={timelineSubmitLoader}
                             onOk={this.submitTimeline.bind(this)}
                             onCancel={this.closeModalLevelTimline.bind(this)}
+                            okText="Хадгалах"
+                            cancelText="Болих"
+                            maskClosable={false}
+                        >
+                            <Form>
+                                <Form.Item
+                                    label='Нэр'
+                                    labelCol={{span: 4}}
+                                    fieldKey='name'
+                                >
+                                    <Input autoFocus={true} size="middle" maxLength={60} value={timeline.title? timeline.title : ''} name='title'
+                                           onChange={this.onChangeHandlerLevelTimeline.bind(this)}
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    label='Тайлбар'
+                                    labelCol={{span: 4}}
+                                    fieldKey='desc'
+                                >
+                                    <TextArea size="middle" rows={4}
+                                              value={timeline.description ? timeline.description : ''}
+                                              name='description'
+                                              onChange={this.onChangeHandlerLevelTimeline.bind(this)}/>
+                                    {/*<Input autoFocus={true} size="middle" maxLength={60} value={timeline.description? timeline.description : ''} name='description'*/}
+                                    {/*       onChange={this.onChangeHandlerLevelTimeline.bind(this)}*/}
+                                    {/*/>*/}
+                                </Form.Item>
+                                <Form.Item
+                                    label='Төрөл'
+                                    name='type'
+                                    fieldKey='type'
+                                    labelCol={{span: 4}}
+                                >
+                                    <span style={{display: "none"}}>{timeline.type? timeline.type : ''}</span>
+                                    <Select
+                                        value={timeline.type ? timeline.type : ''}
+                                        onChange={this.onChangeHandlerLevelTimelineSelect.bind(this)}
+                                    >
+                                        {/*<Option value="">Төрөл сонгоно уу</Option>*/}
+                                        <Option value="content">Контент</Option>
+                                        <Option value="video">Бичлэг</Option>
+                                        <Option value="audio">Аудио</Option>
+                                    </Select>
+                                </Form.Item>
+                                <Form.Item
+                                    fieldKey='min'
+                                    label='Минут'
+                                    labelCol={{span: 4}}
+                                >
+                                    <InputNumber
+                                        size="middle"
+                                        style={{width: '100%'}}
+                                        name='minutes'
+                                        min={0}
+                                        max={600}
+                                        maxLength={9}
+                                        value={timeline.minutes ? timeline.minutes.toString().replace(/\$\s?|(,*)/g, '') : '0'.replace(/\$\s?|(,*)/g, '')}
+                                        // formatter={value => `${value}мин`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                        formatter={value => `${value} минут`}
+                                        onChange={this.onChangeHandle2.bind(this, 'minutes')}
+                                    />
+                                </Form.Item>
+                                {timeline.type?
+                                    timeline.type === 'video'?
+                                        <Form.Item
+                                            label='Бичлэг'
+                                            labelCol={{span: 4}}
+                                        >
+                                            <Upload
+                                                // name="avatar"
+                                                listType="picture-card"
+                                                className="avatar-uploader"
+                                                showUploadList={false}
+                                                disabled={videoUploadLoadingT}
+                                                beforeUpload={this.beforeUploadVideo.bind(this)}
+                                                customRequest={this.customRequestVideo.bind(this)}
+                                            >
+                                                {timelineVideo && timelineVideo.path ?
+                                                    <img src={`${config.get('hostMedia')}${timelineVideo.thumbnail}`} alt="avatar" style={{ width: '100%' }} />
+                                                    :
+                                                    uploadButtonVideo
+                                                }
+                                            </Upload>
+                                        </Form.Item>
+                                        :
+                                        timeline.type === 'audio'?
+                                            <Form.Item
+                                                label='Аудио'
+                                                labelCol={{span: 4}}
+                                            >
+                                                <Upload
+                                                    // name="avatar"
+                                                    listType="picture-card"
+                                                    className="avatar-uploader"
+                                                    showUploadList={false}
+                                                    disabled={audioUploadLoadingT}
+                                                    beforeUpload={this.beforeUploadAudio.bind(this)}
+                                                    customRequest={this.customRequestAudio.bind(this)}
+                                                >
+                                                    {timelineAudio && timelineAudio.path ?
+                                                        <div>{timelineAudio.original_name}</div>
+                                                        :
+                                                        uploadButtonAudio
+                                                    }
+                                                </Upload>
+                                            </Form.Item>
+                                            :
+                                            timeline.type === 'content'?
+                                                'CONTENT'
+                                            :
+                                            null
+                                    :
+                                    null
+                                }
+                                <Form.Item
+                                    label='Татац'
+                                    labelCol={{span: 4}}
+                                >
+                                    <Upload
+                                        // name="avatar"
+                                        listType="picture-card"
+                                        // className="avatar-uploader"
+                                        showUploadList={false}
+                                        disabled={fileUploadLoadingT}
+                                        beforeUpload={this.beforeUploadFile.bind(this)}
+                                        customRequest={this.customRequestFile.bind(this)}
+                                    >
+                                        {timelineFile && timelineFile.path ?
+                                            <div>{timelineFile.original_name}</div>
+                                            :
+                                            uploadButtonFile
+                                        }
+                                    </Upload>
+                                </Form.Item>
+                            </Form>
+                        </Modal>
+                        :
+                        null
+                    }
+                    {openEditTimeline && !editTimelineLoader?
+                        <Modal
+                            title="Хөтөлбөр"
+                            visible={openEditTimeline}
+                            confirmLoading={timelineSubmitLoader}
+                            onOk={this.submitTimeline.bind(this)}
+                            onCancel={this.closeEditTimeline.bind(this)}
                             okText="Хадгалах"
                             cancelText="Болих"
                             maskClosable={false}

@@ -119,6 +119,13 @@ export const openModalLevelTimline = {
 export const closeModalLevelTimline = {
     REQUEST:'closeModalLevelTimline_REQUEST',
 };
+export const openEditTimeline = {
+    REQUEST:'openEditTimeline_REQUEST',
+    RESPONSE:'openEditTimeline_RESPONSE',
+};
+export const closeEditTimeline = {
+    REQUEST:'closeEditTimeline_REQUEST',
+};
 export const orderLevels = {
     REQUEST:'orderLevels_REQUEST',
 };
