@@ -37,6 +37,12 @@ export function addBundleLevel(data){
         json: data
     }
 }
+export function removeSingleOrts(data){
+    return {
+        type: constants.removeSingleOrts.REQUEST,
+        json: data
+    }
+}
 export function submitBundle(data) {
     let url = `/admin/api/submitBundle`;
     return networkActions.requestPost(constants.submitBundle,url, data);

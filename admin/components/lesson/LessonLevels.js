@@ -9,7 +9,27 @@ import { Link } from 'react-router-dom';
 
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 const reducer = ({ main, lessonLevel }) => ({ main, lessonLevel });
-import { Card, Button, List, Avatar, Table, Modal, Form, Popconfirm, Input, Select, Spin, Row, Col, TreeSelect, InputNumber, Steps, Upload, message } from 'antd';
+import {
+    Card,
+    Button,
+    List,
+    Avatar,
+    Table,
+    Modal,
+    Form,
+    Popconfirm,
+    Input,
+    Select,
+    Spin,
+    Row,
+    Col,
+    TreeSelect,
+    InputNumber,
+    Steps,
+    Upload,
+    message,
+    Progress
+} from 'antd';
 import { EditOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, DragOutlined, SearchOutlined, CheckOutlined, UploadOutlined, CloseCircleFilled, SolutionOutlined, LoadingOutlined, SmileOutlined, CheckCircleFilled, CaretRightFilled, CaretLeftFilled } from '@ant-design/icons'
 import LessonEdit from "./LessonEdit";
 const { Meta } = Card;
@@ -84,12 +104,10 @@ class LessonLevels extends React.Component {
         this.props.dispatch(actions.getLessonSingle({id:this.props.match.params.id}));
     }
 
-    // componentWillUnmount() {
-    //     this.props.closeLevelSingle();
-    // }
-    // openModalLevel(type, idx, data = {}) {
-    //     this.props.dispatch(actions.openLessonModalLevel({type:type, idx:idx, level:data}));
-    // }
+    componentWillUnmount() {
+        this.props.closeModalLevelTimline();
+        this.props.closeLessonModalLevel();
+    }
     openModalLevel(type, idx, data = {}) {
         this.props.dispatch(actions.openLessonModalLevel({type:type, idx:idx, level:data}));
     }
@@ -116,7 +134,7 @@ class LessonLevels extends React.Component {
         this.props.dispatch(actions.lessonAddLevel({_id: lesson._id, level_id:level._id, level: level, levelType: levelType, lesson: lesson, levelIdx:levelIdx}));
     }
     submitTimeline(){
-        const {lessonLevel:{timeline, timelineType, lesson, levelIndex, level_id}} = this.props;
+        const {lessonLevel:{ timeline, timelineType, lesson, levelIndex, level_id, timelineVideo, timelineAudio, timelineFile }} = this.props;
         if(!timeline.title || (timeline.title && timeline.title.trim() === '' )){
             return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
         }
@@ -129,12 +147,26 @@ class LessonLevels extends React.Component {
         if(!timeline.minutes || (timeline.minutes && timeline.minutes === 0 )){
             return config.get('emitter').emit('warning', ("Минут оруулна уу!"));
         }
+        if(timeline.type === 'video'){
+            if(!timelineVideo || !timelineVideo.path || timelineVideo.path === '' || !timelineVideo.type || timelineVideo.type !== 'video' ){
+                return config.get('emitter').emit('warning', ("Бичлэг оруулна уу!"));
+            }
+        }
+        if(timeline.type === 'audio') {
+            if(!timelineAudio || !timelineAudio.path || timelineAudio.path === '' || !timelineAudio.type || timelineAudio.type !== 'audio' ){
+                return config.get('emitter').emit('warning', ("Аудио оруулна уу!"));
+            }
+        }
         let cc = {
             ...timeline,
             lesson: lesson._id,
             timelineType: timelineType,
             level_id: level_id,
-            levelIndex:levelIndex
+            levelIndex:levelIndex,
+            timelineVideo: timeline.type === 'video'? (timelineVideo || {})  : null,
+            timelineAudio: timeline.type === 'audio'? (timelineAudio || {})  : null,
+            timelineContent: timeline.type === 'content'? timelineAudio || {}  : null,
+            timelineFile: (timelineFile || null)
         };
         this.props.dispatch(actions.submitTimeline(cc));
     }
@@ -167,8 +199,61 @@ class LessonLevels extends React.Component {
         const {dispatch, lessonLevel:{lesson}} = this.props;
         this.props.dispatch(actions.removeTimeline({_id:lesson._id, level_id: level_id, timeline_id:timeline_id}));
     }
+    //upload
+    customRequestVideo(files) {
+        const {main:{user}} = this.props;
+        let id = user._id;
+        files.file.path = files.file.name;
+        this.props.dispatch(actions.uploadTimelineVideo([files.file], 'video', id));
+    }
+    beforeUploadVideo(file) {
+        const isJpgOrPng = file.type === 'video/mp4' || file.type === 'video/MP4';
+        if (!isJpgOrPng) {
+            message.error('You can only upload .mp4 file!');
+        }
+        const isLt2M = file.size / 1024 / 1024 < 200;
+        if (!isLt2M) {
+            message.error('Video must smaller than 200MB!');
+        }
+        return isJpgOrPng && isLt2M;
+    }
+    customRequestAudio(files) {
+        const {main:{user}} = this.props;
+        let id = user._id;
+        files.file.path = files.file.name;
+        this.props.dispatch(actions.uploadTimelineAudio([files.file], 'audio', id));
+    }
+    beforeUploadAudio(file) {
+        const isJpgOrPng = file.type === 'audio/mp3' || file.type === 'audio/MP3' || file.type === 'audio/mpeg';
+        if (!isJpgOrPng) {
+            message.error('You can only upload .mp3 file!');
+        }
+        const isLt2M = file.size / 1024 / 1024 < 200;
+        if (!isLt2M) {
+            message.error('Audio must smaller than 200MB!');
+        }
+        return isJpgOrPng && isLt2M;
+    }
+    customRequestFile(files) {
+        const {main:{user}} = this.props;
+        let id = user._id;
+        files.file.path = files.file.name;
+        this.props.dispatch(actions.uploadTimelineFile([files.file], 'file', id));
+    }
+    beforeUploadFile(file) {
+        let fileName = (file.name || '').split('.');
+        const isJpgOrPng = file.type === 'application/zip' || (file.type === '' && fileName && fileName[fileName.length-1] === 'rar');
+        if (!isJpgOrPng) {
+            message.error('You can only upload .zip or .rar file!');
+        }
+        const isLt2M = file.size / 1024 / 1024 < 200;
+        if (!isLt2M) {
+            message.error('File must smaller than 200MB!');
+        }
+        return isJpgOrPng && isLt2M;
+    }
     render() {
-        let { main:{user}, lessonLevel:{status, lesson, openModalLevel, level, openModalLevelTimline, timeline, timelineSubmitLoader} } = this.props;
+        let { main:{user}, lessonLevel:{status, lesson, openModalLevel, level, openModalLevelTimline, timeline, timelineSubmitLoader, timelineVideo, timelineVideoProgress, videoUploadLoadingT, timelineAudio, timelineAudioProgress, audioUploadLoadingT , timelineFile, timelineFileProgress, fileUploadLoadingT } } = this.props;
 
 
         // const SortableItem = SortableElement(({value}) => (
@@ -199,6 +284,54 @@ class LessonLevels extends React.Component {
         //         />
         //     );
         // });
+        const uploadButtonVideo = (
+            <div style={{fontSize: 24}}>
+                {videoUploadLoadingT ?
+                    <React.Fragment>
+                        <LoadingOutlined />
+                        {timelineVideoProgress && timelineVideoProgress.percent?
+                            <Progress percent={timelineVideoProgress.percent} size="small" />
+                            :
+                            <Progress percent={0} size="small" />
+                        }
+                    </React.Fragment>
+                    :
+                    <PlusOutlined />
+                }
+            </div>
+        );
+        const uploadButtonAudio = (
+            <div style={{fontSize: 24}}>
+                {audioUploadLoadingT ?
+                    <React.Fragment>
+                        <LoadingOutlined />
+                        {timelineAudioProgress && timelineAudioProgress.percent?
+                            <Progress percent={timelineAudioProgress.percent} size="small" />
+                            :
+                            <Progress percent={0} size="small" />
+                        }
+                    </React.Fragment>
+                    :
+                    <PlusOutlined />
+                }
+            </div>
+        );
+        const uploadButtonFile = (
+            <div style={{fontSize: 24}}>
+                {fileUploadLoadingT ?
+                    <React.Fragment>
+                        <LoadingOutlined />
+                        {timelineFileProgress && timelineFileProgress.percent?
+                            <Progress percent={timelineFileProgress.percent} size="small" />
+                            :
+                            <Progress percent={0} size="small" />
+                        }
+                    </React.Fragment>
+                    :
+                    <PlusOutlined />
+                }
+            </div>
+        );
         return (
             <Card
                 title={lesson && lesson.title? lesson.title : 'LEVEL'}
@@ -434,6 +567,78 @@ class LessonLevels extends React.Component {
                                         formatter={value => `${value} минут`}
                                         onChange={this.onChangeHandle2.bind(this, 'minutes')}
                                     />
+                                </Form.Item>
+                                {timeline.type?
+                                    timeline.type === 'video'?
+                                        <Form.Item
+                                            label='Бичлэг'
+                                            labelCol={{span: 4}}
+                                        >
+                                            <Upload
+                                                // name="avatar"
+                                                listType="picture-card"
+                                                className="avatar-uploader"
+                                                showUploadList={false}
+                                                disabled={videoUploadLoadingT}
+                                                beforeUpload={this.beforeUploadVideo.bind(this)}
+                                                customRequest={this.customRequestVideo.bind(this)}
+                                            >
+                                                {timelineVideo && timelineVideo.path ?
+                                                    <img src={`${config.get('hostMedia')}${timelineVideo.thumbnail}`} alt="avatar" style={{ width: '100%' }} />
+                                                    :
+                                                    uploadButtonVideo
+                                                }
+                                            </Upload>
+                                        </Form.Item>
+                                        :
+                                        timeline.type === 'audio'?
+                                            <Form.Item
+                                                label='Аудио'
+                                                labelCol={{span: 4}}
+                                            >
+                                                <Upload
+                                                    // name="avatar"
+                                                    listType="picture-card"
+                                                    className="avatar-uploader"
+                                                    showUploadList={false}
+                                                    disabled={audioUploadLoadingT}
+                                                    beforeUpload={this.beforeUploadAudio.bind(this)}
+                                                    customRequest={this.customRequestAudio.bind(this)}
+                                                >
+                                                    {timelineAudio && timelineAudio.path ?
+                                                        <div>{timelineAudio.original_name}</div>
+                                                        :
+                                                        uploadButtonAudio
+                                                    }
+                                                </Upload>
+                                            </Form.Item>
+                                            :
+                                            timeline.type === 'content'?
+                                                'CONTENT'
+                                            :
+                                            null
+                                    :
+                                    null
+                                }
+                                <Form.Item
+                                    label='Татац'
+                                    labelCol={{span: 4}}
+                                >
+                                    <Upload
+                                        // name="avatar"
+                                        listType="picture-card"
+                                        // className="avatar-uploader"
+                                        showUploadList={false}
+                                        disabled={fileUploadLoadingT}
+                                        beforeUpload={this.beforeUploadFile.bind(this)}
+                                        customRequest={this.customRequestFile.bind(this)}
+                                    >
+                                        {timelineFile && timelineFile.path ?
+                                            <div>{timelineFile.original_name}</div>
+                                            :
+                                            uploadButtonFile
+                                        }
+                                    </Upload>
                                 </Form.Item>
                             </Form>
                         </Modal>

@@ -43,6 +43,9 @@ export const addBundleLevel = {
 export const addLessonToBundleLevels = {
     REQUEST:'addLessonToBundleLevels_REQUEST',
 };
+export const removeSingleOrts = {
+    REQUEST:'removeSingleOrts_REQUEST',
+};
 export const getBundle = {
     REQUEST:'getBundle_REQUEST',
     RESPONSE:'getBundle_RESPONSE',
@@ -125,6 +128,21 @@ export const closeLessonModalLevel = {
 export const lessonAddLevel = {
     REQUEST:'lessonAddLevel_REQUEST',
     RESPONSE:'lessonAddLevel_RESPONSE',
+};
+export const uploadTimelineVideo = {
+    REQUEST:'uploadTimelineVideo_REQUEST',
+    PROGRESS:'uploadTimelineVideo_PROGRESS',
+    RESPONSE:'uploadTimelineVideo_RESPONSE',
+};
+export const uploadTimelineAudio = {
+    REQUEST:'uploadTimelineAudio_REQUEST',
+    PROGRESS:'uploadTimelineAudio_PROGRESS',
+    RESPONSE:'uploadTimelineAudio_RESPONSE',
+};
+export const uploadTimelineFile = {
+    REQUEST:'uploadTimelineFile_REQUEST',
+    PROGRESS:'uploadTimelineFile_PROGRESS',
+    RESPONSE:'uploadTimelineFile_RESPONSE',
 };
 export const openLevelSingle = {
     REQUEST:'openLevelSingle_REQUEST',

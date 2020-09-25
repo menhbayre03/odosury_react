@@ -12,6 +12,9 @@ import {
     onChangeHandlerLevelTimelineSelect,
     deleteLevel,
     removeTimeline,
+    uploadTimelineVideo,
+    uploadTimelineAudio,
+    uploadTimelineFile,
 } from "../actionTypes";
 const initialState = {
     status: 1,
@@ -28,11 +31,95 @@ const initialState = {
     timelineType: '',
     level_id: '',
     timelineIdx: null,
-    timelineSubmitLoader: false
+    timelineSubmitLoader: false,
+
+    timelineVideo: {},
+    timelineVideoProgress: {},
+    videoUploadLoadingT: false,
+
+    timelineAudio: {},
+    timelineAudioProgress: {},
+    audioUploadLoadingT: false,
+
+    timelineFile: {},
+    timelineFileProgress: {},
+    fileUploadLoadingT: false,
 };
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case uploadTimelineFile.REQUEST:
+            return {
+                ...state,
+                fileUploadLoadingT: true,
+                timelineFile:{}
+            };
+        case uploadTimelineFile.PROGRESS:
+            return {
+                ...state,
+                timelineFileProgress: (action.json || {})
+            };
+        case uploadTimelineFile.RESPONSE:
+            if(action.json.success){
+                return {
+                    ...state,
+                    fileUploadLoadingT: false,
+                    timelineFile: action.json.result
+                };
+            } else {
+                return {
+                    ...state,
+                    fileUploadLoadingT: false
+                };
+            }
+        case uploadTimelineAudio.REQUEST:
+            return {
+                ...state,
+                audioUploadLoadingT: true,
+                timelineAudio:{}
+            };
+        case uploadTimelineAudio.PROGRESS:
+            return {
+                ...state,
+                timelineAudioProgress: (action.json || {})
+            };
+        case uploadTimelineAudio.RESPONSE:
+            if(action.json.success){
+                return {
+                    ...state,
+                    audioUploadLoadingT: false,
+                    timelineAudio: action.json.result
+                };
+            } else {
+                return {
+                    ...state,
+                    audioUploadLoadingT: false
+                };
+            }
+        case uploadTimelineVideo.REQUEST:
+            return {
+                ...state,
+                videoUploadLoadingT: true,
+                timelineVideo:{}
+            };
+        case uploadTimelineVideo.PROGRESS:
+            return {
+                ...state,
+                timelineVideoProgress: (action.json || {})
+            };
+        case uploadTimelineVideo.RESPONSE:
+            if(action.json.success){
+                return {
+                    ...state,
+                    videoUploadLoadingT: false,
+                    timelineVideo: action.json.result
+                };
+            } else {
+                return {
+                    ...state,
+                    videoUploadLoadingT: false
+                };
+            }
         case removeTimeline.REQUEST:
             if(action.json.level_id){
                 let lvls = (state.lesson.levels || []);
@@ -221,7 +308,10 @@ export default(state = initialState, action) => {
                 openModalLevelTimline: true,
                 level_id: action.json.level_id,
                 timelineType: action.json.type,
-                timeline: action.json.timeline
+                timeline: action.json.timeline,
+                timelineFile : {},
+                timelineAudio : {},
+                timelineVideo : {},
             };
         case closeModalLevelTimline.REQUEST:
             return {
@@ -230,6 +320,9 @@ export default(state = initialState, action) => {
                 timeline: {},
                 level_id: '',
                 timelineType: '',
+                timelineFile : {},
+                timelineAudio : {},
+                timelineVideo : {},
             };
         case orderLevels.REQUEST:
             return {

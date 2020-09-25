@@ -50,6 +50,6 @@ export function uploadLessonImage(data, type, id) {
     return networkActions.uploadProgress(constants.uploadLessonImage, url, data, type);
 }
 export function uploadLessonVideo(data, type, id) {
-    let url = `/lesson/video/upload`;
+    let url = `/video/upload`;
     return networkActions.uploadProgress(constants.uploadLessonVideo, url, data, type );
 }

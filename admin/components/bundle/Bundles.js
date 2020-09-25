@@ -142,21 +142,8 @@ class Bundle extends React.Component {
         }
         this.props.dispatch(actions.addBundleLevel());
     }
-    removeSingleOrts(index, name){
-        if(name === 'requirement'){
-            let hold = [];
-            if(this.state.requirementsArray && this.state.requirementsArray.length>0){
-                hold = this.state.requirementsArray.filter((run, idx) => idx !== index);
-                this.setState({requirementsArray: hold})
-            }
-        }
-        if(name === 'learn_check_list'){
-            let hold = [];
-            if(this.state.learn_check_listArray && this.state.learn_check_listArray.length>0){
-                hold = this.state.learn_check_listArray.filter((run, idx) => idx !== index);
-                this.setState({learn_check_listArray: hold})
-            }
-        }
+    removeSingleOrts(index, name, lessonId){
+            this.props.dispatch(actions.removeSingleOrts({name: name, index: index, lessonId:lessonId}));
     }
     addSingleOrts(idx){
         const {bundle:{lessonValue}} = this.props;
@@ -309,8 +296,9 @@ class Bundle extends React.Component {
                                 />
                             }
                             actions={[
-                                <EditOutlined key="edit" />,
-
+                                <span onClick={this.openModal.bind(this, run)}>
+                                    <EditOutlined key="edit" />
+                                </span>,
                                 <Popconfirm
                                     title={`Та устгах гэж байна!`}
                                     onConfirm={this.delete.bind(this, run._id)}
@@ -325,8 +313,16 @@ class Bundle extends React.Component {
                             <Meta
                                 // avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
                                 title={run.title}
-                                description={`Үнэ: ${run.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}₮`}
-
+                                description={
+                                    <div>
+                                        <div>{`Үнэ: ${run.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}₮`}</div>
+                                        {run.sale?
+                                            <div>Хямдрал <span style={{color: '#d81c1c'}}>{`${run.sale.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}₮`}</span></div>
+                                            :
+                                            null
+                                        }
+                                    </div>
+                                }
                             />
                         </Card>
                     )
@@ -418,75 +414,80 @@ class Bundle extends React.Component {
                             label='Түвшин'
                         labelCol={{span: 5}}
                     >
-                        <Input
-                            type="text"
-                            ref="textInput"
-                            name="bundleLevelName"
-                            placeholder='Түвшний нэр'
-                            style={{width: '100%', marginBottom: 10}}
-                            value={bundleLevelName}
-                            onChange={this.changeState.bind(this, 'bundleLevelName')}
-                        />
-                        <Button size='small' style={{width: 120, float: 'right'}}
-                                onClick={this.addBundleLevel.bind(this, 'bundleLevelName')}>
-                            <PlusOutlined/> Түвшин
-                        </Button>
+                        <div className='bundle-levels'>
+                            <Input
+                                type="text"
+                                ref="textInput"
+                                name="bundleLevelName"
+                                placeholder='Түвшний нэр'
+                                style={{width: '100%', marginBottom: 10}}
+                                value={bundleLevelName}
+                                onChange={this.changeState.bind(this, 'bundleLevelName')}
+                            />
+                            <div className='bundle-levels-add'>
+                                <Button size='small' style={{width: 120}}
+                                        onClick={this.addBundleLevel.bind(this, 'bundleLevelName')}>
+                                    <PlusOutlined/> Түвшин
+                                </Button>
+                            </div>
 
-                        {bundle.levels && bundle.levels.length>0?
-                            bundle.levels.map((run, idx) =>
-                                <div key={idx+'levels'}>
-                                    <div>{run.title}</div>
-                                    <div className='bundle-level-outer'>
-                                        {run.lessons && run.lessons.length > 0 ?
-                                            run.lessons.map((run, idx) =>
-                                                <div className='orts-inner' key={idx + 'afro'}>
-                                                    {`${idx + 1}. ${run}`}
-                                                    <div className='action'
-                                                         // onClick={this.removeSingleOrts.bind(this, idx, 'lesson')}
-                                                    >
-                                                        <CloseCircleFilled/></div>
+                            {bundle.levels && bundle.levels.length>0?
+                                bundle.levels.map((run, idx) =>
+                                    <div className='levels' key={idx+'levels'}>
+                                        <div className='level-title'>
+                                            {run.title}
+                                            <Button size='small' danger style={{float: "right"}}
+                                                    onClick={this.removeSingleOrts.bind(this, idx, 'bundleLevel', '' )}>
+                                                <DeleteFilled/> Устгах
+                                            </Button>
+                                        </div>
+                                        <div className='bundle-level-outer'>
+                                            {run.lessons && run.lessons.length > 0 ?
+                                                run.lessons.map((innerRun, innerIdx) =>
+                                                    <div className='orts-inner' key={innerIdx + 'afro'}>
+                                                        <span>{innerIdx + 1}. {lessons && lessons.length>0? lessons.filter(les => les._id.toString() === innerRun.toString())[0].title : innerRun}</span>
+                                                        <div className='action'
+                                                            onClick={this.removeSingleOrts.bind(this, idx, 'lessons', innerRun)}
+                                                        >
+                                                            <CloseCircleFilled/></div>
+                                                    </div>
+                                                )
+                                                :
+                                                <div className='orts-inner' key='no-orts'
+                                                     style={{opacity: '0.7'}}>
+                                                    Хичээл оруулна уу
                                                 </div>
-                                            )
-                                            :
-                                            <div className='orts-inner' key='no-orts'
-                                                 style={{opacity: '0.7'}}>
-                                                Хичээл оруулна уу
-                                            </div>
-                                        }
+                                            }
+                                        </div>
+                                        <div className='timeline-select'>
+                                            <Select
+                                                value={lessonValue.value && lessonValue.index === idx ? lessonValue.value : ''}
+                                                // onChange={this.onChangeHandlerLevelTimelineSelect.bind(this)}
+                                                name="lessons"
+                                                onChange={this.changeState.bind(this, 'lessons', idx)}
+                                            >
+                                                <Option value="">Хичээл сонгоно уу</Option>
+                                                {lessons.length>0?
+                                                    lessons.map(les =>
+                                                        <Option value={les._id}>{les.title}</Option>
+                                                    )
+                                                    :
+                                                    null
+                                                }
+                                            </Select>
+                                        </div>
+                                        <div className='timeline-add-btn'>
+                                            <Button size='small' style={{width: 120}}
+                                                    onClick={this.addSingleOrts.bind(this, idx)}>
+                                                <PlusOutlined/> Нэмэх
+                                            </Button>
+                                        </div>
                                     </div>
-                                    {/*<Input*/}
-                                    {/*    type="text"*/}
-                                    {/*    ref="textInput"*/}
-                                    {/*    name="learn_check_list"*/}
-                                    {/*    placeholder='React'*/}
-                                    {/*    style={{width: '100%', marginBottom: 10}}*/}
-                                    {/*    value={this.state.learn_check_list}*/}
-                                    {/*    onChange={this.changeState.bind(this)}*/}
-                                    {/*/>*/}
-                                    <Select
-                                        value={lessonValue.value && lessonValue.index === idx ? lessonValue.value : ''}
-                                        // onChange={this.onChangeHandlerLevelTimelineSelect.bind(this)}
-                                        name="lessons"
-                                        onChange={this.changeState.bind(this, 'lessons', idx)}
-                                    >
-                                        <Option value="">Хичээл сонгоно уу</Option>
-                                        {lessons.length>0?
-                                            lessons.map(les =>
-                                                <Option value={les._id}>{les.title}</Option>
-                                            )
-                                            :
-                                            null
-                                        }
-                                    </Select>
-                                    <Button size='small' style={{width: 120, float: 'right'}}
-                                            onClick={this.addSingleOrts.bind(this, idx)}>
-                                        <PlusOutlined/> Нэмэх
-                                    </Button>
-                                </div>
-                            )
-                            :
-                            null
-                        }
+                                )
+                                :
+                                null
+                            }
+                        </div>
                     </Form.Item>
                 </Modal>
 

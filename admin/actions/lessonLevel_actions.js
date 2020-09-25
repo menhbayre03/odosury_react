@@ -63,12 +63,19 @@ export function orderLevels(data){
         json: data
     }
 }
-// export function lessonAddLevel(){
-//     return {
-//         type: constants.lessonAddLevel.REQUEST
-//     }
-// }
 export function lessonAddLevel(data){
     let url = `/admin/api/lessonAddLevel`;
     return networkActions.requestPost(constants.lessonAddLevel,url, data);
+}
+export function uploadTimelineVideo(data, type, id) {
+    let url = `/video/upload`;
+    return networkActions.uploadProgress(constants.uploadTimelineVideo, url, data, type );
+}
+export function uploadTimelineAudio(data, type, id) {
+    let url = `/audio/upload`;
+    return networkActions.uploadProgress(constants.uploadTimelineAudio, url, data, type );
+}
+export function uploadTimelineFile(data, type, id) {
+    let url = `/file/upload`;
+    return networkActions.uploadProgress(constants.uploadTimelineFile, url, data, type );
 }

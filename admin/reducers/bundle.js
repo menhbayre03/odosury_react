@@ -9,6 +9,7 @@ import {
     bundleLevelOnChange,
     addLessonToBundleLevels,
     addBundleLevel,
+    removeSingleOrts
 } from "../actionTypes";
 const initialState = {
     status: 1,
@@ -30,6 +31,24 @@ const initialState = {
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case removeSingleOrts.REQUEST:
+            let lvls = (state.bundle.levels || []);
+            if(action.json.name === 'lessons'){
+                lvls.map(function(run, idx) {
+                    if(idx === action.json.index){
+                        run.lessons = run.lessons.filter(les => les !== action.json.lessonId);
+                    }
+                });
+            } else if(action.json.name === 'bundleLevel'){
+                lvls = lvls.filter((lvl, idx) => idx !== action.json.index);
+            }
+            return {
+                ...state,
+                bundle: {
+                    ...state.bundle,
+                    levels: lvls
+                },
+            };
         case addLessonToBundleLevels.REQUEST:
             let bundleLvl = (state.bundle.levels || []);
             if(bundleLvl && bundleLvl.length>0) {
@@ -194,12 +213,7 @@ export default(state = initialState, action) => {
                         openModal: false,
                         bundles: state.bundles.map(function (run) {
                             if(run._id === action.json._id){
-                                run.title =  action.json.data.first_name;
-                                run.last_name = action.json.data.last_name;
-                                run.bio = action.json.data.bio;
-                                run.email = action.json.data.email;
-                                run.phone = action.json.data.phone;
-                                run.avatar = action.json.data.avatar;
+                                run = {...action.json.data, thumbnail: action.json.data.bundleThumbnail};
                             }
                             return run;
                         })
