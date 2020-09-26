@@ -221,6 +221,10 @@ class LessonEdit extends React.Component {
         }
         return isJpgOrPng && isLt2M;
     }
+    removeUploadedFile(name) {
+        this.props.dispatch(actions.removeUploadedFile({name: name}));
+        return false;
+    };
     render() {
         let { main:{user}, lesson:{imageUploadLoading, lessonImage, videoUploadLoading, lessonVideo, status, openModal, lessonVideoProgress, lessonImageProgress, lesson, lessons, submitLessonLoader, all, searchTeachersResult, searchTeacherLoader, categories, level} } = this.props;
         let avatar = '/images/default-avatar.png';
@@ -276,7 +280,7 @@ class LessonEdit extends React.Component {
                         }
                     </React.Fragment>
                     :
-                    <PlusOutlined />
+                    <Button icon={<UploadOutlined />}>Upload</Button>
                 }
             </div>
         );
@@ -561,22 +565,21 @@ class LessonEdit extends React.Component {
                                                     </Form.Item>
                                                     <Form.Item
                                                         label='Бичлэг'
+                                                        // labelCol={{span: 4}}
+                                                        className='upload-m'
                                                     >
-                                                        <Upload
-                                                            name="avatar"
-                                                            listType="picture-card"
-                                                            className="avatar-uploader"
-                                                            showUploadList={false}
-                                                            disabled={videoUploadLoading}
-                                                            beforeUpload={this.beforeUploadVideo.bind(this)}
-                                                            customRequest={this.customRequestVideo.bind(this)}
-                                                        >
-                                                            {lessonVideo && lessonVideo.path ?
-                                                                <img src={`${config.get('hostMedia')}${lessonVideo.thumbnail}`} alt="avatar" style={{ width: '100%' }} />
-                                                                :
-                                                                uploadButtonVideo
-                                                            }
-                                                        </Upload>
+                                                        <div>
+                                                            <Upload
+                                                                listType="picture"
+                                                                disabled={videoUploadLoading}
+                                                                beforeUpload={this.beforeUploadVideo.bind(this)}
+                                                                customRequest={this.customRequestVideo.bind(this)}
+                                                                onRemove={this.removeUploadedFile.bind(this, 'lessonVideo')}
+                                                                fileList={ lessonVideo && lessonVideo.path ? [{uid: lessonVideo._id, name: lessonVideo.original_name, url: `${config.get('hostMedia')}${lessonVideo.thumbnail}`}] : []}
+                                                            >
+                                                                {uploadButtonVideo}
+                                                            </Upload>
+                                                        </div>
                                                     </Form.Item>
                                                 </div>
                                                 :

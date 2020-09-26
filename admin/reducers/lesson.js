@@ -13,6 +13,7 @@ import {
     uploadLessonVideo,
     openLevelSingle,
     closeLevelSingle,
+    removeUploadedFileLessonEdit,
 } from "../actionTypes";
 const initialState = {
     status: 1,
@@ -40,6 +41,11 @@ const initialState = {
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case removeUploadedFileLessonEdit.REQUEST:
+            return {
+                ...state,
+                [action.json.name]: {},
+            };
         case openLevelSingle.REQUEST:
             return {
                 ...state,

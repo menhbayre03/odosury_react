@@ -67,11 +67,19 @@ export function onChangeHandlerLevelTimeline(data){
         json: data
     }
 }
-export function orderLevels(data){
+export function removeUploadedFile(data){
     return {
-        type: constants.orderLevels.REQUEST,
+        type: constants.removeUploadedFile.REQUEST,
         json: data
     }
+}
+export function orderLevels(data){
+    let url = `/admin/api/orderLevels`;
+    return networkActions.requestPost(constants.orderLevels,url, data);
+    // return {
+    //     type: constants.orderLevels.REQUEST,
+    //     json: data
+    // }
 }
 export function lessonAddLevel(data){
     let url = `/admin/api/lessonAddLevel`;

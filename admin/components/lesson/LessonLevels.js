@@ -1,41 +1,16 @@
-import React, {Component, Fragment} from "react";
+import React from "react";
 import { connect } from 'react-redux';
 import config from "../../config";
-import moment from "moment";
 import * as actions from "../../actions/lessonLevel_actions";
 import arrayMove from 'array-move';
 import { Link } from 'react-router-dom';
+import { Editor } from '@tinymce/tinymce-react';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 const reducer = ({ main, lessonLevel }) => ({ main, lessonLevel });
-import {
-    Card,
-    Button,
-    List,
-    Avatar,
-    Table,
-    Modal,
-    Form,
-    Popconfirm,
-    Input,
-    Select,
-    Spin,
-    Row,
-    Col,
-    TreeSelect,
-    InputNumber,
-    Steps,
-    Upload,
-    message,
-    Progress
-} from 'antd';
-import { EditOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, DragOutlined, SearchOutlined, CheckOutlined, UploadOutlined, CloseCircleFilled, SolutionOutlined, LoadingOutlined, SmileOutlined, CheckCircleFilled, CaretRightFilled, CaretLeftFilled } from '@ant-design/icons'
-import LessonEdit from "./LessonEdit";
-import {closeEditTimeline} from "../../actionTypes";
-const { Meta } = Card;
+import { Card, Button, Modal, Form, Popconfirm, Input, Select, InputNumber, Upload, message, Progress } from 'antd';
+import { DeleteFilled, PlusOutlined, EditFilled, UploadOutlined, LoadingOutlined, CaretLeftFilled } from '@ant-design/icons'
 const { TextArea } = Input;
 const { Option } = Select;
-const { TreeNode } = TreeSelect;
-const { Step } = Steps;
 const SortableItem = SortableElement(( {value ,needRemove, removeTimeline, openEditTimeline, dis, indexes}) => {
     return (
         <div className='sortable-item'>
@@ -65,7 +40,6 @@ const SortableItem = SortableElement(( {value ,needRemove, removeTimeline, openE
 const SortableContainera = SortableContainer(({children}) => {
     return <div>{children}</div>;
 });
-
 class LessonLevels extends React.Component {
     constructor(props) {
         super(props);
@@ -74,6 +48,8 @@ class LessonLevels extends React.Component {
             //upload
             loading: false,
         };
+        this.editor = null;
+        this.editorCb = null;
         this.removeTimeline = this.removeTimeline.bind(this);
         this.openEditTimeline = this.openEditTimeline.bind(this);
         this.onSortEnd = this.onSortEnd.bind(this);
@@ -96,7 +72,7 @@ class LessonLevels extends React.Component {
     openEditTimeline(type, level_id, timeline) {
         this.props.dispatch(actions.openEditTimeline({type:type, level_id:level_id, timelineId:timeline._id}));
     }
-    closeModalLevelTimline(type, idx, data = {}) {
+    closeModalLevelTimline() {
         this.props.dispatch(actions.closeModalLevelTimline());
     }
     closeLessonModalLevel() {
@@ -119,6 +95,7 @@ class LessonLevels extends React.Component {
         this.props.dispatch(actions.lessonAddLevel({_id: lesson._id, level_id:level._id, level: level, levelType: levelType, lesson: lesson, levelIdx:levelIdx}));
     }
     submitTimeline(){
+        let content = this.editor.editor.getContent({format:'raw'});
         const {lessonLevel:{ timeline, timelineType, lesson, levelIndex, level_id, timelineVideo, timelineAudio, timelineFile }} = this.props;
         if(!timeline.title || (timeline.title && timeline.title.trim() === '' )){
             return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
@@ -142,6 +119,11 @@ class LessonLevels extends React.Component {
                 return config.get('emitter').emit('warning', ("Аудио оруулна уу!"));
             }
         }
+        if(timeline.type === 'content') {
+            if(!content || content === '' ){
+                return config.get('emitter').emit('warning', ("Аудио оруулна уу!"));
+            }
+        }
         let cc = {
             ...timeline,
             lesson: lesson._id,
@@ -150,33 +132,23 @@ class LessonLevels extends React.Component {
             levelIndex:levelIndex,
             timelineVideo: timeline.type === 'video'? (timelineVideo || {})  : null,
             timelineAudio: timeline.type === 'audio'? (timelineAudio || {})  : null,
-            timelineContent: timeline.type === 'content'? timelineAudio || {}  : null,
-            timelineFile: (timelineFile || null)
+            timelineContent: timeline.type === 'content'? (content || null)  : null,
+            timelineFile: timelineFile && timelineFile.path ? timelineFile : null
         };
         this.props.dispatch(actions.submitTimeline(cc));
     }
-    removeItem(item, index){
-        const {dispatch, lessonLevel:{lesson}} = this.props;
-        // let aa = (lesson.levels || []).filter(function (lvl, idx) {
-        //     return idx !== index;
-        // });
-        // dispatch(actions.orderLevels(aa));
-    };
     onChangeHandlerLevelTimelineSelect(value){
         this.props.dispatch(actions.onChangeHandlerLevelTimeline({name:'type', value: value}));
     };
     onChangeHandle2(name, value) {
         this.props.dispatch(actions.onChangeHandlerLevelTimeline({name:name, value: value}));
     }
-    complete() {
-        const {dispatch, lessonLevel:{lesson}} = this.props;
-    }
     deleteLevel(id) {
-        const {dispatch, lessonLevel:{lesson}} = this.props;
+        const {lessonLevel:{lesson}} = this.props;
         this.props.dispatch(actions.deleteLevel({_id:lesson._id, level_id: id}));
     }
     removeTimeline(level_id, timeline_id) {
-        const {dispatch, lessonLevel:{lesson}} = this.props;
+        const {lessonLevel:{lesson}} = this.props;
         this.props.dispatch(actions.removeTimeline({_id:lesson._id, level_id: level_id, timeline_id:timeline_id}));
     }
     //upload
@@ -239,11 +211,21 @@ class LessonLevels extends React.Component {
         const {dispatch, lessonLevel:{lesson}} = this.props;
         if(oldIndex !== newIndex){
             let aa = arrayMove((lesson.levels[collection].programs || []), oldIndex, newIndex);
-            dispatch(actions.orderLevels({collection: collection, sineLevel:aa}));
+            dispatch(actions.orderLevels({collection: collection, sineLevel:aa, level_id: lesson.levels[collection]._id, _id: lesson._id}));
         }
     };
+    removeUploadedFile(name) {
+        this.props.dispatch(actions.removeUploadedFile({name: name}));
+        return false;
+    };
+
+    onImageUpload(callback, value, meta){
+        this.editorCb = callback;
+        // //callback('myimage.jpg', {alt: 'My alt text'});
+        // this.setState({editorMedia: true})
+    }
     render() {
-        let { main:{user}, lessonLevel:{editTimelineLoader, openEditTimeline, status, lesson, openModalLevel, level, openModalLevelTimline, timeline, timelineSubmitLoader, timelineVideo, timelineVideoProgress, videoUploadLoadingT, timelineAudio, timelineAudioProgress, audioUploadLoadingT , timelineFile, timelineFileProgress, fileUploadLoadingT } } = this.props;
+        let { lessonLevel:{editTimelineLoader, openEditTimeline, status, lesson, openModalLevel, level, orderLoader, openModalLevelTimline, timeline, timelineSubmitLoader, timelineVideo, timelineVideoProgress, videoUploadLoadingT, timelineAudio, timelineAudioProgress, audioUploadLoadingT , timelineFile, timelineFileProgress, fileUploadLoadingT } } = this.props;
 
 
         const uploadButtonVideo = (
@@ -258,7 +240,7 @@ class LessonLevels extends React.Component {
                         }
                     </React.Fragment>
                     :
-                    <PlusOutlined />
+                    <Button icon={<UploadOutlined />}>Upload</Button>
                 }
             </div>
         );
@@ -274,7 +256,7 @@ class LessonLevels extends React.Component {
                         }
                     </React.Fragment>
                     :
-                    <PlusOutlined />
+                    <Button icon={<UploadOutlined />}>Upload</Button>
                 }
             </div>
         );
@@ -290,7 +272,7 @@ class LessonLevels extends React.Component {
                         }
                     </React.Fragment>
                     :
-                    <PlusOutlined />
+                    <Button icon={<UploadOutlined />}>Upload</Button>
                 }
             </div>
         );
@@ -309,15 +291,6 @@ class LessonLevels extends React.Component {
                         <Button style={{marginRight: 10}} type="primary" key='newLevel' icon={<PlusOutlined />} onClick={this.openModalLevel.bind(this, 'new', null, {})} >
                             Түвшин
                         </Button>
-                        {/*<Button loading={timelineSubmitLoader} type="primary" key='hadhad' icon={<CheckOutlined />} onClick={this.complete.bind(this)}>*/}
-                        {/*    Хадгалах*/}
-                        {/*</Button>*/}
-                        {/*<Button type="default" key='forwardButton' icon={<PlusOutlined />} onClick={this.openModal.bind(this, {})} >*/}
-                        {/*    Болих*/}
-                        {/*</Button>*/}
-                        {/*<Button type="primary" key='forwardButton' icon={<PlusOutlined />} onClick={this.openModal.bind(this, {})} >*/}
-                        {/*    Болих*/}
-                        {/*</Button>*/}
                     </React.Fragment>
                 }
             >
@@ -328,6 +301,7 @@ class LessonLevels extends React.Component {
                                 lesson.levels.map((run, idx) =>
                                     <div key={run._id+'lvls'}>
                                         <Card
+                                            loading={orderLoader.includes(run._id)}
                                             style={{marginBottom: 20}}
                                             size='small'
                                             title={run.title ? run.title : ''}
@@ -451,6 +425,106 @@ class LessonLevels extends React.Component {
                                         <Option value="audio">Аудио</Option>
                                     </Select>
                                 </Form.Item>
+                                {timeline.type?
+                                    timeline.type === 'video'?
+                                        <Form.Item
+                                            label='Бичлэг'
+                                            labelCol={{span: 4}}
+                                            className='upload-m'
+                                        >
+                                            <div>
+                                                <Upload
+                                                    listType="picture"
+                                                    disabled={videoUploadLoadingT}
+                                                    beforeUpload={this.beforeUploadVideo.bind(this)}
+                                                    customRequest={this.customRequestVideo.bind(this)}
+                                                    onRemove={this.removeUploadedFile.bind(this, 'timelineVideo')}
+                                                    fileList={ timelineVideo && timelineVideo.path ? [{uid: timelineVideo._id, name: timelineVideo.original_name, url: `${config.get('hostMedia')}${timelineVideo.thumbnail}`}] : []}
+                                                >
+                                                    {uploadButtonVideo}
+                                                </Upload>
+                                            </div>
+                                        </Form.Item>
+                                        :
+                                        timeline.type === 'audio'?
+                                            <Form.Item
+                                                label='Аудио'
+                                                labelCol={{span: 4}}
+                                                className='upload-m'
+                                            >
+                                                <Upload
+                                                    listType="picture"
+                                                    disabled={audioUploadLoadingT}
+                                                    beforeUpload={this.beforeUploadAudio.bind(this)}
+                                                    customRequest={this.customRequestAudio.bind(this)}
+                                                    onRemove={this.removeUploadedFile.bind(this, 'timelineAudio')}
+                                                    fileList={ timelineAudio && timelineAudio.path ? [{uid: timelineAudio._id, name: timelineAudio.original_name, url: `${config.get('hostMedia')}${timelineAudio.thumbnail}`}] : []}
+                                                >
+                                                    {uploadButtonAudio}
+                                                </Upload>
+                                            </Form.Item>
+                                            :
+                                            timeline.type === 'content'?
+                                                <Editor
+                                                    ref={(ref) => {
+                                                        this.editor = ref;
+                                                    }}
+                                                    apiKey='xo6szqntkvg39zc2iafs9skjrw8s20sm44m28p3klgjo26y3'
+                                                    height="350px"
+                                                    value={timeline.content}
+                                                    init={{
+                                                        height: "350px",
+                                                        content_style: 'body { background-color: #f7f7f7;}' +
+                                                            'img { max-width: 100%; }',
+                                                        relative_urls: false,
+                                                        remove_script_host: false,
+                                                        plugins: 'image code paste link lists textcolor hr table emoticons advlist',
+                                                        file_picker_callback: this.onImageUpload.bind(this),
+                                                        file_picker_types: 'image',
+                                                        paste_data_images: true,
+                                                        paste_webkit_styles: "color font-size",
+                                                        valid_elements: 'img[src],*[style]',
+                                                        toolbar: 'undo redo | bold italic | fontsizeselect | alignleft aligncenter alignright | image media link | numlist bullist | forecolor backcolor | emoticons',
+                                                        extended_valid_elements: "iframe[src|style|scrolling|class|width|height|name|align]",
+                                                        color_cols: "5",
+                                                        custom_colors: false,
+                                                        body_class: 'tiny_editor',
+                                                        formats: {
+                                                            h1: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                            h2: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                            h3: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                            h4: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                            h5: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                            h6: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                            p: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                            bold: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                            italic: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                            code: {styles: {'font-family': "'Nunito', sans-serif"}}
+                                                        }
+                                                    }}
+                                                />
+                                                :
+                                                null
+                                    :
+                                    null
+                                }
+                                <Form.Item
+                                    label='Татац'
+                                    labelCol={{span: 4}}
+                                    className='upload-m'
+                                >
+
+                                    <Upload
+                                        listType="picture"
+                                        disabled={fileUploadLoadingT}
+                                        beforeUpload={this.beforeUploadFile.bind(this)}
+                                        customRequest={this.customRequestFile.bind(this)}
+                                        onRemove={this.removeUploadedFile.bind(this, 'timelineFile')}
+                                        fileList={ timelineFile && timelineFile.path ? [{uid: timelineFile._id, name: timelineFile.original_name, url: `${config.get('hostMedia')}${timelineFile.thumbnail}`}] : []}
+                                    >
+                                        {uploadButtonFile}
+                                    </Upload>
+                                </Form.Item>
                                 <Form.Item
                                     fieldKey='min'
                                     label='Минут'
@@ -468,78 +542,6 @@ class LessonLevels extends React.Component {
                                         formatter={value => `${value} минут`}
                                         onChange={this.onChangeHandle2.bind(this, 'minutes')}
                                     />
-                                </Form.Item>
-                                {timeline.type?
-                                    timeline.type === 'video'?
-                                        <Form.Item
-                                            label='Бичлэг'
-                                            labelCol={{span: 4}}
-                                        >
-                                            <Upload
-                                                // name="avatar"
-                                                listType="picture-card"
-                                                className="avatar-uploader"
-                                                showUploadList={false}
-                                                disabled={videoUploadLoadingT}
-                                                beforeUpload={this.beforeUploadVideo.bind(this)}
-                                                customRequest={this.customRequestVideo.bind(this)}
-                                            >
-                                                {timelineVideo && timelineVideo.path ?
-                                                    <img src={`${config.get('hostMedia')}${timelineVideo.thumbnail}`} alt="avatar" style={{ width: '100%' }} />
-                                                    :
-                                                    uploadButtonVideo
-                                                }
-                                            </Upload>
-                                        </Form.Item>
-                                        :
-                                        timeline.type === 'audio'?
-                                            <Form.Item
-                                                label='Аудио'
-                                                labelCol={{span: 4}}
-                                            >
-                                                <Upload
-                                                    // name="avatar"
-                                                    listType="picture-card"
-                                                    className="avatar-uploader"
-                                                    showUploadList={false}
-                                                    disabled={audioUploadLoadingT}
-                                                    beforeUpload={this.beforeUploadAudio.bind(this)}
-                                                    customRequest={this.customRequestAudio.bind(this)}
-                                                >
-                                                    {timelineAudio && timelineAudio.path ?
-                                                        <div>{timelineAudio.original_name}</div>
-                                                        :
-                                                        uploadButtonAudio
-                                                    }
-                                                </Upload>
-                                            </Form.Item>
-                                            :
-                                            timeline.type === 'content'?
-                                                'CONTENT'
-                                            :
-                                            null
-                                    :
-                                    null
-                                }
-                                <Form.Item
-                                    label='Татац'
-                                    labelCol={{span: 4}}
-                                >
-                                    <Upload
-                                        // name="avatar"
-                                        listType="picture-card"
-                                        // className="avatar-uploader"
-                                        showUploadList={false}
-                                        disabled={fileUploadLoadingT}
-                                        beforeUpload={this.beforeUploadFile.bind(this)}
-                                        customRequest={this.customRequestFile.bind(this)}
-                                    >
-                                        {timelineFile && timelineFile.path ?
-                                            <div>{timelineFile.original_name}</div>
-                                            :
-                                            uploadButtonFile
-                                        }
-                                    </Upload>
                                 </Form.Item>
                             </Form>
                         </Modal>
@@ -576,9 +578,6 @@ class LessonLevels extends React.Component {
                                               value={timeline.description ? timeline.description : ''}
                                               name='description'
                                               onChange={this.onChangeHandlerLevelTimeline.bind(this)}/>
-                                    {/*<Input autoFocus={true} size="middle" maxLength={60} value={timeline.description? timeline.description : ''} name='description'*/}
-                                    {/*       onChange={this.onChangeHandlerLevelTimeline.bind(this)}*/}
-                                    {/*/>*/}
                                 </Form.Item>
                                 <Form.Item
                                     label='Төрөл'
@@ -591,11 +590,110 @@ class LessonLevels extends React.Component {
                                         value={timeline.type ? timeline.type : ''}
                                         onChange={this.onChangeHandlerLevelTimelineSelect.bind(this)}
                                     >
-                                        {/*<Option value="">Төрөл сонгоно уу</Option>*/}
                                         <Option value="content">Контент</Option>
                                         <Option value="video">Бичлэг</Option>
                                         <Option value="audio">Аудио</Option>
                                     </Select>
+                                </Form.Item>
+                                {timeline.type?
+                                    timeline.type === 'video'?
+                                        <Form.Item
+                                            label='Бичлэг'
+                                            labelCol={{span: 4}}
+                                            className='upload-m'
+                                        >
+                                            <div>
+                                                <Upload
+                                                    listType="picture"
+                                                    disabled={videoUploadLoadingT}
+                                                    beforeUpload={this.beforeUploadVideo.bind(this)}
+                                                    customRequest={this.customRequestVideo.bind(this)}
+                                                    onRemove={this.removeUploadedFile.bind(this, 'timelineVideo')}
+                                                    fileList={ timelineVideo && timelineVideo.path ? [{uid: timelineVideo._id, name: timelineVideo.original_name, url: `${config.get('hostMedia')}${timelineVideo.thumbnail}`}] : []}
+                                                >
+                                                    {uploadButtonVideo}
+                                                </Upload>
+                                            </div>
+                                        </Form.Item>
+                                        :
+                                        timeline.type === 'audio'?
+                                            <Form.Item
+                                                label='Аудио'
+                                                labelCol={{span: 4}}
+                                                className='upload-m'
+                                            >
+                                                <Upload
+                                                    listType="picture"
+                                                    disabled={audioUploadLoadingT}
+                                                    beforeUpload={this.beforeUploadAudio.bind(this)}
+                                                    customRequest={this.customRequestAudio.bind(this)}
+                                                    onRemove={this.removeUploadedFile.bind(this, 'timelineAudio')}
+                                                    fileList={ timelineAudio && timelineAudio.path ? [{uid: timelineAudio._id, name: timelineAudio.original_name, url: `${config.get('hostMedia')}${timelineAudio.thumbnail}`}] : []}
+                                                >
+                                                    {uploadButtonAudio}
+                                                </Upload>
+                                            </Form.Item>
+                                            :
+                                            timeline.type === 'content'?
+                                                <Editor
+                                                    ref={(ref) => {
+                                                        this.editor = ref;
+                                                    }}
+                                                    apiKey='xo6szqntkvg39zc2iafs9skjrw8s20sm44m28p3klgjo26y3'
+                                                    height="350px"
+                                                    value={timeline.content}
+                                                    init={{
+                                                        height: "350px",
+                                                        content_style: 'body { background-color: #f7f7f7;}' +
+                                                            'img { max-width: 100%; }',
+                                                        relative_urls: false,
+                                                        remove_script_host: false,
+                                                        plugins: 'image code paste link lists textcolor hr table emoticons advlist',
+                                                        // file_picker_callback: this.onImageUpload.bind(this),
+                                                        file_picker_types: 'image',
+                                                        paste_data_images: true,
+                                                        paste_webkit_styles: "color font-size",
+                                                        valid_elements: 'img[src],*[style]',
+                                                        toolbar: 'undo redo | bold italic | fontsizeselect | alignleft aligncenter alignright | image media link | numlist bullist | forecolor backcolor | emoticons',
+                                                        extended_valid_elements: "iframe[src|style|scrolling|class|width|height|name|align]",
+                                                        color_cols: "5",
+                                                        custom_colors: false,
+                                                        body_class: 'tiny_editor',
+                                                        formats: {
+                                                            h1: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                            h2: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                            h3: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                            h4: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                            h5: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                            h6: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                            p: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                            bold: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                            italic: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                            code: {styles: {'font-family': "'Nunito', sans-serif"}}
+                                                        }
+                                                    }}
+                                                />
+                                            :
+                                            null
+                                    :
+                                    null
+                                }
+                                <Form.Item
+                                    label='Татац'
+                                    labelCol={{span: 4}}
+                                    className='upload-m'
+                                >
+
+                                    <Upload
+                                        listType="picture"
+                                        disabled={fileUploadLoadingT}
+                                        beforeUpload={this.beforeUploadFile.bind(this)}
+                                        customRequest={this.customRequestFile.bind(this)}
+                                        onRemove={this.removeUploadedFile.bind(this, 'timelineFile')}
+                                        fileList={ timelineFile && timelineFile.path ? [{uid: timelineFile._id, name: timelineFile.original_name, url: `${config.get('hostMedia')}${timelineFile.thumbnail}`}] : []}
+                                    >
+                                        {uploadButtonFile}
+                                    </Upload>
                                 </Form.Item>
                                 <Form.Item
                                     fieldKey='min'
@@ -614,78 +712,6 @@ class LessonLevels extends React.Component {
                                         formatter={value => `${value} минут`}
                                         onChange={this.onChangeHandle2.bind(this, 'minutes')}
                                     />
-                                </Form.Item>
-                                {timeline.type?
-                                    timeline.type === 'video'?
-                                        <Form.Item
-                                            label='Бичлэг'
-                                            labelCol={{span: 4}}
-                                        >
-                                            <Upload
-                                                // name="avatar"
-                                                listType="picture-card"
-                                                className="avatar-uploader"
-                                                showUploadList={false}
-                                                disabled={videoUploadLoadingT}
-                                                beforeUpload={this.beforeUploadVideo.bind(this)}
-                                                customRequest={this.customRequestVideo.bind(this)}
-                                            >
-                                                {timelineVideo && timelineVideo.path ?
-                                                    <img src={`${config.get('hostMedia')}${timelineVideo.thumbnail}`} alt="avatar" style={{ width: '100%' }} />
-                                                    :
-                                                    uploadButtonVideo
-                                                }
-                                            </Upload>
-                                        </Form.Item>
-                                        :
-                                        timeline.type === 'audio'?
-                                            <Form.Item
-                                                label='Аудио'
-                                                labelCol={{span: 4}}
-                                            >
-                                                <Upload
-                                                    // name="avatar"
-                                                    listType="picture-card"
-                                                    className="avatar-uploader"
-                                                    showUploadList={false}
-                                                    disabled={audioUploadLoadingT}
-                                                    beforeUpload={this.beforeUploadAudio.bind(this)}
-                                                    customRequest={this.customRequestAudio.bind(this)}
-                                                >
-                                                    {timelineAudio && timelineAudio.path ?
-                                                        <div>{timelineAudio.original_name}</div>
-                                                        :
-                                                        uploadButtonAudio
-                                                    }
-                                                </Upload>
-                                            </Form.Item>
-                                            :
-                                            timeline.type === 'content'?
-                                                'CONTENT'
-                                            :
-                                            null
-                                    :
-                                    null
-                                }
-                                <Form.Item
-                                    label='Татац'
-                                    labelCol={{span: 4}}
-                                >
-                                    <Upload
-                                        // name="avatar"
-                                        listType="picture-card"
-                                        // className="avatar-uploader"
-                                        showUploadList={false}
-                                        disabled={fileUploadLoadingT}
-                                        beforeUpload={this.beforeUploadFile.bind(this)}
-                                        customRequest={this.customRequestFile.bind(this)}
-                                    >
-                                        {timelineFile && timelineFile.path ?
-                                            <div>{timelineFile.original_name}</div>
-                                            :
-                                            uploadButtonFile
-                                        }
-                                    </Upload>
                                 </Form.Item>
                             </Form>
                         </Modal>

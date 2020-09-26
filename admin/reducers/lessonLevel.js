@@ -17,6 +17,7 @@ import {
     uploadTimelineFile,
     openEditTimeline,
     closeEditTimeline,
+    removeUploadedFile,
 } from "../actionTypes";
 const initialState = {
     status: 1,
@@ -49,10 +50,17 @@ const initialState = {
 
     editTimelineLoader: false,
     openEditTimeline: false,
+
+    orderLoader: [],
 };
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case removeUploadedFile.REQUEST:
+            return {
+                ...state,
+                [action.json.name]: {},
+            };
         case openEditTimeline.REQUEST:
             return {
                 ...state,
@@ -354,6 +362,14 @@ export default(state = initialState, action) => {
                 timelineVideo : {},
             };
         case orderLevels.REQUEST:
+            return {
+                ...state,
+                orderLoader: [
+                    ...state.orderLoader,
+                    action.json.level_id
+                ]
+            };
+        case orderLevels.RESPONSE:
             let holdLvl = (state.lesson.levels || []);
             holdLvl = holdLvl.map(function (run, idx) {
                 if(idx === action.json.collection){
@@ -362,7 +378,7 @@ export default(state = initialState, action) => {
                 return run;
             });
             return {
-                ...state,
+                orderLoader: state.orderLoader.filter(run => run !== action.json.level_id),
                 lesson: {
                     ...state.lesson,
                     levels: holdLvl
@@ -402,6 +418,7 @@ export default(state = initialState, action) => {
             return {
                 ...state,
                 openModalLevel: true,
+                orderLoader: [],
                 level:action.json.level,
                 levelType: action.json.type,
                 levelIdx: action.json.idx,

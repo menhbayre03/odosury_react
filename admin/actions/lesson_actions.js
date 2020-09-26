@@ -53,3 +53,9 @@ export function uploadLessonVideo(data, type, id) {
     let url = `/video/upload`;
     return networkActions.uploadProgress(constants.uploadLessonVideo, url, data, type );
 }
+export function removeUploadedFile(data){
+    return {
+        type: constants.removeUploadedFileLessonEdit.REQUEST,
+        json: data
+    }
+}

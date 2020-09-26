@@ -110,6 +110,9 @@ export const submitTimeline = {
 export const onChangeHandlerLevelTimeline = {
     REQUEST:'onChangeHandlerLevelTimeline_REQUEST',
 };
+export const removeUploadedFile = {
+    REQUEST:'removeUploadedFile_REQUEST',
+};
 export const openLessonModalLevel = {
     REQUEST:'openLessonModalLevel_REQUEST',
 };
@@ -128,6 +131,7 @@ export const closeEditTimeline = {
 };
 export const orderLevels = {
     REQUEST:'orderLevels_REQUEST',
+    RESPONSE:'orderLevels_RESPONSE',
 };
 export const closeLessonModalLevel = {
     REQUEST:'closeLessonModalLevel_REQUEST',
@@ -184,6 +188,9 @@ export const uploadLessonVideo = {
     REQUEST:'uploadLessonVideo_REQUEST',
     PROGRESS:'uploadLessonVideo_PROGRESS',
     RESPONSE:'uploadLessonVideo_RESPONSE',
+};
+export const removeUploadedFileLessonEdit = {
+    REQUEST:'removeUploadedFileLessonEdit_REQUEST',
 };
 
 
