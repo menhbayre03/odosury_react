@@ -407,12 +407,12 @@ body{
   }
 }
 .uploaded-i{
+  width: 120px;
   box-sizing: border-box;
   margin: 0;
   padding: 10px 20px 10px 90px;
   border-radius: 8px;
   border: 1px solid @color-1;
-  width: 100%;
   font-size: 14px;
   height: 80px;
   line-height: 60px;
@@ -429,9 +429,7 @@ body{
     }
   }
   .uploaded-i-name{
-    width: 250px;
-    display: inline-block;
-    .ellipsisText();
+    display: none;
   }
   .uploaded-i-action{
     color: @color-1;
@@ -477,24 +475,16 @@ body{
 .uploaded-a{
   box-sizing: border-box;
   margin: 0;
-  padding: 10px 20px 10px 90px;
+  padding: 10px 20px 10px 10px;
   border-radius: 8px;
   border: 1px solid @color-1;
   width: 100%;
   font-size: 14px;
-  height: 80px;
-  line-height: 60px;
+  //height: 80px;
+  //line-height: 60px;
   position: relative;
   .uploaded-a-image{
-    position: absolute;
-    left: 10px;
-    top: 10px;
-    width: 80px;
-    img{
-      width: 100%;
-      object-fit: cover;
-      height: 60px;
-    }
+    display: none;
   }
   .uploaded-a-name{
     width: 250px;
@@ -505,30 +495,22 @@ body{
     color: @color-1;
     position: absolute;
     right: 5px;
-    top: -15px;
+    top: -3px;
   }
 }
 .uploaded-f{
   box-sizing: border-box;
   margin: 0;
-  padding: 10px 20px 10px 90px;
+  padding: 10px 20px 10px 10px;
   border-radius: 8px;
   border: 1px solid @color-1;
   width: 100%;
   font-size: 14px;
-  height: 80px;
-  line-height: 60px;
+  //height: 80px;
+  //line-height: 60px;
   position: relative;
   .uploaded-f-image{
-    position: absolute;
-    left: 10px;
-    top: 10px;
-    width: 80px;
-    img{
-      width: 100%;
-      object-fit: cover;
-      height: 60px;
-    }
+    display: none;
   }
   .uploaded-f-name{
     width: 250px;
@@ -539,6 +521,6 @@ body{
     color: @color-1;
     position: absolute;
     right: 5px;
-    top: -15px;
+    top: -3px;
   }
 }

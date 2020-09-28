@@ -296,9 +296,6 @@ class Bundle extends React.Component {
                                                                     <span className='uploaded-i-image'>
                                                                         <img src={`${config.get('hostMedia')}${bundleThumbnail.path}`} />
                                                                     </span>
-                                    <span className='uploaded-i-name'>
-                                                                        {bundleThumbnail.original_name}
-                                                                    </span>
                                     <span onClick={this.removeUploadedFile.bind(this, 'bundleThumbnail')} className='uploaded-i-action'>
                                                                         <DeleteFilled />
                                                                     </span>

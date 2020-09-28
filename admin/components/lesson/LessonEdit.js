@@ -635,9 +635,6 @@ class LessonEdit extends React.Component {
                                                                     <span className='uploaded-i-image'>
                                                                         <img src={`${config.get('hostMedia')}${lessonImage.path}`} />
                                                                     </span>
-                                                                    <span className='uploaded-i-name'>
-                                                                        {lessonImage.original_name}
-                                                                    </span>
                                                                     <span onClick={this.removeUploadedFile.bind(this, 'lessonImage')} className='uploaded-i-action'>
                                                                         <DeleteFilled />
                                                                     </span>
