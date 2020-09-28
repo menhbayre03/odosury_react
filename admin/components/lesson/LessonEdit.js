@@ -135,8 +135,6 @@ class LessonEdit extends React.Component {
         const { selectedMember } = this.state;
         if(this.state.current === 0){
             let content = (this.editor || {}).editor.getContent({format:'raw'});
-            console.log('content');
-            console.log(content);
             if(!lesson.title || (lesson.title && lesson.title.trim() === '' )){
                 return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
             }

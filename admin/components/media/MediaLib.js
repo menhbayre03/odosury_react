@@ -122,22 +122,18 @@ class MediaLib extends React.Component {
         let id = user._id;
         if(type === 'image'){
             files.file.path = files.file.name;
-            console.log('image');
             // this.props.dispatch(actions.uploadBundleThumbnail([files.file], 'image', id));
         }
         if(type === 'video'){
             files.file.path = files.file.name;
-            console.log('video');
             // this.props.dispatch(actions.uploadTimelineVideo([files.file], 'video', id));
         }
         if(type === 'audio'){
             files.file.path = files.file.name;
-            console.log('audio');
             // this.props.dispatch(actions.uploadTimelineAudio([files.file], 'audio', id));
         }
         if(type === 'file'){
             files.file.path = files.file.name;
-            console.log('file');
             // this.props.dispatch(actions.uploadTimelineFile([files.file], 'file', id));
         }
         dispatch(uploadMedia(

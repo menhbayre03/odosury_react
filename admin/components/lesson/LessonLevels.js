@@ -224,8 +224,6 @@ class LessonLevels extends React.Component {
 
     onImageUpload(callback, value, meta){
         this.editorCb = callback;
-        console.log('this.editor');
-        console.log(this.editor);
         // //callback('myimage.jpg', {alt: 'My alt text'});
         // this.setState({editorMedia: true})
     }
