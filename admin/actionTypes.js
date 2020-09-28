@@ -204,6 +204,9 @@ export const removeUploadedFileLessonEdit = {
 export const chooseMediaLessonEdit = {
     REQUEST:'chooseMediaLessonEdit_REQUEST',
 };
+export const setFeatured = {
+    REQUEST:'setFeatured_REQUEST',
+};
 
 
 export const getLessonSingle = {

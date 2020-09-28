@@ -9,6 +9,7 @@ import {
     openLessonModalLevel,
     closeLessonModalLevel,
     lessonChangeHandlerLevel,
+    setFeatured,
     uploadLessonImage,
     uploadLessonVideo,
     openLevelSingle,
@@ -42,6 +43,15 @@ const initialState = {
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case setFeatured.REQUEST:
+            let featured = !!state.lesson.featured
+            return {
+                ...state,
+                lesson:{
+                    ...state.lesson,
+                    featured: !featured
+                }
+            };
         case chooseMediaLessonEdit.REQUEST:
             if(action.json.medType === 'video'){
                 return {
@@ -280,6 +290,7 @@ export default(state = initialState, action) => {
                                 run.learn_check_list= action.json.data.learn_check_listArray;
                                 run.thumbnail= action.json.data.lessonImage;
                                 run.video= action.json.data.lessonVideo;
+                                run.featured= action.json.data.featured;
                                 run.price= action.json.data.price;
                                 run.requirements= action.json.data.requirementsArray;
                                 run.sale= action.json.data.sale;
@@ -302,6 +313,7 @@ export default(state = initialState, action) => {
                         price: action.json.data.price,
                         requirements: action.json.data.requirementsArray,
                         sale: action.json.data.sale,
+                        featured: action.json.data.featured,
                         teacher: action.json.data.selectedMember,
                         title: action.json.data.title,
                         created: action.json.data.created,

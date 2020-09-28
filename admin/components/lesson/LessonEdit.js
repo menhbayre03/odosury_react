@@ -8,7 +8,7 @@ import arrayMove from 'array-move';
 
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 const reducer = ({ main, lesson }) => ({ main, lesson });
-import { Card, Button, List, Avatar, Table, Modal, Form, Input, Select, Popconfirm, Progress, Spin, Row, Col, TreeSelect, InputNumber, Steps, Upload, message } from 'antd';
+import { Card, Button, List, Avatar, Table, Modal, Switch, Form, Input, Select, Popconfirm, Progress, Spin, Row, Col, TreeSelect, InputNumber, Steps, Upload, message } from 'antd';
 import { EditOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, DragOutlined, SearchOutlined, UploadOutlined, CloseCircleFilled, SolutionOutlined, LoadingOutlined, SmileOutlined, CheckCircleFilled, CaretRightFilled, CaretLeftFilled } from '@ant-design/icons'
 import { Editor } from '@tinymce/tinymce-react';
 import MediaLib from "../media/MediaLib";
@@ -246,6 +246,9 @@ class LessonEdit extends React.Component {
     }
     chooseMedia(data, type){
         this.props.dispatch(actions.chooseMedia({data: data, medType:type}));
+    }
+    setFeatured(e){
+        this.props.dispatch(actions.setFeatured());
     }
     render() {
         let { main:{user}, lesson:{imageUploadLoading, lessonImage, videoUploadLoading, lessonVideo, status, openModal, lessonVideoProgress, lessonImageProgress, lesson, lessons, submitLessonLoader, all, searchTeachersResult, searchTeacherLoader, categories, level} } = this.props;
@@ -495,6 +498,11 @@ class LessonEdit extends React.Component {
                                                                 null
                                                             }
                                                         </TreeSelect>
+                                                    </Form.Item>
+                                                    <Form.Item
+                                                        label='Онцлох'
+                                                    >
+                                                        <Switch checked={!!lesson.featured} onChange={this.setFeatured.bind(this)} />
                                                     </Form.Item>
                                                     <Form.Item
                                                         label='Үнэ'

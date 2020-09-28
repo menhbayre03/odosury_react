@@ -65,3 +65,9 @@ export function chooseMedia(data){
         json: data
     }
 }
+export function setFeatured(data){
+    return {
+        type: constants.setFeatured.REQUEST,
+        json: data
+    }
+}
