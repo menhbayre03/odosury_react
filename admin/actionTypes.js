@@ -63,6 +63,12 @@ export const uploadBundleThumbnail = {
     PROGRESS:'uploadBundleThumbnail_PROGRESS',
     RESPONSE:'uploadBundleThumbnail_RESPONSE',
 };
+export const chooseMediaBundle = {
+    REQUEST:'chooseMediaBundle_REQUEST',
+};
+export const removeUploadedFileEdit = {
+    REQUEST:'removeUploadedFileEdit_REQUEST',
+};
 
 
 
@@ -112,6 +118,9 @@ export const onChangeHandlerLevelTimeline = {
 };
 export const removeUploadedFile = {
     REQUEST:'removeUploadedFile_REQUEST',
+};
+export const chooseMedia = {
+    REQUEST:'chooseMedia_REQUEST',
 };
 export const openLessonModalLevel = {
     REQUEST:'openLessonModalLevel_REQUEST',
@@ -192,6 +201,9 @@ export const uploadLessonVideo = {
 export const removeUploadedFileLessonEdit = {
     REQUEST:'removeUploadedFileLessonEdit_REQUEST',
 };
+export const chooseMediaLessonEdit = {
+    REQUEST:'chooseMediaLessonEdit_REQUEST',
+};
 
 
 export const getLessonSingle = {
@@ -205,4 +217,24 @@ export const deleteLevel = {
 export const removeTimeline = {
     REQUEST:'removeTimeline_REQUEST',
     RESPONSE:'removeTimeline_RESPONSE',
+};
+
+export const fetchMediaInfo = {
+    REQUEST: 'fetchMediaInfo_REQ',
+    RESPONSE: 'fetchMediaInfo_RES',
+};
+export const uploadMedia = {
+    REQUEST: 'uploadMedia_REQ',
+    PROGRESS: 'uploadMedia_PROG',
+    RESPONSE: 'uploadMedia_RES',
+};
+export const fetchMedia = {
+    REQUEST: 'fetchMedia_REQ',
+    RESPONSE: 'fetchMedia_RES',
+};
+export const selectMedia = {
+    REQUEST: 'selectMedia_REQ'
+};
+export const closeMediaModal = {
+    REQUEST: 'closeMediaModal_REQ'
 };

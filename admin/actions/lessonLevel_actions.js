@@ -81,6 +81,12 @@ export function orderLevels(data){
     //     json: data
     // }
 }
+export function chooseMedia(data){
+    return {
+        type: constants.chooseMedia.REQUEST,
+        json: data
+    }
+}
 export function lessonAddLevel(data){
     let url = `/admin/api/lessonAddLevel`;
     return networkActions.requestPost(constants.lessonAddLevel,url, data);

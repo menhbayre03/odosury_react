@@ -8,7 +8,8 @@ import { Editor } from '@tinymce/tinymce-react';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 const reducer = ({ main, lessonLevel }) => ({ main, lessonLevel });
 import { Card, Button, Modal, Form, Popconfirm, Input, Select, InputNumber, Upload, message, Progress } from 'antd';
-import { DeleteFilled, PlusOutlined, EditFilled, UploadOutlined, LoadingOutlined, CaretLeftFilled } from '@ant-design/icons'
+import { DeleteFilled, PlusOutlined, EditFilled, UploadOutlined, LoadingOutlined, CaretLeftFilled, PictureOutlined } from '@ant-design/icons'
+import MediaLib from "../media/MediaLib";
 const { TextArea } = Input;
 const { Option } = Select;
 const SortableItem = SortableElement(( {value ,needRemove, removeTimeline, openEditTimeline, dis, indexes}) => {
@@ -47,6 +48,8 @@ class LessonLevels extends React.Component {
             current: 0,
             //upload
             loading: false,
+            mediaType: '',
+            foodImage: null,
         };
         this.editor = null;
         this.editorCb = null;
@@ -95,7 +98,6 @@ class LessonLevels extends React.Component {
         this.props.dispatch(actions.lessonAddLevel({_id: lesson._id, level_id:level._id, level: level, levelType: levelType, lesson: lesson, levelIdx:levelIdx}));
     }
     submitTimeline(){
-        let content = this.editor.editor.getContent({format:'raw'});
         const {lessonLevel:{ timeline, timelineType, lesson, levelIndex, level_id, timelineVideo, timelineAudio, timelineFile }} = this.props;
         if(!timeline.title || (timeline.title && timeline.title.trim() === '' )){
             return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
@@ -110,16 +112,17 @@ class LessonLevels extends React.Component {
             return config.get('emitter').emit('warning', ("Минут оруулна уу!"));
         }
         if(timeline.type === 'video'){
-            if(!timelineVideo || !timelineVideo.path || timelineVideo.path === '' || !timelineVideo.type || timelineVideo.type !== 'video' ){
+            if(!timelineVideo || !timelineVideo._id || timelineVideo._id === '' || !timelineVideo.type || timelineVideo.type !== 'video' ){
                 return config.get('emitter').emit('warning', ("Бичлэг оруулна уу!"));
             }
         }
         if(timeline.type === 'audio') {
-            if(!timelineAudio || !timelineAudio.path || timelineAudio.path === '' || !timelineAudio.type || timelineAudio.type !== 'audio' ){
+            if(!timelineAudio || !timelineAudio._id || timelineAudio._id === '' || !timelineAudio.type || timelineAudio.type !== 'audio' ){
                 return config.get('emitter').emit('warning', ("Аудио оруулна уу!"));
             }
         }
         if(timeline.type === 'content') {
+            let content = ((this.editor || {}).editor).getContent({format:'raw'});
             if(!content || content === '' ){
                 return config.get('emitter').emit('warning', ("Аудио оруулна уу!"));
             }
@@ -133,7 +136,7 @@ class LessonLevels extends React.Component {
             timelineVideo: timeline.type === 'video'? (timelineVideo || {})  : null,
             timelineAudio: timeline.type === 'audio'? (timelineAudio || {})  : null,
             timelineContent: timeline.type === 'content'? (content || null)  : null,
-            timelineFile: timelineFile && timelineFile.path ? timelineFile : null
+            timelineFile: timelineFile && timelineFile._id ? timelineFile : null
         };
         this.props.dispatch(actions.submitTimeline(cc));
     }
@@ -221,13 +224,23 @@ class LessonLevels extends React.Component {
 
     onImageUpload(callback, value, meta){
         this.editorCb = callback;
+        console.log('this.editor');
+        console.log(this.editor);
         // //callback('myimage.jpg', {alt: 'My alt text'});
         // this.setState({editorMedia: true})
     }
+
+
+
+    //MediaLibrary
+    openMediaLib(mediaType){
+        this.setState({mediaType})
+    }
+    chooseMedia(data, type){
+        this.props.dispatch(actions.chooseMedia({data: data, medType:type}));
+    }
     render() {
         let { lessonLevel:{editTimelineLoader, openEditTimeline, status, lesson, openModalLevel, level, orderLoader, openModalLevelTimline, timeline, timelineSubmitLoader, timelineVideo, timelineVideoProgress, videoUploadLoadingT, timelineAudio, timelineAudioProgress, audioUploadLoadingT , timelineFile, timelineFileProgress, fileUploadLoadingT } } = this.props;
-
-
         const uploadButtonVideo = (
             <div style={{fontSize: 24}}>
                 {videoUploadLoadingT ?
@@ -357,7 +370,7 @@ class LessonLevels extends React.Component {
 
                     {openModalLevel?
                         <Modal
-                            title="Level"
+                            title="Түвшин"
                             visible={openModalLevel}
                             onOk={this.addLevel.bind(this)}
                             onCancel={this.closeLessonModalLevel.bind(this)}
@@ -433,16 +446,24 @@ class LessonLevels extends React.Component {
                                             className='upload-m'
                                         >
                                             <div>
-                                                <Upload
-                                                    listType="picture"
-                                                    disabled={videoUploadLoadingT}
-                                                    beforeUpload={this.beforeUploadVideo.bind(this)}
-                                                    customRequest={this.customRequestVideo.bind(this)}
-                                                    onRemove={this.removeUploadedFile.bind(this, 'timelineVideo')}
-                                                    fileList={ timelineVideo && timelineVideo.path ? [{uid: timelineVideo._id, name: timelineVideo.original_name, url: `${config.get('hostMedia')}${timelineVideo.thumbnail}`}] : []}
-                                                >
-                                                    {uploadButtonVideo}
-                                                </Upload>
+                                                <Button onClick={this.openMediaLib.bind(this, 'video')} style={{marginBottom: 10}}>
+                                                    <UploadOutlined /> {timelineVideo && timelineVideo._id? 'Солих' : 'Бичлэг'}
+                                                </Button>
+                                                {timelineVideo && timelineVideo._id ?
+                                                    <div className='uploaded-v'>
+                                                        <span className='uploaded-v-image'>
+                                                            <img src={`${config.get('hostMedia')}${timelineVideo.thumbnail}`} />
+                                                        </span>
+                                                        <span className='uploaded-v-name'>
+                                                            {timelineVideo.original_name}
+                                                        </span>
+                                                        <span onClick={this.removeUploadedFile.bind(this, 'timelineVideo')} className='uploaded-v-action'>
+                                                            <DeleteFilled />
+                                                        </span>
+                                                    </div>
+                                                    :
+                                                    null
+                                                }
                                             </div>
                                         </Form.Item>
                                         :
@@ -450,18 +471,26 @@ class LessonLevels extends React.Component {
                                             <Form.Item
                                                 label='Аудио'
                                                 labelCol={{span: 4}}
-                                                className='upload-m'
+                                                className='upload-a'
                                             >
-                                                <Upload
-                                                    listType="picture"
-                                                    disabled={audioUploadLoadingT}
-                                                    beforeUpload={this.beforeUploadAudio.bind(this)}
-                                                    customRequest={this.customRequestAudio.bind(this)}
-                                                    onRemove={this.removeUploadedFile.bind(this, 'timelineAudio')}
-                                                    fileList={ timelineAudio && timelineAudio.path ? [{uid: timelineAudio._id, name: timelineAudio.original_name, url: `${config.get('hostMedia')}${timelineAudio.thumbnail}`}] : []}
-                                                >
-                                                    {uploadButtonAudio}
-                                                </Upload>
+                                                <div>
+                                                    <Button onClick={this.openMediaLib.bind(this, 'audio')} style={{marginBottom: 10}}>
+                                                        <UploadOutlined /> {timelineAudio && timelineAudio._id? 'Солих' : 'Аудио'}
+                                                    </Button>
+                                                    {timelineAudio && timelineAudio._id ?
+                                                        <div className='uploaded-a'>
+                                                        <span className='uploaded-a-name'>
+                                                            {timelineAudio.original_name}
+                                                        </span>
+                                                            <span onClick={this.removeUploadedFile.bind(this, 'timelineAudio')} className='uploaded-a-action'>
+                                                            <DeleteFilled />
+                                                        </span>
+                                                        </div>
+                                                        :
+                                                        null
+                                                    }
+
+                                                </div>
                                             </Form.Item>
                                             :
                                             timeline.type === 'content'?
@@ -514,16 +543,34 @@ class LessonLevels extends React.Component {
                                     className='upload-m'
                                 >
 
-                                    <Upload
-                                        listType="picture"
-                                        disabled={fileUploadLoadingT}
-                                        beforeUpload={this.beforeUploadFile.bind(this)}
-                                        customRequest={this.customRequestFile.bind(this)}
-                                        onRemove={this.removeUploadedFile.bind(this, 'timelineFile')}
-                                        fileList={ timelineFile && timelineFile.path ? [{uid: timelineFile._id, name: timelineFile.original_name, url: `${config.get('hostMedia')}${timelineFile.thumbnail}`}] : []}
-                                    >
-                                        {uploadButtonFile}
-                                    </Upload>
+                                    {/*<Upload*/}
+                                    {/*    listType="picture"*/}
+                                    {/*    disabled={fileUploadLoadingT}*/}
+                                    {/*    beforeUpload={this.beforeUploadFile.bind(this)}*/}
+                                    {/*    customRequest={this.customRequestFile.bind(this)}*/}
+                                    {/*    onRemove={this.removeUploadedFile.bind(this, 'timelineFile')}*/}
+                                    {/*    fileList={ timelineFile && timelineFile.path ? [{uid: timelineFile._id, name: timelineFile.original_name, url: `${config.get('hostMedia')}${timelineFile.thumbnail}`}] : []}*/}
+                                    {/*>*/}
+                                    {/*    {uploadButtonFile}*/}
+                                    {/*</Upload>*/}
+                                    <div>
+                                        <Button onClick={this.openMediaLib.bind(this, 'file')} style={{marginBottom: 10}}>
+                                            <UploadOutlined /> {timelineFile && timelineFile._id? 'Солих' : 'Татац'}
+                                        </Button>
+                                        {timelineFile && timelineFile._id ?
+                                            <div className='uploaded-f'>
+                                                <span className='uploaded-f-name'>
+                                                    {timelineFile.original_name}
+                                                </span>
+                                                <span onClick={this.removeUploadedFile.bind(this, 'timelineFile')} className='uploaded-f-action'>
+                                                    <DeleteFilled />
+                                                </span>
+                                            </div>
+                                            :
+                                            null
+                                        }
+
+                                    </div>
                                 </Form.Item>
                                 <Form.Item
                                     fieldKey='min'
@@ -603,16 +650,24 @@ class LessonLevels extends React.Component {
                                             className='upload-m'
                                         >
                                             <div>
-                                                <Upload
-                                                    listType="picture"
-                                                    disabled={videoUploadLoadingT}
-                                                    beforeUpload={this.beforeUploadVideo.bind(this)}
-                                                    customRequest={this.customRequestVideo.bind(this)}
-                                                    onRemove={this.removeUploadedFile.bind(this, 'timelineVideo')}
-                                                    fileList={ timelineVideo && timelineVideo.path ? [{uid: timelineVideo._id, name: timelineVideo.original_name, url: `${config.get('hostMedia')}${timelineVideo.thumbnail}`}] : []}
-                                                >
-                                                    {uploadButtonVideo}
-                                                </Upload>
+                                                <Button onClick={this.openMediaLib.bind(this, 'video')} style={{marginBottom: 10}}>
+                                                    <UploadOutlined /> {timelineVideo && timelineVideo._id? 'Солих' : 'Бичлэг'}
+                                                </Button>
+                                                {timelineVideo && timelineVideo._id ?
+                                                    <div className='uploaded-v'>
+                                                        <span className='uploaded-v-image'>
+                                                            <img src={`${config.get('hostMedia')}${timelineVideo.thumbnail}`} />
+                                                        </span>
+                                                        <span className='uploaded-v-name'>
+                                                            {timelineVideo.original_name}
+                                                        </span>
+                                                        <span onClick={this.removeUploadedFile.bind(this, 'timelineVideo')} className='uploaded-v-action'>
+                                                            <DeleteFilled />
+                                                        </span>
+                                                    </div>
+                                                    :
+                                                    null
+                                                }
                                             </div>
                                         </Form.Item>
                                         :
@@ -620,18 +675,26 @@ class LessonLevels extends React.Component {
                                             <Form.Item
                                                 label='Аудио'
                                                 labelCol={{span: 4}}
-                                                className='upload-m'
+                                                className='upload-a'
                                             >
-                                                <Upload
-                                                    listType="picture"
-                                                    disabled={audioUploadLoadingT}
-                                                    beforeUpload={this.beforeUploadAudio.bind(this)}
-                                                    customRequest={this.customRequestAudio.bind(this)}
-                                                    onRemove={this.removeUploadedFile.bind(this, 'timelineAudio')}
-                                                    fileList={ timelineAudio && timelineAudio.path ? [{uid: timelineAudio._id, name: timelineAudio.original_name, url: `${config.get('hostMedia')}${timelineAudio.thumbnail}`}] : []}
-                                                >
-                                                    {uploadButtonAudio}
-                                                </Upload>
+                                                <div>
+                                                    <Button onClick={this.openMediaLib.bind(this, 'audio')} style={{marginBottom: 10}}>
+                                                        <UploadOutlined /> {timelineAudio && timelineAudio._id? 'Солих' : 'Аудио'}
+                                                    </Button>
+                                                    {timelineAudio && timelineAudio._id ?
+                                                        <div className='uploaded-a'>
+                                                        <span className='uploaded-a-name'>
+                                                            {timelineAudio.original_name}
+                                                        </span>
+                                                            <span onClick={this.removeUploadedFile.bind(this, 'timelineAudio')} className='uploaded-a-action'>
+                                                            <DeleteFilled />
+                                                        </span>
+                                                        </div>
+                                                        :
+                                                        null
+                                                    }
+
+                                                </div>
                                             </Form.Item>
                                             :
                                             timeline.type === 'content'?
@@ -684,16 +747,34 @@ class LessonLevels extends React.Component {
                                     className='upload-m'
                                 >
 
-                                    <Upload
-                                        listType="picture"
-                                        disabled={fileUploadLoadingT}
-                                        beforeUpload={this.beforeUploadFile.bind(this)}
-                                        customRequest={this.customRequestFile.bind(this)}
-                                        onRemove={this.removeUploadedFile.bind(this, 'timelineFile')}
-                                        fileList={ timelineFile && timelineFile.path ? [{uid: timelineFile._id, name: timelineFile.original_name, url: `${config.get('hostMedia')}${timelineFile.thumbnail}`}] : []}
-                                    >
-                                        {uploadButtonFile}
-                                    </Upload>
+                                    {/*<Upload*/}
+                                    {/*    listType="picture"*/}
+                                    {/*    disabled={fileUploadLoadingT}*/}
+                                    {/*    beforeUpload={this.beforeUploadFile.bind(this)}*/}
+                                    {/*    customRequest={this.customRequestFile.bind(this)}*/}
+                                    {/*    onRemove={this.removeUploadedFile.bind(this, 'timelineFile')}*/}
+                                    {/*    fileList={ timelineFile && timelineFile.path ? [{uid: timelineFile._id, name: timelineFile.original_name, url: `${config.get('hostMedia')}${timelineFile.thumbnail}`}] : []}*/}
+                                    {/*>*/}
+                                    {/*    {uploadButtonFile}*/}
+                                    {/*</Upload>*/}
+                                    <div>
+                                        <Button onClick={this.openMediaLib.bind(this, 'file')} style={{marginBottom: 10}}>
+                                            <UploadOutlined /> {timelineFile && timelineFile._id? 'Солих' : 'Татац'}
+                                        </Button>
+                                        {timelineFile && timelineFile._id ?
+                                            <div className='uploaded-f'>
+                                                <span className='uploaded-f-name'>
+                                                    {timelineFile.original_name}
+                                                </span>
+                                                <span onClick={this.removeUploadedFile.bind(this, 'timelineFile')} className='uploaded-f-action'>
+                                                    <DeleteFilled />
+                                                </span>
+                                            </div>
+                                            :
+                                            null
+                                        }
+
+                                    </div>
                                 </Form.Item>
                                 <Form.Item
                                     fieldKey='min'
@@ -719,6 +800,18 @@ class LessonLevels extends React.Component {
                         null
                     }
                 </div>
+                {this.state.mediaType !== ''?
+                    <MediaLib
+                        visible={this.state.mediaType != ''}
+                        multi={false}
+                        onOk={this.chooseMedia.bind(this)}
+                        type={this.state.mediaType}
+                        dimension={{width:1200, height: 450}}
+                        onHide={() => this.setState({mediaType: ''})}
+                    />
+                    :
+                    null
+                }
             </Card>
 
 

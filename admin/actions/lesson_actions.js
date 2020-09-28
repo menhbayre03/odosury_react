@@ -59,3 +59,9 @@ export function removeUploadedFile(data){
         json: data
     }
 }
+export function chooseMedia(data){
+    return {
+        type: constants.chooseMediaLessonEdit.REQUEST,
+        json: data
+    }
+}

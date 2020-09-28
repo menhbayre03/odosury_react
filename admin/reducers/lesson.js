@@ -14,6 +14,7 @@ import {
     openLevelSingle,
     closeLevelSingle,
     removeUploadedFileLessonEdit,
+    chooseMediaLessonEdit,
 } from "../actionTypes";
 const initialState = {
     status: 1,
@@ -41,6 +42,22 @@ const initialState = {
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case chooseMediaLessonEdit.REQUEST:
+            if(action.json.medType === 'video'){
+                return {
+                    ...state,
+                    lessonVideo: action.json.data[0]
+                };
+            }
+            if(action.json.medType === 'image'){
+                return {
+                    ...state,
+                    lessonImage: action.json.data[0]
+                };
+            }
+            return {
+                ...state,
+            };
         case removeUploadedFileLessonEdit.REQUEST:
             return {
                 ...state,

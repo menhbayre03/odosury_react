@@ -10,6 +10,8 @@ import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 const reducer = ({ main, lesson }) => ({ main, lesson });
 import { Card, Button, List, Avatar, Table, Modal, Form, Input, Select, Popconfirm, Progress, Spin, Row, Col, TreeSelect, InputNumber, Steps, Upload, message } from 'antd';
 import { EditOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, DragOutlined, SearchOutlined, UploadOutlined, CloseCircleFilled, SolutionOutlined, LoadingOutlined, SmileOutlined, CheckCircleFilled, CaretRightFilled, CaretLeftFilled } from '@ant-design/icons'
+import { Editor } from '@tinymce/tinymce-react';
+import MediaLib from "../media/MediaLib";
 const { Meta } = Card;
 const { TextArea } = Input;
 const { Option } = Select;
@@ -29,6 +31,8 @@ class LessonEdit extends React.Component {
             requirement: '',
             learn_check_listArray: (props.lesson.lesson.learn_check_list || []),
             learn_check_list: '',
+            holdEditor: '',
+            mediaType: '',
             current: 0,
             //upload
             loading: false,
@@ -48,6 +52,8 @@ class LessonEdit extends React.Component {
             current: 0,
             loading: false,
         });
+        this.editor = null;
+        this.editorCb = null;
         this.props.dispatch(actions.closeLessonModal());
     }
     closeModal() {
@@ -128,15 +134,22 @@ class LessonEdit extends React.Component {
         const {lesson:{ lesson }} = this.props;
         const { selectedMember } = this.state;
         if(this.state.current === 0){
+            let content = (this.editor || {}).editor.getContent({format:'raw'});
+            console.log('content');
+            console.log(content);
             if(!lesson.title || (lesson.title && lesson.title.trim() === '' )){
                 return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
             }
             if(!lesson.description || (lesson.description && lesson.description.trim() === '' )){
                 return config.get('emitter').emit('warning', ("Танилцуулга оруулна уу!"));
             }
-            if(!lesson.intro_desc || (lesson.intro_desc && lesson.intro_desc.trim() === '' )){
+            // if(!lesson.intro_desc || (lesson.intro_desc && lesson.intro_desc.trim() === '' )){
+            //     return config.get('emitter').emit('warning', ("Дэлгэрэнгүй танилцуулга оруулна уу!"));
+            // }
+            if(!content || content === '' || content === '<p><br data-mce-bogus="1"></p>' ){
                 return config.get('emitter').emit('warning', ("Дэлгэрэнгүй танилцуулга оруулна уу!"));
             }
+            this.setState({holdEditor: content});
         }
         if(this.state.current === 1){
             if(!selectedMember || !selectedMember._id){
@@ -175,6 +188,7 @@ class LessonEdit extends React.Component {
         let cc = {
             ...lesson,
             selectedMember: this.state.selectedMember,
+            intro_desc: (this.state.holdEditor || null),
             lessonImage: lessonImage,
             lessonVideo: (lessonVideo || {}),
             requirementsArray: this.state.requirementsArray,
@@ -225,6 +239,16 @@ class LessonEdit extends React.Component {
         this.props.dispatch(actions.removeUploadedFile({name: name}));
         return false;
     };
+
+
+
+    //MediaLibrary
+    openMediaLib(mediaType){
+        this.setState({mediaType})
+    }
+    chooseMedia(data, type){
+        this.props.dispatch(actions.chooseMedia({data: data, medType:type}));
+    }
     render() {
         let { main:{user}, lesson:{imageUploadLoading, lessonImage, videoUploadLoading, lessonVideo, status, openModal, lessonVideoProgress, lessonImageProgress, lesson, lessons, submitLessonLoader, all, searchTeachersResult, searchTeacherLoader, categories, level} } = this.props;
         let avatar = '/images/default-avatar.png';
@@ -331,13 +355,55 @@ class LessonEdit extends React.Component {
                                                                   name='description'
                                                                   onChange={this.onChangeHandler.bind(this)}/>
                                                     </Form.Item>
+                                                    {/*<Form.Item*/}
+                                                    {/*    label='Дэлгэрэнгүй танилцуулга'*/}
+                                                    {/*>*/}
+                                                    {/*    <TextArea size="middle" rows={4}*/}
+                                                    {/*              value={lesson.intro_desc ? lesson.intro_desc : ''}*/}
+                                                    {/*              name='intro_desc'*/}
+                                                    {/*              onChange={this.onChangeHandler.bind(this)}/>*/}
+                                                    {/*</Form.Item>*/}
                                                     <Form.Item
                                                         label='Дэлгэрэнгүй танилцуулга'
                                                     >
-                                                        <TextArea size="middle" rows={4}
-                                                                  value={lesson.intro_desc ? lesson.intro_desc : ''}
-                                                                  name='intro_desc'
-                                                                  onChange={this.onChangeHandler.bind(this)}/>
+                                                        <Editor
+                                                            ref={(ref) => {
+                                                                this.editor = ref;
+                                                            }}
+                                                            apiKey='xo6szqntkvg39zc2iafs9skjrw8s20sm44m28p3klgjo26y3'
+                                                            height="350px"
+                                                            value={lesson.intro_desc}
+                                                            init={{
+                                                                height: "350px",
+                                                                content_style: 'body { background-color: #f7f7f7;}' +
+                                                                    'img { max-width: 100%; }',
+                                                                relative_urls: false,
+                                                                remove_script_host: false,
+                                                                plugins: 'image code paste link lists textcolor hr table emoticons advlist',
+                                                                // file_picker_callback: this.onImageUpload.bind(this),
+                                                                file_picker_types: 'image',
+                                                                paste_data_images: true,
+                                                                paste_webkit_styles: "color font-size",
+                                                                valid_elements: 'img[src],*[style]',
+                                                                toolbar: 'undo redo | bold italic | fontsizeselect | alignleft aligncenter alignright | image media link | numlist bullist | forecolor backcolor | emoticons',
+                                                                extended_valid_elements: "iframe[src|style|scrolling|class|width|height|name|align]",
+                                                                color_cols: "5",
+                                                                custom_colors: false,
+                                                                body_class: 'tiny_editor',
+                                                                formats: {
+                                                                    h1: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                                    h2: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                                    h3: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                                    h4: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                                    h5: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                                    h6: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                                    p: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                                    bold: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                                    italic: {styles: {'font-family': "'Nunito', sans-serif"}},
+                                                                    code: {styles: {'font-family': "'Nunito', sans-serif"}}
+                                                                }
+                                                            }}
+                                                        />
                                                     </Form.Item>
                                                 </div>
                                                 :
@@ -551,34 +617,75 @@ class LessonEdit extends React.Component {
                                                         help='Зурагны хэмжээ хамгийн багадаа 1200 x 450 байх'
                                                         style={{marginBottom: 10}}
                                                     >
-                                                        <Upload
-                                                            name="avatar"
-                                                            listType="picture-card"
-                                                            className="avatar-uploader"
-                                                            showUploadList={false}
-                                                            disabled={imageUploadLoading}
-                                                            beforeUpload={this.beforeUpload.bind(this)}
-                                                            customRequest={this.customRequest.bind(this)}
-                                                        >
-                                                            {lessonImage && lessonImage.path ? <img src={`${config.get('hostMedia')}${lessonImage.path}`} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-                                                        </Upload>
+                                                        {/*<Upload*/}
+                                                        {/*    name="avatar"*/}
+                                                        {/*    listType="picture-card"*/}
+                                                        {/*    className="avatar-uploader"*/}
+                                                        {/*    showUploadList={false}*/}
+                                                        {/*    disabled={imageUploadLoading}*/}
+                                                        {/*    beforeUpload={this.beforeUpload.bind(this)}*/}
+                                                        {/*    customRequest={this.customRequest.bind(this)}*/}
+                                                        {/*>*/}
+                                                        {/*    {lessonImage && lessonImage.path ? <img src={`${config.get('hostMedia')}${lessonImage.path}`} alt="avatar" style={{ width: '100%' }} /> : uploadButton}*/}
+                                                        {/*</Upload>*/}
+                                                        <div>
+                                                            <Button onClick={this.openMediaLib.bind(this, 'image')} style={{marginBottom: 10}}>
+                                                                <UploadOutlined /> {lessonImage && lessonImage._id? 'Солих' : 'Зураг'}
+                                                            </Button>
+                                                            {lessonImage && lessonImage._id ?
+                                                                <div className='uploaded-i'>
+                                                                    <span className='uploaded-i-image'>
+                                                                        <img src={`${config.get('hostMedia')}${lessonImage.path}`} />
+                                                                    </span>
+                                                                    <span className='uploaded-i-name'>
+                                                                        {lessonImage.original_name}
+                                                                    </span>
+                                                                    <span onClick={this.removeUploadedFile.bind(this, 'lessonImage')} className='uploaded-i-action'>
+                                                                        <DeleteFilled />
+                                                                    </span>
+                                                                </div>
+                                                                :
+                                                                null
+                                                            }
+                                                        </div>
                                                     </Form.Item>
                                                     <Form.Item
                                                         label='Бичлэг'
                                                         // labelCol={{span: 4}}
                                                         className='upload-m'
                                                     >
+                                                        {/*<div>*/}
+                                                        {/*    <Upload*/}
+                                                        {/*        listType="picture"*/}
+                                                        {/*        disabled={videoUploadLoading}*/}
+                                                        {/*        beforeUpload={this.beforeUploadVideo.bind(this)}*/}
+                                                        {/*        customRequest={this.customRequestVideo.bind(this)}*/}
+                                                        {/*        onRemove={this.removeUploadedFile.bind(this, 'lessonVideo')}*/}
+                                                        {/*        fileList={ lessonVideo && lessonVideo.path ? [{uid: lessonVideo._id, name: lessonVideo.original_name, url: `${config.get('hostMedia')}${lessonVideo.thumbnail}`}] : []}*/}
+                                                        {/*    >*/}
+                                                        {/*        {uploadButtonVideo}*/}
+                                                        {/*    </Upload>*/}
+                                                        {/*</div>*/}
+
                                                         <div>
-                                                            <Upload
-                                                                listType="picture"
-                                                                disabled={videoUploadLoading}
-                                                                beforeUpload={this.beforeUploadVideo.bind(this)}
-                                                                customRequest={this.customRequestVideo.bind(this)}
-                                                                onRemove={this.removeUploadedFile.bind(this, 'lessonVideo')}
-                                                                fileList={ lessonVideo && lessonVideo.path ? [{uid: lessonVideo._id, name: lessonVideo.original_name, url: `${config.get('hostMedia')}${lessonVideo.thumbnail}`}] : []}
-                                                            >
-                                                                {uploadButtonVideo}
-                                                            </Upload>
+                                                            <Button onClick={this.openMediaLib.bind(this, 'video')} style={{marginBottom: 10}}>
+                                                                <UploadOutlined /> {lessonVideo && lessonVideo._id? 'Солих' : 'Бичлэг'}
+                                                            </Button>
+                                                            {lessonVideo && lessonVideo._id ?
+                                                                <div className='uploaded-v'>
+                                                                    <span className='uploaded-v-image'>
+                                                                        <img src={`${config.get('hostMedia')}${lessonVideo.thumbnail}`} />
+                                                                    </span>
+                                                                    <span className='uploaded-v-name'>
+                                                                        {lessonVideo.original_name}
+                                                                    </span>
+                                                                    <span onClick={this.removeUploadedFile.bind(this, 'lessonVideo')} className='uploaded-v-action'>
+                                                                        <DeleteFilled />
+                                                                    </span>
+                                                                </div>
+                                                                :
+                                                                null
+                                                            }
                                                         </div>
                                                     </Form.Item>
                                                 </div>
@@ -607,6 +714,21 @@ class LessonEdit extends React.Component {
                         </Button>
                     )}
                 </div>
+
+
+                {this.state.mediaType !== ''?
+                    <MediaLib
+                        visible={this.state.mediaType != ''}
+                        multi={false}
+                        onOk={this.chooseMedia.bind(this)}
+                        type={this.state.mediaType}
+                        dimension={{width:1200, height: 450}}
+                        forWhat='lesson'
+                        onHide={() => this.setState({mediaType: ''})}
+                    />
+                    :
+                    null
+                }
             </div>
 
         );

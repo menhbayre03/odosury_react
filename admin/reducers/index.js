@@ -5,6 +5,7 @@ import lessonLevel from "./lessonLevel";
 import teacher from "./teacher";
 import category from "./category";
 import bundle from "./bundle";
+import media from "./media";
 export default combineReducers({
     main: main,
     lesson: lesson,
@@ -12,4 +13,5 @@ export default combineReducers({
     teacher: teacher,
     category: category,
     bundle: bundle,
+    media: media,
 });

@@ -9,7 +9,9 @@ import {
     bundleLevelOnChange,
     addLessonToBundleLevels,
     addBundleLevel,
-    removeSingleOrts
+    removeSingleOrts,
+    chooseMediaBundle,
+    removeUploadedFileEdit
 } from "../actionTypes";
 const initialState = {
     status: 1,
@@ -31,6 +33,21 @@ const initialState = {
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case removeUploadedFileEdit.REQUEST:
+            return {
+                ...state,
+                [action.json.name]: {},
+            };
+        case chooseMediaBundle.REQUEST:
+            if(action.json.medType === 'image'){
+                return {
+                    ...state,
+                    bundleThumbnail: action.json.data[0]
+                };
+            }
+            return {
+                ...state,
+            };
         case removeSingleOrts.REQUEST:
             let lvls = (state.bundle.levels || []);
             if(action.json.name === 'lessons'){
