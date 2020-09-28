@@ -21,7 +21,8 @@ import {
     InputNumber,
     Progress,
 } from 'antd';
-import { EditOutlined, LoadingOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, SearchOutlined, CloseCircleFilled } from '@ant-design/icons'
+import { EditOutlined, LoadingOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, SearchOutlined, CloseCircleFilled, UploadOutlined } from '@ant-design/icons'
+import MediaLib from "../media/MediaLib";
 const { Meta } = Card;
 const { TextArea } = Input;
 const { Option } = Select;
@@ -33,6 +34,7 @@ class Bundle extends React.Component {
             pageNum: 0,
             pageSize: 50,
             search: '',
+            mediaType: '',
         };
     }
     componentDidMount() {
@@ -159,94 +161,19 @@ class Bundle extends React.Component {
             this.props.dispatch(actions.bundleLevelOnChange({name:e, value: idx, index:value}));
         }
     }
+    //MediaLibrary
+    openMediaLib(mediaType){
+        this.setState({mediaType})
+    }
+    chooseMedia(data, type){
+        this.props.dispatch(actions.chooseMedia({data: data, medType:type}));
+    }
+    removeUploadedFile(name) {
+        this.props.dispatch(actions.removeUploadedFile({name: name}));
+        return false;
+    };
     render() {
         let { main:{user}, bundle:{status, openModal, bundleLevelName, bundle, bundles, lessonValue, submitBundleLoader, all, imageUploadLoading, lessons, bundleThumbnail, bundleThumbnailProgress} } = this.props;
-        // let pagination = {
-        //     total : all,
-        //     current: this.state.pageNum + 1,
-        //     pageSize : this.state.pageSize,
-        //     position: 'bottom',
-        //     showSizeChanger: false
-        // };
-        // const columns = [
-        //     {
-        //         key: 'num',
-        //         title: '№',
-        //         render: (text, record, idx) => (
-        //             (this.state.pageNum * this.state.pageNum) + idx + 1
-        //         ),
-        //     },
-        //     {
-        //         key: 'last_name',
-        //         title: 'Овог',
-        //         render: (text, record) => (
-        //             record.last_name ? record.last_name : '-'
-        //         ),
-        //     },
-        //     {
-        //         key: 'first_name',
-        //         title: 'Нэр',
-        //         render: (text, record) => (
-        //             record.first_name ? record.first_name : '-'
-        //         ),
-        //     },
-        //     {
-        //         key: 'email',
-        //         title: 'Имэйл',
-        //         render: (text, record) => (
-        //             record.email ? record.email : '-'
-        //         ),
-        //     },
-        //     {
-        //         key: 'phone',
-        //         title: 'Утас',
-        //         render: (text, record) => (
-        //             record.phone ? record.phone : '-'
-        //         ),
-        //     },
-        //     {
-        //         key: 'created',
-        //         title: 'Огноо',
-        //         render: (text, record, idx) => (
-        //             record.created ? moment(record.created).format('YYYY-MM-DD') : '-'
-        //         ),
-        //     },
-        //     {
-        //         title: 'Үйлдэл',
-        //         key: 'action',
-        //         render: (text, record) => (
-        //             <div style={{width: 240}}>
-        //
-        //                 <Button size={"small"} style={{marginRight: 10}} key={record._id+'edit'} loading={!!record.loading}
-        //                         onClick = {this.openModal.bind(this, record )}
-        //                 >
-        //                     <EditFilled /> Засах
-        //                 </Button>
-        //                 {/*{record.status !== 'active'?*/}
-        //                 {/*    <Button size={"small"} type={"primary"} style={{marginRight: 10}}*/}
-        //                 {/*            onClick = {this.changeCategoryStatus.bind(this, record._id, 'active')}*/}
-        //                 {/*    >*/}
-        //                 {/*        <EditFilled /> Идэвхжүүлэх*/}
-        //                 {/*    </Button>*/}
-        //                 {/*    :*/}
-        //                 {/*    null*/}
-        //                 {/*}*/}
-        //                 <Popconfirm
-        //                     title={`Та устгах гэж байна!`}
-        //                     onConfirm={this.delete.bind(this, record._id)}
-        //                     okText="Усгах"
-        //                     placement="left"
-        //                     cancelText="Болих"
-        //                 >
-        //                     <Button type={"primary"} key={record._id} danger size={"small"} loading={!!record.loading}>
-        //                         <DeleteFilled/> Устгах
-        //                     </Button>
-        //                 </Popconfirm>
-        //             </div>
-        //         ),
-        //         width: 240
-        //     },
-        // ];
         // //upload
         const uploadButton = (
             <div style={{fontSize: 24}}>
@@ -316,11 +243,7 @@ class Bundle extends React.Component {
                                 description={
                                     <div>
                                         <div>{`Үнэ: ${run.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}₮`}</div>
-                                        {run.sale?
-                                            <div>Хямдрал <span style={{color: '#d81c1c'}}>{`${run.sale.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}₮`}</span></div>
-                                            :
-                                            null
-                                        }
+                                        <div>Хямдрал: <span style={{color: '#d81c1c'}}>{run.sale ? `${run.sale.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}₮` : '0₮'} </span></div>
                                     </div>
                                 }
                             />
@@ -330,15 +253,6 @@ class Bundle extends React.Component {
                     null
                 }
 
-
-
-
-                {/*<div style={{marginBottom: 20}}>*/}
-                {/*    <Input maxLength={60} size='small' placeholder='Нэр, имэйл' style={{width: 200, marginRight: 20}} value={this.state.search} name='search' onChange={(e) => this.setState({search: e.target.value})} />*/}
-                {/*    <Button type="primary" size='small' icon={<SearchOutlined />} onClick={this.searchTeacher.bind(this)} >Хайх</Button>*/}
-                {/*</div>*/}
-
-                {/*<Table size="small" dataSource={bundles} columns={columns} onChange={this.tableOnChange.bind(this)} pagination={pagination} />*/}
                 <Modal
                     title="Багш"
                     visible={openModal}
@@ -354,25 +268,42 @@ class Bundle extends React.Component {
                         label='Зураг'
                         labelCol={{span: 5}}
                     >
-                        <Upload
-                            name="thumbnail"
-                            listType="picture-card"
-                            className="avatar-uploader"
-                            showUploadList={false}
-                            disabled={imageUploadLoading}
-                            beforeUpload={this.beforeUpload.bind(this)}
-                            customRequest={this.customRequest.bind(this)}
-                        >
-                            {bundleThumbnail && bundleThumbnail.path ?
-                                <img
-                                    onError={(e) => e.target.src = `/images/default-bundle.png`}
-                                    src={avatar}
-                                    style={{ width: '100%' }}
-                                />
+                        {/*<Upload*/}
+                        {/*    name="thumbnail"*/}
+                        {/*    listType="picture-card"*/}
+                        {/*    className="avatar-uploader"*/}
+                        {/*    showUploadList={false}*/}
+                        {/*    disabled={imageUploadLoading}*/}
+                        {/*    beforeUpload={this.beforeUpload.bind(this)}*/}
+                        {/*    customRequest={this.customRequest.bind(this)}*/}
+                        {/*>*/}
+                        {/*    {bundleThumbnail && bundleThumbnail.path ?*/}
+                        {/*        <img*/}
+                        {/*            onError={(e) => e.target.src = `/images/default-bundle.png`}*/}
+                        {/*            src={avatar}*/}
+                        {/*            style={{ width: '100%' }}*/}
+                        {/*        />*/}
+                        {/*        :*/}
+                        {/*        uploadButton*/}
+                        {/*    }*/}
+                        {/*</Upload>*/}
+                        <div>
+                            <Button onClick={this.openMediaLib.bind(this, 'image')} style={{marginBottom: 10}}>
+                                <UploadOutlined /> {bundleThumbnail && bundleThumbnail._id? 'Солих' : 'Зураг'}
+                            </Button>
+                            {bundleThumbnail && bundleThumbnail._id ?
+                                <div className='uploaded-i'>
+                                                                    <span className='uploaded-i-image'>
+                                                                        <img src={`${config.get('hostMedia')}${bundleThumbnail.path}`} />
+                                                                    </span>
+                                    <span onClick={this.removeUploadedFile.bind(this, 'bundleThumbnail')} className='uploaded-i-action'>
+                                                                        <DeleteFilled />
+                                                                    </span>
+                                </div>
                                 :
-                                uploadButton
+                                null
                             }
-                        </Upload>
+                        </div>
                     </Form.Item>
                     <Form.Item
                         label='Нэр'
@@ -491,6 +422,19 @@ class Bundle extends React.Component {
                     </Form.Item>
                 </Modal>
 
+                {this.state.mediaType !== ''?
+                    <MediaLib
+                        visible={this.state.mediaType != ''}
+                        multi={false}
+                        onOk={this.chooseMedia.bind(this)}
+                        type={this.state.mediaType}
+                        dimension={{width:1200, height: 450}}
+                        forWhat='bundle'
+                        onHide={() => this.setState({mediaType: ''})}
+                    />
+                    :
+                    null
+                }
             </Card>
         );
     }

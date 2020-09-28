@@ -57,6 +57,19 @@ export function deleteBundle(data) {
 }
 
 export function uploadBundleThumbnail(data, type, id) {
-    let url = `/uploadBundleThumbnail/image/upload`;
+    let url = `/bundle/image/upload`;
     return networkActions.uploadProgress(constants.uploadBundleThumbnail, url, data, type);
+}
+
+export function chooseMedia(data){
+    return {
+        type: constants.chooseMediaBundle.REQUEST,
+        json: data
+    }
+}
+export function removeUploadedFile(data){
+    return {
+        type: constants.removeUploadedFileEdit.REQUEST,
+        json: data
+    }
 }

@@ -145,7 +145,7 @@ class Category extends React.Component {
 
                 <Table size="small" dataSource={categories} columns={columns} onChange={this.tableOnChange.bind(this)} pagination={pagination} />
                 <Modal
-                    title="Багш"
+                    title="Ангилал"
                     visible={openModal}
                     onOk={this.submitCategory.bind(this)}
                     onCancel={this.closeModal.bind(this)}

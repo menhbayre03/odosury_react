@@ -163,6 +163,95 @@ export function requestPost(requestActions,url,data,requestParams = null,header=
 }
 
 
+export function uploadProgressMediaLib(requestActions, data,type, neededData = {},requestParams = null, header=null) {
+    let url = `/api/${type}/upload`;
+    if(type === 'image'){
+        url = `/api/${neededData.forWhat}/${type}/upload`;
+    }
+    let fd = new FormData();
+    let id = Date.now();
+    fd.append('image', data[0]);
+    fd.append('body', neededData);
+    fd.append('id', id);
+    fd.append('free', true);
+    fd.append('multi', neededData.multi);
+    if(type == 'image'){
+        neededData.fake_image = window.URL.createObjectURL(data[0]);
+    }
+    return dispatch => {
+        dispatch(requestMediaLibUploadStart({id: id}, requestActions, type, neededData));
+        if (Cookies.get('token') != null) {
+            header = {
+                ...header,
+                token: Cookies.get('token')
+            }
+        }
+        let currentUrl = `${config.get('hostMedia')}${url}`;
+        axios.post(currentUrl, fd, {
+            onUploadProgress: progressEvent => {
+                let percent;
+                percent = Math.round(progressEvent.loaded / progressEvent.total * 100);
+                dispatch(requestMediaLibProgress({id: id, percent: percent}, requestActions, type, neededData));
+            },
+            method: 'post',
+            headers: {
+                ...header,
+                'Accept': 'application/json'
+            },
+            responseType: 'json'
+        })
+            .then(function (response) {
+                if (response.status == 200) {
+                    return response.data;
+                } else {
+                    if (response.status == 401) {
+                        if (config.get('emitter'))
+                            config.get('emitter').emit('auth-error');
+                    }
+                    return {
+                        success: false,
+                        status: response.status
+                    }
+                }
+            })
+            .then(json => {
+                if (!json.success) {
+                    config.get('emitter').emit('error', json.msg);
+                } else if(json.success && json.sucmod){
+                    config.get('emitter').emit('success', json.msg);
+                }
+                dispatch(requestMediaLibUploadEnd(json, requestActions, type, neededData));
+            })
+            .catch(error => {
+                dispatch(requestMediaLibUploadEnd({success:false}, requestActions, type, neededData));
+            });
+    }
+}
+export function requestMediaLibUploadStart(json,requestParams,type, data) {
+    return {
+        type: requestParams.REQUEST,
+        mediaType: type,
+        json,
+        data
+    }
+}
+export function requestMediaLibProgress(json,requestParams,type, data) {
+    return {
+        type: requestParams.PROGRESS,
+        mediaType: type,
+        json,
+        data
+    }
+}
+export function requestMediaLibUploadEnd(json,requestParams,type, data) {
+    return {
+        type: requestParams.RESPONSE,
+        mediaType: type,
+        json,
+        data
+    }
+}
+
 export function uploadProgress(requestActions, url, data, type, neededData = {},requestParams = null, header=null) {
     // let url = `/api/${type}/upload`;
     let fd = new FormData();

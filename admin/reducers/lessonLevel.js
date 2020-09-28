@@ -18,6 +18,7 @@ import {
     openEditTimeline,
     closeEditTimeline,
     removeUploadedFile,
+    chooseMedia,
 } from "../actionTypes";
 const initialState = {
     status: 1,
@@ -56,6 +57,28 @@ const initialState = {
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case chooseMedia.REQUEST:
+            if(action.json.medType === 'video'){
+                return {
+                    ...state,
+                    timelineVideo: action.json.data[0]
+                };
+            }
+            if(action.json.medType === 'audio'){
+                return {
+                    ...state,
+                    timelineAudio: action.json.data[0]
+                };
+            }
+            if(action.json.medType === 'file'){
+                return {
+                    ...state,
+                    timelineFile: action.json.data[0]
+                };
+            }
+            return {
+                ...state,
+            };
         case removeUploadedFile.REQUEST:
             return {
                 ...state,
@@ -302,6 +325,7 @@ export default(state = initialState, action) => {
                     });
                     return {
                         ...state,
+                        timelineSubmitLoader: false,
                         editTimelineLoader: false,
                         openEditTimeline: false,
                         lesson:{
