@@ -1,6 +1,7 @@
 import Main from "../components/Main";
 import Home from "../components/Home";
 import Lesson from "../components/lesson/Lesson";
+import List from "../components/lesson/List";
 import Login from "../components/Login";
 import NotFound from "../components/NotFound";
 export default [
@@ -18,8 +19,18 @@ export default [
                 exact: true
             },
             {
+                component: Login,
+                path: '/verify/:token',
+                exact: true
+            },
+            {
                 component: Lesson,
                 path: '/lesson/:slug',
+                exact: true
+            },
+            {
+                component: List,
+                path: '/lessons/:slug',
                 exact: true
             },
             {

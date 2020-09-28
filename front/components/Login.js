@@ -36,16 +36,28 @@ class Home extends Component {
 
 
 
+            verifyLoading: false,
             registerLoading: false,
             loading: false,
             registerDone: false,
+            verifyMsg: '',
             accessToken: '',
             pendingEmail: ''
         };
     }
 
-    componentDidMount() {
-        window.scroll(0,0)
+    async componentDidMount() {
+        window.scroll(0,0);
+        if(this.props.match.params.token) {
+            this.setState({verifyLoading: true});
+            const response = await Api.login(`/api/verify/${this.props.match.params.token}`);
+            if (response.success === true) {
+                this.setState({username: response.username, verifyLoading: false, verifyMsg: 'Амжилттай идэвхижлээ. Нэвтэрж орно уу.'});
+            } else {
+                this.setState({verifyLoading: false, verifyMsg: ''});
+                config.get('emitter').emit('warning', response.msg);
+            }
+        }
     }
 
     changePass(e) {
@@ -83,7 +95,7 @@ class Home extends Component {
                 }
             } else {
                 this.setState({loading: false});
-                config.get('emitter').emit('warning', response.message);
+                config.get('emitter').emit('warning', response.msg);
             }
         } else {
             this.setState({loading: false});
@@ -204,11 +216,34 @@ class Home extends Component {
         return (
             <React.Fragment>
                 <Header/>
-                <div className="login-container">
+                <div className="login-container" style={{position: 'relative'}}>
                     <Container>
                         <Row>
                             <Col md={{ span: 8, offset: 2 }}>
-                                <Row>
+                                {
+                                    this.state.verifyLoading ? (
+                                        <img style={{
+                                            position: 'absolute',
+                                            height: 120,
+                                            top: '30%',
+                                            left: 'calc(100% / 2 - 60px)',
+                                            color: '#000'
+                                        }} src="/images/sync-outline-black.svg" className="spinner"/>
+                                    ) : null
+                                }
+                                {
+                                    !this.state.verifyLoading && this.state.verifyMsg ? (
+                                        <h3 style={{
+                                            marginBottom: 40,
+                                            marginTop: -20,
+                                            fontSize: 24,
+                                            fontWeight: 600,
+                                            color: '#22bb33',
+                                            textAlign: 'center'
+                                        }}>{this.state.verifyMsg}</h3>
+                                    ) : null
+                                }
+                                <Row style={{pointerEvents: this.state.verifyLoading ? 'none' : 'unset', opacity: this.state.verifyLoading ? 0.2 : 1}}>
                                     <Col md={{ span: 5 }}>
                                         <div className="log-block login"><h4 className="title text-center">
                                             <strong>Нэвтрэх</strong></h4>

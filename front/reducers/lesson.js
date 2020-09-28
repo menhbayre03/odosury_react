@@ -1,27 +1,29 @@
 import {
-    getLesson
+    getList
 } from "../actionTypes";
 const initialState = {
     loading: 1,
-    lesson: {}
+    list: [],
 };
 
 export default(state = initialState, action) => {
     switch (action.type) {
-        case getLesson.REQUEST:
+        case getList.REQUEST:
             return {
                 ...state,
                 loading:1
             };
-        case getLesson.RESPONSE:
+        case getList.RESPONSE:
             if(action.json.success) {
                 return {
                     ...state,
+                    list: action.json.results.list || [],
                     loading:0
                 };
             } else {
                 return {
                     ...state,
+                    list: [],
                     loading:2
                 };
             }
