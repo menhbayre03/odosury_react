@@ -523,7 +523,7 @@
     -o-border-radius: 5px;
     border-radius: 5px;
   }
-  button {
+  button.btn-primary {
     font-weight: 600;
     color: #ffffff;
     background-color: #313356;
@@ -533,6 +533,33 @@
     line-height: 10px;
     font-size: 14px;
     border-radius: 6px;
+  }
+  button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #1a1a35;
+    outline: none;
+    border: 1px solid transparent;
+    box-shadow: none;
+  }
+  button.btn-secondary {
+    font-weight: 600;
+    color: #000;
+    background-color: #b3b4ce;
+    text-align: center;
+    border: 1px solid transparent;
+    padding: 10px 20px;
+    line-height: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+  }
+  button.btn-secondary:hover, button.btn-secondary:active, button.btn-secondary:focus {
+    font-weight: 600;
+    color: #000;
+    background-color: #898aa4;
+    outline: none;
+    border: 1px solid transparent;
+    box-shadow: none;
   }
 }
 .ReactPasswordStrength {
@@ -590,4 +617,25 @@
 .ReactPasswordStrength.is-strength-4 .ReactPasswordStrength-strength-bar {
   background: #2FBF71;
   width: calc(100% + -12px);
+}
+
+.spinner {
+  color: #fff;
+  height: 18px;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 6px;
+  left: 10px;
+  animation: spin-animation 0.5s infinite;
+  display: inline-block;
+}
+
+@keyframes spin-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
 }
