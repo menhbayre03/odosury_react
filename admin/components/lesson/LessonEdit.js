@@ -1,20 +1,14 @@
-import React, {Component, Fragment} from "react";
+import React from "react";
 import { connect } from 'react-redux';
 import config from "../../config";
-import moment from "moment";
 import * as actions from "../../actions/lesson_actions";
-import arrayMove from 'array-move';
 
-
-import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 const reducer = ({ main, lesson }) => ({ main, lesson });
-import { Card, Button, List, Avatar, Table, Modal, Switch, Form, Input, Select, Popconfirm, Progress, Spin, Row, Col, TreeSelect, InputNumber, Steps, Upload, message } from 'antd';
-import { EditOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, DragOutlined, SearchOutlined, UploadOutlined, CloseCircleFilled, SolutionOutlined, LoadingOutlined, SmileOutlined, CheckCircleFilled, CaretRightFilled, CaretLeftFilled } from '@ant-design/icons'
+import { Card, Button, Switch, Form, Input, Select, Progress, Spin, Row, Col, TreeSelect, InputNumber, Steps, message } from 'antd';
+import { DeleteFilled, PlusOutlined, UploadOutlined, CloseCircleFilled, LoadingOutlined, CheckCircleFilled, CaretRightFilled, CaretLeftFilled } from '@ant-design/icons'
 import { Editor } from '@tinymce/tinymce-react';
 import MediaLib from "../media/MediaLib";
-const { Meta } = Card;
 const { TextArea } = Input;
-const { Option } = Select;
 const { TreeNode } = TreeSelect;
 const { Step } = Steps;
 
@@ -141,9 +135,6 @@ class LessonEdit extends React.Component {
             if(!lesson.description || (lesson.description && lesson.description.trim() === '' )){
                 return config.get('emitter').emit('warning', ("Танилцуулга оруулна уу!"));
             }
-            // if(!lesson.intro_desc || (lesson.intro_desc && lesson.intro_desc.trim() === '' )){
-            //     return config.get('emitter').emit('warning', ("Дэлгэрэнгүй танилцуулга оруулна уу!"));
-            // }
             if(!content || content === '' || content === '<p><br data-mce-bogus="1"></p>' ){
                 return config.get('emitter').emit('warning', ("Дэлгэрэнгүй танилцуулга оруулна уу!"));
             }
@@ -180,9 +171,6 @@ class LessonEdit extends React.Component {
         if(!lessonImage || !lessonImage.path || lessonImage.path === '' || !lessonImage.type || lessonImage.type !== 'image' ){
             return config.get('emitter').emit('warning', ("Зураг оруулна уу!"));
         }
-        // if(!lessonVideo || !lessonVideo.path || lessonVideo.path === '' || !lessonVideo.type || lessonVideo.type !== 'video' ){
-        //     return config.get('emitter').emit('warning', ("Бичлэг оруулна уу!"));
-        // }
         let cc = {
             ...lesson,
             selectedMember: this.state.selectedMember,
@@ -197,41 +185,6 @@ class LessonEdit extends React.Component {
     prev() {
         const current = this.state.current - 1;
         this.setState({ current });
-    }
-    //upload
-    customRequest(files) {
-        const {main:{user}} = this.props;
-        var id = user._id;
-        files.file.path = files.file.name;
-        this.props.dispatch(actions.uploadLessonImage([files.file], 'image', id));
-    }
-    beforeUpload(file) {
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/JPEG' || file.type === 'image/PNG';
-        if (!isJpgOrPng) {
-            message.error('You can only upload JPG/PNG file!');
-        }
-        const isLt2M = file.size / 1024 / 1024 < 5;
-        if (!isLt2M) {
-            message.error('Image must smaller than 5MB!');
-        }
-        return isJpgOrPng && isLt2M;
-    }
-    customRequestVideo(files) {
-        const {main:{user}} = this.props;
-        let id = user._id;
-        files.file.path = files.file.name;
-        this.props.dispatch(actions.uploadLessonVideo([files.file], 'video', id));
-    }
-    beforeUploadVideo(file) {
-        const isJpgOrPng = file.type === 'video/mp4' || file.type === 'image/MP4';
-        if (!isJpgOrPng) {
-            message.error('You can only upload mp4 file!');
-        }
-        const isLt2M = file.size / 1024 / 1024 < 200;
-        if (!isLt2M) {
-            message.error('Video must smaller than 200MB!');
-        }
-        return isJpgOrPng && isLt2M;
     }
     removeUploadedFile(name) {
         this.props.dispatch(actions.removeUploadedFile({name: name}));
@@ -276,39 +229,6 @@ class LessonEdit extends React.Component {
             },
         ];
         //upload
-        const { loading, imageUrl } = this.state;
-        const uploadButton = (
-            <div style={{fontSize: 24}}>
-                {imageUploadLoading ?
-                    <React.Fragment>
-                        <LoadingOutlined />
-                        {lessonImageProgress && lessonImageProgress.percent?
-                            <Progress percent={lessonImageProgress.percent} size="small" />
-                            :
-                            <Progress percent={0} size="small" />
-                        }
-                    </React.Fragment>
-                    :
-                    <PlusOutlined />
-                }
-            </div>
-        );
-        const uploadButtonVideo = (
-            <div style={{fontSize: 24}}>
-                {videoUploadLoading ?
-                    <React.Fragment>
-                        <LoadingOutlined />
-                        {lessonVideoProgress && lessonVideoProgress.percent?
-                            <Progress percent={lessonVideoProgress.percent} size="small" />
-                            :
-                            <Progress percent={0} size="small" />
-                        }
-                    </React.Fragment>
-                    :
-                    <Button icon={<UploadOutlined />}>Upload</Button>
-                }
-            </div>
-        );
         return (
             <div className='lesson-edit'>
                 <Steps current={current}>
@@ -356,14 +276,6 @@ class LessonEdit extends React.Component {
                                                                   name='description'
                                                                   onChange={this.onChangeHandler.bind(this)}/>
                                                     </Form.Item>
-                                                    {/*<Form.Item*/}
-                                                    {/*    label='Дэлгэрэнгүй танилцуулга'*/}
-                                                    {/*>*/}
-                                                    {/*    <TextArea size="middle" rows={4}*/}
-                                                    {/*              value={lesson.intro_desc ? lesson.intro_desc : ''}*/}
-                                                    {/*              name='intro_desc'*/}
-                                                    {/*              onChange={this.onChangeHandler.bind(this)}/>*/}
-                                                    {/*</Form.Item>*/}
                                                     <Form.Item
                                                         label='Дэлгэрэнгүй танилцуулга'
                                                     >
@@ -471,6 +383,7 @@ class LessonEdit extends React.Component {
                                                     >
                                                         <TreeSelect
                                                             size="middle"
+                                                            treeDefaultExpandAll
                                                             showSearch
                                                             style={{width: '100%'}}
                                                             value={lesson.category}
@@ -623,17 +536,6 @@ class LessonEdit extends React.Component {
                                                         help='Зурагны хэмжээ хамгийн багадаа 1200 x 450 байх'
                                                         style={{marginBottom: 10}}
                                                     >
-                                                        {/*<Upload*/}
-                                                        {/*    name="avatar"*/}
-                                                        {/*    listType="picture-card"*/}
-                                                        {/*    className="avatar-uploader"*/}
-                                                        {/*    showUploadList={false}*/}
-                                                        {/*    disabled={imageUploadLoading}*/}
-                                                        {/*    beforeUpload={this.beforeUpload.bind(this)}*/}
-                                                        {/*    customRequest={this.customRequest.bind(this)}*/}
-                                                        {/*>*/}
-                                                        {/*    {lessonImage && lessonImage.path ? <img src={`${config.get('hostMedia')}${lessonImage.path}`} alt="avatar" style={{ width: '100%' }} /> : uploadButton}*/}
-                                                        {/*</Upload>*/}
                                                         <div>
                                                             <Button onClick={this.openMediaLib.bind(this, 'image')} style={{marginBottom: 10}}>
                                                                 <UploadOutlined /> {lessonImage && lessonImage._id? 'Солих' : 'Зураг'}
@@ -657,19 +559,6 @@ class LessonEdit extends React.Component {
                                                         // labelCol={{span: 4}}
                                                         className='upload-m'
                                                     >
-                                                        {/*<div>*/}
-                                                        {/*    <Upload*/}
-                                                        {/*        listType="picture"*/}
-                                                        {/*        disabled={videoUploadLoading}*/}
-                                                        {/*        beforeUpload={this.beforeUploadVideo.bind(this)}*/}
-                                                        {/*        customRequest={this.customRequestVideo.bind(this)}*/}
-                                                        {/*        onRemove={this.removeUploadedFile.bind(this, 'lessonVideo')}*/}
-                                                        {/*        fileList={ lessonVideo && lessonVideo.path ? [{uid: lessonVideo._id, name: lessonVideo.original_name, url: `${config.get('hostMedia')}${lessonVideo.thumbnail}`}] : []}*/}
-                                                        {/*    >*/}
-                                                        {/*        {uploadButtonVideo}*/}
-                                                        {/*    </Upload>*/}
-                                                        {/*</div>*/}
-
                                                         <div>
                                                             <Button onClick={this.openMediaLib.bind(this, 'video')} style={{marginBottom: 10}}>
                                                                 <UploadOutlined /> {lessonVideo && lessonVideo._id? 'Солих' : 'Бичлэг'}

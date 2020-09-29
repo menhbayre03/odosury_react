@@ -1,7 +1,6 @@
-import React, {Component, Fragment} from "react";
+import React from "react";
 import { connect } from 'react-redux';
 import config from "../../config";
-import moment from "moment";
 import * as actions from "../../actions/bundle_actions";
 
 
@@ -21,10 +20,9 @@ import {
     InputNumber,
     Progress,
 } from 'antd';
-import { EditOutlined, LoadingOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, SearchOutlined, CloseCircleFilled, UploadOutlined } from '@ant-design/icons'
+import { EditOutlined, LoadingOutlined, DeleteFilled, PlusOutlined, CloseCircleFilled, UploadOutlined } from '@ant-design/icons'
 import MediaLib from "../media/MediaLib";
 const { Meta } = Card;
-const { TextArea } = Input;
 const { Option } = Select;
 
 class Bundle extends React.Component {
@@ -40,9 +38,6 @@ class Bundle extends React.Component {
     componentDidMount() {
         this.props.dispatch(actions.getBundle({pageNum: this.state.pageNum, pageSize: this.state.pageSize}));
     }
-    // componentWillUnmount() {
-    //     this.props.dispatch(actions.closeTeacherModal());
-    // }
     openModal(data) {
         const {bundle:{lessons}} = this.props;
         if(lessons && lessons.length>0){
@@ -94,46 +89,8 @@ class Bundle extends React.Component {
         };
         this.props.dispatch(actions.submitBundle(cc));
     }
-    // tableOnChange(data){
-    //     const {dispatch } = this.props;
-    //     this.setState({pageNum : data.current - 1});
-    //     let cc = {
-    //         pageNum:data.current - 1,
-    //         pageSize:this.state.pageSize,
-    //         search: this.state.search
-    //     };
-    //     this.props.dispatch(actions.getTeachers(cc));
-    // }
-    // searchTeacher(){
-    //     const {dispatch } = this.props;
-    //     this.setState({pageNum: 0});
-    //     let cc = {
-    //         pageNum:0,
-    //         pageSize:this.state.pageSize,
-    //         search: this.state.search
-    //     };
-    //     this.props.dispatch(actions.getTeachers(cc));
-    // }
     delete(id){
         this.props.dispatch(actions.deleteBundle({_id:id, pageSize: this.state.pageSize, pageNum: this.state.pageNum}));
-    }
-    //upload
-    customRequest(files) {
-        const {main:{user}} = this.props;
-        var id = user._id;
-        files.file.path = files.file.name;
-        this.props.dispatch(actions.uploadBundleThumbnail([files.file], 'image', id));
-    }
-    beforeUpload(file) {
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/JPEG' || file.type === 'image/PNG';
-        if (!isJpgOrPng) {
-            message.error('You can only upload JPG/PNG file!');
-        }
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-            message.error('Image must smaller than 2MB!');
-        }
-        return isJpgOrPng && isLt2M;
     }
 
     // levels
@@ -173,24 +130,7 @@ class Bundle extends React.Component {
         return false;
     };
     render() {
-        let { main:{user}, bundle:{status, openModal, bundleLevelName, bundle, bundles, lessonValue, submitBundleLoader, all, imageUploadLoading, lessons, bundleThumbnail, bundleThumbnailProgress} } = this.props;
-        // //upload
-        const uploadButton = (
-            <div style={{fontSize: 24}}>
-                {imageUploadLoading ?
-                    <React.Fragment>
-                        <LoadingOutlined />
-                        {bundleThumbnailProgress && bundleThumbnailProgress.percent?
-                            <Progress percent={bundleThumbnailProgress.percent} size="small" />
-                            :
-                            <Progress percent={0} size="small" />
-                        }
-                    </React.Fragment>
-                    :
-                    <PlusOutlined />
-                    }
-            </div>
-        );
+        let { main:{user}, bundle:{status, openModal, bundleLevelName, bundle, bundles, lessonValue, submitBundleLoader, lessons, bundleThumbnail} } = this.props;
         let avatar = '/images/default-bundle.png';
         if (bundleThumbnail && bundleThumbnail.path !== '') {
             avatar = `${config.get('hostMedia')}${bundleThumbnail.path}`;
@@ -199,7 +139,7 @@ class Bundle extends React.Component {
             <Card
                 title="Багц"
                 bordered={true}
-                loading={false}
+                loading={status}
                 extra={
                     <Button type="primary" icon={<PlusOutlined />}
                             onClick={this.openModal.bind(this, {})}
@@ -238,7 +178,6 @@ class Bundle extends React.Component {
                             ]}
                         >
                             <Meta
-                                // avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
                                 title={run.title}
                                 description={
                                     <div>
@@ -268,25 +207,6 @@ class Bundle extends React.Component {
                         label='Зураг'
                         labelCol={{span: 5}}
                     >
-                        {/*<Upload*/}
-                        {/*    name="thumbnail"*/}
-                        {/*    listType="picture-card"*/}
-                        {/*    className="avatar-uploader"*/}
-                        {/*    showUploadList={false}*/}
-                        {/*    disabled={imageUploadLoading}*/}
-                        {/*    beforeUpload={this.beforeUpload.bind(this)}*/}
-                        {/*    customRequest={this.customRequest.bind(this)}*/}
-                        {/*>*/}
-                        {/*    {bundleThumbnail && bundleThumbnail.path ?*/}
-                        {/*        <img*/}
-                        {/*            onError={(e) => e.target.src = `/images/default-bundle.png`}*/}
-                        {/*            src={avatar}*/}
-                        {/*            style={{ width: '100%' }}*/}
-                        {/*        />*/}
-                        {/*        :*/}
-                        {/*        uploadButton*/}
-                        {/*    }*/}
-                        {/*</Upload>*/}
                         <div>
                             <Button onClick={this.openMediaLib.bind(this, 'image')} style={{marginBottom: 10}}>
                                 <UploadOutlined /> {bundleThumbnail && bundleThumbnail._id? 'Солих' : 'Зураг'}
@@ -393,7 +313,6 @@ class Bundle extends React.Component {
                                         <div className='timeline-select'>
                                             <Select
                                                 value={lessonValue.value && lessonValue.index === idx ? lessonValue.value : ''}
-                                                // onChange={this.onChangeHandlerLevelTimelineSelect.bind(this)}
                                                 name="lessons"
                                                 onChange={this.changeState.bind(this, 'lessons', idx)}
                                             >
