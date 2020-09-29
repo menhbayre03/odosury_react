@@ -7,6 +7,7 @@ import GridItem from "./include/GridItem";
 import { Container, Row, Col } from "react-bootstrap";
 import Swiper from "react-id-swiper";
 import * as actions from '../actions/home_actions';
+import config from "../config";
 const reducer = ({ main, home }) => ({ main, home });
 
 class Home extends Component {
@@ -18,6 +19,7 @@ class Home extends Component {
         this.swiperWatching = React.createRef();
     }
     componentDidMount() {
+        window.scroll(0, 0)
         const {dispatch} = this.props;
         dispatch(actions.getHome());
     }
@@ -135,13 +137,13 @@ class Home extends Component {
                             <h5> With our growing catalog of over 30 Nanodegree programs from beginner to advanced</h5>
                             <Row>
                                 {
-                                    [1,2,3,4,5,6,7,8].map(item => (
+                                    bundles.map(item => (
                                         <Col md={3}>
                                             <div className="bundle-item">
-                                                <img src="http://demo.foxthemes.net/courseplusv3.3/assets/images/book/vue-2-basics-.jpg" alt="" className="cover-img"/>
+                                                <img src={(item.thumbnail || {}).path ? `${config.get('hostMedia')}${(item.thumbnail || {}).path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`} className="cover-img"/>
                                                 <div className="bundle-detail">
                                                     <h4>Web Development</h4>
-                                                    <p className="skill-card-subtitle"> 15 courses 3 bundles</p>
+                                                    <p className="skill-card-subtitle">{` ${(item.levels || []).length} түвшин  ${(item.levels || []).reduce((total, aa) => total + (aa.lessons || []).length, 0)} хичээл`}</p>
                                                 </div>
                                             </div>
                                         </Col>

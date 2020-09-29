@@ -19,7 +19,7 @@ class Lesson extends Component {
         return (
             <React.Fragment>
                 <Header/>
-                <div style={{minHeight: '100vh'}}>
+                <div style={{minHeight: 'calc(100vh - 185px)'}}>
                     <h2>LESSON</h2>
                 </div>
                 <Footer/>
