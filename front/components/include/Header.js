@@ -19,6 +19,12 @@ class Header extends Component {
         window.addEventListener('scroll', this.handleScroll);
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(this.props.location.pathname !== prevProps.location.pathname) {
+            this.setState({cate: false})
+        }
+    }
+
     componentWillUnmount() {
         window.removeEventListener('scroll', this.handleScroll);
     }

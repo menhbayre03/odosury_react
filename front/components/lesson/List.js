@@ -4,7 +4,6 @@ import Header from "../include/Header";
 import Footer from "../include/Footer";
 import GridItem from "../include/GridItem";
 import { Container, Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
 import * as actions from '../../actions/lesson_actions';
 import {Link} from "react-router-dom";
 import Select from "react-dropdown-select";
@@ -21,17 +20,29 @@ class List extends Component {
     componentDidMount() {
         window.scroll(0, 0);
         const {dispatch, match} = this.props;
-        dispatch(actions.getList(match.params.slug, {sort: this.state.sort.value}));
+        dispatch(actions.getList(match.params.slug, {sort: this.state.sort.value, search: this.state.search}));
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         const {dispatch, match} = this.props;
         if(match.params.slug !== prevProps.match.params.slug) {
-            dispatch(actions.getList(match.params.slug, {sort: this.state.sort.value}));
+            dispatch(actions.getList(match.params.slug, {sort: this.state.sort.value, search: this.state.search}));
         }
         if(this.state.sort.value !== prevState.sort.value) {
-            dispatch(actions.getList(match.params.slug, {sort: this.state.sort.value}));
+            dispatch(actions.getList(match.params.slug, {sort: this.state.sort.value, search: this.state.search}));
         }
+    }
+
+    onSearch(e) {
+        if(e) {
+            e.preventDefault();
+        }
+        const {dispatch, match} = this.props;
+        dispatch(actions.getList(match.params.slug, {sort: this.state.sort.value, search: this.state.search}));
+    }
+
+    onChange(e) {
+        this.setState({search: e.target.value})
     }
 
     render() {
@@ -39,7 +50,7 @@ class List extends Component {
         let slug = this.props.match.params.slug;
         return (
             <React.Fragment>
-                <Header/>
+                <Header location={this.props.location}/>
                 <div className="list-container" style={{minHeight: 'calc(100vh - 185px)'}}>
                     <Container>
                         <Row>
@@ -82,6 +93,17 @@ class List extends Component {
                             <Col md={3}>
                                 <div className="list-sidebar">
                                     <div className="list-sidebar-items">
+                                        <div className="side-item" style={{marginBottom: 10}}>
+                                            <div className="side-search">
+                                                <form style={{position: 'relative'}} onSubmit={(e) => this.onSearch(e)}>
+                                                    <input
+                                                        onChange={this.onChange.bind(this)}
+                                                        placeholder="Хичээл хайх ..."
+                                                    />
+                                                    <ion-icon  onClick={() => this.onSearch()} name="search-outline"/>
+                                                </form>
+                                            </div>
+                                        </div>
                                         <div className="side-item">
                                             <p>Ангилал</p>
                                             <ul className="cate">
@@ -114,7 +136,7 @@ class List extends Component {
                                                             <li key={ida} className={'cate-item'}>
                                                                 <Link to={`/lessons/${item.slug}`}>
                                                                     {item.slug === slug ? <ion-icon name="checkmark"/> : null}
-                                                                    <span>{item.title} ({item.count})</span>
+                                                                    <span>{item.title} ({(item.child || []).reduce((total, aa) => total + aa.count, item.count)})</span>
                                                                 </Link>
                                                             </li>
                                                         )

@@ -92,7 +92,7 @@ class Home extends Component {
         };
         return (
             <React.Fragment>
-                <Header/>
+                <Header location={this.props.location}/>
                 <div className="home-hero" data-src="../assets/images/home-hero.png"
                      style={{backgroundImage: "url('http://demo.foxthemes.net/courseplusv3.3/assets/images/home-hero.png')"}}>
                     <Container>

@@ -88,7 +88,7 @@ class Home extends Component {
             const response = await Api.login(`/api/login`, data);
             if (response.success === true) {
                 if(response.pending) {
-                    this.setState({loading: false, registerDone: true, pendingEmail: response.email});
+                    this.setState({loading: false, registerDone: true, pendingEmail: response.email, accessToken: response.accessToken});
                 } else {
                     this.setState({loading: false});
                     window.location = "/";
@@ -113,7 +113,7 @@ class Home extends Component {
 
     async reSend() {
         this.setState({resendLoading: true});
-        const response = await Api.login(`/api/resend/email`, {email: this.state.emailRegister, accessToken: this.state.accessToken});
+        const response = await Api.login(`/api/resend/email`, {email: this.state.pendingEmail ? this.state.pendingEmail : this.state.emailRegister, accessToken: this.state.accessToken});
         if (response.success === true) {
             config.get('emitter').emit('success', 'Амжилттай илгээлээ');
             this.setState({resendLoading: false});
@@ -200,7 +200,7 @@ class Home extends Component {
                 if(response.alemod) {
                     config.get('emitter').emit('successs', response.msg);
                 }
-                this.setState({registerLoading: false, registerDone: true, accessToken: response.accessToken});
+                this.setState({resendLoading: false, registerLoading: false, registerDone: true, accessToken: response.accessToken});
             } else {
                 this.setState({registerLoading: false});
                 config.get('emitter').emit('warning', response.msg);
@@ -215,7 +215,7 @@ class Home extends Component {
         const {main : {user}, auth} = this.props;
         return (
             <React.Fragment>
-                <Header/>
+                <Header location={this.props.location}/>
                 <div className="login-container" style={{position: 'relative'}}>
                     <Container>
                         <Row>

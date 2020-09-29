@@ -18,9 +18,20 @@ class Lesson extends Component {
     render() {
         return (
             <React.Fragment>
-                <Header/>
-                <div style={{minHeight: 'calc(100vh - 185px)'}}>
-                    <h2>LESSON</h2>
+                <Header location={this.props.location}/>
+                <div className="lesson-single" style={{position: 'relative', minHeight: 'calc(100vh - 185px)'}}>
+                    <div className="lesson-head">
+                        <Container>
+                            <Row>
+                                <Col md={8}>
+                                    <h2>Learn JavaScript From Scratch</h2>
+                                </Col>
+                                <Col md={4}>
+
+                                </Col>
+                            </Row>
+                        </Container>
+                    </div>
                 </div>
                 <Footer/>
             </React.Fragment>
