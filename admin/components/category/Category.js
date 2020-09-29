@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from "react";
+import React from "react";
 import { connect } from 'react-redux';
 import config from "../../config";
 import moment from "moment";
@@ -6,10 +6,8 @@ import * as actions from "../../actions/category_actions";
 
 
 const reducer = ({ main, category }) => ({ main, category });
-import { Card, Button, Avatar, Table, Modal, Form, Input, Select, Popconfirm } from 'antd';
-import { EditOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, SearchOutlined } from '@ant-design/icons'
-const { Meta } = Card;
-const { TextArea } = Input;
+import { Card, Button, Table, Modal, Form, Input, Select, Popconfirm } from 'antd';
+import { DeleteFilled, PlusOutlined, EditFilled, SearchOutlined } from '@ant-design/icons'
 const { Option } = Select;
 
 class Category extends React.Component {
@@ -70,7 +68,7 @@ class Category extends React.Component {
         this.props.dispatch(actions.deleteCategory({_id:id, pageSize: this.state.pageSize, pageNum: this.state.pageNum}));
     }
     render() {
-        let { main:{user}, category:{status, openModal, category, categories, submitCategoryLoader, all, allCategories} } = this.props;
+        let { category:{ openModal, category, categories, submitCategoryLoader, all, allCategories} } = this.props;
         let pagination = {
             total : all,
             current: this.state.pageNum + 1,

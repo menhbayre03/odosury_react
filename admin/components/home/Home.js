@@ -1,12 +1,9 @@
-import React, {Component, Fragment} from "react";
+import React from "react";
 import { connect } from 'react-redux';
-import config from "../../config";
-import moment from "moment";
 
 
 const reducer = ({ main }) => ({ main });
 import { Card } from 'antd';
-import {  } from '@ant-design/icons';
 
 
 class Home extends React.Component {
@@ -20,15 +17,11 @@ class Home extends React.Component {
     componentWillUnmount() {
     }
     render() {
-        let { main:{user}, location, route: {routes} } = this.props;
         return (
             <Card
                 title="Нүүр"
                 bordered={true}
                 loading={false}
-                // extra={
-                //     <a href="#">More</a>
-                // }
             >
 
             </Card>
