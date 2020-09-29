@@ -91,7 +91,7 @@ class List extends Component {
                                                             <li key={ida} className={item.slug === slug ? 'cate-item active' : 'cate-item'}>
                                                                 <Link to={`/lessons/${item.slug}`}>
                                                                     {item.slug === slug ? <ion-icon name="checkmark"/> : null}
-                                                                    <span>{item.title} ({item.count})</span>
+                                                                    <span>{item.title} ({item.child.reduce((total, aa) => total + aa.count, item.count)})</span>
                                                                 </Link>
                                                                 {
                                                                     item.child && item.child.length > 0 ? (
@@ -101,7 +101,7 @@ class List extends Component {
                                                                                     <li key={ind} className={child.slug === slug ? 'cate-item active' : 'cate-item'}>
                                                                                         <Link to={`/lessons/${child.slug}`}>
                                                                                             {child.slug === slug ? <ion-icon name="checkmark"/> : null}
-                                                                                            <span>{child.title} ({item.count})</span>
+                                                                                            <span>{child.title} ({child.count})</span>
                                                                                         </Link>
                                                                                     </li>
                                                                                 ))
