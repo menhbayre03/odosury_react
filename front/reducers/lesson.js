@@ -1,9 +1,12 @@
 import {
-    getList
+    getList,
+    getLesson
 } from "../actionTypes";
 const initialState = {
     loading: 1,
     list: [],
+    lessonLoading: 1,
+    lesson: {},
 };
 
 export default(state = initialState, action) => {
@@ -25,6 +28,25 @@ export default(state = initialState, action) => {
                     ...state,
                     list: [],
                     loading:2
+                };
+            }
+        case getLesson.REQUEST:
+            return {
+                ...state,
+                lessonLoading:1
+            };
+        case getLesson.RESPONSE:
+            if(action.json.success) {
+                return {
+                    ...state,
+                    lesson: action.json.lesson || {},
+                    lessonLoading:0
+                };
+            } else {
+                return {
+                    ...state,
+                    lesson: {},
+                    lessonLoading:2
                 };
             }
         default:
