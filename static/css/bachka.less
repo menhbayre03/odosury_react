@@ -842,16 +842,259 @@
   }
 }
 .lesson-single {
+  background: #edeff0;
+  .fixeee {
+    position: absolute;
+    right: 0;
+    width: 100%;
+  }
   .lesson-head {
-    min-height: 400px;
-    background: #3659a2;
-    padding: 40px 0;
-    h2 {
+    background: #1e1e1c;
+    background-size: cover;
+    background-position: center center;
+    .head-inner {
+      height: 100%;
+      width: 100%;
+      padding: 40px 0 0 0;
+      background: rgba(0, 0, 0, 0.6);
+      h2 {
+        color: #fff;
+        font-size: 34px;
+        font-weight: 700;
+        display: block;
+        line-height: 36px;
+        margin-bottom: 20px;
+      }
+      p {
+        line-height: 20px;
+        color: #bdbdbd;
+        font-size: 16px;
+      }
+    }
+  }
+  .sticky-side {
+    background: #fff;
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 8px 21px -0.052083333in rgba(25,42,70,.13);
+    padding-bottom: 20px;
+    img {
+      width: 100%;
+      padding: 10px;
+      border-radius: 17px;
+    }
+    .inner {
+      padding: 0 20px 0 20px;
+      button.btn-primary {
+        width: 100%;
+        font-size: 20px;
+        font-weight: 700;
+        border-radius: 10px;
+        background: #313356;
+        border: none;
+        ion-icon {
+          position: relative;
+          top: 4px;
+          margin-right: 10px;
+        }
+      }
+      button.btn-primary:hover {
+        background: #404265;
+      }
+      button.btn-secondary {
+        width: 100%;
+        font-size: 20px;
+        font-weight: 700;
+        border-radius: 10px;
+        background: #d8d8d8;
+        border: none;
+        color: #404265;
+        margin-top: 15px;
+        ion-icon {
+          position: relative;
+          top: 4px;
+          margin-right: 10px;
+        }
+      }
+      button.btn-secondary:hover {
+        background: #e5e5e5;
+      }
+      button:active, button:focus, button:active:focus {
+        border: none;
+        outline: none;
+        box-shadow: none;
+      }
+    }
+  }
+  .tab-menu {
+    padding: 0;
+    height: 46px;
+    display: block;
+    span {
+      font-size: 20px;
       color: #fff;
-      font-size: 28px;
-      font-weight: 600;
+      font-weight: 700;
+      padding: 8px 20px;
+      display: inline-block;
+      background: none;
+      position: relative;
+      margin-right: 60px;
+      cursor: pointer;
+    }
+    span.active {
+      font-size: 20px;
+      color: #000;
+      font-weight: 700;
+      padding: 8px 20px;
+      display: inline-block;
+      background: #edeff0;
+      position: relative;
+      margin-right: 60px;
+    }
+    span.active:before {
+      width: 36px;
+      transition: all 0.3s ease-out;
+      font-size: 31px;
+      height: 47px;
+      top: -1px;
+      content: "";
+      position: absolute;
+      background-size: cover;
+      left: -0.36458333in;
+      background-image: url(http://demo.foxthemes.net/courseplusv3.3/assets/images/bg-shapes/tab-border-left.png);
+    }
+    span.active:after {
+      width: 36px;
+      transition: all 0.3s ease-out;
+      font-size: 31px;
+      height: 47px;
+      top: -1px;
+      content: "";
+      position: absolute;
+      background-size: cover;
+      right: -0.36458333in;
+      background-image: url(http://demo.foxthemes.net/courseplusv3.3/assets/images/bg-shapes/tab-border-right.png);
+    }
+  }
+  .nav-tabs {
+    display: none;
+  }
+  .inner-tab.overview {
+    padding: 20px 0 60px 0;
+    h4 {
+      color: #3e416d;
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      margin-top: 40px;
+    }
+    p {
+      font-size: 16px;
+      font-weight: 500;
+      color: #000;
+    }
+    .list-2 {
+      margin: 0;
+      width: 100%;
       display: block;
-      margin-bottom: 10px;
+      list-style: none;
+      padding: 0;
+      columns: 2;
+      font-size: 16px;
+      -webkit-columns: 2;
+      -moz-columns: 2;
+      li {
+        border: none;
+        display: block;
+        position: relative;
+        margin: 0 0 10px;
+        padding: 0px 0px 0px 30px;
+        ion-icon {
+          position: absolute;
+          font-size: 22px;
+          top: 0px;
+          left: 0px;
+          color: green;
+        }
+      }
+    }
+    .list-1 {
+      margin: 0;
+      width: 100%;
+      display: block;
+      list-style: disc;
+      padding-left: 20px;
+      font-size: 16px;
+      li {
+        border: none;
+        position: relative;
+        margin: 0 0 10px;
+        padding: 0;
+      }
+    }
+  }
+  .timeline-cont {
+    padding: 60px 0;
+    .accordion {
+      .card {
+        border: none;
+        margin-bottom: 20px;
+        border-radius: .0625in !important;
+        box-shadow: 0 3px .625pc 0 rgba(0,0,0,.06) !important;
+        .card-header {
+          background: #fff;
+          border: none;
+          padding: 0;
+          button {
+            width: 100%;
+            padding: 15px 20px;
+            text-align: left;
+            font-size: 18px;
+            font-weight: 700;
+            color: #666;
+            text-decoration: none;
+            outline: none;
+          }
+        }
+        .card-body {
+          padding: 0;
+          .program {
+            align-items: center;
+            justify-content: flex-start;
+            display: flex;
+            padding: 15px;
+            cursor: pointer;
+            ion-icon {
+              color: #666;
+              font-size: 24px;
+              margin-right: 15px;
+              position: relative;
+              top: -2px;
+            }
+            p {
+              display: inline-block;
+              font-size: 18px;
+              font-weight: 700;
+              color: #666;
+              width: calc(100% - 90px);
+              margin-bottom: 0;
+            }
+            span {
+              color: #989898;
+              font-size: 13px;
+              font-weight: 700;
+              text-align: right;
+              width: 60px;
+            }
+          }
+          .program:hover {
+            background: #f1f2ff;
+          }
+          .program.passed ion-icon {
+            color: #62d76b;
+          }
+        }
+      }
     }
   }
 }
