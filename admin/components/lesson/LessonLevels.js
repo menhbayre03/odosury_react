@@ -127,10 +127,6 @@ class LessonLevels extends React.Component {
                 return config.get('emitter').emit('warning', ("Контент оруулна уу!"));
             }
         }
-        console.log('timeline.type');
-        console.log(timeline.type);
-        console.log('content');
-        console.log(content);
         let cc = {
             ...timeline,
             lesson: lesson._id,
