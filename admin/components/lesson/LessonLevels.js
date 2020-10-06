@@ -120,10 +120,11 @@ class LessonLevels extends React.Component {
                 return config.get('emitter').emit('warning', ("Аудио оруулна уу!"));
             }
         }
+        let content = null;
         if(timeline.type === 'content') {
-            let content = ((this.editor || {}).editor).getContent({format:'raw'});
-            if(!content || content === '' ){
-                return config.get('emitter').emit('warning', ("Аудио оруулна уу!"));
+            content = ((this.editor || {}).editor).getContent({format:'raw'});
+            if(!content || content === '' || content === '<p><br></p>' ){
+                return config.get('emitter').emit('warning', ("Контент оруулна уу!"));
             }
         }
         let cc = {
