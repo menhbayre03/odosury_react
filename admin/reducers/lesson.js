@@ -60,10 +60,17 @@ export default(state = initialState, action) => {
                 };
             }
             if(action.json.medType === 'image'){
-                return {
-                    ...state,
-                    lessonImage: action.json.data[0]
-                };
+                if(action.json.forWhat === 'lesson'){
+                    return {
+                        ...state,
+                        lessonImage: action.json.data[0]
+                    };
+                } else if(action.json.forWhat === 'lessonSmall'){
+                    return {
+                        ...state,
+                        lessonSmallImage: action.json.data[0]
+                    };
+                }
             }
             return {
                 ...state,
@@ -254,6 +261,7 @@ export default(state = initialState, action) => {
                 openModal: true,
                 lesson:action.json,
                 lessonImage:action.json.thumbnail,
+                lessonSmallImage:action.json.thumbnailSmall,
                 lessonVideo:action.json.video,
                 searchTeachersResult:[],
                 lessonVideoProgress: {},
@@ -289,6 +297,7 @@ export default(state = initialState, action) => {
                                 run.intro_desc= action.json.data.intro_desc;
                                 run.learn_check_list= action.json.data.learn_check_listArray;
                                 run.thumbnail= action.json.data.lessonImage;
+                                run.thumbnailSmall= action.json.data.lessonSmallImage;
                                 run.video= action.json.data.lessonVideo;
                                 run.featured= action.json.data.featured;
                                 run.price= action.json.data.price;
@@ -309,6 +318,7 @@ export default(state = initialState, action) => {
                         intro_desc: action.json.data.intro_desc,
                         learn_check_list: action.json.data.learn_check_listArray,
                         thumbnail: action.json.data.lessonImage,
+                        thumbnailSmall: action.json.data.lessonSmallImage,
                         video: action.json.data.lessonVideo,
                         price: action.json.data.price,
                         requirements: action.json.data.requirementsArray,

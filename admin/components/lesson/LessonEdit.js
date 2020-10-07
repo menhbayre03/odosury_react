@@ -30,6 +30,7 @@ class LessonEdit extends React.Component {
             current: 0,
             //upload
             loading: false,
+            forWhat: ''
         };
     }
     componentWillUnmount() {
@@ -167,15 +168,19 @@ class LessonEdit extends React.Component {
 
     }
     submitLesson(){
-        const {lesson:{lesson, lessonImage, lessonVideo}} = this.props;
+        const {lesson:{lesson, lessonImage, lessonSmallImage, lessonVideo}} = this.props;
         if(!lessonImage || !lessonImage.path || lessonImage.path === '' || !lessonImage.type || lessonImage.type !== 'image' ){
-            return config.get('emitter').emit('warning', ("Зураг оруулна уу!"));
+            return config.get('emitter').emit('warning', ("Том зураг оруулна уу!"));
+        }
+        if(!lessonSmallImage || !lessonSmallImage.path || lessonSmallImage.path === '' || !lessonSmallImage.type || lessonSmallImage.type !== 'image' ){
+            return config.get('emitter').emit('warning', ("Жижиг зураг оруулна уу!"));
         }
         let cc = {
             ...lesson,
             selectedMember: this.state.selectedMember,
             intro_desc: (this.state.holdEditor || null),
             lessonImage: lessonImage,
+            lessonSmallImage: lessonSmallImage,
             lessonVideo: (lessonVideo || {}),
             requirementsArray: this.state.requirementsArray,
             learn_check_listArray: this.state.learn_check_listArray
@@ -194,17 +199,17 @@ class LessonEdit extends React.Component {
 
 
     //MediaLibrary
-    openMediaLib(mediaType){
-        this.setState({mediaType})
+    openMediaLib(mediaType, forWhat){
+        this.setState({mediaType, forWhat:forWhat})
     }
     chooseMedia(data, type){
-        this.props.dispatch(actions.chooseMedia({data: data, medType:type}));
+        this.props.dispatch(actions.chooseMedia({data: data, medType:type, forWhat:this.state.forWhat}));
     }
     setFeatured(e){
         this.props.dispatch(actions.setFeatured());
     }
     render() {
-        let { main:{user}, lesson:{imageUploadLoading, lessonImage, videoUploadLoading, lessonVideo, status, openModal, lessonVideoProgress, lessonImageProgress, lesson, lessons, submitLessonLoader, all, searchTeachersResult, searchTeacherLoader, categories, level} } = this.props;
+        let { main:{user}, lesson:{imageUploadLoading, lessonImage, lessonSmallImage, videoUploadLoading, lessonVideo, status, openModal, lessonVideoProgress, lessonImageProgress, lesson, lessons, submitLessonLoader, all, searchTeachersResult, searchTeacherLoader, categories, level} } = this.props;
         let avatar = '/images/default-avatar.png';
         if (this.state.selectedMember && this.state.selectedMember.avatar && this.state.selectedMember.avatar !== '') {
             avatar = this.state.selectedMember.avatar;
@@ -532,12 +537,13 @@ class LessonEdit extends React.Component {
                                             steps[current].content === 'content-content' ?
                                                 <div className='content-content'>
                                                     <Form.Item
-                                                        label='Зураг'
+                                                        label='Том зураг'
+                                                        labelCol={{span: 4}}
                                                         help='Зурагны хэмжээ хамгийн багадаа 1200 x 450 байх'
                                                         style={{marginBottom: 10}}
                                                     >
                                                         <div>
-                                                            <Button onClick={this.openMediaLib.bind(this, 'image')} style={{marginBottom: 10}}>
+                                                            <Button onClick={this.openMediaLib.bind(this, 'image', 'lesson')} style={{marginBottom: 10}}>
                                                                 <UploadOutlined /> {lessonImage && lessonImage._id? 'Солих' : 'Зураг'}
                                                             </Button>
                                                             {lessonImage && lessonImage._id ?
@@ -555,8 +561,32 @@ class LessonEdit extends React.Component {
                                                         </div>
                                                     </Form.Item>
                                                     <Form.Item
+                                                        label='Жижиг зураг'
+                                                        labelCol={{span: 4}}
+                                                        help='Зурагны хэмжээ хамгийн багадаа 800 x 450 байх'
+                                                        style={{marginBottom: 10}}
+                                                    >
+                                                        <div>
+                                                            <Button onClick={this.openMediaLib.bind(this, 'image', 'lessonSmall')} style={{marginBottom: 10}}>
+                                                                <UploadOutlined /> {lessonSmallImage && lessonSmallImage._id? 'Солих' : 'Зураг'}
+                                                            </Button>
+                                                            {lessonSmallImage && lessonSmallImage._id ?
+                                                                <div className='uploaded-i'>
+                                                                    <span className='uploaded-i-image'>
+                                                                        <img src={`${config.get('hostMedia')}${lessonSmallImage.path}`} />
+                                                                    </span>
+                                                                    <span onClick={this.removeUploadedFile.bind(this, 'lessonSmallImage')} className='uploaded-i-action'>
+                                                                        <DeleteFilled />
+                                                                    </span>
+                                                                </div>
+                                                                :
+                                                                null
+                                                            }
+                                                        </div>
+                                                    </Form.Item>
+                                                    <Form.Item
                                                         label='Бичлэг'
-                                                        // labelCol={{span: 4}}
+                                                        labelCol={{span: 4}}
                                                         className='upload-m'
                                                     >
                                                         <div>
@@ -615,7 +645,7 @@ class LessonEdit extends React.Component {
                         onOk={this.chooseMedia.bind(this)}
                         type={this.state.mediaType}
                         dimension={{width:1200, height: 450}}
-                        forWhat='lesson'
+                        forWhat={this.state.forWhat}
                         onHide={() => this.setState({mediaType: ''})}
                     />
                     :
