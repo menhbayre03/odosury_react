@@ -3,6 +3,7 @@ import Home from "../components/Home";
 import Lesson from "../components/lesson/Lesson";
 import List from "../components/lesson/List";
 import Login from "../components/Login";
+import Bundle from "../components/Bundle";
 import NotFound from "../components/NotFound";
 export default [
     {
@@ -31,6 +32,11 @@ export default [
             {
                 component: List,
                 path: '/lessons/:slug',
+                exact: true
+            },
+            {
+                component: Bundle,
+                path: '/bundle/:slug',
                 exact: true
             },
             {

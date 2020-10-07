@@ -14,6 +14,7 @@ class Lesson extends Component {
         super(props);
         this.state = {
             active: '',
+            activeIndex: '0'
         };
     }
 
@@ -128,16 +129,33 @@ class Lesson extends Component {
                                 <Tabs activeKey={this.state.active}>
                                     <Tab eventKey="timeline" title={<span>Хөтөлбөр<ion-icon name="chevron-down"></ion-icon></span>}>
                                         <div className="timeline-cont">
-                                            <Accordion defaultActiveKey="0">
+                                            <Accordion activeKey={this.state.activeIndex}>
                                                 {
                                                     (lesson.levels || []).map((item, index) => (
                                                         <Card key={index}>
                                                             <Card.Header>
-                                                                <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                                                                <Accordion.Toggle onClick={() => this.setState({activeIndex: this.state.activeIndex === index.toString() ? '' : index.toString()})} as={Button} variant="link" eventKey={index.toString()}>
                                                                     {item.title}
+                                                                    {
+                                                                        this.state.activeIndex == index.toString() ? (
+                                                                            <ion-icon style={{
+                                                                                float: 'right',
+                                                                                fontSize: 24,
+                                                                                position: 'relative',
+                                                                                top: 2,
+                                                                            }} name="chevron-down"/>
+                                                                        ) : (
+                                                                            <ion-icon style={{
+                                                                                float: 'right',
+                                                                                fontSize: 24,
+                                                                                position: 'relative',
+                                                                                top: 2,
+                                                                            }} name="chevron-up"/>
+                                                                        )
+                                                                    }
                                                                 </Accordion.Toggle>
                                                             </Card.Header>
-                                                            <Accordion.Collapse eventKey="0">
+                                                            <Accordion.Collapse eventKey={index.toString()}>
                                                                 <Card.Body>
                                                                     {
                                                                         (item.programs || []).map((program, ind) => (
