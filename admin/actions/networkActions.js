@@ -177,6 +177,7 @@ export function uploadProgressMediaLib(requestActions, data,type, neededData = {
     fd.append('multi', neededData.multi);
     if(type == 'image'){
         neededData.fake_image = window.URL.createObjectURL(data[0]);
+        fd.append('forWhat', neededData.forWhat)
     }
     return dispatch => {
         dispatch(requestMediaLibUploadStart({id: id}, requestActions, type, neededData));
