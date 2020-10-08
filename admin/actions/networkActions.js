@@ -253,87 +253,87 @@ export function requestMediaLibUploadEnd(json,requestParams,type, data) {
     }
 }
 
-export function uploadProgress(requestActions, url, data, type, neededData = {},requestParams = null, header=null) {
-    // let url = `/api/${type}/upload`;
-    let fd = new FormData();
-    let id = Date.now();
-    fd.append('image', data[0]);
-    if(type == 'image'){
-        neededData.fake_image = window.URL.createObjectURL(data[0]);
-    }
-    return dispatch => {
-        dispatch(requestMediaUploadStart({id: id}, requestActions, type, neededData));
-        if (Cookies.get('token') != null) {
-            header = {
-                ...header,
-                token: Cookies.get('token')
-            }
-        }
-        let currentUrl = `${config.get('hostMedia')}/api${url}`;
-        axios.post(currentUrl, fd, {
-            onUploadProgress: progressEvent => {
-                let percent;
-                percent = Math.round(progressEvent.loaded / progressEvent.total * 100);
-                dispatch(requestMediaProgress({id: id, percent: percent}, requestActions, type, neededData));
-            },
-            method: 'post',
-            headers: {
-                ...header,
-                'Accept': 'application/json'
-            },
-            responseType: 'json'
-        })
-            .then(function (response) {
-                if (response.status == 200) {
-                    return response.data;
-                } else {
-                    if (response.status == 401) {
-                        if (config.get('emitter'))
-                            config.get('emitter').emit('auth-error');
-                    }
-                    return {
-                        success: false,
-                        status: response.status
-                    }
-                }
-            })
-            .then(json => {
-                if (!json.success) {
-                    config.get('emitter').emit('error', json.msg);
-                } else if(json.success && json.sucmod){
-                    config.get('emitter').emit('success', json.msg);
-                }
-                dispatch(requestMediaUploadEnd(json, requestActions, type, neededData));
-            })
-            .catch(error => {
-                dispatch(requestMediaUploadEnd({success:false}, requestActions, type, neededData));
-            });
-    }
-}
-export function requestMediaUploadStart(json,requestParams,type, data) {
-    return {
-        type: requestParams.REQUEST,
-        mediaType: type,
-        json,
-        data
-    }
-}
-export function requestMediaProgress(json,requestParams,type, data) {
-    return {
-        type: requestParams.PROGRESS,
-        mediaType: type,
-        json,
-        data
-    }
-}
-export function requestMediaUploadEnd(json,requestParams,type, data) {
-    return {
-        type: requestParams.RESPONSE,
-        mediaType: type,
-        json,
-        data
-    }
-}
+// export function uploadProgress(requestActions, url, data, type, neededData = {},requestParams = null, header=null) {
+//     // let url = `/api/${type}/upload`;
+//     let fd = new FormData();
+//     let id = Date.now();
+//     fd.append('image', data[0]);
+//     if(type == 'image'){
+//         neededData.fake_image = window.URL.createObjectURL(data[0]);
+//     }
+//     return dispatch => {
+//         dispatch(requestMediaUploadStart({id: id}, requestActions, type, neededData));
+//         if (Cookies.get('token') != null) {
+//             header = {
+//                 ...header,
+//                 token: Cookies.get('token')
+//             }
+//         }
+//         let currentUrl = `${config.get('hostMedia')}/api${url}`;
+//         axios.post(currentUrl, fd, {
+//             onUploadProgress: progressEvent => {
+//                 let percent;
+//                 percent = Math.round(progressEvent.loaded / progressEvent.total * 100);
+//                 dispatch(requestMediaProgress({id: id, percent: percent}, requestActions, type, neededData));
+//             },
+//             method: 'post',
+//             headers: {
+//                 ...header,
+//                 'Accept': 'application/json'
+//             },
+//             responseType: 'json'
+//         })
+//             .then(function (response) {
+//                 if (response.status == 200) {
+//                     return response.data;
+//                 } else {
+//                     if (response.status == 401) {
+//                         if (config.get('emitter'))
+//                             config.get('emitter').emit('auth-error');
+//                     }
+//                     return {
+//                         success: false,
+//                         status: response.status
+//                     }
+//                 }
+//             })
+//             .then(json => {
+//                 if (!json.success) {
+//                     config.get('emitter').emit('error', json.msg);
+//                 } else if(json.success && json.sucmod){
+//                     config.get('emitter').emit('success', json.msg);
+//                 }
+//                 dispatch(requestMediaUploadEnd(json, requestActions, type, neededData));
+//             })
+//             .catch(error => {
+//                 dispatch(requestMediaUploadEnd({success:false}, requestActions, type, neededData));
+//             });
+//     }
+// }
+// export function requestMediaUploadStart(json,requestParams,type, data) {
+//     return {
+//         type: requestParams.REQUEST,
+//         mediaType: type,
+//         json,
+//         data
+//     }
+// }
+// export function requestMediaProgress(json,requestParams,type, data) {
+//     return {
+//         type: requestParams.PROGRESS,
+//         mediaType: type,
+//         json,
+//         data
+//     }
+// }
+// export function requestMediaUploadEnd(json,requestParams,type, data) {
+//     return {
+//         type: requestParams.RESPONSE,
+//         mediaType: type,
+//         json,
+//         data
+//     }
+// }
 
 export function requestUploadPostDirect(requestActions,url,header, requestParams = null,files,type=null,threadID = 'main') {
     var data = new FormData();

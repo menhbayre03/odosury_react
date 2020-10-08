@@ -101,12 +101,6 @@ class MediaLib extends React.Component {
             onHide();
         }
     }
-    onFileDrop(file){
-        const {dispatch, type} = this.props;
-        if(file && file.length > 0){
-            dispatch(uploadMedia(file, {type, originalName: file[0].name}));
-        }
-    }
     changeState(e, value){
         if (typeof e === 'string' || e instanceof String) {
             this.setState({ [e]: value});
@@ -330,21 +324,6 @@ class MediaLib extends React.Component {
                             }
                         >
                             <div className={'mediaLists ' + (type != 'image' && type != 'video' ? 'list' : '')}>
-                                {/*<Dropzone className="add-post-image" accept={accept} multiple={false} onDrop={this.onFileDrop.bind(this)}>*/}
-                                {/*    {({getRootProps, getInputProps}) => {*/}
-                                {/*        return (*/}
-                                {/*            <>*/}
-                                {/*                <input {...getInputProps()}  ref={(ref) => this.dropzone = ref} style={{display: 'none'}}/>*/}
-                                {/*                <div  onClick={() => this.dropzone.click()} className={'gridItem'} style={{textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '5px 10px', height: (type == 'image' || type == 'video' ? 123 : 'auto')}}>*/}
-                                {/*                    /!*<ion-icon name="add-outline" style={{color: '#1890ff', fontSize: 25}}></ion-icon>*!/*/}
-                                {/*                    <span style={{color: '#1890ff', fontSize: 25}}>*/}
-                                {/*                        <PlusOutlined />*/}
-                                {/*                    </span>*/}
-                                {/*                </div>*/}
-                                {/*            </>*/}
-                                {/*        );*/}
-                                {/*    }}*/}
-                                {/*</Dropzone>*/}
                                 {
                                     mediaList.map((media) =>
                                         <div key={media._id} className={'gridItem ' + (media.selected ? 'selected' : '')} onClick={this.selectMedia.bind(this, media._id)}>
