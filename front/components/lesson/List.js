@@ -7,6 +7,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import * as actions from '../../actions/lesson_actions';
 import {Link} from "react-router-dom";
 import Select from "react-dropdown-select";
+import Loader from "../include/Loader";
 const reducer = ({ main, lesson }) => ({ main, lesson });
 
 class List extends Component {
@@ -46,7 +47,7 @@ class List extends Component {
     }
 
     render() {
-        const {main: {categories}, lesson: {list}} = this.props;
+        const {main: {categories}, lesson: {list, loading}} = this.props;
         let slug = this.props.match.params.slug;
         return (
             <React.Fragment>
@@ -76,17 +77,19 @@ class List extends Component {
                                         />
                                     </div>
                                     <div className="list-items">
-                                        <Row>
-                                            {
-                                                list.map((item, index) => (
-                                                    <Col md={4} style={{marginBottom: 30}}>
-                                                        <div key={index}>
-                                                            <GridItem item={item}/>
-                                                        </div>
-                                                    </Col>
-                                                ))
-                                            }
-                                        </Row>
+                                        <Loader status={loading}>
+                                            <Row>
+                                                {
+                                                    list.map((item, index) => (
+                                                        <Col md={4} style={{marginBottom: 30}}>
+                                                            <div key={index}>
+                                                                <GridItem item={item}/>
+                                                            </div>
+                                                        </Col>
+                                                    ))
+                                                }
+                                            </Row>
+                                        </Loader>
                                     </div>
                                 </div>
                             </Col>
@@ -107,13 +110,19 @@ class List extends Component {
                                         <div className="side-item">
                                             <p>Ангилал</p>
                                             <ul className="cate">
+                                                <li className={'cate-item'}>
+                                                    <Link to={`/lessons/all`}>
+                                                        {'all' === slug ? <ion-icon name="checkmark"/> : null}
+                                                        <span>Бүгд ({(categories || []).reduce((total, item) => total + ((item || {}).child || []).reduce((total, aa) => total + (aa || {}).count, (item || {}).count), 0)})</span>
+                                                    </Link>
+                                                </li>
                                                 {
                                                     categories.map((item, ida) => (
                                                         item.slug === slug || (item.child || []).some(chd => chd.slug === slug) ? (
                                                             <li key={ida} className={item.slug === slug ? 'cate-item active' : 'cate-item'}>
                                                                 <Link to={`/lessons/${item.slug}`}>
                                                                     {item.slug === slug ? <ion-icon name="checkmark"/> : null}
-                                                                    <span>{item.title} ({item.child.reduce((total, aa) => total + aa.count, item.count)})</span>
+                                                                    <span>{item.title} ({(item.child || []).reduce((total, aa) => total + (aa || {}).count, item.count)})</span>
                                                                 </Link>
                                                                 {
                                                                     item.child && item.child.length > 0 ? (

@@ -8,6 +8,7 @@ import Sticky from 'react-sticky-el';
 import ReactStars from "react-rating-stars-component";
 import config from "../config";
 import GridItem from "./include/GridItem";
+import Select from "react-dropdown-select";
 const reducer = ({ main, bundle }) => ({ main, bundle });
 
 class Bundle extends Component {
@@ -15,7 +16,6 @@ class Bundle extends Component {
         super(props);
         this.state = {
             active: '',
-            activeIndex: '0'
         };
     }
 
@@ -31,56 +31,48 @@ class Bundle extends Component {
             <React.Fragment>
                 <Header location={this.props.location}/>
                 <div className="bundle-single">
-                    <p>haha</p>
-                    <div className="bundle-levels">
-                        <Container>
-                            <Accordion activeKey={this.state.activeIndex}>
+                    <Container>
+                        <div className="bundle-header">
+                            <img src={(bundle.thumbnail || {}).path ? `${config.get('hostMedia')}${bundle.thumbnail.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
+                            <div className="bundle-header-inner">
+                                <span>Багц</span>
+                                <h3>{bundle.title}</h3>
+                                <p>{bundle.description}</p>
+                            </div>
+                        </div>
+                        <div className="bundle-levels">
+                            <Row>
                                 {
                                     (bundle.levels || []).map((item, index) => (
-                                        <Card key={index}>
-                                            <Card.Header>
-                                                <Accordion.Toggle onClick={() => this.setState({activeIndex: this.state.activeIndex === index.toString() ? '' : index.toString()})} as={Button} variant="link" eventKey={index.toString()}>
-                                                    {item.title}
+                                        <div key={index}>
+                                            <div>
+                                                {item.title}
+                                                <ion-icon style={{
+                                                    float: 'right',
+                                                    fontSize: 24,
+                                                    position: 'relative',
+                                                    top: 2,
+                                                }} name="chevron-down"/>
+                                            </div>
+                                            <div className="bundle-body">
+                                                <Row>
                                                     {
-                                                        this.state.activeIndex == index.toString() ? (
-                                                            <ion-icon style={{
-                                                                float: 'right',
-                                                                fontSize: 24,
-                                                                position: 'relative',
-                                                                top: 2,
-                                                            }} name="chevron-down"/>
-                                                        ) : (
-                                                            <ion-icon style={{
-                                                                float: 'right',
-                                                                fontSize: 24,
-                                                                position: 'relative',
-                                                                top: 2,
-                                                            }} name="chevron-up"/>
-                                                        )
+                                                        (item.lessons || []).map((lesson, ind) => (
+                                                            <Col key={ind} md={3} style={{marginBottom: 30}}>
+                                                                <div>
+                                                                    <GridItem item={lesson}/>
+                                                                </div>
+                                                            </Col>
+                                                        ))
                                                     }
-                                                </Accordion.Toggle>
-                                            </Card.Header>
-                                            <Accordion.Collapse eventKey={index.toString()}>
-                                                <Card.Body>
-                                                    <Row>
-                                                        {
-                                                            (item.lessons || []).map((lesson, ind) => (
-                                                                <Col key={ind} md={3} style={{marginBottom: 30}}>
-                                                                    <div>
-                                                                        <GridItem item={lesson}/>
-                                                                    </div>
-                                                                </Col>
-                                                            ))
-                                                        }
-                                                    </Row>
-                                                </Card.Body>
-                                            </Accordion.Collapse>
-                                        </Card>
+                                                </Row>
+                                            </div>
+                                        </div>
                                     ))
                                 }
-                            </Accordion>
-                        </Container>
-                    </div>
+                            </Row>
+                        </div>
+                    </Container>
                 </div>
                 <Footer/>
             </React.Fragment>
