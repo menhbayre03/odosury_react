@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Header from "./include/Header";
 import Footer from "./include/Footer";
 import Loader from "./include/Loader";
@@ -19,7 +20,7 @@ class Home extends Component {
         this.swiperWatching = React.createRef();
     }
     componentDidMount() {
-        window.scroll(0, 0)
+        window.scroll(0, 0);
         const {dispatch} = this.props;
         dispatch(actions.getHome());
     }
@@ -139,13 +140,15 @@ class Home extends Component {
                                 {
                                     bundles.map(item => (
                                         <Col md={3}>
-                                            <div className="bundle-item">
-                                                <img src={(item.thumbnail || {}).path ? `${config.get('hostMedia')}${(item.thumbnail || {}).path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`} className="cover-img"/>
-                                                <div className="bundle-detail">
-                                                    <h4>Web Development</h4>
-                                                    <p className="skill-card-subtitle">{` ${(item.levels || []).length} түвшин  ${(item.levels || []).reduce((total, aa) => total + (aa.lessons || []).length, 0)} хичээл`}</p>
+                                            <Link to={`/bundle/${item.slug}`}>
+                                                <div className="bundle-item">
+                                                    <img src={(item.thumbnail || {}).path ? `${config.get('hostMedia')}${(item.thumbnail || {}).path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`} className="cover-img"/>
+                                                    <div className="bundle-detail">
+                                                        <h4>Web Development</h4>
+                                                        <p className="skill-card-subtitle">{` ${(item.levels || []).length} түвшин  ${(item.levels || []).reduce((total, aa) => total + (aa.lessons || []).length, 0)} хичээл`}</p>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </Link>
                                         </Col>
                                     ))
                                 }
@@ -186,8 +189,8 @@ class Home extends Component {
                                     <Row>
                                         {
                                             featuredLessons.map((item, index) => (
-                                                <Col md={3} style={{marginBottom: 30}}>
-                                                    <div key={index}>
+                                                <Col key={index} md={3} style={{marginBottom: 30}}>
+                                                    <div>
                                                         <GridItem item={item}/>
                                                     </div>
                                                 </Col>
