@@ -1100,6 +1100,7 @@
   }
 }
 .bundle-single {
+  min-height: calc(100vh - 185px);
   .bundle-header {
     display: flex;
     margin-top: 50px;
@@ -1160,5 +1161,144 @@
       color: #797979;
       font-size: 12px;
     }
+  }
+}
+.view-area {
+  height: 100vh;
+  width: 100%;
+  top: 0;
+  position: relative;
+  .sidebar {
+    position: fixed !important;
+    height: 100vh;
+    left: 0;
+    background: #fff;
+    -webkit-transition: width 0.3s, opacity 0.3s, visibility 0.3s;
+    -moz-transition: width 0.3s, opacity 0.3s, visibility 0.3s;
+    -ms-transition: width 0.3s, opacity 0.3s, visibility 0.3s;
+    -o-transition: width 0.3s, opacity 0.3s, visibility 0.3s;
+    h4 {
+      color: #fff;
+      padding: 10px 20px;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 0;
+      background: #404265;
+    }
+    .timeline-cont {
+      .accordion {
+        .card {
+          -webkit-border-radius: 0;
+          -moz-border-radius: 0;
+          border-radius: 0;
+          border: none;
+          border-bottom: 1px solid #e5e5f1;
+          .card-header {
+            border: none;
+            background: #fff;
+            padding: 0;
+            button {
+              width: 100%;
+              padding: 15px 20px;
+              text-align: left;
+              font-size: 16px;
+              font-weight: 600;
+              color: #404040;
+              text-decoration: none;
+              outline: none;
+            }
+          }
+          .card-body {
+            background: #f8fbff;
+            padding: 0;
+            .program {
+              position: relative;
+              align-items: center;
+              justify-content: flex-start;
+              display: flex;
+              padding: 15px;
+              cursor: pointer;
+              ion-icon {
+                color: #4f4f4f;
+                font-size: 18px;
+                margin-right: 10px;
+                position: relative;
+                top: 0;
+                background: #ddd;
+                border-radius: 30px;
+                padding: 5px 5px;
+              }
+              p {
+                display: inline-block;
+                font-size: 14px;
+                font-weight: 600;
+                color: #8e8e8e;
+                width: calc(100% - 90px);
+                margin-bottom: 0;
+              }
+              span {
+                color: #989898;
+                font-size: 10px;
+                font-weight: 500;
+                text-align: right;
+                width: 60px;
+              }
+            }
+            .program.passed {
+              ion-icon {
+                color: #fff;
+                background: #62d76b;
+              }
+              p {
+                color: #666;
+              }
+            }
+            .program:before {
+              width: 1px;
+              height: 16px;
+              top: 0;
+              content: "";
+              left: 29px;
+              position: absolute;
+              background: #ddd;
+            }
+            .program:after {
+              width: 1px;
+              height: 16px;
+              bottom: 0;
+              content: "";
+              left: 29px;
+              position: absolute;
+              background: #ddd;
+            }
+            .program.passed:before {
+              background: #62d76b;
+            }
+            .program.passed:after {
+              background: #62d76b;
+            }
+            //.program.passed.next-passed:after {
+            //  background: #62d76b;
+            //}
+            .program:last-child:after {
+              display: none;
+            }
+            .program:first-child:before {
+              display: none;
+            }
+            .program.current {
+              background: #c5daf5;
+            }
+          }
+        }
+      }
+    }
+  }
+  .view-cont {
+    min-height: 100vh;
+    -webkit-transition: margin-left 0.3s;
+    -moz-transition: margin-left 0.3s;
+    -ms-transition: margin-left 0.3s;
+    -o-transition: margin-left 0.3s;
   }
 }
