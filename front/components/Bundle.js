@@ -40,37 +40,54 @@ class Bundle extends Component {
                                 <p>{bundle.description}</p>
                             </div>
                         </div>
+                        <div className="price">
+                            {
+                                bundle.sale > 0 ? (
+                                    <div style={{
+                                        alignItems: 'center',
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        justifyContent: 'flex-start'
+                                    }}>
+                                        <span style={{fontSize: 18, color: '#909090', display: 'block', fontWeight: 600 , textDecoration: 'line-through', marginRight: 15}}>{config.formatMoney(bundle.price)}₮</span>
+                                        <span style={{fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{config.formatMoney(bundle.sale)}₮</span>
+                                    </div>
+                                ) : (
+                                    <div style={{
+                                        alignItems: 'center',
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        justifyContent: 'flex-start'
+                                    }}>
+                                        <span style={{fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{config.formatMoney(bundle.price)}₮</span>
+                                    </div>
+                                )
+                            }
+                            <p>Доорхи хичээлүүд бүгд багтсан үнэ болно.</p>
+                        </div>
                         <div className="bundle-levels">
-                            <Row>
-                                {
-                                    (bundle.levels || []).map((item, index) => (
-                                        <div key={index}>
-                                            <div>
-                                                {item.title}
-                                                <ion-icon style={{
-                                                    float: 'right',
-                                                    fontSize: 24,
-                                                    position: 'relative',
-                                                    top: 2,
-                                                }} name="chevron-down"/>
-                                            </div>
-                                            <div className="bundle-body">
-                                                <Row>
-                                                    {
-                                                        (item.lessons || []).map((lesson, ind) => (
-                                                            <Col key={ind} md={3} style={{marginBottom: 30}}>
-                                                                <div>
-                                                                    <GridItem item={lesson}/>
-                                                                </div>
-                                                            </Col>
-                                                        ))
-                                                    }
-                                                </Row>
-                                            </div>
+                            {
+                                (bundle.levels || []).map((item, index) => (
+                                    <div className="bundle-item" key={index}>
+                                        <h4>
+                                            {item.title}
+                                            <ion-icon name="chevron-down"/>
+                                        </h4>
+                                        <p>{bundle.description}</p>
+                                        <div className="bundle-body">
+                                            <Row>
+                                                {
+                                                    (item.lessons || []).map((lesson, ind) => (
+                                                        <Col key={ind} md={3} style={{marginBottom: 30}}>
+                                                            <GridItem item={lesson}/>
+                                                        </Col>
+                                                    ))
+                                                }
+                                            </Row>
                                         </div>
-                                    ))
-                                }
-                            </Row>
+                                    </div>
+                                ))
+                            }
                         </div>
                     </Container>
                 </div>
