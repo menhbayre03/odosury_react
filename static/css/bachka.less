@@ -1180,7 +1180,7 @@
     h4 {
       color: #fff;
       padding: 10px 20px;
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 700;
       margin-bottom: 0;
       background: #404265;
@@ -1300,5 +1300,52 @@
     -moz-transition: margin-left 0.3s;
     -ms-transition: margin-left 0.3s;
     -o-transition: margin-left 0.3s;
+    .view-header {
+      background: #f8fbff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 20px;
+      flex-direction: row;
+      align-content: center;
+      ion-icon {
+        font-size: 24px;
+        cursor: pointer;
+        color: #404265;
+      }
+      h5 {
+        color: #404265;
+        font-size: 16px;
+        font-weight: 700;
+        margin: 0;
+        position: relative;
+        padding-right: 30px;
+      }
+    }
+    .program-cont {
+      padding: 40px 30px;
+      h6.tit {
+        font-size: 20px;
+        font-weight: 700;
+        text-align: center;
+      }
+      .content-prog {
+        img {
+          max-width: 100%;
+        }
+      }
+    }
+    .program-cont.video {
+      padding: 0;
+      .react-player__preview{
+        //height: 420px !important;
+      }
+      video {
+        border: none;
+        outline: none;
+        box-shadow: none;
+        background: #292929;
+      }
+    }
   }
 }

@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { Container, Row, Col, Button, Tabs, Tab, Accordion, Card } from "react-bootstrap";
+import { Button, Accordion, Card } from "react-bootstrap";
 import { Scrollbars } from 'react-custom-scrollbars';
 import * as actions from '../../actions/lesson_actions';
+import Cookies from "js-cookie";
+import ReactPlayer from "react-player";
 import config from "../../config";
-import GridItem from "../include/GridItem";
-import Select from "react-dropdown-select";
 import Loader from "../include/Loader";
 const reducer = ({ main, lesson }) => ({ main, lesson });
 
@@ -32,7 +32,11 @@ class Bundle extends Component {
 
     render() {
         const {main: {user}, lesson: {lessonView, loadingView}} = this.props;
-        console.log(this.state.program)
+        const {program} = this.state;
+        let mediaUrl = '';
+        if(program.video) {
+            mediaUrl = "http://cdn.odosury.mn/api/video/show/"+program.video._id+'?lessonId='+lessonView._id+'&token='+Cookies.get('token');
+        }
         return (
             <React.Fragment>
                 <div className="view-area">
@@ -115,13 +119,56 @@ class Bundle extends Component {
                                         <ion-icon name="menu-outline" onClick={() => this.setState({collapse: true})}/>
                                     )
                                 }
-                                <h5>{lessonView.title}</h5>
+                                <h5>
+                                    {lessonView.title}
+                                    <ion-icon name="close" style={{
+                                        position: 'absolute',
+                                        top: -3,
+                                        right: -10,
+                                    }} onClick={() => this.props.history.push(`/lesson/${lessonView.slug}`)}/>
+                                </h5>
                             </div>
-                            <div className="program-cont">
+                            <div className={`program-cont ${program.type === 'video' ? 'video' : ''}`}>
                                 {
-                                    this.state.program._id ? (
+                                    program._id ? (
                                         <div>
-                                            <p>{this.state.program.title}</p>
+                                            {
+                                                program.type === 'video' ? null : (
+                                                    <h6 className="tit">{program.title}</h6>
+                                                )
+                                            }
+                                            {
+                                                program.content ? (
+                                                    <div className="content-prog" dangerouslySetInnerHTML={{__html : program.content}}/>
+                                                ) : null
+                                            }
+                                            {
+                                                program.video && mediaUrl && program.type === 'video' ? (
+                                                    <ReactPlayer
+                                                        playing
+                                                        onError={() => config.get('emitter').emit('warning', 'Хандах эрх хүрэхгүй байна.')}
+                                                        controls
+                                                        light={`${program.video.url}${program.video.thumbnail}`}
+                                                        autoPlay={false}
+                                                        height={560}
+                                                        playIcon={<ion-icon style={{fontSize: 74, color: '#fff'}} name="play-circle"/>}
+                                                        width={"100%"}
+                                                        url={mediaUrl}
+                                                        config={{
+                                                            file: {
+                                                                attributes: {
+                                                                    controlsList : "nodownload"
+                                                                }
+                                                            }
+                                                        }}
+                                                    />
+                                                ) : null
+                                            }
+                                            {
+                                                program.type === 'video' ? (
+                                                    <h6 className="tit" style={{marginTop: 20}}>{program.title}</h6>
+                                                ) : null
+                                            }
                                         </div>
                                     ) : (
                                         <p>haha</p>
