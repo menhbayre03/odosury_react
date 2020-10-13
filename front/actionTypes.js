@@ -26,6 +26,10 @@ export const lessonRemoveFromCard = {
     REQUEST:'lessonRemoveFromCard_REQ',
     RESPONSE:'lessonRemoveFromCard_RES'
 };
+export const getViewArea = {
+    REQUEST:'FETCH_GET_LESSOINVIEW_REQUEST',
+    RESPONSE:'FETCH_GET_LESSOINVIEW_RESPONSE'
+};
 export const getBundle = {
     REQUEST:'FETCH_GET_BUNDLESINGLE_REQUEST',
     RESPONSE:'FETCH_GET_BUNDLESINGLE_RESPONSE'

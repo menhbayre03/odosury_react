@@ -2,6 +2,7 @@ import Main from "../components/Main";
 import Home from "../components/Home";
 import Lesson from "../components/lesson/Lesson";
 import List from "../components/lesson/List";
+import ViewArea from "../components/lesson/ViewArea";
 import Login from "../components/Login";
 import Bundle from "../components/Bundle";
 import NotFound from "../components/NotFound";
@@ -33,6 +34,11 @@ export default [
             {
                 component: List,
                 path: '/lessons/:slug',
+                exact: true
+            },
+            {
+                component: ViewArea,
+                path: '/lesson/view/:slug',
                 exact: true
             },
             {

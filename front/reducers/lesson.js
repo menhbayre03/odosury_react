@@ -2,7 +2,8 @@ import {
     getList,
     getLesson,
     lessonAddToCard,
-    lessonRemoveFromCard
+    lessonRemoveFromCard,
+    getViewArea
 } from "../actionTypes";
 const initialState = {
     loading: 1,
@@ -10,6 +11,8 @@ const initialState = {
     rating: 0,
     lessonLoading: 1,
     lesson: {},
+    lessonView: {},
+    loadingView: 1,
     addingToCard: false,
     removingFromCard: false,
 };
@@ -59,6 +62,25 @@ export default(state = initialState, action) => {
                     lesson: {},
                     rating: 0,
                     lessonLoading:2
+                };
+            }
+        case getViewArea.REQUEST:
+            return {
+                ...state,
+                loadingView:1
+            };
+        case getViewArea.RESPONSE:
+            if(action.json.success) {
+                return {
+                    ...state,
+                    lessonView: action.json.lesson || {},
+                    loadingView:0
+                };
+            } else {
+                return {
+                    ...state,
+                    lessonView: {},
+                    loadingView:2
                 };
             }
         case lessonAddToCard.REQUEST:

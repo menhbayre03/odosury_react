@@ -390,6 +390,7 @@ class LessonLevels extends React.Component {
                             title="Хөтөлбөр"
                             visible={openModalLevelTimline}
                             confirmLoading={timelineSubmitLoader}
+                            size="lg"
                             onOk={this.submitTimeline.bind(this)}
                             onCancel={this.closeModalLevelTimline.bind(this)}
                             okText="Хадгалах"
@@ -497,7 +498,7 @@ class LessonLevels extends React.Component {
                                                         this.editor = ref;
                                                     }}
                                                     apiKey='xo6szqntkvg39zc2iafs9skjrw8s20sm44m28p3klgjo26y3'
-                                                    height="350px"
+                                                    height="500px"
                                                     value={timeline.content}
                                                     init={{
                                                         height: "350px",
