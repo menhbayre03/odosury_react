@@ -1,6 +1,8 @@
 import {
     setCardTypes,
     getQpay,
+    setBank,
+    payByBank,
     lessonAddToCard,
     lessonRemoveFromCard,
 } from "../actionTypes";
@@ -8,7 +10,8 @@ const initialState = {
     type: '',
     step: 1,
     qpay: {},
-    purchase: []
+    purchase: [],
+    bankPaying: false
 };
 
 export default(state = initialState, action) => {
@@ -40,6 +43,27 @@ export default(state = initialState, action) => {
                 ...state,
                 qpay: action.json.body || {},
                 purchase: [...state.purchase, (action.json.purchase || {})],
+            };
+        case setBank.REQUEST:
+            return {
+                ...state,
+                step: 3,
+                type: 'b',
+            };
+        case setBank.RESPONSE:
+            return {
+                ...state,
+                purchase: [...state.purchase, (action.json.purchase || {})],
+            };
+        case payByBank.REQUEST:
+            return {
+                ...state,
+                bankPaying: true
+            };
+        case payByBank.RESPONSE:
+            return {
+                ...state,
+                bankPaying: false
             };
         default:
             return state;
