@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Header from "../include/Header";
 import Footer from "../include/Footer";
 import { Container, Row, Col, Button, Tabs, Tab, Accordion, Card, Spinner } from "react-bootstrap";
@@ -64,7 +65,7 @@ class Lesson extends Component {
                                                             top: 4,
                                                             fontSize: 19,
                                                             marginRight: 5,
-                                                        }} name="people-outline"/> 32 Судалсан</span>
+                                                        }} name="people-outline"/> {(lesson.progress || []).length} Судалсан</span>
                                                     </div>
                                                 </div>
                                                 <div className="tab-menu">
@@ -79,54 +80,66 @@ class Lesson extends Component {
                                                 <Sticky className={'stacka'} onFixedToggle={(e) => this.setState({fixed: e})} topOffset={-90} stickyStyle={{top: 90}}>
                                                     <div className="sticky-side">
                                                         <img src={(lesson.video || {}).thumbnail ? `${config.get('hostMedia')}${lesson.video.thumbnail}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
-                                                        <div className="inner">
-                                                            {
-                                                                lesson.sale > 0 ? (
-                                                                    <div style={{
-                                                                        textAlign: 'right',
-                                                                        height: 43,
-                                                                        alignItems: 'center',
-                                                                        display: 'flex',
-                                                                        flexDirection: 'row',
-                                                                        justifyContent: 'flex-end',
-                                                                    }}>
-                                                                        <span style={{fontSize: 18, color: '#909090', display: 'block', fontWeight: 600 , textDecoration: 'line-through'}}>{config.formatMoney(lesson.price)}₮</span>
-                                                                        <span style={{marginLeft: 15,fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{config.formatMoney(lesson.sale)}₮</span>
-                                                                    </div>
-                                                                ) : (
-                                                                    <div style={{
-                                                                        textAlign: 'right',
-                                                                        height: 43,
-                                                                        alignItems: 'flex-end',
-                                                                        display: 'flex',
-                                                                        flexDirection: 'column',
-                                                                        justifyContent: 'flex-end'
-                                                                    }}>
-                                                                        <span style={{fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{config.formatMoney(lesson.price)}₮</span>
-                                                                    </div>
-                                                                )
-                                                            }
-                                                            <Button
-                                                                disabled={addingToCard || removingFromCard}
-                                                                variant="primary"
-                                                                onClick={() =>
-                                                                    hadInCard ?
-                                                                        (removingFromCard ? false : dispatch(actions.removeFromCard({_id: lesson._id})))
-                                                                    :
-                                                                        (addingToCard ? false : dispatch(actions.addToCard({_id: lesson._id})))
-                                                                }
-                                                            >
-                                                                {
-                                                                    addingToCard || removingFromCard ?
-                                                                        <Spinner variant={'light'} animation={'border'} size={'sm'}/>
-                                                                    :
-                                                                        <ion-icon name={hadInCard ? "trash-outline" : "cart-outline"}/>
-                                                                } {hadInCard ? "Сагснаас хасах" : "Сагслах"}
-                                                            </Button>
-                                                            <Button variant="secondary">
-                                                                <ion-icon name="heart" /> Хадгалах
-                                                            </Button>
-                                                        </div>
+                                                        {
+                                                            lesson.paid ? (
+                                                                <div className="inner">
+                                                                    <Link to={`/lesson/view/${lesson.slug}`}>
+                                                                        <Button variant="secondary">
+                                                                            <ion-icon name="play" /> Үзэх
+                                                                        </Button>
+                                                                    </Link>
+                                                                </div>
+                                                            ) : (
+                                                                <div className="inner">
+                                                                    {
+                                                                        lesson.sale > 0 ? (
+                                                                            <div style={{
+                                                                                textAlign: 'right',
+                                                                                height: 43,
+                                                                                alignItems: 'center',
+                                                                                display: 'flex',
+                                                                                flexDirection: 'row',
+                                                                                justifyContent: 'flex-end',
+                                                                            }}>
+                                                                                <span style={{fontSize: 18, color: '#909090', display: 'block', fontWeight: 600 , textDecoration: 'line-through'}}>{config.formatMoney(lesson.price)}₮</span>
+                                                                                <span style={{marginLeft: 15,fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{config.formatMoney(lesson.sale)}₮</span>
+                                                                            </div>
+                                                                        ) : (
+                                                                            <div style={{
+                                                                                textAlign: 'right',
+                                                                                height: 43,
+                                                                                alignItems: 'flex-end',
+                                                                                display: 'flex',
+                                                                                flexDirection: 'column',
+                                                                                justifyContent: 'flex-end'
+                                                                            }}>
+                                                                                <span style={{fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{config.formatMoney(lesson.price)}₮</span>
+                                                                            </div>
+                                                                        )
+                                                                    }
+                                                                    <Button
+                                                                        disabled={addingToCard || removingFromCard}
+                                                                        variant="primary"
+                                                                        onClick={() =>
+                                                                            hadInCard ?
+                                                                                (removingFromCard ? false : dispatch(actions.removeFromCard({_id: lesson._id})))
+                                                                                :
+                                                                                (addingToCard ? false : dispatch(actions.addToCard({_id: lesson._id})))
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            addingToCard || removingFromCard ?
+                                                                                <Spinner variant={'light'} animation={'border'} size={'sm'}/>
+                                                                                :
+                                                                                <ion-icon name={hadInCard ? "trash-outline" : "cart-outline"}/>
+                                                                        } {hadInCard ? "Сагснаас хасах" : "Сагслах"}
+                                                                    </Button>
+                                                                    <Button variant="secondary">
+                                                                        <ion-icon name="heart" /> Хадгалах
+                                                                    </Button>
+                                                                </div>
+                                                            )
+                                                        }
                                                     </div>
                                                 </Sticky>
                                             </div>
