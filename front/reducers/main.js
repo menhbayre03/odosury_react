@@ -1,6 +1,7 @@
 import {
     lessonAddToCard,
     lessonRemoveFromCard,
+    payByBank,
 } from "../actionTypes";
 
 const initialState = {
@@ -34,6 +35,15 @@ export default(state = initialState, action) => {
               ...state,
               user: action.json.user || {
                   ...state.user
+              }
+            };
+        case payByBank.RESPONSE:
+            return {
+              ...state,
+              user: {
+                  ...state.user,
+                  bundles: [],
+                  lessons: []
               }
             };
         default:

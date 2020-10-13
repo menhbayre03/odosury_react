@@ -42,6 +42,14 @@ export const payByBank = {
     REQUEST:'payByBank_REQ',
     RESPONSE:'payByBank_RES'
 };
+export const setBank = {
+    REQUEST:'setBank_REQ',
+    RESPONSE:'setBank_RES'
+};
+export const checkQpay = {
+    REQUEST:'checkQpay_REQ',
+    RESPONSE:'checkQpay_RES'
+};
 export const setCardTypes = {
     REQUEST:'setCardTypes_REQ'
 };

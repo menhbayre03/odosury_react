@@ -72,7 +72,7 @@ class CardPage extends React.Component {
                                     >
                                         qpay
                                     </button>
-                                    <button onClick={() => dispatch(actions.payByBank({amount: (bundlesPrice + lessonsPrice)}))}>bank</button>
+                                    <button onClick={() => dispatch(actions.setBank({amount: (bundlesPrice + lessonsPrice)}))}>bank</button>
                                 </div>
                                 <button onClick={() => dispatch(actions.setCardTypes({step: 1, type: type}))}>list ee harii</button>
                             </div>
@@ -82,6 +82,14 @@ class CardPage extends React.Component {
                                     step sister
                                 </p>
                                 <button onClick={() => dispatch(actions.setCardTypes({step: 2, type: type}))}>mother lvv ywii</button>
+                                {
+                                    type === 'b' &&
+                                    <button onClick={() => dispatch(actions.payByBank({step: 2, type: type}))}>Bankaar tulhiig batlah</button>
+                                }
+                                {
+                                    type === 'q' && qpay.payment_id &&
+                                    <button onClick={() => dispatch(actions.checkQpay({c: qpay.payment_id}))}>qpay gvilgee shalgah</button>
+                                }
                             </div>
                         : null
                     }
