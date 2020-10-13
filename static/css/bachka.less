@@ -96,12 +96,14 @@
       }
     }
     .section-2 {
-       display: inherit;
+      display: flex;
+      justify-content: space-between;
       .section-1-1 {
         display: inline-block;
         position: relative;
-        width: 100%;
+        width: calc(100% - 127px);
         margin-left: 15px;
+        margin-right: 15px;
         ion-icon {
           font-size: 18px;
           position: absolute;
@@ -154,12 +156,36 @@
           }
         }
       }
-      ion-icon {
-        color: #fff;
-        font-size: 31px;
-        margin-left: 25px;
-        margin-right: 10px;
-        position: relative;
+      .user-menu {
+        display: flex;
+        align-items: center;
+        a {
+          margin-right: 0;
+          font-weight: 600;
+          font-size: 13px;
+          color: #fff;
+          span {
+            background: #ffdc74;
+            border-radius: 10px;
+            font-size: 8px;
+            color: #272840;
+            text-align: center;
+            line-height: 11px;
+            position: absolute;
+            padding: 0 2px;
+            top: -2px;
+            right: -5px;
+            min-width: 11px;
+          }
+          ion-icon {
+            color: #fff;
+            font-size: 16px;
+            margin-left: 5px;
+            margin-right: 0;
+            position: relative;
+            top: 3px;
+          }
+        }
       }
     }
   }
@@ -182,6 +208,9 @@
           font-size: 12px;
         }
       }
+      li:first-child {
+        padding-left: 0;
+      }
     }
   }
   .section-2 {
@@ -203,6 +232,7 @@
       }
       li:last-child {
         border-right: 0;
+        padding-right: 0;
       }
     }
   }
@@ -232,6 +262,10 @@
     border-radius: 0.09375in;
     background-color: #fff;
     position: relative;
+    -webkit-transition: 0.3s;
+    -moz-transition: 0.3s;
+    -ms-transition: 0.3s;
+    -o-transition: 0.3s;
     img {
       box-shadow: 0 2.25pt 8.25pt -0.02083333in rgba(0, 0, 0, 0.33);
       margin-top: -0.6pc;
@@ -247,6 +281,7 @@
         font-size: 16px;
         font-weight: 600;
         margin-top: 12px;
+        color: #3e416d;
       }
       p {
         margin-bottom: 0;
@@ -255,6 +290,9 @@
         color: #757575;
       }
     }
+  }
+  .bundle-item:hover {
+    box-shadow: -7.5pt 10px 14px -0.09375in rgba(25, 42, 70, 0.45);
   }
 }
 .home-hero {
@@ -433,6 +471,9 @@
         font-size: 15px;
       }
     }
+  }
+  .grid-item-box:hover {
+    box-shadow: -7.5pt 0.625pc 0.145833333in -9px rgba(25,42,70,.3);
   }
 }
 .grid-item.watching {

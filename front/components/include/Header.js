@@ -73,7 +73,10 @@ class Header extends Component {
                                 </div>
                                 {
                                     user ? (
-                                        <a href="/logout">garah</a>
+                                        <div className="user-menu">
+                                            <a href="/cart" style={{marginRight: 10, position: 'relative'}}><span>4</span><ion-icon name="basket"/></a>
+                                            <a href="/logout">{user.username}<ion-icon name="person"/></a>
+                                        </div>
                                     ) : (
                                         <Link to="/login">
                                             <span style={{
@@ -112,20 +115,15 @@ class Header extends Component {
                             <div className="header-menu">
                                 <ul>
                                     <li>
-                                        <Link to={'#'}>
-                                            Багцууд
-                                        </Link>
-                                    </li>
-                                    <li>
                                         <Link to={`/lessons/all`}>
                                             Хичээлүүд
                                         </Link>
                                     </li>
-                                    <li>
-                                        <Link to={'#'}>
-                                            Заавар
-                                        </Link>
-                                    </li>
+                                    {/*<li>*/}
+                                    {/*    <Link to={'#'}>*/}
+                                    {/*        Заавар*/}
+                                    {/*    </Link>*/}
+                                    {/*</li>*/}
                                     <li>
                                         <Link to={'#'}>
                                             Холбоо барих
