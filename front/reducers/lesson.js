@@ -1,6 +1,8 @@
 import {
     getList,
-    getLesson
+    getLesson,
+    lessonAddToCard,
+    lessonRemoveFromCard
 } from "../actionTypes";
 const initialState = {
     loading: 1,
@@ -8,6 +10,8 @@ const initialState = {
     rating: 0,
     lessonLoading: 1,
     lesson: {},
+    addingToCard: false,
+    removingFromCard: false,
 };
 
 export default(state = initialState, action) => {
@@ -57,6 +61,26 @@ export default(state = initialState, action) => {
                     lessonLoading:2
                 };
             }
+        case lessonAddToCard.REQUEST:
+            return {
+                ...state,
+                addingToCard: true
+            };
+        case lessonAddToCard.RESPONSE:
+            return {
+                ...state,
+                addingToCard: false
+            };
+        case lessonRemoveFromCard.REQUEST:
+            return {
+                ...state,
+                removingFromCard: true
+            };
+        case lessonRemoveFromCard.RESPONSE:
+            return {
+                ...state,
+                removingFromCard: false
+            };
         default:
             return state;
     }

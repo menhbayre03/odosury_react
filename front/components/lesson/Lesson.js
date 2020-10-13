@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import Header from "../include/Header";
 import Footer from "../include/Footer";
-import { Container, Row, Col, Button, Tabs, Tab, Accordion, Card } from "react-bootstrap";
+import { Container, Row, Col, Button, Tabs, Tab, Accordion, Card, Spinner } from "react-bootstrap";
 import * as actions from '../../actions/lesson_actions';
 import Sticky from 'react-sticky-el';
 import ReactStars from "react-rating-stars-component";
@@ -25,9 +25,9 @@ class Lesson extends Component {
         this.setState({active: 'overview'});
         dispatch(actions.getLesson(match.params.slug));
     }
-
     render() {
-        const {main: {user}, lesson: {lesson, rating, lessonLoading}} = this.props;
+        const {main: {user}, lesson: {lesson, rating, lessonLoading, addingToCard, removingFromCard}, dispatch} = this.props;
+        let hadInCard = (user.lessons || []).some(ls => ls._id === lesson._id);
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
@@ -106,11 +106,25 @@ class Lesson extends Component {
                                                                     </div>
                                                                 )
                                                             }
-                                                            <Button variant="primary">
-                                                                <ion-icon name="wallet"></ion-icon> Худалдаж авах
+                                                            <Button
+                                                                disabled={addingToCard || removingFromCard}
+                                                                variant="primary"
+                                                                onClick={() =>
+                                                                    hadInCard ?
+                                                                        (removingFromCard ? false : dispatch(actions.removeFromCard({_id: lesson._id})))
+                                                                    :
+                                                                        (addingToCard ? false : dispatch(actions.addToCard({_id: lesson._id})))
+                                                                }
+                                                            >
+                                                                {
+                                                                    addingToCard || removingFromCard ?
+                                                                        <Spinner variant={'light'} animation={'border'} size={'sm'}/>
+                                                                    :
+                                                                        <ion-icon name={hadInCard ? "trash-outline" : "cart-outline"}/>
+                                                                } {hadInCard ? "Сагснаас хасах" : "Сагслах"}
                                                             </Button>
                                                             <Button variant="secondary">
-                                                                <ion-icon name="heart"></ion-icon> Хадгалах
+                                                                <ion-icon name="heart" /> Хадгалах
                                                             </Button>
                                                         </div>
                                                     </div>

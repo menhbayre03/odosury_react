@@ -5,6 +5,7 @@ import List from "../components/lesson/List";
 import Login from "../components/Login";
 import Bundle from "../components/Bundle";
 import NotFound from "../components/NotFound";
+import Card from '../components/card';
 export default [
     {
         component: Main,
@@ -37,6 +38,11 @@ export default [
             {
                 component: Bundle,
                 path: '/bundle/:slug',
+                exact: true
+            },
+            {
+                component: Card,
+                path: '/card',
                 exact: true
             },
             {

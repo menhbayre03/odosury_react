@@ -112,6 +112,11 @@ class Header extends Component {
                             <div className="header-menu">
                                 <ul>
                                     <li>
+                                        <Link to={'/card'}>
+                                            Сагс
+                                        </Link>
+                                    </li>
+                                    <li>
                                         <Link to={'#'}>
                                             Багцууд
                                         </Link>
