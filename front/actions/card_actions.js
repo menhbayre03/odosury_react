@@ -11,3 +11,7 @@ export function getQpay(data){
     let url = `/api/get/qpay`;
     return networkActions.requestPost(constants.getQpay, url, data);
 }
+export function payByBank(data){
+    let url = `/api/set/bank`;
+    return networkActions.requestPost(constants.payByBank, url, data);
+}

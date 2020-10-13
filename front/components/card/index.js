@@ -68,16 +68,11 @@ class CardPage extends React.Component {
                                 <div>
                                     <p>sisterlvv yaaj ywhaa songii</p>
                                     <button
-                                        onClick={() =>
-                                            qpay.qPay_QRcode && qpay.payment_id ?
-                                                dispatch(actions.getQpay({amount: (bundlesPrice + lessonsPrice)}))
-                                            :
-                                                dispatch(actions.setCardTypes({step: 3, type: 'q'}))
-                                        }
+                                        onClick={() => dispatch(actions.getQpay({amount: (bundlesPrice + lessonsPrice)}))}
                                     >
                                         qpay
                                     </button>
-                                    <button onClick={() => dispatch(actions.setCardTypes({step: 3, type: 'b'}))}>bank</button>
+                                    <button onClick={() => dispatch(actions.payByBank({amount: (bundlesPrice + lessonsPrice)}))}>bank</button>
                                 </div>
                                 <button onClick={() => dispatch(actions.setCardTypes({step: 1, type: type}))}>list ee harii</button>
                             </div>

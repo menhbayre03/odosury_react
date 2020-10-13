@@ -1,6 +1,8 @@
 import {
     setCardTypes,
     getQpay,
+    lessonAddToCard,
+    lessonRemoveFromCard,
 } from "../actionTypes";
 const initialState = {
     type: '',
@@ -11,6 +13,16 @@ const initialState = {
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case lessonAddToCard.RESPONSE:
+            return {
+                ...state,
+                qpay: {},
+            };
+        case lessonRemoveFromCard.RESPONSE:
+            return {
+                ...state,
+                qpay: {},
+            };
         case setCardTypes.REQUEST:
             return {
                 ...state,
