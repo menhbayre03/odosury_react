@@ -38,6 +38,10 @@ export const getQpay = {
     REQUEST:'getQpay_REQ',
     RESPONSE:'getQpay_RES'
 };
+export const payByBank = {
+    REQUEST:'payByBank_REQ',
+    RESPONSE:'payByBank_RES'
+};
 export const setCardTypes = {
     REQUEST:'setCardTypes_REQ'
 };
