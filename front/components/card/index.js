@@ -7,6 +7,7 @@ import { removeFromCard } from '../../actions/lesson_actions';
 import * as actions from '../../actions/card_actions';
 import { Row, Col } from 'react-bootstrap';
 import NumberFormat from 'react-number-format';
+import QRCode from "react-qr-code";
 const reducer = ({ main, card }) => ({ main, card });
 
 class CardPage extends React.Component {
@@ -24,12 +25,12 @@ class CardPage extends React.Component {
     }
     render() {
         const {
-            main: { user },
-            card: { step, type, qpay },
+            main: { user = {} },
+            card: { step, type, qpay = {} },
             dispatch
         } = this.props;
-        let bundles = (user.bundles || []);
-        let lessons = (user.lessons || []);
+        let bundles = ((user || {}).bundles || []);
+        let lessons = ((user || {}).lessons || []);
         let lessonsPrice = lessons.reduce((total, c) => total + (c.sale ? c.sale : c.price), 0) || 0;
         let bundlesPrice = bundles.reduce((total, c) => total + (c.sale ? c.sale : c.price), 0) || 0;
         return (
@@ -81,6 +82,11 @@ class CardPage extends React.Component {
                                 <p>
                                     step sister
                                 </p>
+                                {
+                                    type === 'q' && qpay.qPay_QRcode ?
+                                        <QRCode value={qpay.qPay_QRcode} />
+                                    : null
+                                }
                                 <button onClick={() => dispatch(actions.setCardTypes({step: 2, type: type}))}>mother lvv ywii</button>
                                 {
                                     type === 'b' &&

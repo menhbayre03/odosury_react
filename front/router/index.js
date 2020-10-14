@@ -13,12 +13,16 @@ import 'react-photoswipe/lib/photoswipe.css';
 import "react-datepicker/dist/react-datepicker.css";
 import 'swiper/swiper.less'
 require("../../static/css/front.less");
+import io from "socket.io-client";
+import * as actions from "../actions/card_actions";
+const socket = io('http://odosury.mn:8021', {path:'/api/socket',transports:['websocket']});
 
 const reducer = ({ main }) => ({ main });
 
 class index extends React.Component{
     constructor(props){
         super(props);
+        this.socket = socket;
     }
 
     componentDidMount() {
@@ -89,6 +93,13 @@ class index extends React.Component{
         this.not_found = config.get('emitter').addListener('not-found',function(){
             window.location.assign("/not-found");
         });
+        if(((this.props.main || {}).user || {})._id){
+            this.socket.on('odosuryphk', (data) => {
+                if(data.payment_id && (data.user === ((this.props.main || {}).user || {})._id)){
+                    this.props.dispatch(actions.checkQpay({c: data.payment_id}))
+                }
+            })
+        }
     }
 
     render(){
