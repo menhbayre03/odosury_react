@@ -78,7 +78,7 @@ class Header extends Component {
                                                 <span>{(user.bundles || []).length + (user.lessons || []).length}</span>
                                                 <ion-icon name="basket"/>
                                             </Link>
-                                            <Link to="/profile">{user.username}<ion-icon name="person"/></Link>
+                                            <Link to="/profile/info">Профайл<ion-icon name="person"/></Link>
                                         </div>
                                     ) : (
                                         <Link to="/login">

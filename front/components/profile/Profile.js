@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import Header from "../include/Header";
 import Footer from "../include/Footer";
-import { Container, Row, Col, Button, Tabs, Tab, Accordion, Card } from "react-bootstrap";
+import {Container, Row, Col, Button, Tabs, Tab, Accordion, Card, Form} from "react-bootstrap";
 import * as actions from '../../actions/bundle_actions';
 import config from "../../config";
 import GridItem from "../include/GridItem";
@@ -15,13 +15,19 @@ class Bundle extends Component {
         super(props);
         this.state = {
             active: '',
+            error: {
+                password: false,
+                newPassword: false,
+                newPasswordRepeat: false,
+            },
+            password: '',
+            newPassword: '',
+            newPasswordRepeat: '',
         };
     }
 
     componentDidMount() {
         window.scroll(0, 0);
-        const {dispatch, match} = this.props;
-        dispatch(actions.getBundle(match.params.slug));
     }
 
     render() {
@@ -29,76 +35,111 @@ class Bundle extends Component {
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
-                <div className="bundle-single">
-                    <Row>
-                        <Col>
-                            <Sidebar location={this.props.location}/>
-                        </Col>
-                        <Col>
-                            <Loader status={loading}>
-                                <Container>
-                                    <div className="bundle-header">
-                                        <img src={(bundle.thumbnail || {}).path ? `${config.get('hostMedia')}${bundle.thumbnail.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
-                                        <div className="bundle-header-inner">
-                                            <span>Багц</span>
-                                            <h3>{bundle.title}</h3>
-                                            <p>{bundle.description}</p>
+                <Container>
+                    <div className="profile-container">
+                        <Row>
+                            <Col md={3}>
+                                <Sidebar location={this.props.location}/>
+                            </Col>
+                            <Col md={9}>
+                                <div className="profile">
+                                    <div>
+                                        <h4>Ерөнхий мэдээлэл</h4>
+                                        <Row>
+                                            <Col md={4}>
+                                                <Form.Group>
+                                                    <Form.Label>Хэрэглэгчйн нэр</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        placeholder="Хэрэглэгчйн нэр"
+                                                        value={user.username}
+                                                        disabled
+                                                    />
+                                                </Form.Group>
+                                            </Col>
+                                            <Col md={4}>
+                                                <Form.Group>
+                                                    <Form.Label>Имэйл хаяг</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        placeholder="Имэйл хаяг"
+                                                        value={user.email}
+                                                        disabled
+                                                    />
+                                                </Form.Group>
+                                            </Col>
+                                            <Col md={4}>
+                                                <Form.Group>
+                                                    <Form.Label>Утас</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        placeholder="99999999"
+                                                        value={user.phone}
+                                                        disabled
+                                                    />
+                                                </Form.Group>
+                                            </Col>
+                                        </Row>
+                                        <div style={{textAlign: 'right'}}>
+                                            <Button>Хадгалах</Button>
+                                        </div>
+                                        <h4 style={{marginTop: 40}}>Нууц үг солих</h4>
+                                        <Row>
+                                            <Col md={4}>
+                                                <Form.Group>
+                                                    <Form.Label>Хуучин нууц үг</Form.Label>
+                                                    <Form.Control
+                                                        type="password"
+                                                        onChange={(e) => this.setState({password: e.target.value})}
+                                                        placeholder="*************"
+                                                        value={this.state.password}
+                                                        isInvalid={!!this.state.error.password}
+                                                    />
+                                                    <Form.Control.Feedback type="invalid">
+                                                        Нууц үг оруулна уу.
+                                                    </Form.Control.Feedback>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col md={4}>
+                                                <Form.Group>
+                                                    <Form.Label>Шинэ нууц үг</Form.Label>
+                                                    <Form.Control
+                                                        type="password"
+                                                        onChange={(e) => this.setState({newPassword: e.target.value})}
+                                                        placeholder="*************"
+                                                        value={this.state.newPassword}
+                                                        isInvalid={!!this.state.error.newPassword}
+                                                    />
+                                                    <Form.Control.Feedback type="invalid">
+                                                        Нууц үг оруулна уу.
+                                                    </Form.Control.Feedback>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col md={4}>
+                                                <Form.Group>
+                                                    <Form.Label>Шинэ нууц үг давтах</Form.Label>
+                                                    <Form.Control
+                                                        type="password"
+                                                        onChange={(e) => this.setState({newPasswordRepeat: e.target.value})}
+                                                        placeholder="*************"
+                                                        value={this.state.newPasswordRepeat}
+                                                        isInvalid={!!this.state.error.newPasswordRepeat}
+                                                    />
+                                                    <Form.Control.Feedback type="invalid">
+                                                        Нууц үг оруулна уу.
+                                                    </Form.Control.Feedback>
+                                                </Form.Group>
+                                            </Col>
+                                        </Row>
+                                        <div style={{textAlign: 'right'}}>
+                                            <Button>Хадгалах</Button>
                                         </div>
                                     </div>
-                                    <div className="price">
-                                        {
-                                            bundle.sale > 0 ? (
-                                                <div style={{
-                                                    alignItems: 'center',
-                                                    display: 'flex',
-                                                    flexDirection: 'row',
-                                                    justifyContent: 'flex-start'
-                                                }}>
-                                                    <span style={{fontSize: 18, color: '#909090', display: 'block', fontWeight: 600 , textDecoration: 'line-through', marginRight: 15}}>{config.formatMoney(bundle.price)}₮</span>
-                                                    <span style={{fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{config.formatMoney(bundle.sale)}₮</span>
-                                                </div>
-                                            ) : (
-                                                <div style={{
-                                                    alignItems: 'center',
-                                                    display: 'flex',
-                                                    flexDirection: 'row',
-                                                    justifyContent: 'flex-start'
-                                                }}>
-                                                    <span style={{fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{config.formatMoney(bundle.price)}₮</span>
-                                                </div>
-                                            )
-                                        }
-                                        <p>Доорхи хичээлүүд бүгд багтсан үнэ болно.</p>
-                                    </div>
-                                    <div className="bundle-levels">
-                                        {
-                                            (bundle.levels || []).map((item, index) => (
-                                                <div className="bundle-item" key={index}>
-                                                    <h4>
-                                                        {item.title}
-                                                        <ion-icon name="chevron-down"/>
-                                                    </h4>
-                                                    <p>{bundle.description}</p>
-                                                    <div className="bundle-body">
-                                                        <Row>
-                                                            {
-                                                                (item.lessons || []).map((lesson, ind) => (
-                                                                    <Col key={ind} md={3} style={{marginBottom: 30}}>
-                                                                        <GridItem item={lesson}/>
-                                                                    </Col>
-                                                                ))
-                                                            }
-                                                        </Row>
-                                                    </div>
-                                                </div>
-                                            ))
-                                        }
-                                    </div>
-                                </Container>
-                            </Loader>
-                        </Col>
-                    </Row>
-                </div>
+                                </div>
+                            </Col>
+                        </Row>
+                    </div>
+                </Container>
                 <Footer/>
             </React.Fragment>
         );

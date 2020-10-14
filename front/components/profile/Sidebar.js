@@ -20,22 +20,23 @@ class Bundle extends Component {
             <React.Fragment>
                 <div className="profile-sidebar">
                     Sidebar
-
-                    <Link to="/classes">
-                        <li className={`${url.indexOf('info') >= 0 || url.indexOf('class') >= 0 ? 'active' : ''}`}>
-                            <ion-icon name="cube"/>
+                    <Link to="/profile/info">
+                        <li className={`${url.indexOf('info') >= 0 ? 'active' : ''}`}>
                             <span>Ерөнхий мэдээлэл</span>
                         </li>
-                        <li className={`${url.indexOf('info') >= 0 || url.indexOf('class') >= 0 ? 'active' : ''}`}>
-                            <ion-icon name="cube"/>
+                    </Link>
+                    <Link to="/profile/history">
+                        <li className={`${url.indexOf('history') >= 0 ? 'active' : ''}`}>
                             <span>Худалдан авалтийн түүх</span>
                         </li>
-                        <li className={`${url.indexOf('info') >= 0 || url.indexOf('class') >= 0 ? 'active' : ''}`}>
-                            <ion-icon name="cube"/>
+                    </Link>
+                    <Link to="/profile/lessons">
+                        <li className={`${url.indexOf('lessons') >= 0 ? 'active' : ''}`}>
                             <span>Худалдаж авсан хичээлүүд</span>
                         </li>
-                        <li className={`${url.indexOf('info') >= 0 || url.indexOf('class') >= 0 ? 'active' : ''}`}>
-                            <ion-icon name="cube"/>
+                    </Link>
+                    <Link to="/profile/wishlist">
+                        <li className={`${url.indexOf('wishlist') >= 0 ? 'active' : ''}`}>
                             <span>Хадгалсан хичээлүүд</span>
                         </li>
                     </Link>

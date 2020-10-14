@@ -7,6 +7,7 @@ import Login from "../components/Login";
 import Bundle from "../components/Bundle";
 import NotFound from "../components/NotFound";
 import Card from '../components/card';
+import Profile from '../components/profile/Profile';
 export default [
     {
         component: Main,
@@ -49,6 +50,11 @@ export default [
             {
                 component: Card,
                 path: '/card',
+                exact: true
+            },
+            {
+                component: Profile,
+                path: '/profile/info',
                 exact: true
             },
             {
