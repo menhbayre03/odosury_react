@@ -74,7 +74,7 @@ class Header extends Component {
                                 {
                                     user ? (
                                         <div className="user-menu">
-                                            <Link to="/card" style={{marginRight: 10, position: 'relative'}}>
+                                            <Link to="/card" style={{marginRight: 15, position: 'relative'}}>
                                                 <span>{(user.bundles || []).length + (user.lessons || []).length}</span>
                                                 <ion-icon name="basket"/>
                                             </Link>

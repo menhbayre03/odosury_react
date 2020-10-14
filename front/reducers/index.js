@@ -4,6 +4,7 @@ import auth from "./auth";
 import home from "./home";
 import lesson from "./lesson";
 import bundle from "./bundle";
+import profile from "./profile";
 import card from "./card";
 export default combineReducers({
     main: main,
@@ -11,5 +12,6 @@ export default combineReducers({
     home: home,
     lesson: lesson,
     bundle: bundle,
+    profile: profile,
     card: card,
 });
