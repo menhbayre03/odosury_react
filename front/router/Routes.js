@@ -8,6 +8,7 @@ import Bundle from "../components/Bundle";
 import NotFound from "../components/NotFound";
 import Card from '../components/card';
 import Profile from '../components/profile/Profile';
+import Lessons from '../components/profile/Lessons';
 import History from '../components/profile/History';
 export default [
     {
@@ -61,6 +62,11 @@ export default [
             {
                 component: History,
                 path: '/profile/history',
+                exact: true
+            },
+            {
+                component: Lessons,
+                path: '/profile/lessons',
                 exact: true
             },
             {
