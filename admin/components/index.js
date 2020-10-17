@@ -95,9 +95,14 @@ class index extends React.Component {
                                     <span>Нүүр</span>
                                 </Link>
                             </Menu.Item>
-                            <Menu.Item key="teachers" icon={<UserOutlined />}>
-                                <Link to="/admin/teachers">
-                                    <span>Багш</span>
+                            {/*<Menu.Item key="teachers" icon={<UserOutlined />}>*/}
+                            {/*    <Link to="/admin/teachers">*/}
+                            {/*        <span>Багш</span>*/}
+                            {/*    </Link>*/}
+                            {/*</Menu.Item>*/}
+                            <Menu.Item key="users" icon={<UserOutlined />}>
+                                <Link to="/admin/user">
+                                    <span>Хэрэглэгч</span>
                                 </Link>
                             </Menu.Item>
                             <Menu.Item key="category" icon={<DatabaseFilled />}>
@@ -123,7 +128,7 @@ class index extends React.Component {
                     <Layout className="site-layout">
                         <Header className="site-layout-background" >
                             <Tooltip placement="bottom" title='Гарах'>
-                                <a href="/api/logout" className='logout-button'><LogoutOutlined /></a>
+                                <a href="/logout" className='logout-button'><LogoutOutlined /></a>
                             </Tooltip>
                         </Header>
 
