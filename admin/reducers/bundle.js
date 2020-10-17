@@ -27,6 +27,7 @@ const initialState = {
     bundleThumbnailProgress:{},
 
     bundleLevelName: '',
+    bundleLevelDescription: '',
     lessonValue: '',
 
 };
@@ -93,13 +94,14 @@ export default(state = initialState, action) => {
         case addBundleLevel.REQUEST:
             let bundle = state.bundle;
             if(bundle.levels && bundle.levels.length>0) {
-                bundle.levels.push({title:state.bundleLevelName, lessons:[]});
+                bundle.levels.push({title:state.bundleLevelName, description:state.bundleLevelDescription, lessons:[]});
             } else {
-                bundle.levels = [{title:state.bundleLevelName, lessons:[]}];
+                bundle.levels = [{title:state.bundleLevelName, description:state.bundleLevelDescription, lessons:[]}];
             }
             return {
                 ...state,
                 bundleLevelName: '',
+                bundleLevelDescription: '',
                 bundle: bundle
             };
         case uploadBundleThumbnail.REQUEST:
@@ -193,6 +195,11 @@ export default(state = initialState, action) => {
                 return {
                     ...state,
                     bundleLevelName: action.json.value
+                };
+            } else if(action.json.name === 'bundleLevelDescription'){
+                return {
+                    ...state,
+                    bundleLevelDescription: action.json.value
                 };
             } else if(action.json.name === 'lessons'){
                 return {

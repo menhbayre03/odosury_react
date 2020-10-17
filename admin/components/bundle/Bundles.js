@@ -24,6 +24,7 @@ import { EditOutlined, LoadingOutlined, DeleteFilled, PlusOutlined, CloseCircleF
 import MediaLib from "../media/MediaLib";
 const { Meta } = Card;
 const { Option } = Select;
+const { TextArea } = Input;
 
 class Bundle extends React.Component {
     constructor(props) {
@@ -63,6 +64,9 @@ class Bundle extends React.Component {
         if(!bundle.title || (bundle.title && bundle.title.trim() === '')){
             return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
         }
+        if(!bundle.description || (bundle.description && bundle.description.trim() === '')){
+            return config.get('emitter').emit('warning', ("Тайлбар оруулна уу!"));
+        }
         if(!bundle.price || (bundle.price && bundle.price === 0)){
             return config.get('emitter').emit('warning', ("Үнэ оруулна уу!"));
         }
@@ -95,9 +99,12 @@ class Bundle extends React.Component {
 
     // levels
     addBundleLevel(){
-        const {bundle:{bundleLevelName}} = this.props;
+        const {bundle:{bundleLevelName, bundleLevelDescription}} = this.props;
         if(!bundleLevelName || (bundleLevelName && bundleLevelName==='')){
             return config.get('emitter').emit('warning', ("Түвшний нэр оруулна уу!"));
+        }
+        if(!bundleLevelDescription || (bundleLevelDescription && bundleLevelDescription==='')){
+            return config.get('emitter').emit('warning', ("Түвшний тайлбар оруулна уу!"));
         }
         this.props.dispatch(actions.addBundleLevel());
     }
@@ -113,6 +120,8 @@ class Bundle extends React.Component {
     }
     changeState(e, value, idx){
         if(e === 'bundleLevelName'){
+            this.props.dispatch(actions.bundleLevelOnChange({name:e, value: value.target.value}));
+        } else if(e === 'bundleLevelDescription'){
             this.props.dispatch(actions.bundleLevelOnChange({name:e, value: value.target.value}));
         } else if(e === 'lessons'){
             this.props.dispatch(actions.bundleLevelOnChange({name:e, value: idx, index:value}));
@@ -130,7 +139,7 @@ class Bundle extends React.Component {
         return false;
     };
     render() {
-        let { main:{user}, bundle:{status, openModal, bundleLevelName, bundle, bundles, lessonValue, submitBundleLoader, lessons, bundleThumbnail} } = this.props;
+        let { main:{user}, bundle:{status, openModal, bundleLevelDescription, bundleLevelName, bundle, bundles, lessonValue, submitBundleLoader, lessons, bundleThumbnail} } = this.props;
         let avatar = '/images/default-bundle.png';
         if (bundleThumbnail && bundleThumbnail.path !== '') {
             avatar = `${config.get('hostMedia')}${bundleThumbnail.path}`;
@@ -206,6 +215,7 @@ class Bundle extends React.Component {
                     <Form.Item
                         label='Зураг'
                         labelCol={{span: 5}}
+                        fieldKey='pic'
                     >
                         <div>
                             <Button onClick={this.openMediaLib.bind(this, 'image')} style={{marginBottom: 10}}>
@@ -228,12 +238,24 @@ class Bundle extends React.Component {
                     <Form.Item
                         label='Нэр'
                         labelCol={{span: 5}}
+                        fieldKey='tit'
                     >
                         <Input maxLength={60} value={bundle.title? bundle.title : ''} name='title' onChange={this.onChangeHandler.bind(this)} />
                     </Form.Item>
                     <Form.Item
+                        label='Тайлбар'
+                        labelCol={{span: 5}}
+                        fieldKey='desc'
+                    >
+                        <TextArea size="middle" rows={4}
+                                  value={bundle.description ? bundle.description : ''}
+                                  name='description'
+                                  onChange={this.onChangeHandler.bind(this)}/>
+                    </Form.Item>
+                    <Form.Item
                         label='Үнэ'
                         labelCol={{span: 5}}
+                        fieldKey='pri'
                     >
                         <InputNumber
                             size="middle"
@@ -262,8 +284,9 @@ class Bundle extends React.Component {
                         />
                     </Form.Item>
                     <Form.Item
-                            label='Түвшин'
+                        label='Түвшин'
                         labelCol={{span: 5}}
+                        fieldKey='lev'
                     >
                         <div className='bundle-levels'>
                             <Input
@@ -274,6 +297,15 @@ class Bundle extends React.Component {
                                 style={{width: '100%', marginBottom: 10}}
                                 value={bundleLevelName}
                                 onChange={this.changeState.bind(this, 'bundleLevelName')}
+                            />
+                            <Input
+                                type="text"
+                                ref="textInput"
+                                name="bundleLevelDescription"
+                                placeholder='Түвшний тайлбар'
+                                style={{width: '100%', marginBottom: 10}}
+                                value={bundleLevelDescription}
+                                onChange={this.changeState.bind(this, 'bundleLevelDescription')}
                             />
                             <div className='bundle-levels-add'>
                                 <Button size='small' style={{width: 120}}
