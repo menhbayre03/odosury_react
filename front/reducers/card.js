@@ -64,9 +64,9 @@ export default(state = initialState, action) => {
             return {
                 ...state,
                 bankPaying: false,
-                type: action.json.success ? state.type : '',
-                step: action.json.success ? state.step : 1,
-                qpay: action.json.success ? state.qpay : {},
+                type: !action.json.success ? state.type : '',
+                step: !action.json.success ? state.step : 1,
+                qpay: !action.json.success ? state.qpay : {},
             };
         default:
             return state;
