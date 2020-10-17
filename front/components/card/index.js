@@ -54,6 +54,17 @@ class CardPage extends React.Component {
                                                 </div>
                                             )
                                         }
+                                        <p>bagtsuud</p>
+                                        {
+                                            bundles.map( (bundle) =>
+                                                <div>
+                                                    <span>{bundle.title}</span>
+                                                    <button disabled={bundle.deleting} onClick={() => dispatch(removeFromCard({_id: bundle._id}))}>{
+                                                        bundle.deleting ? "deleting" : "x"
+                                                    }</button>
+                                                </div>
+                                            )
+                                        }
                                     </Col>
                                     <Col md={4}>
                                         <NumberFormat value={lessonsPrice} displayType={'text'} renderText={(value) => <p>hicheelvvd: {value}₮</p>} thousandSeparator={true}/>
