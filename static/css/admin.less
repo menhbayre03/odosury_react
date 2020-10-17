@@ -1,6 +1,7 @@
 @import "../../node_modules/antd/dist/antd.less";
 @border-radius-base: 4px; // major border radius
 @primary-color: #4e53a0; // primary color for all components
+@tooltip-bg: #6e73c8;
 @color-1 : #4e53a0;
 @color-2 : #666262;
 @color-3 : #fff4ea;
@@ -82,7 +83,7 @@
   text-transform: uppercase;
   display: inline-block;
   font-weight: 700;
-  color: #1890ff;
+  color: @primary-color;
   background-image: -webkit-gradient(linear, 37.219838% 34.532506%, 36.425669% 93.178216%, from(#29cdff), to(#0a60ff), color-stop(0.37, #148eff));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -107,7 +108,7 @@ body{
         margin-top: 15px;
         h3{
           font-size: 20px;
-          color: #1790ff;
+          color: @primary-color;
           text-transform: uppercase;
           white-space: nowrap;
           transition: all .2s;
@@ -136,7 +137,7 @@ body{
       }
     }
     .ant-layout-sider-trigger{
-      background-color: #1890ff;
+      background-color: @primary-color;
       color: white;
       height: 32px;
       line-height: 32px;
@@ -313,7 +314,7 @@ body{
 }
 .sortable-item:hover{
   background-color: #e6f7ff;
-  color: #1890ff;
+  color: @primary-color;
 
 }
 .antd-upload-audio{
@@ -369,7 +370,7 @@ body{
         width: 100%;
       }
       &:hover, &.selected {
-        border: 2px solid #1890ff;
+        border: 2px solid @primary-color;
         transition: .2s;
       }
       .selectedMedia {
@@ -385,7 +386,7 @@ body{
 
         ion-icon {
           font-size: 46px;
-          color: #1890ff;
+          color: @primary-color;
         }
       }
     }

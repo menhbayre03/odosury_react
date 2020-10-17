@@ -1,6 +1,7 @@
 import index from "../components/index";
 import Home from "../components/home/Home";
 import Teachers from "../components/teacher/Teachers";
+import User from "../components/user/User";
 import Category from "../components/category/Category";
 import Lessons from "../components/lesson/Lessons";
 import LessonLevels from "../components/lesson/LessonLevels";
@@ -16,9 +17,14 @@ export default [
                 path: '/admin',
                 exact: true
             },
+            // {
+            //     component: Teachers,
+            //     path: '/admin/teachers',
+            //     exact: true
+            // },
             {
-                component: Teachers,
-                path: '/admin/teachers',
+                component: User,
+                path: '/admin/user',
                 exact: true
             },
             {

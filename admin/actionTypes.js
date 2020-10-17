@@ -25,6 +25,33 @@ export const uploadTeacherAvatar = {
 };
 
 
+export const openUserModal = {
+    REQUEST:'openUserModal_REQUEST',
+};
+export const closeUserModal = {
+    REQUEST:'closeUserModal_REQUEST',
+};
+export const userChangeHandler = {
+    REQUEST:'userChangeHandler_REQUEST',
+};
+export const submitUser = {
+    REQUEST:'submitUser_REQUEST',
+    RESPONSE:'submitUser_RESPONSE',
+};
+export const getUsers = {
+    REQUEST:'getUsers_REQUEST',
+    RESPONSE:'getUsers_RESPONSE',
+};
+export const deleteUsers = {
+    REQUEST:'deleteUsers_REQUEST',
+    RESPONSE:'deleteUsers_RESPONSE',
+};
+export const uploadUserAvatar = {
+    REQUEST:'uploadUserAvatar_REQUEST',
+    RESPONSE:'uploadUserAvatar_RESPONSE',
+};
+
+
 export const openBundleModal = {
     REQUEST:'openBundleModal_REQUEST',
 };
