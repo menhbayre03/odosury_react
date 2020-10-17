@@ -107,8 +107,8 @@ class index extends React.Component {
                                     <span>Багц</span>
                                 </Link>
                             </Menu.Item>
-                            <Menu.Item key="payment" icon={<DollarCircleFilled />}>
-                                <Link to="/admin/bundles">
+                            <Menu.Item key="purchases" icon={<DollarCircleFilled />}>
+                                <Link to="/admin/purchases">
                                     <span>Худалдан авалт</span>
                                 </Link>
                             </Menu.Item>

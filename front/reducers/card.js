@@ -53,7 +53,7 @@ export default(state = initialState, action) => {
         case setBank.RESPONSE:
             return {
                 ...state,
-                purchase: [...state.purchase, (action.json.purchase || {})],
+                purchase: [...state.purchase, (action.json.purchase || {})]
             };
         case payByBank.REQUEST:
             return {
@@ -63,7 +63,10 @@ export default(state = initialState, action) => {
         case payByBank.RESPONSE:
             return {
                 ...state,
-                bankPaying: false
+                bankPaying: false,
+                type: action.json.success ? state.type : '',
+                step: action.json.success ? state.step : 1,
+                qpay: action.json.success ? state.qpay : {},
             };
         default:
             return state;
