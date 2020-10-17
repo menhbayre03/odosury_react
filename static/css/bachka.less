@@ -1424,8 +1424,8 @@
       color: #272840;
       font-weight: 600;
       font-size: 14px;
-      display: block;
       padding: 5px 0;
+      display: inline-block;
       li.active {
         text-decoration: underline;
         color: #000cdc;
@@ -1587,5 +1587,28 @@
     font-size: 12px;
     font-weight: 600;
     margin-right: 10px;
+  }
+  .item p {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    .tit {
+      white-space: nowrap;
+      width: calc(100% - 90px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .cost {
+      font-size: 12px;
+      font-weight: 600;
+    }
+  }
+  .item:last-child p {
+    border-bottom: none;
+    padding-bottom: 5px;
   }
 }

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import moment from "moment";
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Header from "../include/Header";
 import Footer from "../include/Footer";
 import {Container, Row, Col, Button, Modal} from "react-bootstrap";
@@ -118,19 +119,37 @@ class Bundle extends Component {
                             {
                                 data.bundles && data.bundles.length > 0 ? (
                                     <React.Fragment>
-                                        багц: <span style={{marginRight: 10}}>{data.bundles.length}</span>
+                                        <span className="date" style={{marginTop: 15, marginBottom: 5}}>Багц:</span>
+                                        <div>
+                                            {
+                                                data.bundles.map((item, ind) => (
+                                                    <div key={ind} className="item">
+                                                        <p><Link target="_blank" to={`/bundle/${item.bundle.slug}`} className="tit">{item.bundle.title}</Link><span className="cost">{config.formatMoney(item.cost)}₮</span></p>
+                                                    </div>
+                                                ))
+                                            }
+                                        </div>
                                     </React.Fragment>
                                 ) : null
                             }
                             {
                                 data.lessons && data.lessons.length > 0 ? (
                                     <React.Fragment>
-                                        хичээл: <span>{data.lessons.length}</span>
+                                        <span className="date" style={{marginTop: 15}}>Хичээл:</span>
+                                        <div>
+                                            {
+                                                data.lessons.map((item, ind) => (
+                                                    <div key={ind} className="item">
+                                                        <p><Link target="_blank" to={`/lesson/${item.lesson.slug}`} className="tit">{item.lesson.title}</Link><span className="cost">{config.formatMoney(item.cost)}₮</span></p>
+                                                    </div>
+                                                ))
+                                            }
+                                        </div>
                                     </React.Fragment>
                                 ) : null
                             }
-                            <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                                <span className="price">{config.formatMoney(data.amount)}₮</span>
+                            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 15, borderTop: '1px solid #eee', paddingTop: 15}}>
+                                <span className="price date">Нийт: <span>{config.formatMoney(data.amount)}₮</span></span>
                                 <span className={`status ${data.status}`}>{this.printStats(data.status)}</span>
                             </div>
                         </div>
