@@ -7,7 +7,7 @@ import * as actions from "../../actions/user_actions";
 
 const reducer = ({ main, user }) => ({ main, user });
 import {Card, Button, Avatar, Table, Modal, Form, Input, Select, Popconfirm, Upload, message} from 'antd';
-import { EditOutlined, LoadingOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, SearchOutlined } from '@ant-design/icons'
+import { EditOutlined, LoadingOutlined, DeleteFilled, PlusOutlined, UserOutlined, EditFilled, SearchOutlined, CloseCircleFilled, CloseCircleOutlined, CloseOutlined } from '@ant-design/icons'
 const { Meta } = Card;
 const { TextArea } = Input;
 const { Option } = Select;
@@ -19,6 +19,7 @@ class User extends React.Component {
             pageNum: 0,
             pageSize: 50,
             search: '',
+            role: '',
         };
     }
     componentDidMount() {
@@ -105,7 +106,8 @@ class User extends React.Component {
         let cc = {
             pageNum:data.current - 1,
             pageSize:this.state.pageSize,
-            search: this.state.search
+            search: this.state.search,
+            role: this.state.role
         };
         this.props.dispatch(actions.getUsers(cc));
     }
@@ -115,7 +117,8 @@ class User extends React.Component {
         let cc = {
             pageNum:0,
             pageSize:this.state.pageSize,
-            search: this.state.search
+            search: this.state.search,
+            role: this.state.role
         };
         this.props.dispatch(actions.getUsers(cc));
     }
@@ -273,8 +276,16 @@ class User extends React.Component {
                 }
             >
                 <div style={{marginBottom: 20}}>
-                    <Input maxLength={60} size='small' placeholder='Нэр, имэйл' style={{width: 200, marginRight: 20}} value={this.state.search} name='search' onChange={(e) => this.setState({search: e.target.value})} />
-                    <Button type="primary" size='small' icon={<SearchOutlined />} onClick={this.searchUser.bind(this)} >Хайх</Button>
+                    {/*<Input addonAfter={<CloseOutlined onClick={() => this.setState({search:''})} />} maxLength={60} size='small' placeholder='Хайх /бүх талбар/' style={{width: 200, marginRight: 20}} value={this.state.search} name='search' onChange={(e) => this.setState({search: e.target.value})} />*/}
+                    {/*<Input addonAfter={<CloseCircleOutlined style={{color:'white'}} onClick={() => this.setState({search:''})} />} maxLength={60} size='small' placeholder='Хайх /бүх талбар/' style={{width: 200, marginRight: 20}} value={this.state.search} name='search' onChange={(e) => this.setState({search: e.target.value})} />*/}
+                    <Input addonAfter={<CloseCircleFilled style={{color:'white'}} onClick={() => this.setState({search:''})} />} maxLength={60} size='small' placeholder='Хайх /бүх талбар/' style={{width: 200, marginRight: 20}} value={this.state.search} name='search' onChange={(e) => this.setState({search: e.target.value})} />
+                    <Select style={{width: 142, marginRight: 20}} size='small' name='role' value={this.state.role} onChange={(e) => this.setState({role: e})}
+                    >
+                        <Option value=''>Эрх сонгоно уу</Option>
+                        <Option value='teacher'>Багш</Option>
+                        <Option value='user'>Хэрэглэгч</Option>
+                    </Select>
+                    <Button loading={status} type="primary" size='small' icon={<SearchOutlined />} onClick={this.searchUser.bind(this)} >Хайх</Button>
                 </div>
 
                 <Table size="small" dataSource={users} columns={columns} onChange={this.tableOnChange.bind(this)} pagination={pagination} />
