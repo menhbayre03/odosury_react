@@ -12,24 +12,16 @@ import {
     Link
 } from 'react-router-dom';
 import {
-    DesktopOutlined,
-    PieChartOutlined,
-    FileOutlined,
-    TeamOutlined,
     UserOutlined,
-    MenuUnfoldOutlined,
-    MenuFoldOutlined,
     HomeFilled,
     LogoutOutlined,
-    ArrowLeftOutlined,
     LayoutFilled,
-    FileSearchOutlined,
+    DollarCircleFilled,
     DatabaseFilled,
     FileTextFilled
 } from '@ant-design/icons';
-import {Layout, Menu, message, Breadcrumb, Row, Button, Tooltip } from 'antd';
-const {Header, Content, Sider, Footer} = Layout;
-const { SubMenu } = Menu;
+import {Layout, Menu, Tooltip } from 'antd';
+const {Header, Content, Sider} = Layout;
 const reducer = ({ main }) => ({ main });
 
 
@@ -113,6 +105,11 @@ class index extends React.Component {
                             <Menu.Item key="bundles" icon={<LayoutFilled />}>
                                 <Link to="/admin/bundles">
                                     <span>Багц</span>
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item key="payment" icon={<DollarCircleFilled />}>
+                                <Link to="/admin/bundles">
+                                    <span>Худалдан авалт</span>
                                 </Link>
                             </Menu.Item>
                         </Menu>
