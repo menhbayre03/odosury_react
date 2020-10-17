@@ -3,7 +3,7 @@ import moment from "moment";
 import { connect } from 'react-redux';
 import Header from "../include/Header";
 import Footer from "../include/Footer";
-import {Container, Row, Col, Button, Tabs, Tab, Accordion, Card, Form} from "react-bootstrap";
+import {Container, Row, Col, Button, Modal} from "react-bootstrap";
 import * as actions from '../../actions/profile_actions';
 import config from "../../config";
 import Loader from "../include/Loader";
@@ -14,7 +14,8 @@ class Bundle extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            data: {},
+            show: false
         };
     }
 
@@ -43,6 +44,7 @@ class Bundle extends Component {
 
     render() {
         const {main: {user}, profile: {histories, loadingHistory}} = this.props;
+        let {data} = this.state;
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
@@ -59,7 +61,7 @@ class Bundle extends Component {
                                         {
                                             histories.length > 0 ? (
                                                 histories.map((item , index) => (
-                                                    <div key={index} className={`history-item ${item.status}`}>
+                                                    <div key={index} onClick={() => this.setState({show: true, data: item})} className={`history-item ${item.status}`}>
                                                         <div style={{display: 'inline-block'}}>
                                                             <span className="ind">{index+1}</span>
                                                             <span className="date">{moment(item.created).format('YYYY/MM/DD')}</span>
@@ -103,6 +105,37 @@ class Bundle extends Component {
                         </Row>
                     </div>
                 </Container>
+                <Modal show={this.state.show} onHide={() => this.setState({show: false, data: {}})}>
+                    <Modal.Header closeButton>
+                        <Modal.Title style={{fontSize: 18, fontWeight: 600}}>Худалдан авалтын мэдээлэл</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div className="histmodal-item">
+                            <span className="date">Огноо: <span>{moment(data.created).format('YYYY/MM/DD')}</span></span>
+                            <span className="date">
+                                Гүйлгээний утга: <span>{data.description}</span>
+                            </span>
+                            {
+                                data.bundles && data.bundles.length > 0 ? (
+                                    <React.Fragment>
+                                        багц: <span style={{marginRight: 10}}>{data.bundles.length}</span>
+                                    </React.Fragment>
+                                ) : null
+                            }
+                            {
+                                data.lessons && data.lessons.length > 0 ? (
+                                    <React.Fragment>
+                                        хичээл: <span>{data.lessons.length}</span>
+                                    </React.Fragment>
+                                ) : null
+                            }
+                            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                                <span className="price">{config.formatMoney(data.amount)}₮</span>
+                                <span className={`status ${data.status}`}>{this.printStats(data.status)}</span>
+                            </div>
+                        </div>
+                    </Modal.Body>
+                </Modal>
                 <Footer/>
             </React.Fragment>
         );

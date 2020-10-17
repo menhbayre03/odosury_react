@@ -19,7 +19,7 @@ class Bundle extends Component {
         return (
             <React.Fragment>
                 <div className="profile-sidebar">
-                    Sidebar
+                    <h5>Хэрэглэгчийн хэсэг</h5>
                     <Link to="/profile/info">
                         <li className={`${url.indexOf('info') >= 0 ? 'active' : ''}`}>
                             <span>Ерөнхий мэдээлэл</span>

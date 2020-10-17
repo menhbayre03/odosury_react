@@ -1409,6 +1409,29 @@
 .profile-container {
   min-height: calc(100vh - 185px);
   padding: 60px 0;
+  .profile-sidebar {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    h5 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #272840;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+    a {
+      color: #272840;
+      font-weight: 600;
+      font-size: 14px;
+      display: block;
+      padding: 5px 0;
+      li.active {
+        text-decoration: underline;
+        color: #000cdc;
+      }
+    }
+  }
   .profile {
     background: #fff;
     padding: 30px;
@@ -1522,5 +1545,47 @@
     .history-item:last-child {
       border-bottom: none;
     }
+  }
+}
+.histmodal-item {
+  .date {
+    display: block;
+    color: #4a4a4a;
+    font-size: 14px;
+    font-weight: 600;
+    span {
+      color: #000;
+      font-size: 14px;
+      font-weight: 600;
+    }
+  }
+  .status.success {
+    font-size: 11px;
+    font-weight: 700;
+    background: #55b526;
+    color: #fff;
+    padding: 0px 5px;
+    border-radius: 3px;
+  }
+  .status.pending {
+    font-size: 11px;
+    font-weight: 700;
+    background: #797979;
+    color: #fff;
+    padding: 0px 5px;
+    border-radius: 3px;
+  }
+  .status.fail {
+    font-size: 11px;
+    font-weight: 700;
+    background: #b11a1a;
+    color: #fff;
+    padding: 0px 5px;
+    border-radius: 3px;
+  }
+  .price {
+    font-size: 12px;
+    font-weight: 600;
+    margin-right: 10px;
   }
 }
