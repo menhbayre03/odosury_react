@@ -1,9 +1,11 @@
 import {
-    getBundle
+    getBundle, bundleAddToCard, bundleRemoveFromCard
 } from "../actionTypes";
 const initialState = {
     loading: 1,
     bundle: {},
+    addingToCard: false,
+    removingFromCard: false,
 };
 
 export default(state = initialState, action) => {
@@ -27,6 +29,26 @@ export default(state = initialState, action) => {
                     loading:2
                 };
             }
+        case bundleAddToCard.REQUEST:
+            return {
+                ...state,
+                addingToCard: true
+            };
+        case bundleAddToCard.RESPONSE:
+            return {
+                ...state,
+                addingToCard: false
+            };
+        case bundleRemoveFromCard.REQUEST:
+            return {
+                ...state,
+                removingFromCard: true
+            };
+        case bundleRemoveFromCard.RESPONSE:
+            return {
+                ...state,
+                removingFromCard: false
+            };
         default:
             return state;
     }

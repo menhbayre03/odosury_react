@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import Header from "./include/Header";
 import Footer from "./include/Footer";
-import { Container, Row, Col, Button, Tabs, Tab, Accordion, Card } from "react-bootstrap";
+import {Container, Row, Col, Button, Tabs, Tab, Accordion, Card, Spinner} from "react-bootstrap";
 import * as actions from '../actions/bundle_actions';
 import Sticky from 'react-sticky-el';
 import ReactStars from "react-rating-stars-component";
@@ -27,7 +27,12 @@ class Bundle extends Component {
     }
 
     render() {
-        const {main: {user}, bundle: {bundle, loading}} = this.props;
+        const {
+            main: { user },
+            bundle: { bundle, loading, addingToCard, removingFromCard },
+            dispatch
+        } = this.props;
+        let hadInCard = (user.bundles || []).some(ls => ls._id === bundle._id);
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
@@ -43,28 +48,39 @@ class Bundle extends Component {
                                 </div>
                             </div>
                             <div className="price">
-                                {
-                                    bundle.sale > 0 ? (
-                                        <div style={{
-                                            alignItems: 'center',
-                                            display: 'flex',
-                                            flexDirection: 'row',
-                                            justifyContent: 'flex-start'
-                                        }}>
-                                            <span style={{fontSize: 18, color: '#909090', display: 'block', fontWeight: 600 , textDecoration: 'line-through', marginRight: 15}}>{config.formatMoney(bundle.price)}₮</span>
-                                            <span style={{fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{config.formatMoney(bundle.sale)}₮</span>
-                                        </div>
-                                    ) : (
-                                        <div style={{
-                                            alignItems: 'center',
-                                            display: 'flex',
-                                            flexDirection: 'row',
-                                            justifyContent: 'flex-start'
-                                        }}>
+                                <div style={{
+                                    alignItems: 'center',
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    justifyContent: 'flex-start'
+                                }}>
+                                    {
+                                        bundle.sale > 0 ?
+                                            <React.Fragment>
+                                                <span style={{fontSize: 18, color: '#909090', display: 'block', fontWeight: 600 , textDecoration: 'line-through', marginRight: 15}}>{config.formatMoney(bundle.price)}₮</span>
+                                                <span style={{fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{config.formatMoney(bundle.sale)}₮</span>
+                                            </React.Fragment>
+                                            :
                                             <span style={{fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{config.formatMoney(bundle.price)}₮</span>
-                                        </div>
-                                    )
-                                }
+                                    }
+                                    <Button
+                                        disabled={addingToCard || removingFromCard}
+                                        variant="primary"
+                                        onClick={() =>
+                                            hadInCard ?
+                                                (removingFromCard ? false : dispatch(actions.removeFromCard({_id: bundle._id})))
+                                                :
+                                                (addingToCard ? false : dispatch(actions.addToCard({_id: bundle._id})))
+                                        }
+                                    >
+                                        {
+                                            addingToCard || removingFromCard ?
+                                                <Spinner variant={'light'} animation={'border'} size={'sm'}/>
+                                                :
+                                                <ion-icon name={hadInCard ? "trash-outline" : "cart-outline"}/>
+                                        } {hadInCard ? "Сагснаас хасах" : "Сагслах"}
+                                    </Button>
+                                </div>
                                 <p>Доорхи хичээлүүд бүгд багтсан үнэ болно.</p>
                             </div>
                             <div className="bundle-levels">

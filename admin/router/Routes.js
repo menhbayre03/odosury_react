@@ -6,6 +6,7 @@ import Category from "../components/category/Category";
 import Lessons from "../components/lesson/Lessons";
 import LessonLevels from "../components/lesson/LessonLevels";
 import Bundles from "../components/bundle/Bundles";
+import Purchase from "../components/purchase/Purchase";
 import NotFound from "../components/NotFound";
 export default [
     {
@@ -44,6 +45,11 @@ export default [
             {
                 component: Bundles,
                 path: '/admin/bundles',
+                exact: true
+            },
+            {
+                component: Purchase,
+                path: '/admin/purchases',
                 exact: true
             },
             {

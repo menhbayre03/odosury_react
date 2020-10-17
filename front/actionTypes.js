@@ -26,6 +26,14 @@ export const lessonRemoveFromCard = {
     REQUEST:'lessonRemoveFromCard_REQ',
     RESPONSE:'lessonRemoveFromCard_RES'
 };
+export const bundleAddToCard = {
+    REQUEST:'bundleAddToCard_REQ',
+    RESPONSE:'bundleAddToCard_RES'
+};
+export const bundleRemoveFromCard = {
+    REQUEST:'bundleRemoveFromCard_REQ',
+    RESPONSE:'bundleRemoveFromCard_RES'
+};
 export const getViewArea = {
     REQUEST:'FETCH_GET_LESSOINVIEW_REQUEST',
     RESPONSE:'FETCH_GET_LESSOINVIEW_RESPONSE'

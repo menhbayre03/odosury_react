@@ -268,3 +268,9 @@ export const selectMedia = {
 export const closeMediaModal = {
     REQUEST: 'closeMediaModal_REQ'
 };
+
+
+export const getPayments = {
+    REQUEST: 'getPayments_REQ',
+    RESPONSE: 'getPayments_RES'
+};
