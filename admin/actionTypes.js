@@ -274,3 +274,7 @@ export const getPayments = {
     REQUEST: 'getPayments_REQ',
     RESPONSE: 'getPayments_RES'
 };
+export const setPaymentStatus = {
+    REQUEST: 'setPaymentStatus_REQ',
+    RESPONSE: 'setPaymentStatus_RES'
+};
