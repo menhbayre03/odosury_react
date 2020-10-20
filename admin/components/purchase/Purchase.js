@@ -44,7 +44,7 @@ class Purchase extends React.Component {
                 key: '_id',
                 title: '№',
                 render: (text, record, idx) => (
-                    (this.state.pageNum * this.state.pageNum) + idx + 1
+                    ((pageNum - 1) * 50) + (idx + 1)
                 ),
             },
             {
