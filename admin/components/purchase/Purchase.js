@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from 'react-redux';
 import config from "../../config";
 import {
-    Card, Table, Select, Button
+    Card, Table, Select, Button, List, Row, Col, Typography
 } from 'antd';
 import { getPayments, setPaymentStatus } from '../../actions/purchase_actions';
 import { DeleteFilled, EyeFilled } from '@ant-design/icons';
@@ -10,6 +10,7 @@ import NumberFormat from 'react-number-format';
 import moment from 'moment';
 
 const { Option } = Select;
+const { Text } = Typography;
 
 const reducer = ({ main, purchase }) => ({ main, purchase });
 
@@ -17,8 +18,6 @@ class Purchase extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            pageNum: 0,
-            pageSize: 50,
             search: '',
             mediaType: '',
         };
@@ -30,16 +29,16 @@ class Purchase extends React.Component {
         let {
             dispatch,
             main:{ user },
-            purchase:{ status, transactions }
+            purchase:{ status, transactions, all = 0, pageNum = 1 }
         } = this.props;
-        // let pagination = {
-        //     total : all,
-        //     current: this.state.pageNum + 1,
-        //     pageSize : this.state.pageSize,
-        //     position: 'bottom',
-        //     showSizeChanger: false,
-        //     key: 'pagin'
-        // };
+        let pagination = {
+            total : all,
+            current: pageNum,
+            pageSize : 50,
+            position: ['bottomRight', 'topRight'],
+            showSizeChanger: false,
+            key: 'pagin'
+        };
         const columns = [
             {
                 key: '_id',
@@ -118,10 +117,71 @@ class Purchase extends React.Component {
                     size="small"
                     dataSource={transactions}
                     columns={columns}
-                    pagination={false}
+                    pagination={pagination}
                     expandable={{
-                        expandedRowRender: record => <p>{record.amount}</p>
-                    }}/>
+                        rowExpandable: record => (record.bundles || []).length > 0 || (record.lessons || []).length > 0,
+                        expandedRowRender: record =>
+                            <Row gutter={[8, 8]}>
+                                {
+                                    (record.bundles || []).length > 0 ?
+                                        <Col span={(record.lessons || []).length > 0 ? 12 : 24}>
+                                            <Card
+                                                title={'Багцууд: '}
+                                                size={'small'}
+                                                extra={<Text type="secondary" strong>( {(record.bundles || []).length} )</Text>}
+                                            >
+                                                {
+                                                    (record.bundles || []).map((item) =>
+                                                        <List.Item
+                                                            actions={[
+                                                                <NumberFormat value={item.cost || 0} displayType={'text'} thousandSeparator={true} renderText={value => <Text>{value}₮</Text>}/>
+                                                            ]}
+                                                        >
+                                                            <Text
+                                                                copyable
+                                                                ellipsis
+                                                            >
+                                                                {(item.bundle || {}).title || ''}
+                                                            </Text>
+                                                        </List.Item>
+                                                    )
+                                                }
+                                            </Card>
+                                        </Col>
+                                    : null
+                                }
+                                {
+                                    (record.lessons || []).length > 0 ?
+                                        <Col span={(record.bundles || []).length > 0 ? 12 : 24}>
+                                            <Card
+                                                title={'Хичээлүүд: '}
+                                                size={'small'}
+                                                extra={<Text type="secondary" strong>( {(record.lessons || []).length} )</Text>}
+                                            >
+                                                {
+                                                    (record.lessons || []).map((item) =>
+                                                        <List.Item
+                                                            actions={[
+                                                                <NumberFormat value={item.cost || 0} displayType={'text'} thousandSeparator={true} renderText={value => <Text>{value}₮</Text>}/>
+                                                            ]}
+                                                        >
+                                                            <Text
+                                                                copyable
+                                                                ellipsis
+                                                            >
+                                                                {(item.lesson || {}).title || ''}
+                                                            </Text>
+                                                        </List.Item>
+                                                    )
+                                                }
+                                            </Card>
+                                        </Col>
+                                    : null
+                                }
+                            </Row>
+                    }}
+                    onChange={(e) => dispatch(getPayments({skip: (e.current - 1) * 50}))}
+                />
             </Card>
         );
     }

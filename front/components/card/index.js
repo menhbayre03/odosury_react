@@ -6,6 +6,7 @@ import Loader from "../include/Loader";
 import Footer from "../include/Footer";
 import { removeFromCard } from '../../actions/lesson_actions';
 import * as actions from '../../actions/card_actions';
+import * as bundleActions from '../../actions/bundle_actions';
 import { Row, Col, Container } from 'react-bootstrap';
 import NumberFormat from 'react-number-format';
 import QRCode from "react-qr-code";
@@ -79,7 +80,7 @@ class CardPage extends React.Component {
                                                                                 <span><Link to={`/bundle/${bundle.slug}`}>{bundle.title}</Link></span>
                                                                                 <div className="rii">
                                                                                     <NumberFormat value={bundle.sale && bundle.sale > 0 ? bundle.sale : bundle.price} displayType={'text'} renderText={(value) => <span>{value}₮</span>} thousandSeparator={true}/>
-                                                                                    <button disabled={bundle.deleting} onClick={() => dispatch(removeFromCard({_id: bundle._id}))}>
+                                                                                    <button disabled={bundle.deleting} onClick={() => dispatch(bundleActions.removeFromCard({_id: bundle._id}))}>
                                                                                         {bundle.deleting ? "устгаж байна" : "устгах"}
                                                                                     </button>
                                                                                 </div>
@@ -154,7 +155,7 @@ class CardPage extends React.Component {
                                         <button onClick={() => dispatch(actions.setCardTypes({step: 2, type: type}))}>mother lvv ywii</button>
                                         {
                                             type === 'b' &&
-                                            <button onClick={() => dispatch(actions.payByBank({step: 2, type: type}))}>Bankaar tulhiig batlah</button>
+                                            <button onClick={() => dispatch(actions.payByBank({step: 2, type: type, amount: (bundlesPrice + lessonsPrice)}))}>Bankaar tulhiig batlah</button>
                                         }
                                         {
                                             type === 'q' && qpay.payment_id &&

@@ -4,6 +4,8 @@ import {
 } from "../actionTypes";
 const initialState = {
     status: 1,
+    pageNum: 1,
+    all: 0,
     transactions: []
 };
 
@@ -13,12 +15,17 @@ export default(state = initialState, action) => {
             return {
                 ...state,
                 status: 1,
+                pageNum: parseInt((action.json.skip / 50 + 1) || 1),
             };
         case getPayments.RESPONSE:
             return {
                 ...state,
                 status: action.json.success ? 0 : 2,
-                transactions: action.json.trans || []
+                transactions: (action.json.trans || []).map((c, i) => {
+                    c.key = i + 1;
+                    return c;
+                }),
+                all: action.json.all || state.all
             };
         case setPaymentStatus.REQUEST:
             return {
