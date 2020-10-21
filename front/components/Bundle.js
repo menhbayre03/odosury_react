@@ -32,7 +32,7 @@ class Bundle extends Component {
             bundle: { bundle, loading, addingToCard, removingFromCard },
             dispatch
         } = this.props;
-        let hadInCard = (user.bundles || []).some(ls => ls._id === bundle._id);
+        let hadInCard = ((user || {}).bundles || []).some(ls => ls._id === bundle._id);
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
