@@ -1612,3 +1612,199 @@
     padding-bottom: 5px;
   }
 }
+.cart {
+  min-height: calc(100vh - 185px);
+  padding: 60px 0;
+  .section.lesson {
+    margin-bottom: 30px;
+    p {
+      font-size: 18px;
+      font-weight: 700;
+      color: #272840;
+      margin-bottom: 5px;
+    }
+  }
+  .section.bundle {
+    margin-bottom: 30px;
+    p {
+      font-size: 18px;
+      font-weight: 700;
+      color: #272840;
+      margin-bottom: 5px;
+    }
+  }
+  .item {
+    background: #fff;
+    align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+    img {
+      width: 25px;
+      height: 25px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    span {
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      width: calc(100% - 120px);
+      text-overflow: ellipsis;
+      display: inline-block;
+      margin: 0;
+      margin-left: 15px;
+      padding: 0;
+      position: relative;
+      top: 4px;
+      height: 18px;
+    }
+    .rii {
+      float: right;
+      text-align: right;
+      span {
+        font-size: 11px;
+        color: #000;
+        display: block;
+        width: unset;
+        text-overflow: unset;
+        white-space: unset;
+        overflow: unset;
+        margin-left: 0;
+        font-weight: 800;
+        margin-top: -10px;
+      }
+      button {
+        font-size: 11px;
+        background: red;
+        border: none;
+        outline: none;
+        box-shadow: none;
+        border-radius: 3px;
+        color: #fff;
+        font-weight: 700;
+        margin-top: 3px;
+      }
+    }
+  }
+  .cart-side {
+    background: #fff;
+    border-radius: 5px;
+    padding: 20px;
+    p {
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+      color: #616161;
+      span {
+        font-size: 14px;
+        font-weight: 800;
+      }
+    }
+    p.total {
+      border-bottom: none;
+      font-weight: 700;
+      font-size: 16px;
+      color: #000;
+      span {
+        font-size: 16px;
+        font-weight: 800;
+      }
+    }
+    button {
+      font-size: 16px;
+      border: none;
+      outline: none;
+      box-shadow: none;
+      background: #313356;
+      border-radius: 5px;
+      color: #fff;
+      font-weight: 700;
+      width: 100%;
+      padding: 6px 20px;
+      -webkit-transition: 0.3s;
+      -moz-transition: 0.3s;
+      -ms-transition: 0.3s;
+      -o-transition: 0.3s;
+      transition: 0.3s;
+    }
+    button:hover {
+      background:#272840;
+    }
+  }
+  .pay-option {
+    img {
+      width: 100px;
+      background: #fff;
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      -webkit-transition: 0.3s;
+      -moz-transition: 0.3s;
+      -ms-transition: 0.3s;
+      -o-transition: 0.3s;
+      transition: 0.3s;
+    }
+    button {
+      margin-left: 15px;
+      background: #fff;
+      border: none;
+      outline: none;
+      box-shadow: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #272840;
+      cursor: pointer;
+      -webkit-transition: 0.3s;
+      -moz-transition: 0.3s;
+      -ms-transition: 0.3s;
+      -o-transition: 0.3s;
+      transition: 0.3s;
+    }
+    img:hover {
+      box-shadow: -7.5pt 0.625pc 0.14583333in -9px rgba(25, 42, 70, 0.13);
+    }
+    button:hover {
+      box-shadow: -7.5pt 0.625pc 0.14583333in -9px rgba(25, 42, 70, 0.13);
+    }
+  }
+  .cart-side.pay button {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background: #f5f5f5;
+    color: #000;
+  }
+  .cart-side.pay button:hover {
+    background: #d0d0d0;
+  }
+  .qr-c {
+    margin-top: 30px;
+    .qr-q {
+      display: inline-block;
+      float: left;
+      background: #fff;
+      border-radius: 10px;
+      padding: 10px;
+    }
+    .qr-r {
+      margin-left: 220px;
+      display: block;
+      button {
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        margin-top: 10px;
+        background: #272840;
+        color: #fff;
+        font-size: 16px;
+      }
+    }
+  }
+}

@@ -79,7 +79,7 @@ class Lesson extends Component {
                                             <div>
                                                 <Sticky className={'stacka'} onFixedToggle={(e) => this.setState({fixed: e})} topOffset={-90} stickyStyle={{top: 90}}>
                                                     <div className="sticky-side">
-                                                        <img src={(lesson.video || {}).thumbnail ? `${config.get('hostMedia')}${lesson.video.thumbnail}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
+                                                        <img src={(lesson.thumbnailSmall || {}).path ? `${config.get('hostMedia')}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
                                                         {
                                                             lesson.paid ? (
                                                                 <div className="inner">

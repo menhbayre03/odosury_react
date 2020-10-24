@@ -44,7 +44,7 @@ class Header extends Component {
             <div className={`grid-item ${watching ? 'watching' : ''}`}>
                 <div title={item.title}>
                     <div className="grid-item-box">
-                        <img src={(item.thumbnail || {}).path ? `${config.get('hostMedia')}${(item.thumbnail || {}).path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
+                        <img src={(item.thumbnailSmall || {}).path ? `${config.get('hostMedia')}${(item.thumbnailSmall || {}).path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
                             <div className="contents">
                                 <Link to={`/lesson/${item.slug}`} title={item.title}>
                                     <h3>{item.title}</h3>

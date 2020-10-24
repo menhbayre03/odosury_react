@@ -10,8 +10,10 @@ const initialState = {
     type: '',
     step: 1,
     qpay: {},
+    qpayPur: {},
     purchase: [],
-    bankPaying: false
+    bankPaying: false,
+    qloading: false
 };
 
 export default(state = initialState, action) => {
@@ -35,13 +37,18 @@ export default(state = initialState, action) => {
         case getQpay.REQUEST:
             return {
                 ...state,
+                qloading: true,
                 step: 3,
                 type: 'q',
+                qpay: {},
+                qpayPur: {},
             };
         case getQpay.RESPONSE:
             return {
                 ...state,
+                qloading: false,
                 qpay: action.json.body || {},
+                qpayPur: action.json.purchase|| {},
                 purchase: [...state.purchase, (action.json.purchase || {})],
             };
         case setBank.REQUEST:
