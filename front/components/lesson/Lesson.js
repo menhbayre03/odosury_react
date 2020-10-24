@@ -28,7 +28,7 @@ class Lesson extends Component {
     }
     render() {
         const {main: {user}, lesson: {lesson, rating, lessonLoading, addingToCard, removingFromCard}, dispatch} = this.props;
-        let hadInCard = (user.lessons || []).some(ls => ls._id === lesson._id);
+        let hadInCard = ((user || {}).lessons || []).some(ls => ls._id === lesson._id);
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
