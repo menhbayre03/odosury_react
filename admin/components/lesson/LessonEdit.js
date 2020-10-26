@@ -307,19 +307,7 @@ class LessonEdit extends React.Component {
                                                                 extended_valid_elements: "iframe[src|style|scrolling|class|width|height|name|align]",
                                                                 color_cols: "5",
                                                                 custom_colors: false,
-                                                                body_class: 'tiny_editor',
-                                                                formats: {
-                                                                    h1: {styles: {'font-family': "'Nunito', sans-serif"}},
-                                                                    h2: {styles: {'font-family': "'Nunito', sans-serif"}},
-                                                                    h3: {styles: {'font-family': "'Nunito', sans-serif"}},
-                                                                    h4: {styles: {'font-family': "'Nunito', sans-serif"}},
-                                                                    h5: {styles: {'font-family': "'Nunito', sans-serif"}},
-                                                                    h6: {styles: {'font-family': "'Nunito', sans-serif"}},
-                                                                    p: {styles: {'font-family': "'Nunito', sans-serif"}},
-                                                                    bold: {styles: {'font-family': "'Nunito', sans-serif"}},
-                                                                    italic: {styles: {'font-family': "'Nunito', sans-serif"}},
-                                                                    code: {styles: {'font-family': "'Nunito', sans-serif"}}
-                                                                }
+                                                                body_class: 'tiny_editor'
                                                             }}
                                                         />
                                                     </Form.Item>
