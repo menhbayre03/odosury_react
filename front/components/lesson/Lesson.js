@@ -9,6 +9,7 @@ import Sticky from 'react-sticky-el';
 import ReactStars from "react-rating-stars-component";
 import config from "../../config";
 import Loader from "../include/Loader";
+import Cookies from "js-cookie";
 const reducer = ({ main, lesson }) => ({ main, lesson });
 
 class Lesson extends Component {
@@ -16,7 +17,8 @@ class Lesson extends Component {
         super(props);
         this.state = {
             active: '',
-            activeIndex: '0'
+            activeIndex: '0',
+            card: (Cookies.get('odosuryCard') ? JSON.parse(Cookies.get('odosuryCard')) : {})
         };
     }
 
@@ -26,9 +28,42 @@ class Lesson extends Component {
         this.setState({active: 'overview'});
         dispatch(actions.getLesson(match.params.slug));
     }
+    cardAction(){
+        const {
+            main: { user },
+            lesson: { lesson, addingToCard, removingFromCard },
+            dispatch
+        } = this.props;
+        let hadInCard = (user || {})._id ? ((user || {}).lessons || []).indexOf(lesson._id) > -1 : ((this.state.card || {}).lessons || []).indexOf(lesson._id) > -1;
+        if(user){
+            if(hadInCard){
+                if(!removingFromCard){
+                    dispatch(actions.removeFromCard({_id: lesson._id}))
+                }
+            } else {
+                if(!addingToCard){
+                    dispatch(actions.addToCard({_id: lesson._id}))
+                }
+            }
+        } else {
+            let card = this.state.card;
+            let lessons = card.lessons || [];
+            if(hadInCard){
+                lessons = lessons.filter((c) => c !== lesson._id);
+            } else {
+                if(lessons.indexOf(lesson._id) === -1){
+                    lessons.push(lesson._id);
+                }
+            }
+            card.lessons = lessons;
+            Cookies.set('odosuryCard', JSON.stringify(card));
+            dispatch(actions.removeFromCookie(lesson._id));
+            this.setState({card: card})
+        }
+    }
     render() {
         const {main: {user}, lesson: {lesson, rating, lessonLoading, addingToCard, removingFromCard}, dispatch} = this.props;
-        let hadInCard = ((user || {}).lessons || []).some(ls => ls._id === lesson._id);
+        let hadInCard = user ? ((user || {}).lessons || []).indexOf(lesson._id) > -1 : ((this.state.card || {}).lessons || []).indexOf(lesson._id) > -1;
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
@@ -120,12 +155,7 @@ class Lesson extends Component {
                                                                     <Button
                                                                         disabled={addingToCard || removingFromCard}
                                                                         variant="primary"
-                                                                        onClick={() =>
-                                                                            hadInCard ?
-                                                                                (removingFromCard ? false : dispatch(actions.removeFromCard({_id: lesson._id})))
-                                                                                :
-                                                                                (addingToCard ? false : dispatch(actions.addToCard({_id: lesson._id})))
-                                                                        }
+                                                                        onClick={this.cardAction.bind(this)}
                                                                     >
                                                                         {
                                                                             addingToCard || removingFromCard ?

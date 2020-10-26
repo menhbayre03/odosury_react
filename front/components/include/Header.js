@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, Container, Col, Row } from 'react-bootstrap';
+import Cookies from "js-cookie";
 const reducer = ({ main }) => ({ main });
 
 class Header extends Component {
@@ -39,6 +40,7 @@ class Header extends Component {
 
     render() {
         const {main : {user, categories}} = this.props;
+        let card = (Cookies.get('odosuryCard') ? JSON.parse(Cookies.get('odosuryCard')) : {});
         return (
             <div>
                 <div className={`header ${this.state.trans ? 'trans' : ''}`}>
@@ -81,20 +83,26 @@ class Header extends Component {
                                             <Link to="/profile/info">Профайл<ion-icon name="person"/></Link>
                                         </div>
                                     ) : (
-                                        <Link to="/login">
-                                            <span style={{
-                                                width: 158,
-                                                display: 'block',
-                                                fontSize: 12,
-                                                color: '#fff',
-                                                padding: '6px 0px 6px 15px',
-                                                marginRight: -25,
-                                                marginLeft: 15,
-                                                cursor: 'pointer'
-                                            }}>
-                                                Нэвтрэх / Бүртгүүлэх
-                                            </span>
-                                        </Link>
+                                        <React.Fragment>
+                                            <Link to="/card" style={{marginRight: 15, position: 'relative'}}>
+                                                <span>{(card.bundles || []).length + (card.lessons || []).length}</span>
+                                                <ion-icon name="basket"/>
+                                            </Link>
+                                            <Link to="/login">
+                                                <span style={{
+                                                    width: 158,
+                                                    display: 'block',
+                                                    fontSize: 12,
+                                                    color: '#fff',
+                                                    padding: '6px 0px 6px 15px',
+                                                    marginRight: -25,
+                                                    marginLeft: 15,
+                                                    cursor: 'pointer'
+                                                }}>
+                                                    Нэвтрэх / Бүртгүүлэх
+                                                </span>
+                                            </Link>
+                                        </React.Fragment>
                                     )
                                 }
                             </Col>

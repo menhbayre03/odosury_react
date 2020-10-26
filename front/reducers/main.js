@@ -15,55 +15,33 @@ export default(state = initialState, action) => {
         case lessonAddToCard.RESPONSE:
             return {
               ...state,
-                user: action.json.user || {
-                    ...state.user
+                user: {
+                    ...state.user,
+                    lessons: (state.user.lessons || []).indexOf((action.json.lesson || {})._id) === -1 ? [...(state.user.lessons || []), (action.json.lesson || {})._id] : (state.user.lessons || [])
                 }
-            };
-        case lessonRemoveFromCard.REQUEST:
-            return {
-              ...state,
-              user: {
-                  ...state.user,
-                  lessons: (state.user.lessons || []).map((c) => {
-                      if(c._id === action.json._id){
-                          c.deleting = true;
-                      }
-                      return c;
-                  })
-              }
             };
         case lessonRemoveFromCard.RESPONSE:
             return {
               ...state,
-              user: action.json.user || {
-                  ...state.user
+              user: {
+                  ...state.user,
+                  lessons: (state.user.lessons || []).filter((c) => c !== action.json._id)
               }
             };
         case bundleAddToCard.RESPONSE:
             return {
               ...state,
-                user: action.json.user || {
-                    ...state.user
-                }
-            };
-        case bundleRemoveFromCard.REQUEST:
-            return {
-              ...state,
-              user: {
+                user: {
                   ...state.user,
-                  bundles: (state.user.bundles || []).map((c) => {
-                      if(c._id === action.json._id){
-                          c.deleting = true;
-                      }
-                      return c;
-                  })
-              }
+                    bundles: (state.user.bundles || []).indexOf((action.json.bundle || {})._id) === -1 ? [...(state.user.bundles || []), (action.json.bundle || {})._id] : (state.user.bundles || [])
+                }
             };
         case bundleRemoveFromCard.RESPONSE:
             return {
               ...state,
-              user: action.json.user || {
-                  ...state.user
+              user: {
+                  ...state.user,
+                  bundles: (state.user.bundles || []).filter((c) => c !== action.json._id)
               }
             };
         case payByBank.RESPONSE:

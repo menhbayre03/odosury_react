@@ -26,6 +26,12 @@ export const lessonRemoveFromCard = {
     REQUEST:'lessonRemoveFromCard_REQ',
     RESPONSE:'lessonRemoveFromCard_RES'
 };
+export const removeFromCookieLesson = {
+    REQUEST:'removeFromCookieLesson_REQ'
+};
+export const removeFromCookieBundle = {
+    REQUEST:'removeFromCookieBundle_REQ'
+};
 export const bundleAddToCard = {
     REQUEST:'bundleAddToCard_REQ',
     RESPONSE:'bundleAddToCard_RES'
@@ -49,6 +55,14 @@ export const getLessonsProf = {
 export const getBundle = {
     REQUEST:'FETCH_GET_BUNDLESINGLE_REQUEST',
     RESPONSE:'FETCH_GET_BUNDLESINGLE_RESPONSE'
+};
+export const getBundleAll = {
+    REQUEST:'getBundleAll_REQ',
+    RESPONSE:'getBundleAll_RES'
+};
+export const getLessonAll = {
+    REQUEST:'getLessonAll_REQ',
+    RESPONSE:'getLessonAll_RES'
 };
 export const getQpay = {
     REQUEST:'getQpay_REQ',

@@ -4,12 +4,13 @@ import { Link } from 'react-router-dom';
 import Header from "../include/Header";
 import Loader from "../include/Loader";
 import Footer from "../include/Footer";
-import { removeFromCard } from '../../actions/lesson_actions';
+import { removeFromCard, getLessonAll, removeFromCookie } from '../../actions/lesson_actions';
 import * as actions from '../../actions/card_actions';
 import * as bundleActions from '../../actions/bundle_actions';
 import { Row, Col, Container } from 'react-bootstrap';
 import NumberFormat from 'react-number-format';
 import QRCode from "react-qr-code";
+import Cookies from 'js-cookie';
 import config from "../../config";
 const reducer = ({ main, card }) => ({ main, card });
 
@@ -24,15 +25,54 @@ class CardPage extends React.Component {
             }));
         }
     }
-
+    componentDidMount() {
+        const {
+            main: { user = {} },
+            dispatch
+        } = this.props;
+        dispatch(bundleActions.getBundleAll());
+        dispatch(getLessonAll());
+    }
+    removeLesson(lesson){
+        const {main: { user }, dispatch} = this.props;
+        let card = (Cookies.get('odosuryCard') ? JSON.parse(Cookies.get('odosuryCard')) : {});
+        let hadInCard = (user || {})._id ? ((user || {}).lessons || []).indexOf(lesson._id) > -1 : ((card || {}).lessons || []).indexOf(lesson._id) > -1;
+        if(user){
+            if(hadInCard){
+                dispatch(removeFromCard({_id: lesson._id}));
+            }
+        } else {
+            let lessons = card.lessons || [];
+            if(hadInCard){
+                card.lessons = lessons.filter((c) => c !== lesson._id);
+            }
+            dispatch(removeFromCookie(lesson._id));
+            Cookies.set('odosuryCard', JSON.stringify(card));
+        }
+    }
+    removeBundle(bundle){
+        const {main: { user }, dispatch} = this.props;
+        let card = (Cookies.get('odosuryCard') ? JSON.parse(Cookies.get('odosuryCard')) : {});
+        let hadInCard = (user || {})._id ? ((user || {}).bundles || []).indexOf(bundle._id) > -1 : ((card || {}).bundles || []).indexOf(bundle._id) > -1;
+        if(user){
+            if(hadInCard){
+                dispatch(bundleActions.removeFromCard({_id: bundle._id}));
+            }
+        } else {
+            let bundles = card.bundles || [];
+            if(hadInCard){
+                card.bundles = bundles.filter((c) => c !== bundle._id);
+            }
+            dispatch(bundleActions.removeFromCookie(bundle._id));
+            Cookies.set('odosuryCard', JSON.stringify(card));
+        }
+    }
     render() {
         const {
             main: { user = {} },
-            card: { step, type, qpay = {}, qloading, qpayPur },
+            card: { step, type, qpay = {}, qloading, qpayPur, bundles, lessons },
             dispatch
         } = this.props;
-        let bundles = ((user || {}).bundles || []);
-        let lessons = ((user || {}).lessons || []);
         let lessonsPrice = lessons.reduce((total, c) => total + (c.sale ? c.sale : c.price), 0) || 0;
         let bundlesPrice = bundles.reduce((total, c) => total + (c.sale ? c.sale : c.price), 0) || 0;
         return (
@@ -59,7 +99,7 @@ class CardPage extends React.Component {
                                                                                 <span><Link to={`/lesson/${lesson.slug}`}>{lesson.title}</Link></span>
                                                                                 <div className="rii">
                                                                                     <NumberFormat value={lesson.sale && lesson.sale > 0 ? lesson.sale : lesson.price} displayType={'text'} renderText={(value) => <span>{value}₮</span>} thousandSeparator={true}/>
-                                                                                    <button disabled={lesson.deleting} onClick={() => dispatch(removeFromCard({_id: lesson._id}))}>
+                                                                                    <button disabled={lesson.deleting} onClick={this.removeLesson.bind(this, lesson)}>
                                                                                         {lesson.deleting ? "устгаж байна" : "устгах"}
                                                                                     </button>
                                                                                 </div>
@@ -80,7 +120,7 @@ class CardPage extends React.Component {
                                                                                 <span><Link to={`/bundle/${bundle.slug}`}>{bundle.title}</Link></span>
                                                                                 <div className="rii">
                                                                                     <NumberFormat value={bundle.sale && bundle.sale > 0 ? bundle.sale : bundle.price} displayType={'text'} renderText={(value) => <span>{value}₮</span>} thousandSeparator={true}/>
-                                                                                    <button disabled={bundle.deleting} onClick={() => dispatch(bundleActions.removeFromCard({_id: bundle._id}))}>
+                                                                                    <button disabled={bundle.deleting} onClick={this.removeBundle.bind(this, bundle)}>
                                                                                         {bundle.deleting ? "устгаж байна" : "устгах"}
                                                                                     </button>
                                                                                 </div>
@@ -124,11 +164,17 @@ class CardPage extends React.Component {
                                                     ) : null
                                                 }
                                                 <NumberFormat value={bundlesPrice + lessonsPrice} displayType={'text'} renderText={(value) => <p className="total">Нийт: <span>{value}₮</span></p>} thousandSeparator={true}/>
-                                                <button onClick={() => lessons.length > 0 || bundles.length ? dispatch(actions.setCardTypes({step: 2, type: type})) : config.get('emitter').emit('warning', 'Сагс хоосон байна')}>Худалдан авалт хийх</button>
+                                                <button onClick={() =>
+                                                    (user || {})._id ?
+                                                        (lessons.length > 0 || bundles.length) ? dispatch(actions.setCardTypes({step: 2, type: type})) : config.get('emitter').emit('warning', 'Сагс хоосон байна')
+                                                    : config.get('emitter').emit('warning', 'Нэвтрээгүй байна!')
+                                                }>
+                                                    Худалдан авалт хийх
+                                                </button>
                                             </div>
                                         </Col>
                                     </Row>
-                                ) : step === 2 ? (
+                                ) : (user || {})._id && step === 2 ? (
                                     <Row>
                                         <Col md={8}>
                                             <div className="section pay-option">
@@ -165,7 +211,7 @@ class CardPage extends React.Component {
                                             </div>
                                         </Col>
                                     </Row>
-                                ) : step === 3 && (type === 'q' || type === 'b') ? (
+                                ) : (user || {})._id && step === 3 && (type === 'q' || type === 'b') ? (
                                     <Row>
                                         <Col md={8}>
                                             <div className="section pay-option">

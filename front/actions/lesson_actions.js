@@ -21,3 +21,13 @@ export function removeFromCard(data) {
     let url = `/api/lesson/remove/from/card`;
     return networkActions.requestPost(constants.lessonRemoveFromCard, url, data);
 }
+export function removeFromCookie(lesson) {
+    return {
+        type: constants.removeFromCookieLesson.REQUEST,
+        lesson
+    }
+}
+export function getLessonAll() {
+    let url = `/api/lesson/get/all`;
+    return networkActions.requestGet(constants.getLessonAll, url);
+}
