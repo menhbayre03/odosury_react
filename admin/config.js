@@ -2,9 +2,9 @@ var {EventEmitter} = require('fbemitter');
 let config = {};
 let configList = {
     emitter: new EventEmitter(),
-    host:process.env.NODE_ENV == 'development' ? 'http://odosury.mn' : 'https://odosury.com',
-    hostMedia:process.env.NODE_ENV == 'development' ? 'http://cdn.odosury.mn' : 'https://cdn.odosury.com',
-    socketUrl: process.env.NODE_ENV == 'development' ? 'http://odosury.mn:8080' : 'https://odosury.com',
+    host:process.env.NODE_ENV == 'development' ? 'http://odosury.mn' : 'http://odosury.com',
+    hostMedia:process.env.NODE_ENV == 'development' ? 'http://cdn.odosury.mn' : 'http://cdn.odosury.com',
+    socketUrl: process.env.NODE_ENV == 'development' ? 'http://odosury.mn:8080' : 'http://odosury.com',
     fbApi: {},
     socket: {},
 };
