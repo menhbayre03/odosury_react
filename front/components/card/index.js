@@ -37,7 +37,7 @@ class CardPage extends React.Component {
         const {main: { user }, dispatch} = this.props;
         let card = (Cookies.get('odosuryCard') ? JSON.parse(Cookies.get('odosuryCard')) : {});
         let hadInCard = (user || {})._id ? ((user || {}).lessons || []).indexOf(lesson._id) > -1 : ((card || {}).lessons || []).indexOf(lesson._id) > -1;
-        if(user){
+        if((user || {})._id){
             if(hadInCard){
                 dispatch(removeFromCard({_id: lesson._id}));
             }
@@ -54,7 +54,7 @@ class CardPage extends React.Component {
         const {main: { user }, dispatch} = this.props;
         let card = (Cookies.get('odosuryCard') ? JSON.parse(Cookies.get('odosuryCard')) : {});
         let hadInCard = (user || {})._id ? ((user || {}).bundles || []).indexOf(bundle._id) > -1 : ((card || {}).bundles || []).indexOf(bundle._id) > -1;
-        if(user){
+        if((user || {})._id){
             if(hadInCard){
                 dispatch(bundleActions.removeFromCard({_id: bundle._id}));
             }

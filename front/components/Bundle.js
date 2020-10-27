@@ -31,7 +31,7 @@ class Bundle extends Component {
             dispatch
         } = this.props;
         let hadInCard = (user || {})._id ? ((user || {}).bundles || []).indexOf(bundle._id) > -1 : ((this.state.card || {}).bundles || []).indexOf(bundle._id) > -1;
-        if(user){
+        if((user || {})._id){
             if(hadInCard){
                 if(!removingFromCard){
                     dispatch(actions.removeFromCard({_id: bundle._id}))
