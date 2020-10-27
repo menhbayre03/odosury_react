@@ -6,6 +6,7 @@ import Footer from "./include/Footer";
 import ReactPasswordStrength from 'react-password-strength';
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import Api from "../../admin/actions/api";
+import Cookies from "js-cookie";
 const reducer = ({ main, auth }) => ({ main, auth });
 
 class Home extends Component {
@@ -91,6 +92,7 @@ class Home extends Component {
                     this.setState({loading: false, registerDone: true, pendingEmail: response.email, accessToken: response.accessToken});
                 } else {
                     this.setState({loading: false});
+                    Cookies.set('odosuryCard', JSON.stringify({bundles: [], lessons: []}));
                     window.location = "/";
                 }
             } else {
