@@ -3,8 +3,10 @@ import {
     getLesson,
     lessonAddToCard,
     lessonRemoveFromCard,
+    setProgress,
     getViewArea
 } from "../actionTypes";
+import config from "../config";
 const initialState = {
     loading: 1,
     list: [],
@@ -36,6 +38,38 @@ export default(state = initialState, action) => {
                     ...state,
                     list: [],
                     loading:2
+                };
+            }
+        case setProgress.REQUEST:
+            return {
+                ...state
+            };
+        case setProgress.RESPONSE:
+            if(action.json.success) {
+                return {
+                    ...state,
+                    lessonView: {
+                        ...state.lessonView,
+                        levels: state.lessonView.levels.map(level => {
+                            return {
+                                ...level,
+                                programs: level.programs.map(prog => {
+                                    if(prog._id.toString() === action.json.program.toString()) {
+                                        return {
+                                            ...prog,
+                                            passed_users: [...prog.passed_users, action.json.user_id]
+                                        }
+                                    } else {
+                                        return prog
+                                    }
+                                })
+                            }
+                        })
+                    }
+                };
+            } else {
+                return {
+                    ...state
                 };
             }
         case getLesson.REQUEST:
@@ -71,6 +105,7 @@ export default(state = initialState, action) => {
             };
         case getViewArea.RESPONSE:
             if(action.json.success) {
+                config.get('emitter').emit('setProgram', action.json.lesson || {});
                 return {
                     ...state,
                     lessonView: action.json.lesson || {},

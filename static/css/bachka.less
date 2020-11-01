@@ -291,13 +291,18 @@
       border-radius: 10px;
     }
     .bundle-detail {
-      display: inline-block;
+      display: block;
       margin-left: 80px;
+      padding-top: 1px;
       h4 {
         font-size: 16px;
         font-weight: 600;
         margin-top: 12px;
         color: #3e416d;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       p {
         margin-bottom: 0;
@@ -1217,6 +1222,21 @@
     p {
       color: #797979;
       font-size: 12px;
+    }
+    button {
+      font-size: 20px;
+      font-weight: 700;
+      border-radius: 10px;
+      background: #d8d8d8;
+      border: none;
+      color: #404265;
+      margin-left: 30px;
+      padding: 5px 20px;
+      ion-icon {
+        position: relative;
+        top: 2px;
+        margin-right: 10px;
+      }
     }
   }
 }

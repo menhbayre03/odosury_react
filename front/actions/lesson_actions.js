@@ -13,6 +13,10 @@ export function getViewArea(slug) {
     let url = `/api/lesson/view/${slug}`;
     return networkActions.requestGet(constants.getViewArea, url);
 }
+export function setProgress(lesson_id, program) {
+    let url = `/api/lesson/setProgram/${lesson_id}`;
+    return networkActions.requestGet(constants.setProgress, url, {program: program._id});
+}
 export function addToCard(data) {
     let url = `/api/lesson/add/to/card`;
     return networkActions.requestPost(constants.lessonAddToCard, url, data);

@@ -22,12 +22,28 @@ class Bundle extends Component {
 
     componentDidMount() {
         window.scroll(0, 0);
-        const {dispatch, match} = this.props;
+        let self = this;
+        const {dispatch, match, main: {user}} = this.props;
         dispatch(actions.getViewArea(match.params.slug));
+        this.setProgram = config.get('emitter').addListener('setProgram', function (lessonView) {
+            let aa = 0;
+            setTimeout(function () {
+                (lessonView.levels || []).map((item, index) => {
+                    item.programs.map(prog => {
+                        if(prog.passed_users.indexOf(user._id) < 0 && aa === 0) {
+                            aa = 1;
+                            self.setState({program: prog.timeline, activeIndex: index.toString()}, () => dispatch(actions.setProgress(lessonView._id, prog)));
+                        }
+                    })
+                })
+            }, 100)
+        })
     }
 
     selectProgram(program) {
-        this.setState({program: program.timeline})
+        const {lesson: {lessonView}} = this.props;
+        const {dispatch} = this.props;
+        this.setState({program: program.timeline}, () => dispatch(actions.setProgress(lessonView._id, program)))
     }
 
     render() {
@@ -35,7 +51,7 @@ class Bundle extends Component {
         const {program} = this.state;
         let mediaUrl = '';
         if(program.video) {
-            mediaUrl = "http://cdn.odosury.mn/api/video/show/"+program.video._id+'?lessonId='+lessonView._id+'&token='+Cookies.get('token');
+            mediaUrl = config.get('hostMedia')+"/api/video/show/"+program.video._id+'?lessonId='+lessonView._id+'&token='+Cookies.get('token');
         }
         return (
             <React.Fragment>
@@ -148,7 +164,7 @@ class Bundle extends Component {
                                                         playing
                                                         onError={() => config.get('emitter').emit('warning', 'Хандах эрх хүрэхгүй байна.')}
                                                         controls
-                                                        light={`${program.video.url}${program.video.thumbnail}`}
+                                                        light={`${config.get('hostMedia')}${program.video.thumbnail}`}
                                                         autoPlay={false}
                                                         height={560}
                                                         playIcon={<ion-icon style={{fontSize: 74, color: '#fff'}} name="play-circle"/>}
@@ -171,7 +187,7 @@ class Bundle extends Component {
                                             }
                                         </div>
                                     ) : (
-                                        <p>haha</p>
+                                        null
                                     )
                                 }
                             </div>

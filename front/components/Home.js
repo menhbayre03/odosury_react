@@ -140,11 +140,11 @@ class Home extends Component {
                                 {
                                     bundles.map(item => (
                                         <Col md={3}>
-                                            <Link to={`/bundle/${item.slug}`}>
+                                            <Link style={{textDecoration: 'none'}} to={`/bundle/${item.slug}`}>
                                                 <div className="bundle-item">
                                                     <img src={(item.thumbnail || {}).path ? `${config.get('hostMedia')}${(item.thumbnail || {}).path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`} className="cover-img"/>
                                                     <div className="bundle-detail">
-                                                        <h4>Web Development</h4>
+                                                        <h4>{item.title}</h4>
                                                         <p className="skill-card-subtitle">{` ${(item.levels || []).length} түвшин  ${(item.levels || []).reduce((total, aa) => total + (aa.lessons || []).length, 0)} хичээл`}</p>
                                                     </div>
                                                 </div>

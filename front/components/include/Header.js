@@ -83,7 +83,7 @@ class Header extends Component {
                                             <Link to="/profile/info">Профайл<ion-icon name="person"/></Link>
                                         </div>
                                     ) : (
-                                        <React.Fragment>
+                                        <div className="user-menu">
                                             <Link to="/card" style={{marginRight: 15, position: 'relative'}}>
                                                 <span>{(card.bundles || []).length + (card.lessons || []).length}</span>
                                                 <ion-icon name="basket"/>
@@ -96,13 +96,19 @@ class Header extends Component {
                                                     color: '#fff',
                                                     padding: '6px 0px 6px 15px',
                                                     marginRight: -25,
-                                                    marginLeft: 15,
-                                                    cursor: 'pointer'
+                                                    cursor: 'pointer',
+                                                    background: 'unset',
+                                                    position: 'unset',
+                                                    top: 'unset',
+                                                    right: 'unset',
+                                                    minWidth: 'unset',
+                                                    textAlign: 'unset',
+                                                    lineHeight: 'unset',
                                                 }}>
                                                     Нэвтрэх / Бүртгүүлэх
                                                 </span>
                                             </Link>
-                                        </React.Fragment>
+                                        </div>
                                     )
                                 }
                             </Col>

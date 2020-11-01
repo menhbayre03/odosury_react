@@ -1,14 +1,9 @@
-import React, {Component, Fragment} from "react";
+import React, {Fragment} from "react";
 import { connect } from 'react-redux';
-import config from "../config";
-import moment from "moment";
 import Login from "./Login";
-import Routes from "../router";
 import {renderRoutes} from 'react-router-config';
 import {
-    Router,
     Route,
-    Switch,
     Link
 } from 'react-router-dom';
 import {
@@ -20,7 +15,8 @@ import {
     DatabaseFilled,
     FileTextFilled
 } from '@ant-design/icons';
-import {Layout, Menu, Tooltip } from 'antd';
+import {Layout, Menu, Tooltip, Button } from 'antd';
+import * as actions from "../actions";
 const {Header, Content, Sider} = Layout;
 const reducer = ({ main }) => ({ main });
 
@@ -36,6 +32,10 @@ class index extends React.Component {
         this.setState({
             collapsed: !this.state.collapsed,
         });
+    };
+    async flush() {
+        const result = await actions.flush();
+        console.log(result)
     };
     render() {
         let { main:{user}, location, route: {routes} } = this.props;
@@ -117,6 +117,11 @@ class index extends React.Component {
                                     <span>Худалдан авалт</span>
                                 </Link>
                             </Menu.Item>
+                            <Button style={{
+                                marginLeft: 'auto',
+                                marginRight: 'auto',
+                                display: 'block',
+                            }} type={"primary"} onClick={() => this.flush()}>Cache цэвэрлэх</Button>
                         </Menu>
                         {/*<Button type="primary" onClick={() => this.toggleCollapsed()} style={{ marginBottom: 16, width: "100%"}}>*/}
                         {/*    {this.state.collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}*/}

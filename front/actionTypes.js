@@ -44,6 +44,10 @@ export const getViewArea = {
     REQUEST:'FETCH_GET_LESSOINVIEW_REQUEST',
     RESPONSE:'FETCH_GET_LESSOINVIEW_RESPONSE'
 };
+export const setProgress = {
+    REQUEST:'FETCH_GET_setProgress_REQUEST',
+    RESPONSE:'FETCH_GET_setProgress_RESPONSE'
+};
 export const getHistory = {
     REQUEST:'FETCH_GET_HISTORY_REQUEST',
     RESPONSE:'FETCH_GET_HISTORY_RESPONSE'
