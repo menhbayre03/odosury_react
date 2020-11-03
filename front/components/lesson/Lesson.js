@@ -62,8 +62,12 @@ class Lesson extends Component {
         }
     }
     addWish(id, add) {
-        const {dispatch} = this.props;
-        dispatch(actions.addWish(id, {add}));
+        const {main: {user}, dispatch} = this.props;
+        if(user) {
+            dispatch(actions.addWish(id, {add}));
+        } else {
+            config.get('emitter').emit('warning', 'Нэвтрэх шаардлагатай !')
+        }
     }
     render() {
         const {main: {user}, lesson: {lesson, rating, lessonLoading, addingToCard, removingFromCard}, dispatch} = this.props;
