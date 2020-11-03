@@ -61,6 +61,10 @@ class Lesson extends Component {
             this.setState({card: card})
         }
     }
+    addWish(id, add) {
+        const {dispatch} = this.props;
+        dispatch(actions.addWish(id, {add}));
+    }
     render() {
         const {main: {user}, lesson: {lesson, rating, lessonLoading, addingToCard, removingFromCard}, dispatch} = this.props;
         let hadInCard = user ? ((user || {}).lessons || []).indexOf(lesson._id) > -1 : ((this.state.card || {}).lessons || []).indexOf(lesson._id) > -1;
@@ -164,9 +168,17 @@ class Lesson extends Component {
                                                                                 <ion-icon name={hadInCard ? "trash-outline" : "cart-outline"}/>
                                                                         } {hadInCard ? "Сагснаас хасах" : "Сагслах"}
                                                                     </Button>
-                                                                    <Button variant="secondary">
-                                                                        <ion-icon name="heart" /> Хадгалах
-                                                                    </Button>
+                                                                    {
+                                                                        (user.wish || []).some( aa => aa == lesson._id) ? (
+                                                                            <Button onClick={() => this.addWish(lesson._id, false)} variant="secondary">
+                                                                                <ion-icon name="heart" /> Хадгалсан
+                                                                            </Button>
+                                                                        ) : (
+                                                                            <Button onClick={() => this.addWish(lesson._id, true)} variant="secondary">
+                                                                                <ion-icon name="heart" /> Хадгалах
+                                                                            </Button>
+                                                                        )
+                                                                    }
                                                                 </div>
                                                             )
                                                         }

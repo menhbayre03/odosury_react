@@ -4,6 +4,7 @@ import {
     bundleAddToCard,
     bundleRemoveFromCard,
     payByBank,
+    addWish,
 } from "../actionTypes";
 
 const initialState = {
@@ -53,6 +54,18 @@ export default(state = initialState, action) => {
                   lessons: []
               }
             };
+        case addWish.RESPONSE:
+            if(action.json.success) {
+                return {
+                    ...state,
+                    user: {
+                        ...state.user,
+                        wish: action.json.wish ||[],
+                    }
+                };
+            } else {
+                return state
+            }
         default:
             return state;
     }

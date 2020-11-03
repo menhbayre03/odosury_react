@@ -26,6 +26,10 @@ export const lessonRemoveFromCard = {
     REQUEST:'lessonRemoveFromCard_REQ',
     RESPONSE:'lessonRemoveFromCard_RES'
 };
+export const addWish = {
+    REQUEST:'addWish_REQ',
+    RESPONSE:'addWish_RES'
+};
 export const removeFromCookieLesson = {
     REQUEST:'removeFromCookieLesson_REQ'
 };
@@ -55,6 +59,10 @@ export const getHistory = {
 export const getLessonsProf = {
     REQUEST:'FETCH_GET_LESSONS_PROF_REQUEST',
     RESPONSE:'FETCH_GET_LESSONS_PROF_RESPONSE'
+};
+export const getWishlist = {
+    REQUEST:'FETCH_GET_WISHLIST_REQUEST',
+    RESPONSE:'FETCH_GET_WISHLIST_RESPONSE'
 };
 export const getBundle = {
     REQUEST:'FETCH_GET_BUNDLESINGLE_REQUEST',

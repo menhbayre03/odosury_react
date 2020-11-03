@@ -11,3 +11,8 @@ export function getLessonsProf(id) {
     let url = `/api/profileLessons/${id}`;
     return networkActions.requestGet(constants.getLessonsProf, url);
 }
+
+export function getWishlist(id) {
+    let url = `/api/wishlist/${id}`;
+    return networkActions.requestGet(constants.getWishlist, url);
+}

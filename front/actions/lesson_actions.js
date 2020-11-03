@@ -25,6 +25,10 @@ export function removeFromCard(data) {
     let url = `/api/lesson/remove/from/card`;
     return networkActions.requestPost(constants.lessonRemoveFromCard, url, data);
 }
+export function addWish(id, data) {
+    let url = `/api/lesson/addWish/${id}`;
+    return networkActions.requestGet(constants.addWish, url, data);
+}
 export function removeFromCookie(lesson) {
     return {
         type: constants.removeFromCookieLesson.REQUEST,

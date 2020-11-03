@@ -1,12 +1,17 @@
 import {
     getHistory,
     getLessonsProf,
+    getWishlist,
+    addWish
 } from "../actionTypes";
 import moment from 'moment';
 const initialState = {
     histories: [],
     loadingHistory: false,
     loadingLessons: false,
+    loadingWishlist: false,
+    wishlist: [],
+    wishRemoveLoading: false,
     lessons: [],
     bundles: [],
 };
@@ -32,6 +37,24 @@ export default(state = initialState, action) => {
                     histories: [],
                 };
             }
+        case addWish.REQUEST:
+            return {
+                ...state,
+                wishRemoveLoading:true
+            };
+        case addWish.RESPONSE:
+            if(action.json.success) {
+                return {
+                    ...state,
+                    wishlist: state.wishlist.filter(aa => action.json.wish.some(bb => bb == aa._id)),
+                    wishRemoveLoading:false
+                };
+            } else {
+                return {
+                    ...state,
+                    wishRemoveLoading:false
+                }
+            }
         case getLessonsProf.REQUEST:
             return {
                 ...state,
@@ -53,6 +76,25 @@ export default(state = initialState, action) => {
                     loadingLessons:false,
                     lessons: [],
                     bundles: [],
+                };
+            }
+        case getWishlist.REQUEST:
+            return {
+                ...state,
+                loadingWishlist:true
+            };
+        case getWishlist.RESPONSE:
+            if(action.json.success) {
+                return {
+                    ...state,
+                    wishlist: action.json.wishlist || [],
+                    loadingWishlist:false
+                };
+            } else {
+                return {
+                    ...state,
+                    loadingWishlist:false,
+                    wishlist: [],
                 };
             }
         default:

@@ -4,7 +4,7 @@ import {
     lessonAddToCard,
     lessonRemoveFromCard,
     setProgress,
-    getViewArea
+    getViewArea, addWish
 } from "../actionTypes";
 import config from "../config";
 const initialState = {
@@ -21,6 +21,22 @@ const initialState = {
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case addWish.REQUEST:
+            return {
+                ...state,
+                lesson: {
+                    ...state.lesson,
+                    wishLoading: true
+                },
+            };
+        case addWish.RESPONSE:
+            return {
+                ...state,
+                lesson: {
+                    ...state.lesson,
+                    wishLoading: false
+                },
+            };
         case getList.REQUEST:
             return {
                 ...state,

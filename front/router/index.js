@@ -15,7 +15,7 @@ import 'swiper/swiper.less'
 require("../../static/css/front.less");
 import io from "socket.io-client";
 import * as actions from "../actions/card_actions";
-const socket = io('http://odosury.mn:8021', {path:'/api/socket',transports:['websocket']});
+const socket = io(`${config.get('host')}:8021`, {path:'/api/socket',transports:['websocket']});
 
 const reducer = ({ main }) => ({ main });
 
