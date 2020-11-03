@@ -169,7 +169,7 @@ class Lesson extends Component {
                                                                         } {hadInCard ? "Сагснаас хасах" : "Сагслах"}
                                                                     </Button>
                                                                     {
-                                                                        (user.wish || []).some( aa => aa == lesson._id) ? (
+                                                                        ((user || {}).wish || []).some( aa => aa == lesson._id) ? (
                                                                             <Button onClick={() => this.addWish(lesson._id, false)} variant="secondary">
                                                                                 <ion-icon name="heart" /> Хадгалсан
                                                                             </Button>
