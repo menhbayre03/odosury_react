@@ -79,6 +79,9 @@ class User extends React.Component {
         if(!user.role || (user.role && user.role.trim() === '' )){
             return config.get('emitter').emit('warning', ("Хэрэглэгчийн эрх сонгоно уу!"));
         }
+        if(!user.status || (user.status && user.status.trim() === '' )){
+            return config.get('emitter').emit('warning', ("Хэрэглэгчийн статус сонгоно уу!"));
+        }
         if(!user._id){
             if(!user.password || (user.password && user.password.trim() === '' )){
                 return config.get('emitter').emit('warning', ("Нууц үг оруулна уу!"));
@@ -146,6 +149,9 @@ class User extends React.Component {
 
     onChangeSelect(value){
         this.props.dispatch(actions.userChangeHandler({name:'role', value: value}));
+    };
+    onChangeSelect1(value){
+        this.props.dispatch(actions.userChangeHandler({name:'status', value: value}));
     };
     render() {
         let { user:{status, openModal, user, users, submitUserLoader, all, imageUploadLoading} } = this.props;
@@ -216,6 +222,18 @@ class User extends React.Component {
                 title: 'Огноо',
                 render: (text, record, idx) => (
                     record.created ? moment(record.created).format('YYYY-MM-DD') : '-'
+                ),
+            },
+            {
+                key: 'status',
+                title: 'Статус',
+                render: (text, record) => (
+                    record.status ?
+                        record.status === 'pending' ? 'Хүлээгдэж байна' :
+                            record.status === 'active' ? 'Идэвхитэй' :
+                                record.status === 'delete' ? 'Устгагдсан' : null
+                        :
+                        '-'
                 ),
             },
             {
@@ -376,6 +394,19 @@ class User extends React.Component {
                             <Option value="">Эрх сонгоно уу</Option>
                             <Option value="teacher">Багш</Option>
                             <Option value="user">Хэрэглэгч</Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        label='Статус'
+                        labelCol={{span: 5}}
+                        // help=""
+                    >
+                        <Select
+                            value={user.status ? user.status : ''}
+                            onChange={this.onChangeSelect1.bind(this)}
+                        >
+                            <Option value="pending">Идэвхгүй</Option>
+                            <Option value="active">Идэвхтэй</Option>
                         </Select>
                     </Form.Item>
                     <Form.Item

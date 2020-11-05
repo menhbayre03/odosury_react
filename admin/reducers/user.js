@@ -135,6 +135,7 @@ export default(state = initialState, action) => {
                                 run.phone = action.json.data.phone;
                                 run.avatar = action.json.data.avatar;
                                 run.role = action.json.data.role;
+                                run.status = action.json.data.status;
                                 run.password = action.json.data.password;
                             }
                             return run;
