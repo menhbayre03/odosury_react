@@ -13,8 +13,10 @@ const reducer = ({ main, lesson }) => ({ main, lesson });
 class List extends Component {
     constructor(props) {
         super(props);
+        let search = ((props.location || {}).state || {}).search || '';
         this.state = {
-            sort: {value: 'newest', name: 'Шинэ'}
+            sort: {value: 'newest', name: 'Шинэ'},
+            search: search
         };
     }
 
@@ -102,6 +104,7 @@ class List extends Component {
                                                     <input
                                                         onChange={this.onChange.bind(this)}
                                                         placeholder="Хичээл хайх ..."
+                                                        value={this.state.search}
                                                     />
                                                     <ion-icon  onClick={() => this.onSearch()} name="search-outline"/>
                                                 </form>

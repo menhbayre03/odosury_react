@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import config from '../../config';
 import { Button, Container, Col, Row } from 'react-bootstrap';
 import Cookies from "js-cookie";
 const reducer = ({ main }) => ({ main });
@@ -11,8 +12,9 @@ class Header extends Component {
         this.state = {
             showNotf: false,
             cate: false,
-            trans: false
-        }
+            trans: false,
+            search: ''
+        };
         this.handleScroll = this.handleScroll.bind(this);
     }
 
@@ -36,6 +38,11 @@ class Header extends Component {
         } else if(window.scrollY < 100 && this.state.trans) {
             this.setState({trans: false})
         }
+    }
+
+    search(e) {
+        e.preventDefault();
+        config.get('history').push(`/lessons/all`, {search: this.state.search})
     }
 
     render() {
@@ -71,8 +78,10 @@ class Header extends Component {
                             </Col>
                             <Col md={6} className="section-2">
                                 <div className="section-1-1">
-                                    <input style={{width: '100%'}} placeholder="Хичээл хайх ..."/>
-                                    <ion-icon name="search-outline"/>
+                                    <form onSubmit={(e) => this.search(e)}>
+                                        <input onChange={(e) => this.setState({search: e.target.value})} style={{width: '100%'}} placeholder="Хичээл хайх ..."/>
+                                        <ion-icon onClick={(e) => this.search(e)} name="search-outline" style={{cursor: 'pointer'}}/>
+                                    </form>
                                 </div>
                                 {
                                     user ? (
