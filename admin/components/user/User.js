@@ -230,7 +230,7 @@ class User extends React.Component {
                 render: (text, record) => (
                     record.status ?
                         record.status === 'pending' ? 'Хүлээгдэж байна' :
-                            record.status === 'active' ? 'Идэвхитэй' :
+                            record.status === 'active' ? 'Идэвхтэй' :
                                 record.status === 'delete' ? 'Устгагдсан' : null
                         :
                         '-'
