@@ -153,6 +153,9 @@ class User extends React.Component {
     onChangeSelect1(value){
         this.props.dispatch(actions.userChangeHandler({name:'status', value: value}));
     };
+    onChangeSelect2(value){
+        this.props.dispatch(actions.userChangeHandler({name:'premium', value: value}));
+    };
     render() {
         let { user:{status, openModal, user, users, submitUserLoader, all, imageUploadLoading} } = this.props;
         let pagination = {
@@ -396,6 +399,24 @@ class User extends React.Component {
                             <Option value="user">Хэрэглэгч</Option>
                         </Select>
                     </Form.Item>
+                    {user.role && user.role === 'user'?
+                        <Form.Item
+                            label='Премиум'
+                            labelCol={{span: 5}}
+                            // help=""
+                        >
+                            <Select
+                                value={!!user.premium}
+                                onChange={this.onChangeSelect2.bind(this)}
+                                style={{fontWeight: 700, color:'#000000'}}
+                            >
+                                <Option value={false}>Энгийн хэрэглэгч</Option>
+                                <Option value={true}>Премиум хэрэглэгч</Option>
+                            </Select>
+                        </Form.Item>
+                        :
+                        null
+                    }
                     <Form.Item
                         label='Статус'
                         labelCol={{span: 5}}
