@@ -6,7 +6,6 @@ import { Button, Container, Col, Row, Modal, Spinner } from 'react-bootstrap';
 import * as actions from '../../actions/home_actions';
 import Cookies from "js-cookie";
 import QRCode from "react-qr-code";
-import NumberFormat from "react-number-format";
 
 class Header extends Component {
     constructor(props) {
