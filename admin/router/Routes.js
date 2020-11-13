@@ -42,11 +42,11 @@ export default [
                 path: '/admin/lessons/levels/:id',
                 exact: true
             },
-            {
-                component: Bundles,
-                path: '/admin/bundles',
-                exact: true
-            },
+            // {
+            //     component: Bundles,
+            //     path: '/admin/bundles',
+            //     exact: true
+            // },
             {
                 component: Purchase,
                 path: '/admin/purchases',

@@ -107,11 +107,11 @@ class index extends React.Component {
                                     <span>Хичээл</span>
                                 </Link>
                             </Menu.Item>
-                            <Menu.Item key="bundles" icon={<LayoutFilled />}>
-                                <Link to="/admin/bundles">
-                                    <span>Багц</span>
-                                </Link>
-                            </Menu.Item>
+                            {/*<Menu.Item key="bundles" icon={<LayoutFilled />}>*/}
+                            {/*    <Link to="/admin/bundles">*/}
+                            {/*        <span>Багц</span>*/}
+                            {/*    </Link>*/}
+                            {/*</Menu.Item>*/}
                             <Menu.Item key="purchases" icon={<DollarCircleFilled />}>
                                 <Link to="/admin/purchases">
                                     <span>Худалдан авалт</span>
