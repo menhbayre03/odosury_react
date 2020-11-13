@@ -5,6 +5,8 @@ import config from '../../config';
 import { Button, Container, Col, Row, Modal, Spinner } from 'react-bootstrap';
 import * as actions from '../../actions/home_actions';
 import Cookies from "js-cookie";
+import QRCode from "react-qr-code";
+import NumberFormat from "react-number-format";
 
 class Header extends Component {
     constructor(props) {
@@ -79,7 +81,7 @@ class Header extends Component {
     render() {
         const {
             main,
-            premiumModal: {visible, step, type, gettingTransaction, transaction},
+            premiumModal: {visible, step, type, gettingTransaction, transaction, checkingQpay},
             dispatch
         } = this.props;
         let categories = main.categories || [];
@@ -342,8 +344,44 @@ class Header extends Component {
                                                             renderBankDetails()
                                                         }
                                                     </div>
-                                            : type === 'qpay' ?
-                                                'qpay'
+                                            : gettingTransaction ?
+                                                <div style={{textAlign: 'center'}}>
+                                                    <Spinner
+                                                        variant={'secondary'}
+                                                        animation={'border'}
+                                                    />
+                                                </div>
+                                            : type === 'qpay' && (transaction.qpay || {}).payment_id ?
+                                                <div style={{marginTop: 30, marginBottom: 30}}>
+                                                    <div style={{textAlign: 'center'}}>
+                                                        <QRCode size={180} value={(transaction.qpay || {}).qPay_QRcode} />
+                                                    </div>
+                                                    <div className={'paymentMethodDet bankdetail'}>
+                                                        <p>
+                                                            <span>
+                                                                {'Шилжүүлэх дүн'.toUpperCase()}:
+                                                            </span>
+                                                            <span>
+                                                                99,000₮
+                                                            </span>
+                                                        </p>
+                                                        <p>
+                                                            <span>
+                                                                {'Гүйлгээний утга'.toUpperCase()}:
+                                                            </span>
+                                                            <span>
+                                                                {user.username || user.email}
+                                                            </span>
+                                                        </p>
+                                                        <p>
+                                                            Хаан банкны болон бусад банкны
+                                                            аппликейшнээр qr кодыг уншуулан
+                                                            төлбөрийг төлнө үү.
+                                                            Төлбөр <strong>төлөгдсөний</strong> дараа
+                                                            таны худалдан авалт баталгаажиж, үзэх боломжтой болно.
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             :
                                                 <div style={{marginTop: 30, marginBottom: 30}}>
                                                     <div className={'paymentMethod'}>
@@ -351,7 +389,7 @@ class Header extends Component {
                                                             <span>₮</span>
                                                             Дансны шилжүүлэг
                                                         </div>
-                                                        <div className={'qpay method'} onClick={() => dispatch(actions.setPremiumModal({type: 'qpay'}))}>
+                                                        <div className={'qpay method'} onClick={() => dispatch(actions.setQpay())}>
                                                             <img src="/images/qpay1.png" alt="qpay_logo"/>
                                                             QPAY үйлчилгээ ашиглан шилжүүлэх.
                                                         </div>
@@ -396,35 +434,44 @@ class Header extends Component {
                             }
                         </span>
                         {
-                            !transaction._id && !transaction.hadTrans ?
-                                step === 1 ?
-                                    <span className={'get-pre'} onClick={() => dispatch(actions.setPremiumModal({step: 2}))}>
-                                        Төлбөрийн нөхцөл сонгох
-                                        <span style={{fontSize: 12, color: '#fbfbfb'}}> / 99k /</span>
+                            step === 1 && !transaction._id && !transaction.hadTrans ?
+                                <span className={'get-pre'} onClick={() => dispatch(actions.setPremiumModal({step: 2}))}>
+                                    Төлбөрийн нөхцөл сонгох
+                                    <span style={{fontSize: 12, color: '#fbfbfb'}}> / 99k /</span>
+                                </span>
+                            : step === 2 ?
+                                type === 'bank' && !transaction._id && !transaction.hadTrans ?
+                                    <span className={'get-pre'} onClick={() => dispatch(actions.setBank())}>
+                                        {
+                                            gettingTransaction ?
+                                                <Spinner
+                                                    variant={'light'}
+                                                    size={'sm'}
+                                                    animation={'border'}
+                                                />
+                                            : null
+                                        }
+                                        <span style={{marginLeft: (gettingTransaction ? 10 : 0)}}>
+                                            Худалдан авах хүсэлт илгээх
+                                            <span style={{fontSize: 12, color: '#fbfbfb', marginLeft: 5}}> / 99k /</span>
+                                        </span>
                                     </span>
-                                : step === 2 ?
-                                    type === 'bank' ?
-                                        <span className={'get-pre'} onClick={() => dispatch(actions.setBank())}>
-                                            {
-                                                gettingTransaction ?
-                                                    <Spinner
-                                                        variant={'light'}
-                                                        size={'sm'}
-                                                        animation={'border'}
-                                                    />
+                                : type === 'qpay' && (transaction.qpay || {}).payment_id ?
+                                    <span className={'get-pre'} onClick={() => dispatch(actions.checkQpay({c: (transaction.qpay || {}).payment_id}))}>
+                                        {
+                                            checkingQpay ?
+                                                <Spinner
+                                                    variant={'light'}
+                                                    size={'sm'}
+                                                    animation={'border'}
+                                                />
                                                 : null
-                                            }
-                                            <span style={{marginLeft: (gettingTransaction ? 10 : 0)}}>
-                                                Худалдан авах хүсэлт илгээх
-                                                <span style={{fontSize: 12, color: '#fbfbfb', marginLeft: 5}}> / 99k /</span>
-                                            </span>
-                                        </span>
-                                    : type === 'qpay' ?
-                                        <span className={'get-pre'}>
+                                        }
+                                        <span style={{marginLeft: (checkingQpay ? 10 : 0)}}>
                                             Гүйлгээ шалгах
-                                            <span style={{fontSize: 12, color: '#fbfbfb'}}> / 99k /</span>
+                                            <span style={{fontSize: 12, color: '#fbfbfb', marginLeft: 5}}> / 99k /</span>
                                         </span>
-                                    : null
+                                    </span>
                                 : null
                             : null
                         }

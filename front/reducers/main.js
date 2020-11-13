@@ -5,6 +5,9 @@ import {
     bundleRemoveFromCard,
     payByBank,
     addWish,
+    setBankForPremium,
+    setQpayForPremium,
+    checkQpayForPremium,
 } from "../actionTypes";
 
 const initialState = {
@@ -13,6 +16,32 @@ const initialState = {
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case checkQpayForPremium.RESPONSE:
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    premium: action.json.success ? 'pr' : '',
+                    premiumDate: new Date()
+                }
+            };
+
+        case setBankForPremium.RESPONSE:
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    premium: action.json.success ? 'pq' : ''
+                }
+            };
+        case setQpayForPremium.RESPONSE:
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    premium: action.json.success ? 'pq' : ''
+                }
+            };
         case lessonAddToCard.RESPONSE:
             return {
               ...state,

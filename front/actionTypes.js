@@ -105,3 +105,11 @@ export const setBankForPremium = {
     REQUEST: 'setBankForPremium_REQ',
     RESPONSE: 'setBankForPremium_RES',
 };
+export const setQpayForPremium = {
+    REQUEST: 'setQpayForPremium_REQ',
+    RESPONSE: 'setQpayForPremium_RES',
+};
+export const checkQpayForPremium = {
+    REQUEST: 'checkQpayForPremium_REQ',
+    RESPONSE: 'checkQpayForPremium_RES',
+};

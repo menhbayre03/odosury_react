@@ -15,6 +15,7 @@ import 'swiper/swiper.less'
 require("../../static/css/front.less");
 import io from "socket.io-client";
 import * as actions from "../actions/card_actions";
+import * as homeActions from "../actions/home_actions";
 const socket = io(`${config.get('host')}:8021`, {path:'/api/socket',transports:['websocket']});
 
 const reducer = ({ main }) => ({ main });
@@ -98,7 +99,12 @@ class index extends React.Component{
                 if(data.payment_id && (data.user === ((this.props.main || {}).user || {})._id)){
                     this.props.dispatch(actions.checkQpay({c: data.payment_id}))
                 }
-            })
+            });
+            this.socket.on('odosuryphkPremium', (data) => {
+                if(data.payment_id && (data.user === ((this.props.main || {}).user || {})._id)){
+                    this.props.dispatch(homeActions.checkQpay({c: data.payment_id}))
+                }
+            });
         }
     }
 
