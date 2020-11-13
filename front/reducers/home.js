@@ -1,5 +1,7 @@
 import {
-    getHome
+    getHome,
+    setPremiumModal,
+    setBankForPremium,
 } from "../actionTypes";
 const initialState = {
     loading: 1,
@@ -7,10 +9,43 @@ const initialState = {
     newLessons: [],
     featuredLessons: [],
     bundles: [],
+    premiumModal: {
+        visible: false,
+        gettingTransaction: false,
+        transaction: {},
+        step: 1,
+        type: '',
+        qpay: {}
+    }
 };
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case setBankForPremium.REQUEST:
+            return {
+                ...state,
+                premiumModal: {
+                    ...state.premiumModal,
+                    gettingTransaction: true
+                }
+            };
+        case setBankForPremium.RESPONSE:
+            return {
+                ...state,
+                premiumModal: {
+                    ...state.premiumModal,
+                    gettingTransaction: false,
+                    transaction: action.json.transaction || {}
+                }
+            };
+        case setPremiumModal.REQUEST:
+            return {
+                ...state,
+                premiumModal: {
+                    ...state.premiumModal,
+                    ...action.data
+                }
+            };
         case getHome.REQUEST:
             return {
                 ...state,

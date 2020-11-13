@@ -95,3 +95,13 @@ export const checkQpay = {
 export const setCardTypes = {
     REQUEST:'setCardTypes_REQ'
 };
+
+
+
+export const setPremiumModal = {
+    REQUEST: 'setPremiumModal'
+};
+export const setBankForPremium = {
+    REQUEST: 'setBankForPremium_REQ',
+    RESPONSE: 'setBankForPremium_RES',
+};

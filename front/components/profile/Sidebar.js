@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col, Button, Tabs, Tab, Accordion, Card } from "react-bootstrap";
 import config from "../../config";
-import {locale} from "../../../../amjilt_school/src/lang";
 const reducer = ({ main, bundle }) => ({ main, bundle });
 
 class Bundle extends Component {
