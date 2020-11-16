@@ -126,9 +126,9 @@ class MediaLib extends React.Component {
             files.file.path = files.file.name;
             // this.props.dispatch(actions.uploadTimelineAudio([files.file], 'audio', id));
         }
-        if(type === 'file'){
+        if(type === 'pdf'){
             files.file.path = files.file.name;
-            // this.props.dispatch(actions.uploadTimelineFile([files.file], 'file', id));
+            // this.props.dispatch(actions.uploadTimelineFile([files.file], 'pdf', id));
         }
         dispatch(uploadMedia(
             [files.file],
@@ -174,15 +174,15 @@ class MediaLib extends React.Component {
             }
             return isJpgOrPng && isLt2M;
         }
-        if(type === 'file'){
+        if(type === 'pdf'){
             let fileName = (file.name || '').split('.');
-            const isJpgOrPng = file.type === 'application/zip' || (file.type === '' && fileName && fileName[fileName.length-1] === 'rar');
+            const isJpgOrPng = file.type === 'application/pdf' || (file.type === '' && fileName && fileName[fileName.length-1] === 'pdf');
             if (!isJpgOrPng) {
-                message.error('You can only upload .zip or .rar file!');
+                message.error('You can only upload PDF file!');
             }
             const isLt2M = file.size / 1024 / 1024 < 200;
             if (!isLt2M) {
-                message.error('File must smaller than 200MB!');
+                message.error('Pdf must smaller than 200MB!');
             }
             return isJpgOrPng && isLt2M;
         }
@@ -200,7 +200,7 @@ class MediaLib extends React.Component {
             case "audio":
                 accept = ".mp3, .MP3";
                 break;
-            case "file":
+            case "pdf":
                 accept = ".pdf,.PDF";
                 break;
             case "download":
@@ -209,8 +209,8 @@ class MediaLib extends React.Component {
         }
         let title = 'Файл';
         switch(type){
-            case 'file':
-                title = 'Pdf';
+            case 'pdf':
+                title = 'PDF';
                 break;
             case 'video':
                 title = 'Видео';

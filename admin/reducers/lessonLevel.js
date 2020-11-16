@@ -45,6 +45,10 @@ const initialState = {
     timelineAudioProgress: {},
     audioUploadLoadingT: false,
 
+    timelinePdf: {},
+    timelinePdfProgress: {},
+    pdfUploadLoadingT: false,
+
     timelineFile: {},
     timelineFileProgress: {},
     fileUploadLoadingT: false,
@@ -76,6 +80,12 @@ export default(state = initialState, action) => {
                     timelineFile: action.json.data[0]
                 };
             }
+            if(action.json.medType === 'pdf'){
+                return {
+                    ...state,
+                    timelinePdf: action.json.data[0]
+                };
+            }
             return {
                 ...state,
             };
@@ -96,6 +106,7 @@ export default(state = initialState, action) => {
                 openEditTimeline: true,
                 timelineVideo: (action.json.timeline.video || null),
                 timelineAudio: (action.json.timeline.audio || null),
+                timelinePdf: (action.json.timeline.pdf || null),
                 timelineFile: (action.json.timeline.include_zip || null),
                 timeline:action.json.timeline,
                 timelineType: action.json.type,
@@ -286,6 +297,7 @@ export default(state = initialState, action) => {
                     description: action.json.data.description,
                     video: action.json.data.video,
                     audio: action.json.data.audio,
+                    pdf: action.json.data.pdf,
                     include_zip: action.json.data.include_zip,
                     content: action.json.data.content,
                     user: action.json.data.user,
@@ -373,6 +385,7 @@ export default(state = initialState, action) => {
                 timelineFile : {},
                 timelineAudio : {},
                 timelineVideo : {},
+                timelinePdf : {},
             };
         case closeModalLevelTimline.REQUEST:
             return {

@@ -97,7 +97,7 @@ class LessonLevels extends React.Component {
         this.props.dispatch(actions.lessonAddLevel({_id: lesson._id, level_id:level._id, level: level, levelType: levelType, lesson: lesson, levelIdx:levelIdx}));
     }
     submitTimeline(){
-        const {lessonLevel:{ timeline, timelineType, lesson, levelIndex, level_id, timelineVideo, timelineAudio, timelineFile }} = this.props;
+        const {lessonLevel:{ timeline, timelineType, lesson, levelIndex, level_id, timelineVideo, timelineAudio, timelinePdf, timelineFile }} = this.props;
         if(!timeline.title || (timeline.title && timeline.title.trim() === '' )){
             return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
         }
@@ -120,6 +120,11 @@ class LessonLevels extends React.Component {
                 return config.get('emitter').emit('warning', ("Аудио оруулна уу!"));
             }
         }
+        if(timeline.type === 'pdf') {
+            if(!timelinePdf || !timelinePdf._id || timelinePdf._id === '' || !timelinePdf.type || timelinePdf.type !== 'pdf' ){
+                return config.get('emitter').emit('warning', ("PDF оруулна уу!"));
+            }
+        }
         let content = null;
         if(timeline.type === 'content') {
             content = ((this.editor || {}).editor).getContent({format:'raw'});
@@ -135,6 +140,7 @@ class LessonLevels extends React.Component {
             levelIndex:levelIndex,
             timelineVideo: timeline.type === 'video'? (timelineVideo || {})  : null,
             timelineAudio: timeline.type === 'audio'? (timelineAudio || {})  : null,
+            timelinePdf: timeline.type === 'pdf'? (timelinePdf || {})  : null,
             timelineContent: timeline.type === 'content'? (content || null)  : null,
             timelineFile: timelineFile && timelineFile._id ? timelineFile : null
         };
@@ -238,7 +244,7 @@ class LessonLevels extends React.Component {
         this.props.dispatch(actions.chooseMedia({data: data, medType:type}));
     }
     render() {
-        let { lessonLevel:{editTimelineLoader, openEditTimeline, status, lesson, openModalLevel, level, orderLoader, openModalLevelTimline, timeline, timelineSubmitLoader, timelineVideo, timelineVideoProgress, videoUploadLoadingT, timelineAudio, timelineAudioProgress, audioUploadLoadingT , timelineFile, timelineFileProgress, fileUploadLoadingT } } = this.props;
+        let { lessonLevel:{editTimelineLoader, openEditTimeline, status, lesson, openModalLevel, level, orderLoader, openModalLevelTimline, timeline, timelineSubmitLoader, timelineVideo, timelineVideoProgress, videoUploadLoadingT, timelineAudio, timelinePdf, timelineAudioProgress, audioUploadLoadingT , timelineFile, timelineFileProgress, fileUploadLoadingT } } = this.props;
         // const uploadButtonVideo = (
         //     <div style={{fontSize: 24}}>
         //         {videoUploadLoadingT ?
@@ -435,6 +441,7 @@ class LessonLevels extends React.Component {
                                         <Option value="content">Контент</Option>
                                         <Option value="video">Бичлэг</Option>
                                         <Option value="audio">Аудио</Option>
+                                        <Option value="pdf">PDF</Option>
                                     </Select>
                                 </Form.Item>
                                 {timeline.type?
@@ -519,6 +526,31 @@ class LessonLevels extends React.Component {
                                                         body_class: 'tiny_editor'
                                                     }}
                                                 />
+                                                :
+                                                    timeline.type === 'pdf'?
+                                                        <Form.Item
+                                                            label='PDF'
+                                                            labelCol={{span: 4}}
+                                                            className='upload-a'
+                                                        >
+                                                            <div>
+                                                                <Button onClick={this.openMediaLib.bind(this, 'pdf')} style={{marginBottom: 10}}>
+                                                                    <UploadOutlined /> {timelinePdf && timelinePdf._id? 'Солих' : 'PDF'}
+                                                                </Button>
+                                                                {timelinePdf && timelinePdf._id ?
+                                                                    <div className='uploaded-a'>
+                                                                        <span className='uploaded-a-name'>
+                                                                            {timelinePdf.original_name}
+                                                                        </span>
+                                                                        <span onClick={this.removeUploadedFile.bind(this, 'timelinePdf')} className='uploaded-a-action'>
+                                                                            <DeleteFilled />
+                                                                        </span>
+                                                                    </div>
+                                                                    :
+                                                                    null
+                                                                }
+                                                            </div>
+                                                        </Form.Item>
                                                 :
                                                 null
                                     :
@@ -627,6 +659,7 @@ class LessonLevels extends React.Component {
                                         <Option value="content">Контент</Option>
                                         <Option value="video">Бичлэг</Option>
                                         <Option value="audio">Аудио</Option>
+                                        <Option value="pdf">PDF</Option>
                                     </Select>
                                 </Form.Item>
                                 {timeline.type?
@@ -711,6 +744,31 @@ class LessonLevels extends React.Component {
                                                         body_class: 'tiny_editor'
                                                     }}
                                                 />
+                                            :
+                                                timeline.type === 'pdf'?
+                                                    <Form.Item
+                                                        label='PDF'
+                                                        labelCol={{span: 4}}
+                                                        className='upload-a'
+                                                    >
+                                                        <div>
+                                                            <Button onClick={this.openMediaLib.bind(this, 'pdf')} style={{marginBottom: 10}}>
+                                                                <UploadOutlined /> {timelinePdf && timelinePdf._id? 'Солих' : 'PDF'}
+                                                            </Button>
+                                                            {timelinePdf && timelinePdf._id ?
+                                                                <div className='uploaded-a'>
+                                                                    <span className='uploaded-a-name'>
+                                                                        {timelinePdf.original_name}
+                                                                    </span>
+                                                                    <span onClick={this.removeUploadedFile.bind(this, 'timelinePdf')} className='uploaded-a-action'>
+                                                                        <DeleteFilled />
+                                                                    </span>
+                                                                </div>
+                                                                :
+                                                                null
+                                                            }
+                                                        </div>
+                                                    </Form.Item>
                                             :
                                             null
                                     :
