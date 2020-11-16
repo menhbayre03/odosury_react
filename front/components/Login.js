@@ -7,6 +7,8 @@ import ReactPasswordStrength from 'react-password-strength';
 import { Container, Row, Col, Form, Button, Modal } from "react-bootstrap";
 import Api from "../../admin/actions/api";
 import Cookies from "js-cookie";
+import * as actions from "../../../amjilt_school/src/actions/auth_actions";
+import {locale} from "../../../amjilt_school/src/lang";
 const reducer = ({ main, auth }) => ({ main, auth });
 
 class Home extends Component {
@@ -24,6 +26,7 @@ class Home extends Component {
                 passwordRepeatRegister: false,
                 passwordNoMatch: false,
                 passwordNoValid: false,
+                terms: false,
             },
             username: '',
             password: '',
@@ -34,12 +37,14 @@ class Home extends Component {
             phoneRegister: '',
             passwordRegister: '',
             passwordRepeatRegister: '',
+            terms: false,
 
 
 
             verifyLoading: false,
             registerLoading: false,
             loading: false,
+            fbLoading: false,
             registerDone: false,
             verifyMsg: '',
             accessToken: '',
@@ -49,6 +54,7 @@ class Home extends Component {
 
     async componentDidMount() {
         window.scroll(0,0);
+        config.get('fbApi').whenLoaded().then(() => this.setState({sdkLoaded: true}));
         if(this.props.match.params.token) {
             this.setState({verifyLoading: true});
             const response = await Api.login(`/api/verify/${this.props.match.params.token}`);
@@ -56,6 +62,21 @@ class Home extends Component {
                 this.setState({username: response.username, verifyLoading: false, verifyMsg: 'Амжилттай идэвхижлээ. Нэвтэрж орно уу.'});
             } else {
                 this.setState({verifyLoading: false, verifyMsg: ''});
+                config.get('emitter').emit('warning', response.msg);
+            }
+        }
+    }
+    async responseFacebook() {
+        this.setState({fbLoading: true});
+        const res = await config.get('fbApi').login();
+        if(res && res.status === "connected" && (res.authResponse || {}).accessToken) {
+            const response = await Api.login(`/api/fb/login`, {token: res.authResponse.accessToken});
+            if (response.success === true) {
+                this.setState({fbLoading: false});
+                Cookies.set('odosuryCard', JSON.stringify({bundles: [], lessons: []}));
+                window.location = "/";
+            } else {
+                this.setState({fbLoading: false});
                 config.get('emitter').emit('warning', response.msg);
             }
         }
@@ -188,6 +209,11 @@ class Home extends Component {
                 errors.passwordRepeatRegister = true
             }
         }
+        if(!this.state.terms) {
+            errors.terms = true
+        } else {
+            noErr.terms = false
+        }
         if(Object.keys(errors).length === 0 && errors.constructor === Object) {
             this.setState({error : {...this.state.error, ...noErr}});
             let data = {
@@ -291,6 +317,18 @@ class Home extends Component {
                                                 </Button>
                                                 </div>
                                             </Form>
+                                            {
+                                                this.state.sdkLoaded ? (
+                                                    <div style={{cursor: 'pointer'}} className="fb"
+                                                         onClick={this.responseFacebook.bind(this)}>
+                                                        <ion-icon name="logo-facebook"/>
+                                                        <span>{locale("login.fbLogin")}</span></div>
+                                                ) : (
+                                                    <div style={{cursor: 'pointer'}} className="fb">
+                                                        <ion-icon name="logo-facebook"/>
+                                                        <span>Ачааллаж байна...</span></div>
+                                                )
+                                            }
                                         </div>
                                     </Col>
                                     <Col md={{ span: 5, offset: 2 }}>
@@ -417,6 +455,9 @@ class Home extends Component {
                                                                     this.state.error.passwordNoMatch ? 'Нууц үг зөрж байна' : 'Нууц үг давтах оруулна уу.'
                                                                 }
                                                             </Form.Control.Feedback>
+                                                        </Form.Group>
+                                                        <Form.Group className="reg-check">
+                                                            <Form.Check onChange={() => this.setState({terms: !this.state.terms})} type="checkbox" label="Үйлчигээний нөхцөлийг зөвшөөрч байна" isInvalid={!!this.state.error.terms}/>
                                                         </Form.Group>
                                                         <div className="text-center">
                                                             <small id="emailHelp" style={{marginBottom: 15}}

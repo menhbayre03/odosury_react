@@ -45,7 +45,7 @@ class Bundle extends Component {
                                     <Loader status={loadingLessons}>
                                         <h4>Худалдан авсан хичээлүүд</h4>
                                         {
-                                            bundles.length > 0 && lessons.length > 0 ? (
+                                            bundles.length > 0 || lessons.length > 0 ? (
                                                 <div>
                                                     {
                                                         bundles.length > 0 ? (

@@ -73,7 +73,7 @@ export default(state = initialState, action) => {
                                     if(prog._id.toString() === action.json.program.toString()) {
                                         return {
                                             ...prog,
-                                            passed_users: [...prog.passed_users, action.json.user_id]
+                                            passed_users: [...prog.passed_users || [], action.json.user_id]
                                         }
                                     } else {
                                         return prog

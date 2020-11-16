@@ -7,6 +7,8 @@ import {connect} from "react-redux";
 import config from "../config";
 import ReactNotification from 'react-notifications-component'
 import { store } from 'react-notifications-component';
+import facebookLogin from 'facebook-login';
+const api = facebookLogin({ appId: '1025498560826970' });
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-notifications-component/dist/theme.css'
 import 'react-photoswipe/lib/photoswipe.css';
@@ -23,6 +25,9 @@ const reducer = ({ main }) => ({ main });
 class index extends React.Component{
     constructor(props){
         super(props);
+        config.config({
+            'fbApi': api
+        });
         this.socket = socket;
     }
 

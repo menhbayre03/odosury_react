@@ -23,19 +23,25 @@ class Bundle extends Component {
     componentDidMount() {
         window.scroll(0, 0);
         let self = this;
-        const {dispatch, match, main: {user}} = this.props;
+        const {dispatch,location,  match, main: {user}} = this.props;
         dispatch(actions.getViewArea(match.params.slug));
+        console.log(location.state)
         this.setProgram = config.get('emitter').addListener('setProgram', function (lessonView) {
             let aa = 0;
             setTimeout(function () {
-                (lessonView.levels || []).map((item, index) => {
-                    item.programs.map(prog => {
-                        if(prog.passed_users.indexOf(user._id) < 0 && aa === 0) {
-                            aa = 1;
-                            self.setState({program: prog.timeline, activeIndex: index.toString()}, () => dispatch(actions.setProgress(lessonView._id, prog)));
-                        }
+                if((location.state || {}).levelIndex != null && (location.state || {}).programIndex != null) {
+                    let prog =(lessonView.levels || [])[location.state.levelIndex].programs[location.state.programIndex];
+                    self.setState({program: prog.timeline, activeIndex: location.state.levelIndex.toString()}, () => dispatch(actions.setProgress(lessonView._id, prog)));
+                } else {
+                    (lessonView.levels || []).map((item, index) => {
+                        item.programs.map(prog => {
+                            if((prog.passed_users || []).indexOf(user._id) < 0 && aa === 0) {
+                                aa = 1;
+                                self.setState({program: prog.timeline, activeIndex: index.toString()}, () => dispatch(actions.setProgress(lessonView._id, prog)));
+                            }
+                        })
                     })
-                })
+                }
             }, 100)
         })
     }
@@ -96,7 +102,7 @@ class Bundle extends Component {
                                                 <Card.Body>
                                                     {
                                                         (item.programs || []).map((program, ind) => (
-                                                            <div onClick={() => this.selectProgram(program)} className={`program ${program.passed_users.indexOf(((user || {})._id || 'WW@@#').toString()) > -1 ? 'passed' : ''} ${this.state.program._id == (program.timeline || {})._id ? 'current' : ''}`} key={ind}>
+                                                            <div onClick={() => this.selectProgram(program)} className={`program ${(program.passed_users || []).indexOf(((user || {})._id || 'WW@@#').toString()) > -1 ? 'passed' : ''} ${this.state.program._id == (program.timeline || {})._id ? 'current' : ''}`} key={ind}>
                                                                 {
                                                                     (program.timeline || {}).type === 'video' ? (
                                                                         <ion-icon name="videocam"/>

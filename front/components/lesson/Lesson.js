@@ -230,25 +230,49 @@ class Lesson extends Component {
                                                                     <Card.Body>
                                                                         {
                                                                             (item.programs || []).map((program, ind) => (
-                                                                                <div className={`program ${program.passed_users.indexOf(((user || {})._id || 'WW@@#').toString()) > -1 ? 'passed' : ''}`} key={ind}>
-                                                                                    {
-                                                                                        (program.timeline || {}).type === 'video' ? (
-                                                                                            <ion-icon name="videocam"/>
-                                                                                        ) : (
-                                                                                            (program.timeline || {}).type === 'audio' ? (
+                                                                                lesson.paid ? (
+                                                                                    <Link style={{textDecoration: 'none'}} to={{pathname: `/lesson/view/${lesson.slug}`, state: {levelIndex: index, programIndex: ind}}}>
+                                                                                        <div className={`program ${(program.passed_users || []).indexOf(((user || {})._id || 'WW@@#').toString()) > -1 ? 'passed' : ''}`} key={ind}>
+                                                                                            {
+                                                                                                (program.timeline || {}).type === 'video' ? (
+                                                                                                    <ion-icon name="videocam"/>
+                                                                                                ) : (
+                                                                                                    (program.timeline || {}).type === 'audio' ? (
+                                                                                                        <ion-icon name="videocam"/>
+                                                                                                    ) : (
+                                                                                                        <ion-icon name="document-text"/>
+                                                                                                    )
+                                                                                                )
+                                                                                            }
+                                                                                            <p>{(program.timeline || {}).title}</p>
+                                                                                            {
+                                                                                                program.timeline.minutes > 0 ? (
+                                                                                                    <span>{(program.timeline || {}).minutes} мин</span>
+                                                                                                ) : null
+                                                                                            }
+                                                                                        </div>
+                                                                                    </Link>
+                                                                                ) : (
+                                                                                    <div className={`program ${(program.passed_users || []).indexOf(((user || {})._id || 'WW@@#').toString()) > -1 ? 'passed' : ''}`} key={ind}>
+                                                                                        {
+                                                                                            (program.timeline || {}).type === 'video' ? (
                                                                                                 <ion-icon name="videocam"/>
                                                                                             ) : (
-                                                                                                <ion-icon name="document-text"/>
+                                                                                                (program.timeline || {}).type === 'audio' ? (
+                                                                                                    <ion-icon name="videocam"/>
+                                                                                                ) : (
+                                                                                                    <ion-icon name="document-text"/>
+                                                                                                )
                                                                                             )
-                                                                                        )
-                                                                                    }
-                                                                                    <p>{(program.timeline || {}).title}</p>
-                                                                                    {
-                                                                                        program.timeline.minutes > 0 ? (
-                                                                                            <span>{(program.timeline || {}).minutes} мин</span>
-                                                                                        ) : null
-                                                                                    }
-                                                                                </div>
+                                                                                        }
+                                                                                        <p>{(program.timeline || {}).title}</p>
+                                                                                        {
+                                                                                            program.timeline.minutes > 0 ? (
+                                                                                                <span>{(program.timeline || {}).minutes} мин</span>
+                                                                                            ) : null
+                                                                                        }
+                                                                                    </div>
+                                                                                )
                                                                             ))
                                                                         }
                                                                     </Card.Body>

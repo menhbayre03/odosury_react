@@ -247,11 +247,6 @@ class Header extends Component {
                                     {/*        Заавар*/}
                                     {/*    </Link>*/}
                                     {/*</li>*/}
-                                    <li>
-                                        <Link to={'#'}>
-                                            Холбоо барих
-                                        </Link>
-                                    </li>
                                 </ul>
                             </div>
                         </div>
