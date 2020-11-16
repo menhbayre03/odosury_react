@@ -94,17 +94,25 @@ class Home extends Component {
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
-                <div className="home-hero" data-src="../assets/images/home-hero.png"
-                     style={{backgroundImage: "url('http://demo.foxthemes.net/courseplusv3.3/assets/images/home-hero.png')"}}>
+                <div className="home-hero" style={{backgroundImage: "url('/images/cover.png')", position: 'relative'}}>
                     <Container>
                         <div className="hero-inner">
-                            <h1>Learn HTML , CSS , iphone <br/> Apps More</h1>
-                            <h4 className="my-lg-4"> Learn how to build websites apps <br/> write a code or start a
-                                business
+                            <h1>БҮХ ТӨРЛИЙН МЭДЛЭГИЙН <br/> САН <span style={{color: '#E26A98'}}>ODOSURY</span></h1>
+                            <h4 className="my-lg-4" style={{
+                                marginTop: '0 !important',
+                                textTransform: 'uppercase'
+                            }}>Өөрийн бүтээлч сэтгэлгээг нэмэгдүүлж, <br/>
+                            оюундаа хөрөнгө оруулж, ирээдүйнхээ <br/> төлөө одооноос сурцгаая.
                             </h4>
-                            <a href="#" className="btn btn-default">Free trailer </a>
+                            {/*<a href="#" className="btn btn-default">Free trailer </a>*/}
                         </div>
                     </Container>
+                    <img style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        right: '20%',
+                        maxHeight: '80%',
+                    }} src="/images/cover-woman.png" alt=""/>
                 </div>
                 <Loader status={loading}>
                     {
@@ -132,29 +140,29 @@ class Home extends Component {
                             </div>
                         ) : null
                     }
-                    <div className="section-bundle">
-                        <Container>
-                            <h3>Багц хичээлүүд</h3>
-                            <h5> With our growing catalog of over 30 Nanodegree programs from beginner to advanced</h5>
-                            <Row>
-                                {
-                                    bundles.map(item => (
-                                        <Col md={3}>
-                                            <Link style={{textDecoration: 'none'}} to={`/bundle/${item.slug}`}>
-                                                <div className="bundle-item">
-                                                    <img src={(item.thumbnail || {}).path ? `${config.get('hostMedia')}${(item.thumbnail || {}).path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`} className="cover-img"/>
-                                                    <div className="bundle-detail">
-                                                        <h4>{item.title}</h4>
-                                                        <p className="skill-card-subtitle">{` ${(item.levels || []).length} түвшин  ${(item.levels || []).reduce((total, aa) => total + (aa.lessons || []).length, 0)} хичээл`}</p>
-                                                    </div>
-                                                </div>
-                                            </Link>
-                                        </Col>
-                                    ))
-                                }
-                            </Row>
-                        </Container>
-                    </div>
+                    {/*<div className="section-bundle">*/}
+                    {/*    <Container>*/}
+                    {/*        <h3>Багц хичээлүүд</h3>*/}
+                    {/*        <h5> With our growing catalog of over 30 Nanodegree programs from beginner to advanced</h5>*/}
+                    {/*        <Row>*/}
+                    {/*            {*/}
+                    {/*                bundles.map(item => (*/}
+                    {/*                    <Col md={3}>*/}
+                    {/*                        <Link style={{textDecoration: 'none'}} to={`/bundle/${item.slug}`}>*/}
+                    {/*                            <div className="bundle-item">*/}
+                    {/*                                <img src={(item.thumbnail || {}).path ? `${config.get('hostMedia')}${(item.thumbnail || {}).path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`} className="cover-img"/>*/}
+                    {/*                                <div className="bundle-detail">*/}
+                    {/*                                    <h4>{item.title}</h4>*/}
+                    {/*                                    <p className="skill-card-subtitle">{` ${(item.levels || []).length} түвшин  ${(item.levels || []).reduce((total, aa) => total + (aa.lessons || []).length, 0)} хичээл`}</p>*/}
+                    {/*                                </div>*/}
+                    {/*                            </div>*/}
+                    {/*                        </Link>*/}
+                    {/*                    </Col>*/}
+                    {/*                ))*/}
+                    {/*            }*/}
+                    {/*        </Row>*/}
+                    {/*    </Container>*/}
+                    {/*</div>*/}
                     {
                         newLessons && newLessons.length > 0 ? (
                             <div className="section-new">
