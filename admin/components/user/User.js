@@ -215,7 +215,9 @@ class User extends React.Component {
                     record.role ?
                         record.role === 'admin'? 'Админ' :
                             record.role === 'teacher'? 'Багш' :
-                                record.role === 'user'? 'Хэрэглэгч' : record.role
+                                record.role === 'user' && record.premium === 'pr' ? <span style={{color: 'green'}}>Premium</span> :
+                                    record.role === 'user' && record.premium === 'pq' ? <span>Premium хүсэлттэй</span> :
+                                        record.role === 'user'? 'Хэрэглэгч' : record.role
                         :
                         '-'
                 ),
@@ -305,6 +307,8 @@ class User extends React.Component {
                         <Option value=''>Эрх сонгоно уу</Option>
                         <Option value='teacher'>Багш</Option>
                         <Option value='user'>Хэрэглэгч</Option>
+                        <Option value='pr'>Premium хэрэглэгч</Option>
+                        <Option value='pq'>Premium хүсэлттэй хэрэглэгч</Option>
                     </Select>
                     <Button loading={status} type="primary" size='small' icon={<SearchOutlined />} onClick={this.searchUser.bind(this)} >Хайх</Button>
                 </div>
@@ -406,12 +410,12 @@ class User extends React.Component {
                             // help=""
                         >
                             <Select
-                                value={!!user.premium}
+                                value={user.premium === 'pq'}
                                 onChange={this.onChangeSelect2.bind(this)}
                                 style={{fontWeight: 700, color:'#000000'}}
                             >
-                                <Option value={false}>Энгийн хэрэглэгч</Option>
-                                <Option value={true}>Премиум хэрэглэгч</Option>
+                                <Option value={''}>Энгийн хэрэглэгч</Option>
+                                <Option value={'pr'}>Премиум хэрэглэгч</Option>
                             </Select>
                         </Form.Item>
                         :
