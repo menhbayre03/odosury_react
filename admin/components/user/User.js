@@ -410,12 +410,12 @@ class User extends React.Component {
                             // help=""
                         >
                             <Select
-                                value={!!user.premium}
+                                value={user.premium === 'pq'}
                                 onChange={this.onChangeSelect2.bind(this)}
                                 style={{fontWeight: 700, color:'#000000'}}
                             >
-                                <Option value={false}>Энгийн хэрэглэгч</Option>
-                                <Option value={true}>Премиум хэрэглэгч</Option>
+                                <Option value={''}>Энгийн хэрэглэгч</Option>
+                                <Option value={'pr'}>Премиум хэрэглэгч</Option>
                             </Select>
                         </Form.Item>
                         :
