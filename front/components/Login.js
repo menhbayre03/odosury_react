@@ -25,6 +25,12 @@ class Home extends Component {
                 passwordNoMatch: false,
                 passwordNoValid: false,
                 terms: false,
+
+                passResetNoMatch: false,
+                passResetNoValid: false,
+                passReset: false,
+                passResetRepeat: false,
+
             },
             username: '',
             password: '',
@@ -49,7 +55,16 @@ class Home extends Component {
             pendingEmail: '',
             showReset: false,
             resetLoading: false,
-            email_reset: ''
+            email_reset: '',
+
+            passReset: '',
+            passResetRepeat: '',
+            passResetUser: {},
+            passResetToken: '',
+            passResetDone: false,
+            passResetValid: false,
+            showResetForm: false,
+            passResetLoading: false,
         };
     }
 
@@ -67,8 +82,13 @@ class Home extends Component {
                 config.get('emitter').emit('warning', response.msg);
             }
         }
-        console.log(this.props.location.state);
-        console.log(userReset)
+        if(userReset && this.props.location.state.showResetForm) {
+            this.setState({
+                passResetUser: userReset,
+                passResetToken: token,
+                showResetForm: true
+            })
+        }
     }
     async ResetSubmit(event){
         event.preventDefault();
@@ -78,10 +98,12 @@ class Home extends Component {
         };
         if (this.state.email_reset == null || this.state.email_reset === '') {
             config.get('emitter').emit('warning', 'Имэйл хаяг оруулна уу');
+            this.setState({resetLoading: false});
         } else {
             const response = await Api.login(`/api/password/reset`, cc);
             if (response.success === true) {
                 this.setState({resetLoading: false});
+                config.get('emitter').emit('success', response.msg);
 
             } else {
                 this.setState({resetLoading: false});
@@ -262,8 +284,69 @@ class Home extends Component {
         }
     }
 
+    async handleSubmitReset(e) {
+        e.preventDefault();
+        this.setState({passResetLoading: true});
+        let errors = {};
+        let noErr = {};
+
+        if(this.state.passReset == null || this.state.passReset === '') {
+            errors.passReset = true;
+            errors.passResetNoValid = false
+        } else {
+            if(this.state.passResetValid) {
+                noErr.passReset = false;
+                noErr.passResetNoValid = false
+            } else {
+                errors.passReset = true;
+                errors.passResetNoValid = true
+            }
+        }
+        if(this.state.passResetRepeat == null || this.state.passResetRepeat === '') {
+            errors.passwordRepeatRegister = true
+        } else {
+            if(this.state.passReset === this.state.passResetRepeat ) {
+                noErr.passResetNoMatch = false;
+                noErr.passResetRepeat = false
+
+            } else {
+                errors.passResetNoMatch = true;
+                errors.passResetRepeat = true
+            }
+        }
+        if(Object.keys(errors).length === 0 && errors.constructor === Object) {
+            this.setState({error : {...this.state.error, ...noErr}});
+            let data = {
+                token: this.state.passResetToken,
+                newPassword: this.state.passReset,
+                newPasswordRepeat: this.state.passResetRepeat,
+            };
+            const response = await Api.login(`/api/reset/passwordSave/${this.state.passResetUser._id}`, data);
+            if (response.success === true) {
+                // config.get('emitter').emit('successs', response.msg);
+                this.setState({
+                    passReset: '',
+                    passResetRepeat: '',
+                    passResetUser: {},
+                    passResetToken: '',
+                    passResetDone: true,
+                    passResetValid: false,
+                    showResetForm: false,
+                    passResetLoading: false,
+
+                    username: response.username
+                });
+            } else {
+                this.setState({passResetLoading: false});
+                config.get('emitter').emit('warning', response.msg);
+            }
+        } else {
+            this.setState({passResetLoading: false});
+            this.setState({error : {...this.state.error, ...errors, ...noErr}});
+        }
+    }
+
     render() {
-        const {main : {user}, auth} = this.props;
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
@@ -292,6 +375,18 @@ class Home extends Component {
                                             color: '#22bb33',
                                             textAlign: 'center'
                                         }}>{this.state.verifyMsg}</h3>
+                                    ) : null
+                                }
+                                {
+                                    this.state.passResetDone ? (
+                                        <h3 style={{
+                                            marginBottom: 40,
+                                            marginTop: -20,
+                                            fontSize: 24,
+                                            fontWeight: 600,
+                                            color: '#22bb33',
+                                            textAlign: 'center'
+                                        }}>Нууц үг Амжиилттай солигдлоо нэвтрэх үйлпэл хийнэ үү.</h3>
                                     ) : null
                                 }
                                 <Row style={{pointerEvents: this.state.verifyLoading ? 'none' : 'unset', opacity: this.state.verifyLoading ? 0.2 : 1}}>
@@ -356,151 +451,212 @@ class Home extends Component {
                                     </Col>
                                     <Col md={{ span: 5, offset: 2 }}>
                                         {
-                                            this.state.registerDone ? (
-                                                <div>
-                                                    {
-                                                        this.state.pendingEmail ? (
-                                                            <h3 style={{
-                                                                marginBottom: 5,
-                                                                fontSize: 22,
-                                                                fontWeight: 600,
-                                                                color: 'rgb(255 0 0)'
-                                                            }}>Баталшаажуулаагүй байна.</h3>
-                                                        ) : (
-                                                            <h3 style={{
-                                                                marginBottom: 5,
-                                                                fontSize: 24,
-                                                                fontWeight: 600,
-                                                                color: '#22bb33'
-                                                            }}>Амжилттай бүртгэгдлээ.</h3>
-                                                        )
-                                                    }
-                                                    <p style={{
-                                                        marginBottom: 2,
-                                                        fontSize: 16,
-                                                        fontWeight: 400
-                                                    }}>Имэйл - ээ баталгаажуулна уу.</p>
-                                                    <p style={{
-                                                        fontSize: 16,
-                                                        fontWeight: 400
-                                                    }}>Имэйл хаяг: <span style={{color: 'black', fontWeight: 700}}>{ this.state.pendingEmail ? (this.state.pendingEmail || '') : (this.state.emailRegister || '')}</span></p>
-                                                    <Button onClick={() => this.reSend()} style={{position: 'relative', paddingLeft: this.state.resendLoading ? 35 : 20}} disabled={this.state.resendLoading} type="submit" className="btn btn-btn btn-submit">
-                                                        {
-                                                            this.state.resendLoading ? (
-                                                                <img src="/images/sync-outline.svg" className="spinner"/>
-                                                            ) :  (
-                                                                null
-                                                            )
-                                                        }
-                                                        Дахин илгээх
-                                                    </Button>
-                                                    <Button variant="secondary" onClick={() => this.closeActivate()} style={{marginLeft: 15}} type="button">
-                                                        Бүртгүүлэх
-                                                    </Button>
-                                                </div>
-                                            ) : (
+                                            this.state.showResetForm && !this.state.passResetDone ? (
                                                 <div className="log-block login"><h4 className="title text-center">
-                                                    <strong>Бүртгүүлэх</strong></h4>
-                                                    <Form onSubmit={this.handleSubmitRegister.bind(this)}>
+                                                    <strong style={{color: '#bb1a1a'}}>Нууц үг сэргээх</strong></h4>
+                                                    <Form onSubmit={this.handleSubmitReset.bind(this)}>
                                                         <Form.Group>
-                                                            <Form.Label>Имэйл *</Form.Label>
-                                                            <Form.Control
-                                                                placeholder="example.gmail.com"
-                                                                onChange={(e) => this.setState({emailRegister: e.target.value})}
-                                                                value={this.state.emailRegister}
-                                                                isInvalid={!!this.state.error.emailRegister}
-                                                            />
-                                                            <Form.Control.Feedback type="invalid">
-                                                                Имэйл хаяг оруулна уу.
-                                                            </Form.Control.Feedback>
-                                                        </Form.Group>
-                                                        <Form.Group>
-                                                            <Form.Label>Хэрэглэгчийн нэр *</Form.Label>
-                                                            <Form.Control
-                                                                placeholder="odosury"
-                                                                onChange={(e) => this.setState({usernameRegister: e.target.value})}
-                                                                value={this.state.usernameRegister}
-                                                                isInvalid={!!this.state.error.usernameRegister}
-                                                            />
-                                                            <Form.Control.Feedback type="invalid">
-                                                                Хэрэглэгчийн нэр оруулна уу.
-                                                            </Form.Control.Feedback>
-                                                        </Form.Group>
-                                                        <Form.Group>
-                                                            <Form.Label>Утасны дугаар</Form.Label>
-                                                            <Form.Control
-                                                                type="number"
-                                                                onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
-                                                                placeholder="99119911"
-                                                                onChange={(e) => this.changePhone(e)}
-                                                                value={this.state.phoneRegister}
-                                                                isInvalid={!!this.state.error.phoneRegister}
-                                                            />
-                                                            <Form.Control.Feedback type="invalid">
-                                                                Утасны бугаар буруу байна уу.
-                                                            </Form.Control.Feedback>
-                                                        </Form.Group>
-                                                        <Form.Group>
-                                                            <Form.Label>Нууц үг *</Form.Label>
-                                                            <Form.Control
-                                                                hidden={true}
-                                                                type="password"
-                                                                placeholder="*************"
-                                                                value={this.state.passwordRegister}
-                                                                isInvalid={!!this.state.error.passwordRegister}
-                                                            />
-                                                            <ReactPasswordStrength
-                                                                className="customClass"
-                                                                minLength={5}
-                                                                minScore={3}
-                                                                scoreWords={['хэт богино', 'сул', 'дунд', 'сайн', 'маш сайн']}
-                                                                tooShortWord={'боломжгүй'}
-                                                                changeCallback={this.changePass.bind(this)}
-                                                                inputProps={{ isInvalid: this.state.error.passwordRegister, value: this.state.passwordRegister, placeholder: "*************", name: "passwordRegister", autoComplete: "off", className: "form-control" }}
-                                                            />
-                                                            <Form.Control.Feedback type="invalid">
-                                                                {
-                                                                    this.state.error.passwordNoValid ? 'Нууц үг хангалтгүй байна' : 'Нууц үг оруулна уу.'
-                                                                }
-                                                            </Form.Control.Feedback>
-                                                        </Form.Group>
-                                                        <Form.Group>
-                                                            <Form.Label>Нууц үг давтах *</Form.Label>
-                                                            <Form.Control
-                                                                type="password"
-                                                                onChange={(e) => this.setState({passwordRepeatRegister: e.target.value})}
-                                                                placeholder="*************"
-                                                                value={this.state.passwordRepeatRegister}
-                                                                isInvalid={!!this.state.error.passwordRepeatRegister}
-                                                            />
-                                                            <Form.Control.Feedback type="invalid">
-                                                                {
-                                                                    this.state.error.passwordNoMatch ? 'Нууц үг зөрж байна' : 'Нууц үг давтах оруулна уу.'
-                                                                }
-                                                            </Form.Control.Feedback>
-                                                        </Form.Group>
-                                                        <Form.Group className="reg-check">
-                                                            <Form.Check onChange={() => this.setState({terms: !this.state.terms})} type="checkbox" label="Үйлчигээний нөхцөлийг зөвшөөрч байна" isInvalid={!!this.state.error.terms}/>
+                                                            <Form.Group>
+                                                                <Form.Label>Нууц үг *</Form.Label>
+                                                                <Form.Control
+                                                                    hidden={true}
+                                                                    type="password"
+                                                                    placeholder="*************"
+                                                                    value={this.state.passReset}
+                                                                    isInvalid={!!this.state.error.passReset}
+                                                                />
+                                                                <ReactPasswordStrength
+                                                                    className="customClass"
+                                                                    minLength={5}
+                                                                    minScore={3}
+                                                                    scoreWords={['хэт богино', 'сул', 'дунд', 'сайн', 'маш сайн']}
+                                                                    tooShortWord={'боломжгүй'}
+                                                                    changeCallback={(e) =>  this.setState({passReset: e.password, passResetValid: e.isValid})}
+                                                                    inputProps={{ isInvalid: this.state.error.passReset, value: this.state.passReset, placeholder: "*************", name: "passReset", autoComplete: "off", className: "form-control" }}
+                                                                />
+                                                                <Form.Control.Feedback type="invalid">
+                                                                    {
+                                                                        this.state.error.passResetNoValid ? 'Нууц үг хангалтгүй байна' : 'Нууц үг оруулна уу.'
+                                                                    }
+                                                                </Form.Control.Feedback>
+                                                            </Form.Group>
+                                                            <Form.Group>
+                                                                <Form.Label>Нууц үг давтах *</Form.Label>
+                                                                <Form.Control
+                                                                    type="password"
+                                                                    onChange={(e) => this.setState({passResetRepeat: e.target.value})}
+                                                                    placeholder="*************"
+                                                                    value={this.state.passResetRepeat}
+                                                                    isInvalid={!!this.state.error.passResetRepeat}
+                                                                />
+                                                                <Form.Control.Feedback type="invalid">
+                                                                    {
+                                                                        this.state.error.passResetNoMatch ? 'Нууц үг зөрж байна' : 'Нууц үг давтах оруулна уу.'
+                                                                    }
+                                                                </Form.Control.Feedback>
+                                                            </Form.Group>
                                                         </Form.Group>
                                                         <div className="text-center">
-                                                            <small id="emailHelp" style={{marginBottom: 15}}
-                                                                   className="form-text text-muted text-center">Та бүртгүүлэх
-                                                                товчийг дарсанаар манай <span style={{color: '#1a1aa2', cursor: 'pointer'}} onClick={() => this.setState({showModal: true})}>үйлчилгээний нөхцөл</span> - ийг хүлээн
-                                                                зөвшөөрсөнд тооцно.
-                                                            </small>
-                                                            <Button style={{position: 'relative', paddingLeft: this.state.registerLoading ? 35 : 20}} disabled={this.state.registerLoading} type="submit" className="btn btn-btn btn-submit">
+                                                            <Button style={{position: 'relative', paddingLeft: this.state.passResetLoading ? 35 : 20}} disabled={this.state.passResetLoading} type="submit" className="btn btn-btn btn-submit">
                                                                 {
-                                                                    this.state.registerLoading ? (
+                                                                    this.state.passResetLoading ? (
                                                                         <img src="/images/sync-outline.svg" className="spinner"/>
                                                                     ) :  (
                                                                         null
                                                                     )
                                                                 }
-                                                                Бүртгүүлэх
+                                                                Солих
                                                             </Button>
                                                         </div>
                                                     </Form>
                                                 </div>
+                                            ) : (
+                                                this.state.registerDone ? (
+                                                    <div>
+                                                        {
+                                                            this.state.pendingEmail ? (
+                                                                <h3 style={{
+                                                                    marginBottom: 5,
+                                                                    fontSize: 22,
+                                                                    fontWeight: 600,
+                                                                    color: 'rgb(255 0 0)'
+                                                                }}>Баталшаажуулаагүй байна.</h3>
+                                                            ) : (
+                                                                <h3 style={{
+                                                                    marginBottom: 5,
+                                                                    fontSize: 24,
+                                                                    fontWeight: 600,
+                                                                    color: '#22bb33'
+                                                                }}>Амжилттай бүртгэгдлээ.</h3>
+                                                            )
+                                                        }
+                                                        <p style={{
+                                                            marginBottom: 2,
+                                                            fontSize: 16,
+                                                            fontWeight: 400
+                                                        }}>Имэйл - ээ баталгаажуулна уу.</p>
+                                                        <p style={{
+                                                            fontSize: 16,
+                                                            fontWeight: 400
+                                                        }}>Имэйл хаяг: <span style={{color: 'black', fontWeight: 700}}>{ this.state.pendingEmail ? (this.state.pendingEmail || '') : (this.state.emailRegister || '')}</span></p>
+                                                        <Button onClick={() => this.reSend()} style={{position: 'relative', paddingLeft: this.state.resendLoading ? 35 : 20}} disabled={this.state.resendLoading} type="submit" className="btn btn-btn btn-submit">
+                                                            {
+                                                                this.state.resendLoading ? (
+                                                                    <img src="/images/sync-outline.svg" className="spinner"/>
+                                                                ) :  (
+                                                                    null
+                                                                )
+                                                            }
+                                                            Дахин илгээх
+                                                        </Button>
+                                                        <Button variant="secondary" onClick={() => this.closeActivate()} style={{marginLeft: 15}} type="button">
+                                                            Бүртгүүлэх
+                                                        </Button>
+                                                    </div>
+                                                ) : (
+                                                    <div className="log-block login">
+                                                        <h4 className="title text-center"><strong>Бүртгүүлэх</strong></h4>
+                                                        <Form onSubmit={this.handleSubmitRegister.bind(this)}>
+                                                            <Form.Group>
+                                                                <Form.Label>Имэйл *</Form.Label>
+                                                                <Form.Control
+                                                                    placeholder="example.gmail.com"
+                                                                    onChange={(e) => this.setState({emailRegister: e.target.value})}
+                                                                    value={this.state.emailRegister}
+                                                                    isInvalid={!!this.state.error.emailRegister}
+                                                                />
+                                                                <Form.Control.Feedback type="invalid">
+                                                                    Имэйл хаяг оруулна уу.
+                                                                </Form.Control.Feedback>
+                                                            </Form.Group>
+                                                            <Form.Group>
+                                                                <Form.Label>Хэрэглэгчийн нэр *</Form.Label>
+                                                                <Form.Control
+                                                                    placeholder="odosury"
+                                                                    onChange={(e) => this.setState({usernameRegister: e.target.value})}
+                                                                    value={this.state.usernameRegister}
+                                                                    isInvalid={!!this.state.error.usernameRegister}
+                                                                />
+                                                                <Form.Control.Feedback type="invalid">
+                                                                    Хэрэглэгчийн нэр оруулна уу.
+                                                                </Form.Control.Feedback>
+                                                            </Form.Group>
+                                                            <Form.Group>
+                                                                <Form.Label>Утасны дугаар</Form.Label>
+                                                                <Form.Control
+                                                                    type="number"
+                                                                    onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
+                                                                    placeholder="99119911"
+                                                                    onChange={(e) => this.changePhone(e)}
+                                                                    value={this.state.phoneRegister}
+                                                                    isInvalid={!!this.state.error.phoneRegister}
+                                                                />
+                                                                <Form.Control.Feedback type="invalid">
+                                                                    Утасны бугаар буруу байна уу.
+                                                                </Form.Control.Feedback>
+                                                            </Form.Group>
+                                                            <Form.Group>
+                                                                <Form.Label>Нууц үг *</Form.Label>
+                                                                <Form.Control
+                                                                    hidden={true}
+                                                                    type="password"
+                                                                    placeholder="*************"
+                                                                    value={this.state.passwordRegister}
+                                                                    isInvalid={!!this.state.error.passwordRegister}
+                                                                />
+                                                                <ReactPasswordStrength
+                                                                    className="customClass"
+                                                                    minLength={5}
+                                                                    minScore={3}
+                                                                    scoreWords={['хэт богино', 'сул', 'дунд', 'сайн', 'маш сайн']}
+                                                                    tooShortWord={'боломжгүй'}
+                                                                    changeCallback={this.changePass.bind(this)}
+                                                                    inputProps={{ isInvalid: this.state.error.passwordRegister, value: this.state.passwordRegister, placeholder: "*************", name: "passwordRegister", autoComplete: "off", className: "form-control" }}
+                                                                />
+                                                                <Form.Control.Feedback type="invalid">
+                                                                    {
+                                                                        this.state.error.passwordNoValid ? 'Нууц үг хангалтгүй байна' : 'Нууц үг оруулна уу.'
+                                                                    }
+                                                                </Form.Control.Feedback>
+                                                            </Form.Group>
+                                                            <Form.Group>
+                                                                <Form.Label>Нууц үг давтах *</Form.Label>
+                                                                <Form.Control
+                                                                    type="password"
+                                                                    onChange={(e) => this.setState({passwordRepeatRegister: e.target.value})}
+                                                                    placeholder="*************"
+                                                                    value={this.state.passwordRepeatRegister}
+                                                                    isInvalid={!!this.state.error.passwordRepeatRegister}
+                                                                />
+                                                                <Form.Control.Feedback type="invalid">
+                                                                    {
+                                                                        this.state.error.passwordNoMatch ? 'Нууц үг зөрж байна' : 'Нууц үг давтах оруулна уу.'
+                                                                    }
+                                                                </Form.Control.Feedback>
+                                                            </Form.Group>
+                                                            <Form.Group className="reg-check">
+                                                                <Form.Check onChange={() => this.setState({terms: !this.state.terms})} type="checkbox" label="Үйлчигээний нөхцөлийг зөвшөөрч байна" isInvalid={!!this.state.error.terms}/>
+                                                            </Form.Group>
+                                                            <div className="text-center">
+                                                                <small id="emailHelp" style={{marginBottom: 15}}
+                                                                       className="form-text text-muted text-center">Та бүртгүүлэх
+                                                                    товчийг дарсанаар манай <span style={{color: '#1a1aa2', cursor: 'pointer'}} onClick={() => this.setState({showModal: true})}>үйлчилгээний нөхцөл</span> - ийг хүлээн
+                                                                    зөвшөөрсөнд тооцно.
+                                                                </small>
+                                                                <Button style={{position: 'relative', paddingLeft: this.state.registerLoading ? 35 : 20}} disabled={this.state.registerLoading} type="submit" className="btn btn-btn btn-submit">
+                                                                    {
+                                                                        this.state.registerLoading ? (
+                                                                            <img src="/images/sync-outline.svg" className="spinner"/>
+                                                                        ) :  (
+                                                                            null
+                                                                        )
+                                                                    }
+                                                                    Бүртгүүлэх
+                                                                </Button>
+                                                            </div>
+                                                        </Form>
+                                                    </div>
+                                                )
                                             )
                                         }
                                     </Col>
@@ -508,23 +664,36 @@ class Home extends Component {
                             </Col>
                         </Row>
                     </Container>
-                    <Modal style={{maxWidth: 400, margin: 'auto'}} className="resetModal" show={this.state.showReset} onHide={() => this.setState({showReset: false})}>
+                    <Modal size="sm" className="resetModal" show={this.state.showReset} onHide={() => this.setState({showReset: false, email_reset: ''})}>
                         <Modal.Header closeButton>
                             <span>Нууц үг сэргээх</span>
                         </Modal.Header>
-                        <Modal.Body style={{ padding: 20}}>
-                            <div className="l-m-s-d">
-                                <form className="m-reg-form" onSubmit={(event) => this.ResetSubmit(event)}
-                                      action="/api/password/reset">
-                                    <div className="l-b">
-                                        <input placeholder={"email@example.com"} ref="name" name="email_reset"
-                                               id="name" value={this.state.email_reset} type="text" onChange={(e) => this.setState({email_reset: e.target.value})}/>
-                                    </div>
-                                    <button type="submit" className="m-reg-submit" style={{
-                                        marginTop: '20px',
-                                        background: "#4175c7"
-                                    }}>Илгээх</button>
-                                </form>
+                        <Modal.Body style={{ padding: 20, background: '#F5F5F5'}}>
+                            <div style={{padding: 0, minHeight: "unset"}} className="login-container">
+                                <div className="log-block login">
+                                    <Form onSubmit={this.ResetSubmit.bind(this)}>
+                                        <Form.Group>
+                                            <Form.Label>Имэйл хаяг</Form.Label>
+                                            <Form.Control
+                                                placeholder="Имэйл хаяг"
+                                                onChange={(e) => this.setState({email_reset: e.target.value})}
+                                                value={this.state.email_reset}
+                                            />
+                                        </Form.Group>
+                                        <div className="text-center">
+                                            <Button style={{position: 'relative', paddingLeft: this.state.resetLoading ? 35 : 20}} disabled={this.state.resetLoading} type="submit" className="btn btn-btn btn-submit">
+                                                {
+                                                    this.state.resetLoading ? (
+                                                        <img src="/images/sync-outline.svg" className="spinner"/>
+                                                    ) :  (
+                                                        null
+                                                    )
+                                                }
+                                                Илгээх
+                                            </Button>
+                                        </div>
+                                    </Form>
+                                </div>
                             </div>
                         </Modal.Body>
                     </Modal>
