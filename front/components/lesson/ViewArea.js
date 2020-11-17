@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import ReactPlayer from "react-player";
 import config from "../../config";
 import Loader from "../include/Loader";
+import AmjiltPdf from './pdf';
 const reducer = ({ main, lesson }) => ({ main, lesson });
 
 class Bundle extends Component {
@@ -25,7 +26,6 @@ class Bundle extends Component {
         let self = this;
         const {dispatch,location,  match, main: {user}} = this.props;
         dispatch(actions.getViewArea(match.params.slug));
-        console.log(location.state)
         this.setProgram = config.get('emitter').addListener('setProgram', function (lessonView) {
             let aa = 0;
             setTimeout(function () {
@@ -58,6 +58,9 @@ class Bundle extends Component {
         let mediaUrl = '';
         if(program.video) {
             mediaUrl = config.get('hostMedia')+"/api/video/show/"+program.video._id+'?lessonId='+lessonView._id+'&token='+Cookies.get('token');
+        }
+        if(program.pdf) {
+            mediaUrl = config.get('hostMedia')+"/api/pdf/show/"+program.pdf._id+'?lessonId='+lessonView._id+'&token='+Cookies.get('token');
         }
         return (
             <React.Fragment>
@@ -184,6 +187,15 @@ class Bundle extends Component {
                                                             }
                                                         }}
                                                     />
+                                                ) : null
+                                            }
+                                            {
+                                                program.pdf && mediaUrl && program.type === 'pdf' ? (
+                                                    <div className={'PdfView'}>
+                                                        <div style={{padding: '0px 0px 10px'}}>
+                                                            <AmjiltPdf src={mediaUrl} hideHeader={true}/>
+                                                        </div>
+                                                    </div>
                                                 ) : null
                                             }
                                             {

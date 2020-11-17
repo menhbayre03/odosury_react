@@ -69,7 +69,7 @@ class Home extends Component {
     }
 
     async componentDidMount() {
-        const {main: {userReset}} = this.props;
+        const {main: {userReset, token}} = this.props;
         window.scroll(0,0);
         config.get('fbApi').whenLoaded().then(() => this.setState({sdkLoaded: true}));
         if(this.props.match.params.token) {
@@ -386,7 +386,7 @@ class Home extends Component {
                                             fontWeight: 600,
                                             color: '#22bb33',
                                             textAlign: 'center'
-                                        }}>Нууц үг Амжиилттай солигдлоо нэвтрэх үйлпэл хийнэ үү.</h3>
+                                        }}>Нууц үг Амжилттай солигдлоо нэвтрэх үйлдэл хийнэ үү.</h3>
                                     ) : null
                                 }
                                 <Row style={{pointerEvents: this.state.verifyLoading ? 'none' : 'unset', opacity: this.state.verifyLoading ? 0.2 : 1}}>
@@ -664,7 +664,7 @@ class Home extends Component {
                             </Col>
                         </Row>
                     </Container>
-                    <Modal size="sm" className="resetModal" show={this.state.showReset} onHide={() => this.setState({showReset: false, email_reset: ''})}>
+                    <Modal size="sm" className="resetModal" show={this.state.showReset} onHide={() => this.setState({showReset: false, email_reset: ''})} backdrop='static'>
                         <Modal.Header closeButton>
                             <span>Нууц үг сэргээх</span>
                         </Modal.Header>
