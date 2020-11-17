@@ -7,8 +7,6 @@ import ReactPasswordStrength from 'react-password-strength';
 import { Container, Row, Col, Form, Button, Modal } from "react-bootstrap";
 import Api from "../../admin/actions/api";
 import Cookies from "js-cookie";
-import * as actions from "../../../amjilt_school/src/actions/auth_actions";
-import {locale} from "../../../amjilt_school/src/lang";
 const reducer = ({ main, auth }) => ({ main, auth });
 
 class Home extends Component {
@@ -48,11 +46,15 @@ class Home extends Component {
             registerDone: false,
             verifyMsg: '',
             accessToken: '',
-            pendingEmail: ''
+            pendingEmail: '',
+            showReset: false,
+            resetLoading: false,
+            email_reset: ''
         };
     }
 
     async componentDidMount() {
+        const {main: {userReset}} = this.props;
         window.scroll(0,0);
         config.get('fbApi').whenLoaded().then(() => this.setState({sdkLoaded: true}));
         if(this.props.match.params.token) {
@@ -62,6 +64,27 @@ class Home extends Component {
                 this.setState({username: response.username, verifyLoading: false, verifyMsg: 'Амжилттай идэвхижлээ. Нэвтэрж орно уу.'});
             } else {
                 this.setState({verifyLoading: false, verifyMsg: ''});
+                config.get('emitter').emit('warning', response.msg);
+            }
+        }
+        console.log(this.props.location.state);
+        console.log(userReset)
+    }
+    async ResetSubmit(event){
+        event.preventDefault();
+        this.setState({resetLoading: true});
+        var cc = {
+            email:this.state.email_reset,
+        };
+        if (this.state.email_reset == null || this.state.email_reset === '') {
+            config.get('emitter').emit('warning', 'Имэйл хаяг оруулна уу');
+        } else {
+            const response = await Api.login(`/api/password/reset`, cc);
+            if (response.success === true) {
+                this.setState({resetLoading: false});
+
+            } else {
+                this.setState({resetLoading: false});
                 config.get('emitter').emit('warning', response.msg);
             }
         }
@@ -302,7 +325,7 @@ class Home extends Component {
                                                     </Form.Control.Feedback>
                                                 </Form.Group>
                                                 <div className="text-right">
-                                                    <span className="forgot">Нууц үгээ мартсан</span>
+                                                    <span style={{cursor: 'pointer'}} onClick={() => this.setState({showReset: true})} className="forgot">Нууц үгээ мартсан</span>
                                                 </div>
                                                 <div className="text-center">
                                                 <Button style={{position: 'relative', paddingLeft: this.state.loading ? 35 : 20}} disabled={this.state.loading} type="submit" className="btn btn-btn btn-submit">
@@ -322,7 +345,7 @@ class Home extends Component {
                                                     <div style={{cursor: 'pointer'}} className="fb"
                                                          onClick={this.responseFacebook.bind(this)}>
                                                         <ion-icon name="logo-facebook"/>
-                                                        <span>{locale("login.fbLogin")}</span></div>
+                                                        <span>Facebook-ээр нэвтрэх</span></div>
                                                 ) : (
                                                     <div style={{cursor: 'pointer'}} className="fb">
                                                         <ion-icon name="logo-facebook"/>
@@ -485,6 +508,26 @@ class Home extends Component {
                             </Col>
                         </Row>
                     </Container>
+                    <Modal style={{maxWidth: 400, margin: 'auto'}} className="resetModal" show={this.state.showReset} onHide={() => this.setState({showReset: false})}>
+                        <Modal.Header closeButton>
+                            <span>Нууц үг сэргээх</span>
+                        </Modal.Header>
+                        <Modal.Body style={{ padding: 20}}>
+                            <div className="l-m-s-d">
+                                <form className="m-reg-form" onSubmit={(event) => this.ResetSubmit(event)}
+                                      action="/api/password/reset">
+                                    <div className="l-b">
+                                        <input placeholder={"email@example.com"} ref="name" name="email_reset"
+                                               id="name" value={this.state.email_reset} type="text" onChange={(e) => this.setState({email_reset: e.target.value})}/>
+                                    </div>
+                                    <button type="submit" className="m-reg-submit" style={{
+                                        marginTop: '20px',
+                                        background: "#4175c7"
+                                    }}>Илгээх</button>
+                                </form>
+                            </div>
+                        </Modal.Body>
+                    </Modal>
                     <Modal show={this.state.showModal}  onHide={() => this.setState({showModal: false})} size={"lg"}>
                         <Modal.Header closeButton/>
                         <Modal.Body>

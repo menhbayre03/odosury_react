@@ -10,6 +10,13 @@ class Home extends Component {
         super(props);
         config.config({history: this.props.history});
     }
+    componentDidMount() {
+        const { main: {userReset}, history} = this.props;
+        if(userReset) {
+            history.push('/login', {showResetForm: true})
+        }
+    }
+
     render() {
         const { route: {routes}} = this.props;
         return (
