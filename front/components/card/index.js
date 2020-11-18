@@ -84,7 +84,7 @@ class CardPage extends React.Component {
                             {
                                 step === 1 ? (
                                     <Row>
-                                        <Col md={8}>
+                                        <Col lg={8} md={7} sm={12}>
                                             {
                                                 lessons.length > 0 || bundles.length > 0 ? (
                                                     <React.Fragment>
@@ -146,7 +146,7 @@ class CardPage extends React.Component {
                                                 )
                                             }
                                         </Col>
-                                        <Col md={4}>
+                                        <Col lg={4} md={5} sm={12}>
                                             <p style={{
                                                 fontSize: 18,
                                                 fontWeight: 700,
@@ -176,7 +176,7 @@ class CardPage extends React.Component {
                                     </Row>
                                 ) : (user || {})._id && step === 2 ? (
                                     <Row>
-                                        <Col md={8}>
+                                        <Col lg={8} md={7} sm={12}>
                                             <div className="section pay-option">
                                                 <p style={{
                                                     fontSize: 18,
@@ -189,7 +189,7 @@ class CardPage extends React.Component {
                                                 </div>
                                             </div>
                                         </Col>
-                                        <Col md={4}>
+                                        <Col lg={4} md={5} sm={12}>
                                             <p style={{
                                                 fontSize: 18,
                                                 fontWeight: 700,
@@ -213,7 +213,7 @@ class CardPage extends React.Component {
                                     </Row>
                                 ) : (user || {})._id && step === 3 && (type === 'q' || type === 'b') ? (
                                     <Row>
-                                        <Col md={8}>
+                                        <Col lg={8} md={7} sm={12}>
                                             <div className="section pay-option">
                                                 <p style={{
                                                     fontSize: 18,
@@ -265,7 +265,7 @@ class CardPage extends React.Component {
                                                 </div>
                                             </div>
                                         </Col>
-                                        <Col md={4}>
+                                        <Col lg={4} md={5} sm={12}>
                                             <p style={{
                                                 fontSize: 18,
                                                 fontWeight: 700,

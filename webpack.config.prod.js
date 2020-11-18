@@ -2,7 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-
+const WebpackAssetsManifest = require('webpack-assets-manifest');
 module.exports = {
     mode: 'production',
     entry: {
@@ -15,7 +15,8 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, './static/dist'),
-        filename: "[name].js",
+        filename: "[name].[hash].js",
+        chunkFilename: '[id]-[chunkhash].js',
         publicPath: '/dist/'
     },
     plugins: [
@@ -28,6 +29,11 @@ module.exports = {
         new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /ja|it/),
         new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.optimize.AggressiveMergingPlugin(),
+        new WebpackAssetsManifest({
+            output: `${path.resolve(__dirname, './static/')}/manifest.json`,
+            merge: true,
+            publicPath: '/dist/'
+        })
     ],
     optimization: {
         minimize: true,

@@ -9,6 +9,9 @@ import Sticky from 'react-sticky-el';
 import ReactStars from "react-rating-stars-component";
 import config from "../../config";
 import Loader from "../include/Loader";
+import {
+    isMobile
+} from "react-device-detect";
 import Cookies from "js-cookie";
 const reducer = ({ main, lesson }) => ({ main, lesson });
 
@@ -79,9 +82,22 @@ class Lesson extends Component {
                     <Loader status={lessonLoading}>
                         <div className="lesson-head" style={{backgroundImage: (lesson.thumbnail || {}).path ? `url('${config.get('hostMedia')}${(lesson.thumbnail || {}).path}')` : 'none'}}>
                             <div className="head-inner">
+                                {
+                                    isMobile ? (
+                                        <img src={(lesson.thumbnailSmall || {}).path ? `${config.get('hostMedia')}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}
+                                            style={{
+                                                height: 'auto',
+                                                margin: '0 40px',
+                                                width: 'calc(100% - 80px)',
+                                                marginBottom: 40,
+                                                borderRadius: 10,
+                                            }}
+                                        />
+                                    ) : null
+                                }
                                 <Container>
                                     <Row style={{position: 'relative'}}>
-                                        <Col md={8}>
+                                        <Col lg={8} md={7}>
                                             <h2>{lesson.title}</h2>
                                             <p>{lesson.description}</p>
                                             <div style={{display: 'flex', justifyContent: 'space-between', flexDirection: 'column'}}>
@@ -111,6 +127,78 @@ class Lesson extends Component {
                                                         }} name="people-outline"/> {(lesson.progress || []).length} Судалсан</span>
                                                     </div>
                                                 </div>
+                                                {
+                                                    isMobile ? (
+                                                        <div className="sticky-side" style={{
+                                                            background: 'transparent',
+                                                            marginTop: -20
+                                                        }}>
+                                                            {
+                                                                lesson.paid ? (
+                                                                    <div className="inner">
+                                                                        <Link to={`/lesson/view/${lesson.slug}`}>
+                                                                            <Button variant="secondary">
+                                                                                <ion-icon name="play" /> Үзэх
+                                                                            </Button>
+                                                                        </Link>
+                                                                    </div>
+                                                                ) : (
+                                                                    <div className="inner">
+                                                                        {
+                                                                            lesson.sale > 0 ? (
+                                                                                <div style={{
+                                                                                    textAlign: 'right',
+                                                                                    height: 43,
+                                                                                    alignItems: 'center',
+                                                                                    display: 'flex',
+                                                                                    flexDirection: 'row',
+                                                                                    justifyContent: 'flex-end',
+                                                                                }}>
+                                                                                    <span style={{fontSize: 18, color: '#b1b1b1', display: 'block', fontWeight: 600 , textDecoration: 'line-through'}}>{config.formatMoney(lesson.price)}₮</span>
+                                                                                    <span style={{marginLeft: 15,fontSize: 24, color: '#fff', display: 'block', fontWeight: 700}}>{config.formatMoney(lesson.sale)}₮</span>
+                                                                                </div>
+                                                                            ) : (
+                                                                                <div style={{
+                                                                                    textAlign: 'right',
+                                                                                    height: 43,
+                                                                                    alignItems: 'flex-end',
+                                                                                    display: 'flex',
+                                                                                    flexDirection: 'column',
+                                                                                    justifyContent: 'flex-end'
+                                                                                }}>
+                                                                                    <span style={{fontSize: 24, color: '#fff', display: 'block', fontWeight: 700}}>{config.formatMoney(lesson.price)}₮</span>
+                                                                                </div>
+                                                                            )
+                                                                        }
+                                                                        <Button
+                                                                            disabled={addingToCard || removingFromCard}
+                                                                            variant="primary"
+                                                                            onClick={this.cardAction.bind(this)}
+                                                                        >
+                                                                            {
+                                                                                addingToCard || removingFromCard ?
+                                                                                    <Spinner variant={'light'} animation={'border'} size={'sm'}/>
+                                                                                    :
+                                                                                    <ion-icon name={hadInCard ? "trash-outline" : "cart-outline"}/>
+                                                                            } {hadInCard ? "Сагснаас хасах" : "Сагслах"}
+                                                                        </Button>
+                                                                        {
+                                                                            ((user || {}).wish || []).some( aa => aa == lesson._id) ? (
+                                                                                <Button onClick={() => this.addWish(lesson._id, false)} variant="secondary">
+                                                                                    <ion-icon name="heart" /> Хадгалсан
+                                                                                </Button>
+                                                                            ) : (
+                                                                                <Button onClick={() => this.addWish(lesson._id, true)} variant="secondary">
+                                                                                    <ion-icon name="heart" /> Хадгалах
+                                                                                </Button>
+                                                                            )
+                                                                        }
+                                                                    </div>
+                                                                )
+                                                            }
+                                                        </div>
+                                                    ) : null
+                                                }
                                                 <div className="tab-menu">
                                                     <span onClick={() => this.setState({active : 'timeline'})} className={`${this.state.active === 'timeline' ? 'active' : ''}`}>Хөтөлбөр</span>
                                                     <span onClick={() => this.setState({active : 'overview'})} className={`${this.state.active === 'overview' ? 'active' : ''}`}>Танилцуулга</span>
@@ -118,85 +206,89 @@ class Lesson extends Component {
                                                 </div>
                                             </div>
                                         </Col>
-                                        <Col md={4} className={`fixeee ${this.state.fixed ? 'fixeed' : 'not-fixeed'}`}>
-                                            <div>
-                                                <Sticky className={'stacka'} onFixedToggle={(e) => this.setState({fixed: e})} topOffset={-90} stickyStyle={{top: 90}}>
-                                                    <div className="sticky-side">
-                                                        <img src={(lesson.thumbnailSmall || {}).path ? `${config.get('hostMedia')}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
-                                                        {
-                                                            lesson.paid ? (
-                                                                <div className="inner">
-                                                                    <Link to={`/lesson/view/${lesson.slug}`}>
-                                                                        <Button variant="secondary">
-                                                                            <ion-icon name="play" /> Үзэх
-                                                                        </Button>
-                                                                    </Link>
-                                                                </div>
-                                                            ) : (
-                                                                <div className="inner">
-                                                                    {
-                                                                        lesson.sale > 0 ? (
-                                                                            <div style={{
-                                                                                textAlign: 'right',
-                                                                                height: 43,
-                                                                                alignItems: 'center',
-                                                                                display: 'flex',
-                                                                                flexDirection: 'row',
-                                                                                justifyContent: 'flex-end',
-                                                                            }}>
-                                                                                <span style={{fontSize: 18, color: '#909090', display: 'block', fontWeight: 600 , textDecoration: 'line-through'}}>{config.formatMoney(lesson.price)}₮</span>
-                                                                                <span style={{marginLeft: 15,fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{config.formatMoney(lesson.sale)}₮</span>
-                                                                            </div>
-                                                                        ) : (
-                                                                            <div style={{
-                                                                                textAlign: 'right',
-                                                                                height: 43,
-                                                                                alignItems: 'flex-end',
-                                                                                display: 'flex',
-                                                                                flexDirection: 'column',
-                                                                                justifyContent: 'flex-end'
-                                                                            }}>
-                                                                                <span style={{fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{config.formatMoney(lesson.price)}₮</span>
-                                                                            </div>
-                                                                        )
-                                                                    }
-                                                                    <Button
-                                                                        disabled={addingToCard || removingFromCard}
-                                                                        variant="primary"
-                                                                        onClick={this.cardAction.bind(this)}
-                                                                    >
-                                                                        {
-                                                                            addingToCard || removingFromCard ?
-                                                                                <Spinner variant={'light'} animation={'border'} size={'sm'}/>
-                                                                                :
-                                                                                <ion-icon name={hadInCard ? "trash-outline" : "cart-outline"}/>
-                                                                        } {hadInCard ? "Сагснаас хасах" : "Сагслах"}
-                                                                    </Button>
-                                                                    {
-                                                                        ((user || {}).wish || []).some( aa => aa == lesson._id) ? (
-                                                                            <Button onClick={() => this.addWish(lesson._id, false)} variant="secondary">
-                                                                                <ion-icon name="heart" /> Хадгалсан
+                                        {
+                                            isMobile ? null : (
+                                                <Col lg={4} md={5} className={`fixeee ${this.state.fixed ? 'fixeed' : 'not-fixeed'}`}>
+                                                    <div>
+                                                        <Sticky className={'stacka'} onFixedToggle={(e) => this.setState({fixed: e})} topOffset={-90} stickyStyle={{top: 90}}>
+                                                            <div className="sticky-side">
+                                                                <img src={(lesson.thumbnailSmall || {}).path ? `${config.get('hostMedia')}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
+                                                                {
+                                                                    lesson.paid ? (
+                                                                        <div className="inner">
+                                                                            <Link to={`/lesson/view/${lesson.slug}`}>
+                                                                                <Button variant="secondary">
+                                                                                    <ion-icon name="play" /> Үзэх
+                                                                                </Button>
+                                                                            </Link>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div className="inner">
+                                                                            {
+                                                                                lesson.sale > 0 ? (
+                                                                                    <div style={{
+                                                                                        textAlign: 'right',
+                                                                                        height: 43,
+                                                                                        alignItems: 'center',
+                                                                                        display: 'flex',
+                                                                                        flexDirection: 'row',
+                                                                                        justifyContent: 'flex-end',
+                                                                                    }}>
+                                                                                        <span style={{fontSize: 18, color: '#909090', display: 'block', fontWeight: 600 , textDecoration: 'line-through'}}>{config.formatMoney(lesson.price)}₮</span>
+                                                                                        <span style={{marginLeft: 15,fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{config.formatMoney(lesson.sale)}₮</span>
+                                                                                    </div>
+                                                                                ) : (
+                                                                                    <div style={{
+                                                                                        textAlign: 'right',
+                                                                                        height: 43,
+                                                                                        alignItems: 'flex-end',
+                                                                                        display: 'flex',
+                                                                                        flexDirection: 'column',
+                                                                                        justifyContent: 'flex-end'
+                                                                                    }}>
+                                                                                        <span style={{fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{config.formatMoney(lesson.price)}₮</span>
+                                                                                    </div>
+                                                                                )
+                                                                            }
+                                                                            <Button
+                                                                                disabled={addingToCard || removingFromCard}
+                                                                                variant="primary"
+                                                                                onClick={this.cardAction.bind(this)}
+                                                                            >
+                                                                                {
+                                                                                    addingToCard || removingFromCard ?
+                                                                                        <Spinner variant={'light'} animation={'border'} size={'sm'}/>
+                                                                                        :
+                                                                                        <ion-icon name={hadInCard ? "trash-outline" : "cart-outline"}/>
+                                                                                } {hadInCard ? "Сагснаас хасах" : "Сагслах"}
                                                                             </Button>
-                                                                        ) : (
-                                                                            <Button onClick={() => this.addWish(lesson._id, true)} variant="secondary">
-                                                                                <ion-icon name="heart" /> Хадгалах
-                                                                            </Button>
-                                                                        )
-                                                                    }
-                                                                </div>
-                                                            )
-                                                        }
+                                                                            {
+                                                                                ((user || {}).wish || []).some( aa => aa == lesson._id) ? (
+                                                                                    <Button onClick={() => this.addWish(lesson._id, false)} variant="secondary">
+                                                                                        <ion-icon name="heart" /> Хадгалсан
+                                                                                    </Button>
+                                                                                ) : (
+                                                                                    <Button onClick={() => this.addWish(lesson._id, true)} variant="secondary">
+                                                                                        <ion-icon name="heart" /> Хадгалах
+                                                                                    </Button>
+                                                                                )
+                                                                            }
+                                                                        </div>
+                                                                    )
+                                                                }
+                                                            </div>
+                                                        </Sticky>
                                                     </div>
-                                                </Sticky>
-                                            </div>
-                                        </Col>
+                                                </Col>
+                                            )
+                                        }
                                     </Row>
                                 </Container>
                             </div>
                         </div>
                         <Container className="inner-cont">
                             <Row>
-                                <Col md={8}>
+                                <Col lg={8} md={12}>
                                     <Tabs activeKey={this.state.active}>
                                         <Tab eventKey="timeline" title={<span>Хөтөлбөр<ion-icon name="chevron-down"></ion-icon></span>}>
                                             <div className="timeline-cont">
