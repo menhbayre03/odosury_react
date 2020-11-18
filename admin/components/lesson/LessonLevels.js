@@ -396,7 +396,7 @@ class LessonLevels extends React.Component {
                             title="Хөтөлбөр"
                             visible={openModalLevelTimline}
                             confirmLoading={timelineSubmitLoader}
-                            size="lg"
+                            width={1000}
                             onOk={this.submitTimeline.bind(this)}
                             onCancel={this.closeModalLevelTimline.bind(this)}
                             okText="Хадгалах"
@@ -622,6 +622,7 @@ class LessonLevels extends React.Component {
                             onOk={this.submitTimeline.bind(this)}
                             onCancel={this.closeEditTimeline.bind(this)}
                             okText="Хадгалах"
+                            width={1000}
                             cancelText="Болих"
                             maskClosable={false}
                         >

@@ -223,7 +223,15 @@ class CardPage extends React.Component {
                                                 <div>
                                                     {
                                                         type === 'b' ? (
-                                                            <button onClick={() => dispatch(actions.payByBank({step: 2, type: type, amount: (bundlesPrice + lessonsPrice)}))}>Bankaar tulhiig batlah</button>
+                                                            <div>
+                                                                <ul>
+                                                                    <li>-Дансны дугаар: Хаан банк 5028961615</li>
+                                                                    <li>-Данс эзэмшигч: Амжилт дотком</li>
+                                                                    <li>-Холбогдох утас: 8844-5020</li>
+                                                                    <li>-Суралцагч худалдан авсан контент хичээлээ буцаах эрхгүй учир сонголт хийхээсээ өмнө жишээ контентоо сайтар үзэж үйлчилгээний нөцөлтэй уншиж танилцаарай.</li>
+                                                                </ul>
+                                                                <button onClick={() => dispatch(actions.payByBank({step: 2, type: type, amount: (bundlesPrice + lessonsPrice)}))}>Баталгаажуулах</button>
+                                                            </div>
                                                         ) : (
                                                             type === 'q' ? (
                                                                 <Loader status={qloading}>
@@ -247,7 +255,7 @@ class CardPage extends React.Component {
                                                                                 </li>
 
                                                                             </ul>
-                                                                            <button onClick={() => dispatch(actions.checkQpay({c: qpay.payment_id}))}>qpay gvilgee shalgah</button>
+                                                                            <button onClick={() => dispatch(actions.checkQpay({c: qpay.payment_id}))}>Гүйлгээ шалгах</button>
                                                                         </div>
                                                                     </div>
                                                                 </Loader>
