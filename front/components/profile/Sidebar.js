@@ -40,7 +40,11 @@ class Bundle extends Component {
                     </Link>
                     <a href="/logout" style={{
                         textAlign: 'center',
-                        display: 'block'
+                        display: 'inherit',
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        width: 90,
+                        marginTop: 10,
                     }}>
                         <Button className="logout_button">Гарах</Button>
                     </a>
