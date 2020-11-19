@@ -8,6 +8,9 @@ import * as actions from '../../actions/lesson_actions';
 import {Link} from "react-router-dom";
 import Select from "react-dropdown-select";
 import Loader from "../include/Loader";
+import {
+    isMobile
+} from "react-device-detect";
 const reducer = ({ main, lesson }) => ({ main, lesson });
 
 class List extends Component {
@@ -48,16 +51,91 @@ class List extends Component {
         this.setState({search: e.target.value})
     }
 
-    render() {
-        const {main: {categories}, lesson: {list, loading}} = this.props;
+    renderSidebar() {
+        const {main: {categories}} = this.props;
         let slug = this.props.match.params.slug;
+        return (
+            <Col xl={3} lg={4} md={5} sm={12} style={{marginBottom: 30}}>
+                <div className="list-sidebar">
+                    <div className="list-sidebar-items">
+                        <div className="side-item" style={{marginBottom: 10}}>
+                            <div className="side-search">
+                                <form style={{position: 'relative'}} onSubmit={(e) => this.onSearch(e)}>
+                                    <input
+                                        onChange={this.onChange.bind(this)}
+                                        placeholder="Хичээл хайх ..."
+                                        value={this.state.search}
+                                    />
+                                    <ion-icon  onClick={() => this.onSearch()} name="search-outline"/>
+                                </form>
+                            </div>
+                        </div>
+                        <div className="side-item">
+                            <p>Ангилал</p>
+                            <ul className="cate">
+                                <li className={'cate-item'}>
+                                    <Link to={`/lessons/all`}>
+                                        {'all' === slug ? <ion-icon name="checkmark"/> : null}
+                                        <span>Бүгд ({(categories || []).reduce((total, item) => total + ((item || {}).child || []).reduce((total, aa) => total + (aa || {}).count, (item || {}).count), 0)})</span>
+                                    </Link>
+                                </li>
+                                {
+                                    categories.map((item, ida) => (
+                                        item.slug === slug || (item.child || []).some(chd => chd.slug === slug) ? (
+                                            <li key={ida} className={item.slug === slug ? 'cate-item active' : 'cate-item'}>
+                                                <Link to={`/lessons/${item.slug}`}>
+                                                    {item.slug === slug ? <ion-icon name="checkmark"/> : null}
+                                                    <span>{item.title} ({(item.child || []).reduce((total, aa) => total + (aa || {}).count, item.count)})</span>
+                                                </Link>
+                                                {
+                                                    item.child && item.child.length > 0 ? (
+                                                        <ul className="cate-child">
+                                                            {
+                                                                item.child.map((child, ind) => (
+                                                                    <li key={ind} className={child.slug === slug ? 'cate-item active' : 'cate-item'}>
+                                                                        <Link to={`/lessons/${child.slug}`}>
+                                                                            {child.slug === slug ? <ion-icon name="checkmark"/> : null}
+                                                                            <span>{child.title} ({child.count})</span>
+                                                                        </Link>
+                                                                    </li>
+                                                                ))
+                                                            }
+                                                        </ul>
+                                                    ) : null
+                                                }
+                                            </li>
+                                        ) : (
+                                            <li key={ida} className={'cate-item'}>
+                                                <Link to={`/lessons/${item.slug}`}>
+                                                    {item.slug === slug ? <ion-icon name="checkmark"/> : null}
+                                                    <span>{item.title} ({(item.child || []).reduce((total, aa) => total + aa.count, item.count)})</span>
+                                                </Link>
+                                            </li>
+                                        )
+                                    ))
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </Col>
+        )
+    }
+
+    render() {
+        const {lesson: {list, loading}} = this.props;
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
                 <div className="list-container" style={{minHeight: 'calc(100vh - 185px)'}}>
                     <Container>
                         <Row>
-                            <Col md={9}>
+                            {
+                                isMobile ? (
+                                    this.renderSidebar()
+                                ) : null
+                            }
+                            <Col xl={9} lg={8} md={7} sm={12}>
                                 <div className="list-content">
                                     <div className="list-header">
                                         <h3>Хичээлүүд</h3>
@@ -66,7 +144,7 @@ class List extends Component {
                                             valueField="value"
                                             labelField="name"
                                             style={{
-                                                width: 200
+                                                width: isMobile ? 140 : 200
                                             }}
                                             values={[this.state.sort]}
                                             options={[{value: 'newest', name: 'Шинэ'}, {value: 'oldest', name: 'Хуучин'}]}
@@ -83,7 +161,7 @@ class List extends Component {
                                             <Row>
                                                 {
                                                     list.map((item, index) => (
-                                                        <Col md={4} style={{marginBottom: 30}}>
+                                                        <Col lg={4} md={6} sm={6} style={{marginBottom: 30}}>
                                                             <div key={index}>
                                                                 <GridItem item={item}/>
                                                             </div>
@@ -95,70 +173,11 @@ class List extends Component {
                                     </div>
                                 </div>
                             </Col>
-                            <Col md={3}>
-                                <div className="list-sidebar">
-                                    <div className="list-sidebar-items">
-                                        <div className="side-item" style={{marginBottom: 10}}>
-                                            <div className="side-search">
-                                                <form style={{position: 'relative'}} onSubmit={(e) => this.onSearch(e)}>
-                                                    <input
-                                                        onChange={this.onChange.bind(this)}
-                                                        placeholder="Хичээл хайх ..."
-                                                        value={this.state.search}
-                                                    />
-                                                    <ion-icon  onClick={() => this.onSearch()} name="search-outline"/>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <div className="side-item">
-                                            <p>Ангилал</p>
-                                            <ul className="cate">
-                                                <li className={'cate-item'}>
-                                                    <Link to={`/lessons/all`}>
-                                                        {'all' === slug ? <ion-icon name="checkmark"/> : null}
-                                                        <span>Бүгд ({(categories || []).reduce((total, item) => total + ((item || {}).child || []).reduce((total, aa) => total + (aa || {}).count, (item || {}).count), 0)})</span>
-                                                    </Link>
-                                                </li>
-                                                {
-                                                    categories.map((item, ida) => (
-                                                        item.slug === slug || (item.child || []).some(chd => chd.slug === slug) ? (
-                                                            <li key={ida} className={item.slug === slug ? 'cate-item active' : 'cate-item'}>
-                                                                <Link to={`/lessons/${item.slug}`}>
-                                                                    {item.slug === slug ? <ion-icon name="checkmark"/> : null}
-                                                                    <span>{item.title} ({(item.child || []).reduce((total, aa) => total + (aa || {}).count, item.count)})</span>
-                                                                </Link>
-                                                                {
-                                                                    item.child && item.child.length > 0 ? (
-                                                                        <ul className="cate-child">
-                                                                            {
-                                                                                item.child.map((child, ind) => (
-                                                                                    <li key={ind} className={child.slug === slug ? 'cate-item active' : 'cate-item'}>
-                                                                                        <Link to={`/lessons/${child.slug}`}>
-                                                                                            {child.slug === slug ? <ion-icon name="checkmark"/> : null}
-                                                                                            <span>{child.title} ({child.count})</span>
-                                                                                        </Link>
-                                                                                    </li>
-                                                                                ))
-                                                                            }
-                                                                        </ul>
-                                                                    ) : null
-                                                                }
-                                                            </li>
-                                                        ) : (
-                                                            <li key={ida} className={'cate-item'}>
-                                                                <Link to={`/lessons/${item.slug}`}>
-                                                                    {item.slug === slug ? <ion-icon name="checkmark"/> : null}
-                                                                    <span>{item.title} ({(item.child || []).reduce((total, aa) => total + aa.count, item.count)})</span>
-                                                                </Link>
-                                                            </li>
-                                                        )
-                                                    ))
-                                                }
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Col>
+                            {
+                                isMobile ? null : (
+                                    this.renderSidebar()
+                                )
+                            }
                         </Row>
                     </Container>
                 </div>

@@ -6,6 +6,9 @@ import { Button, Container, Col, Row, Modal, Spinner } from 'react-bootstrap';
 import * as actions from '../../actions/home_actions';
 import Cookies from "js-cookie";
 import QRCode from "react-qr-code";
+import {
+    isMobile
+} from "react-device-detect";
 
 class Header extends Component {
     constructor(props) {
@@ -143,7 +146,7 @@ class Header extends Component {
                 <div className={`header ${this.state.trans ? 'trans' : ''}`}>
                     <Container>
                         <Row className="header-top">
-                            <Col md={6} className="section-1">
+                            <Col md={6} sm={9} xs={9} className="section-1">
                                 <div className="logo" style={{display: 'inline-block'}}>
                                     <Link to={'/'}><img src="/images/logo.svg" alt=""/></Link>
                                     {/*<Link to={'/'}><img src="/images/logo-small.png" alt=""/></Link>*/}
@@ -166,13 +169,17 @@ class Header extends Component {
                                     </ul>
                                 </div>
                             </Col>
-                            <Col md={6} className="section-2">
-                                <div className="section-1-1">
-                                    <form onSubmit={(e) => this.search(e)}>
-                                        <input onChange={(e) => this.setState({search: e.target.value})} style={{width: '100%'}} placeholder="Хичээл хайх ..."/>
-                                        <ion-icon onClick={(e) => this.search(e)} name="search-outline" style={{cursor: 'pointer'}}/>
-                                    </form>
-                                </div>
+                            <Col md={6} sm={3} xs={3} className="section-2">
+                                {
+                                    isMobile ? null : (
+                                        <div className="section-1-1">
+                                            <form onSubmit={(e) => this.search(e)}>
+                                                <input onChange={(e) => this.setState({search: e.target.value})} style={{width: '100%'}} placeholder="Хичээл хайх ..."/>
+                                                <ion-icon onClick={(e) => this.search(e)} name="search-outline" style={{cursor: 'pointer'}}/>
+                                            </form>
+                                        </div>
+                                    )
+                                }
                                 {
                                     user._id ? (
                                         <div className="user-menu">
@@ -180,7 +187,7 @@ class Header extends Component {
                                                 <span>{(user.bundles || []).length + (user.lessons || []).length}</span>
                                                 <ion-icon name="basket"/>
                                             </Link>
-                                            <Link to="/profile/info">Профайл<ion-icon name="person"/></Link>
+                                            <Link to="/profile/info">{isMobile ? null : 'Профайл'}<ion-icon name="person"/></Link>
                                         </div>
                                     ) : (
                                         <div className="user-menu">
@@ -189,24 +196,28 @@ class Header extends Component {
                                                 <ion-icon name="basket"/>
                                             </Link>
                                             <Link to="/login">
-                                                <span style={{
-                                                    width: 158,
-                                                    display: 'block',
-                                                    fontSize: 12,
-                                                    color: '#fff',
-                                                    padding: '6px 0px 6px 15px',
-                                                    marginRight: -25,
-                                                    cursor: 'pointer',
-                                                    background: 'unset',
-                                                    position: 'unset',
-                                                    top: 'unset',
-                                                    right: 'unset',
-                                                    minWidth: 'unset',
-                                                    textAlign: 'unset',
-                                                    lineHeight: 'unset',
-                                                }}>
+                                                {
+                                                    isMobile ? <ion-icon name="person"/> : (
+                                                        <span style={{
+                                                            width: 158,
+                                                            display: 'block',
+                                                            fontSize: 12,
+                                                            color: '#fff',
+                                                            padding: '6px 0px 6px 15px',
+                                                            marginRight: -25,
+                                                            cursor: 'pointer',
+                                                            background: 'unset',
+                                                            position: 'unset',
+                                                            top: 'unset',
+                                                            right: 'unset',
+                                                            minWidth: 'unset',
+                                                            textAlign: 'unset',
+                                                            lineHeight: 'unset',
+                                                        }}>
                                                     Нэвтрэх / Бүртгүүлэх
                                                 </span>
+                                                    )
+                                                }
                                             </Link>
                                         </div>
                                     )

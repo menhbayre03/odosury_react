@@ -218,7 +218,6 @@
       li {
         display: inline-block;
         height: 30px;
-        padding: 1px 15px;
         a {
           color: #fff;
           font-size: 12px;
@@ -991,7 +990,7 @@
   }
   .tab-menu {
     padding: 0;
-    height: 46px;
+    height: 43px;
     display: block;
     span {
       font-size: 20px;
@@ -1018,8 +1017,8 @@
       width: 36px;
       transition: all 0.3s ease-out;
       font-size: 31px;
-      height: 47px;
-      top: -1px;
+      height: 43px;
+      top: 0px;
       content: "";
       position: absolute;
       background-size: cover;
@@ -1030,8 +1029,8 @@
       width: 36px;
       transition: all 0.3s ease-out;
       font-size: 31px;
-      height: 47px;
-      top: -1px;
+      height: 43px;
+      top: 0px;
       content: "";
       position: absolute;
       background-size: cover;
@@ -1385,6 +1384,8 @@
       padding: 8px 20px;
       flex-direction: row;
       align-content: center;
+      position: fixed;
+      top: 0;
       ion-icon {
         font-size: 24px;
         cursor: pointer;
@@ -1401,6 +1402,7 @@
     }
     .program-cont {
       padding: 40px 30px;
+      margin-top: 40px;
       h6.tit {
         font-size: 20px;
         font-weight: 700;
@@ -1855,7 +1857,6 @@
   }
 }
 .fb {
-  cursor: pointer;
   background: #3b5998;
   color: white;
   border-radius: 5px;
@@ -1863,12 +1864,13 @@
   text-align: center;
   font-size: 16px;
   font-weight: 700;
-  position: relative;
-  margin-top: 50px;
+  width: 100%;
+  display: block;
   ion-icon {
     font-size: 24px;
     position: absolute;
     left: 12px;
+    pointer-events: none;
   }
 }
 .logout_button {
@@ -1979,5 +1981,195 @@
     height: calc(100vh - 200px);
     max-width: 100% !important;
     overflow: auto;
+  }
+}
+
+div.facebook-login {
+  position: relative;
+  margin-top: 40px;
+}
+div.facebook-login>span{
+  opacity: 0;
+  position: absolute;
+  transition: none !important;
+  height: 46px;
+  width: 100%;
+}
+div.facebook-login>span button {
+  opacity: 0;
+  transition: none !important;
+  height: 46px;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background: #0046BE;
+  color: #fff;
+}
+@media(max-width: 1200px){
+  .profile-sidebar li span {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    width: calc(100% - 20px);
+    position: relative;
+    top: 7px;
+  }
+  .fb span {
+    font-size: 14px;
+  }
+  .home-hero {
+    height: 380px;
+    .hero-inner {
+      padding-top: 100px;
+      h1 {
+      font-size: 32px;
+      }
+      h4 {
+        font-size: 18px;
+      }
+    }
+    img {
+      right: 20% !important;
+      max-height: 70% !important;
+    }
+  }
+}
+@media(max-width: 1075px){
+  .grid-next {
+    right: -5px
+  }
+  .grid-prev {
+    left: -5px
+  }
+  .section-new .swiper-container, .section-watching .swiper-container {
+    width: calc(100% - 40px);
+  }
+}
+
+@media(max-width: 992px){
+  .register-login {
+    margin-top: 50px;
+  }
+  .home-hero {
+    height: 280px;
+    .hero-inner {
+      padding-top: 90px;
+      h1 {
+        font-size: 20px;
+      }
+      h4 {
+        font-size: 14px;
+      }
+    }
+    img {
+      right: 10% !important;
+      max-height: 70% !important;
+    }
+  }
+  .sticky {
+    position: unset !important;
+  }
+  .lesson-single .tab-menu {
+    text-align: center;
+    height: 40px;
+  }
+  .lesson-single .tab-menu span {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .lesson-single .tab-menu span.active {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .lesson-single .tab-menu span.active:before {
+    height: 41px;
+    top: 0;
+  }
+  .lesson-single .tab-menu span.active:after {
+    height: 41px;
+    top: 0;
+  }
+}
+@media(max-width: 768px){
+  .register-login {
+    margin-top: 50px;
+  }
+  .lesson-single .tab-menu {
+    text-align: center;
+  }
+  .lesson-single .lesson-head .head-inner h2 {
+    font-size: 24px;
+  }
+  .home-hero {
+    height: 180px;
+    .hero-inner {
+      padding-top: 40px;
+    }
+    img {
+      display: none;
+    }
+  }
+
+
+  .lesson-single .inner-tab.overview .list-2 {
+    columns: 1;
+    -webkit-columns: 1;
+    -moz-columns: 1;
+  }
+  .lesson-single .timeline-cont .accordion .card .card-body .program p {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .header .header-top .section-1 .logo {
+    height: 60px;
+    padding: 17px 0;
+  }
+  .header .header-top .section-1 .logo img {
+    height: 24px;
+  }
+  .header .header-top .section-1 .category-menu button.btn-primary {
+    margin-left: 20px;
+    height: 26px;
+    padding: 0 15px;
+    font-size: 10px;
+  }
+}
+@media(max-width: 576px){
+  .header .header-top .section-1 .logo img {
+    height: 16px;
+  }
+  .header .header-top .section-1 .logo {
+    padding: 18px 0;
+  }
+  .lesson-single .tab-menu span.active:before {
+    height: 37px;
+  }
+  .lesson-single .tab-menu span.active:after {
+    height: 37px;
+  }
+  .lesson-single .tab-menu {
+    height: 37px;
+  }
+  .lesson-single .tab-menu span.active {
+    font-size: 14px;
+    padding: 8px 0px;
+    margin: 0 30px;
+  }
+  .lesson-single .tab-menu span {
+    font-size: 14px;
+    padding: 8px 0px;
+    margin: 0 30px;
+  }
+  .header .header-top .section-1 .category-menu ul {
+    left: -80px;
+  }
+  .grid-prev {
+    left: 0px;
+    font-size: 26px;
+  }
+  .grid-next {
+    right: 0px;
+    font-size: 26px;
   }
 }

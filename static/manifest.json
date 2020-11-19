@@ -1,3 +1,10 @@
 {
-  "gcm_sender_id": "103953800507"
+  "admin.js": "/dist/admin.b029913a5770e9ec1750.js",
+  "default-skin.png": "/dist/e3f799c6dec9af194c86decdf7392405.png",
+  "front.js": "/dist/front.b029913a5770e9ec1750.js",
+  "gcm_sender_id": "103953800507",
+  "preloader.gif": "/dist/e34aafbb485a96eaf2a789b2bf3af6fe.gif",
+  "tab-border-left.png": "/dist/02e9f4d73ce1d9e36fcbdc8915fd5ece.png",
+  "tab-border-right.png": "/dist/2f00196594702db2244236d5fd943e49.png",
+  "vendors~pdfjsWorker.js": "/dist/0-11e0ec49a231949be970.js"
 }

@@ -59,10 +59,11 @@
     "react-bootstrap": "^1.0.1",
     "react-custom-scrollbars": "^4.2.1",
     "react-datepicker": "^3.0.0",
-    "react-device-detect": "^1.12.0",
+    "react-device-detect": "^1.14.0",
     "react-dom": "^16.13.1",
     "react-dropdown-select": "^4.4.1",
     "react-dropzone": "^11.0.1",
+    "react-facebook-login": "^4.1.1",
     "react-ga": "^2.7.0",
     "react-id-swiper": "^4.0.0",
     "react-infinite-scroll-component": "^5.0.4",
@@ -87,6 +88,7 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "socket.io-client": "^2.3.1",
-    "swiper": "^6.2.0"
+    "swiper": "^6.2.0",
+    "webpack-assets-manifest": "^3.1.1"
   }
 }

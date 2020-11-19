@@ -8,6 +8,7 @@ import { Container, Row, Col, Form, Button, Modal } from "react-bootstrap";
 import Api from "../../admin/actions/api";
 import Cookies from "js-cookie";
 const reducer = ({ main, auth }) => ({ main, auth });
+import FacebookLogin from 'react-facebook-login';
 
 class Home extends Component {
     constructor(props) {
@@ -71,7 +72,7 @@ class Home extends Component {
     async componentDidMount() {
         const {main: {userReset, token}} = this.props;
         window.scroll(0,0);
-        config.get('fbApi').whenLoaded().then(() => this.setState({sdkLoaded: true}));
+        // config.get('fbApi').whenLoaded().then(() => this.setState({sdkLoaded: true}));
         if(this.props.match.params.token) {
             this.setState({verifyLoading: true});
             const response = await Api.login(`/api/verify/${this.props.match.params.token}`);
@@ -111,11 +112,26 @@ class Home extends Component {
             }
         }
     }
-    async responseFacebook() {
+    // async responseFacebook() {
+    //     this.setState({fbLoading: true});
+    //     const res = await config.get('fbApi').login();
+    //     if(res && res.status === "connected" && (res.authResponse || {}).accessToken) {
+    //         const response = await Api.login(`/api/fb/login`, {token: res.authResponse.accessToken});
+    //         if (response.success === true) {
+    //             this.setState({fbLoading: false});
+    //             Cookies.set('odosuryCard', JSON.stringify({bundles: [], lessons: []}));
+    //             window.location = "/";
+    //         } else {
+    //             this.setState({fbLoading: false});
+    //             config.get('emitter').emit('warning', response.msg);
+    //         }
+    //     }
+    // }
+    async responseFacebook(data) {
         this.setState({fbLoading: true});
-        const res = await config.get('fbApi').login();
-        if(res && res.status === "connected" && (res.authResponse || {}).accessToken) {
-            const response = await Api.login(`/api/fb/login`, {token: res.authResponse.accessToken});
+        // const res = await config.get('fbApi').login();
+        // if(res && res.status === "connected" && (res.authResponse || {}).accessToken) {
+            const response = await Api.login(`/api/fb/login`, {token: data.accessToken});
             if (response.success === true) {
                 this.setState({fbLoading: false});
                 Cookies.set('odosuryCard', JSON.stringify({bundles: [], lessons: []}));
@@ -124,7 +140,7 @@ class Home extends Component {
                 this.setState({fbLoading: false});
                 config.get('emitter').emit('warning', response.msg);
             }
-        }
+        // }
     }
 
     changePass(e) {
@@ -390,8 +406,9 @@ class Home extends Component {
                                     ) : null
                                 }
                                 <Row style={{pointerEvents: this.state.verifyLoading ? 'none' : 'unset', opacity: this.state.verifyLoading ? 0.2 : 1}}>
-                                    <Col md={{ span: 5 }}>
-                                        <div className="log-block login"><h4 className="title text-center">
+                                    <Col xl={{ span: 5, offset: 0 }} lg={{ span: 6, offset: 0 }} md={{ span: 8, offset: 2 }} sm={{ span: 10, offset: 1 }}>
+                                        <div className="log-block login">
+                                            <h4 className="title text-center">
                                             <strong>Нэвтрэх</strong></h4>
                                             <Form onSubmit={this.handleSubmit.bind(this)}>
                                                 <Form.Group>
@@ -435,21 +452,36 @@ class Home extends Component {
                                                 </Button>
                                                 </div>
                                             </Form>
-                                            {
-                                                this.state.sdkLoaded ? (
-                                                    <div style={{cursor: 'pointer'}} className="fb"
-                                                         onClick={this.responseFacebook.bind(this)}>
-                                                        <ion-icon name="logo-facebook"/>
-                                                        <span>Facebook-ээр нэвтрэх</span></div>
-                                                ) : (
-                                                    <div style={{cursor: 'pointer'}} className="fb">
-                                                        <ion-icon name="logo-facebook"/>
-                                                        <span>Ачааллаж байна...</span></div>
-                                                )
-                                            }
+                                            <div className="facebook-login">
+                                                <FacebookLogin
+                                                    appId="1025498560826970"
+                                                    autoLoad={false}
+                                                    callback={(response)=>this.responseFacebook(response)}
+                                                    render={renderProps => (
+                                                        <Button variant="danger" onClick={renderProps.onClick}>
+                                                            Facebook
+                                                        </Button>
+                                                    )}
+                                                />
+                                                <div style={{cursor: 'pointer'}} className="fb">
+                                                    <ion-icon name="logo-facebook"/>
+                                                    <span>Facebook-ээр нэвтрэх</span></div>
+                                            </div>
+                                            {/*{*/}
+                                            {/*    this.state.sdkLoaded ? (*/}
+                                            {/*        <div style={{cursor: 'pointer'}} className="fb"*/}
+                                            {/*             onClick={this.responseFacebook.bind(this)}>*/}
+                                            {/*            <ion-icon name="logo-facebook"/>*/}
+                                            {/*            <span>Facebook-ээр нэвтрэх</span></div>*/}
+                                            {/*    ) : (*/}
+                                            {/*        <div style={{cursor: 'pointer'}} className="fb">*/}
+                                            {/*            <ion-icon name="logo-facebook"/>*/}
+                                            {/*            <span>Ачааллаж байна...</span></div>*/}
+                                            {/*    )*/}
+                                            {/*}*/}
                                         </div>
                                     </Col>
-                                    <Col md={{ span: 5, offset: 2 }}>
+                                    <Col xl={{ span: 5, offset: 2 }} lg={{ span: 6, offset: 0 }} md={{ span: 8, offset: 2 }} sm={{ span: 10, offset: 1 }} className="register-login">
                                         {
                                             this.state.showResetForm && !this.state.passResetDone ? (
                                                 <div className="log-block login"><h4 className="title text-center">

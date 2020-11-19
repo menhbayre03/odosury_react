@@ -8,6 +8,9 @@ import ReactPlayer from "react-player";
 import config from "../../config";
 import Loader from "../include/Loader";
 import AmjiltPdf from './pdf';
+import {
+    isMobile
+} from "react-device-detect";
 const reducer = ({ main, lesson }) => ({ main, lesson });
 
 class Bundle extends Component {
@@ -17,7 +20,7 @@ class Bundle extends Component {
             active: '',
             program: {},
             activeIndex: '0',
-            collapse: true
+            collapse: !isMobile
         };
     }
 
@@ -49,11 +52,73 @@ class Bundle extends Component {
     selectProgram(program) {
         const {lesson: {lessonView}} = this.props;
         const {dispatch} = this.props;
+        if(isMobile) {
+            this.setState({collapse: false})
+        }
         this.setState({program: program.timeline}, () => dispatch(actions.setProgress(lessonView._id, program)))
     }
 
     render() {
-        const {main: {user}, lesson: {lessonView, loadingView}} = this.props;
+        const {lesson: {loadingView}} = this.props;
+        return (
+            <React.Fragment>
+                {
+                    isMobile ? (
+                        <div className="view-area">
+                            <Scrollbars
+                                className="sidebar"
+                                style={{
+                                    width: this.state.collapse ? '100%' : 0,
+                                    opacity: this.state.collapse ? 1 : 0,
+                                    visibility: this.state.collapse ? 'visible' : 'hidden',
+                                    zIndex: 2
+                                }}
+                            >
+                                <h4 style={{width: '100%'}}>Хөтөлбөрүүд:
+                                    <ion-icon style={{float: 'right'}} name="chevron-back-outline" onClick={() => this.setState({collapse: false})}/>
+                                </h4>
+                                <div className="timeline-cont" style={{width: '100%'}}>
+                                    <Accordion activeKey={this.state.activeIndex}>
+                                        {this.renderSide()}
+                                    </Accordion>
+                                </div>
+                            </Scrollbars>
+                            <Loader status={loadingView}>
+                                <div className="view-cont" style={{marginLeft: 0}}>
+                                    {this.renderBody()}
+                                </div>
+                            </Loader>
+                        </div>
+                    ) : (
+                        <div className="view-area">
+                            <Scrollbars
+                                className="sidebar"
+                                style={{
+                                    width: this.state.collapse ? 380 : 0,
+                                    opacity: this.state.collapse ? 1 : 0,
+                                    visibility: this.state.collapse ? 'visible' : 'hidden',
+                                }}
+                            >
+                                <h4 style={{width: 380}}>Хөтөлбөрүүд:</h4>
+                                <div className="timeline-cont" style={{width: 380}}>
+                                    <Accordion activeKey={this.state.activeIndex}>
+                                        {this.renderSide()}
+                                    </Accordion>
+                                </div>
+                            </Scrollbars>
+                            <Loader status={loadingView}>
+                                <div className="view-cont" style={{marginLeft: this.state.collapse ? 380 : 0}}>
+                                    {this.renderBody()}
+                                </div>
+                            </Loader>
+                        </div>
+                    )
+                }
+            </React.Fragment>
+        );
+    }
+    renderBody() {
+        const {lesson: {lessonView}} = this.props;
         const {program} = this.state;
         let mediaUrl = '';
         if(program.video) {
@@ -64,156 +129,145 @@ class Bundle extends Component {
         }
         return (
             <React.Fragment>
-                <div className="view-area">
-                    <Scrollbars
-                        className="sidebar"
-                        style={{
-                            width: this.state.collapse ? 380 : 0,
-                            opacity: this.state.collapse ? 1 : 0,
-                            visibility: this.state.collapse ? 'visible' : 'hidden',
-                        }}
-                    >
-                        <h4 style={{width: 380}}>Хөтөлбөрүүд:</h4>
-                        <div className="timeline-cont" style={{width: 380}}>
-                            <Accordion activeKey={this.state.activeIndex}>
+                <div className="view-header" style={{
+                    width: isMobile ? '100%' : this.state.collapse ? 'calc(100% - 380px)' : '100%'
+                }}>
+                    {
+                        this.state.collapse ? (
+                            <ion-icon name="chevron-back-outline" onClick={() => this.setState({collapse: false})}/>
+                        ) : (
+                            <ion-icon name="menu-outline" onClick={() => this.setState({collapse: true})}/>
+                        )
+                    }
+                    <h5>
+                        {lessonView.title}
+                        <ion-icon name="close" style={{
+                            position: 'absolute',
+                            top: -3,
+                            right: -10,
+                        }} onClick={() => this.props.history.push(`/lesson/${lessonView.slug}`)}/>
+                    </h5>
+                </div>
+                <div className={`program-cont ${program.type === 'video' ? 'video' : ''}`}
+                    style={{
+                        padding: (isMobile || (program.type === 'video' || program.type === 'pdf')) ? '20px 0 0 0' : '40px 30px'
+                    }}
+                >
+                    {
+                        program._id ? (
+                            <div>
                                 {
-                                    (lessonView.levels || []).map((item, index) => (
-                                        <Card key={index}>
-                                            <Card.Header>
-                                                <Accordion.Toggle onClick={() => this.setState({activeIndex: this.state.activeIndex === index.toString() ? '' : index.toString()})} as={Button} variant="link" eventKey={index.toString()}>
-                                                    {item.title}
-                                                    {
-                                                        this.state.activeIndex == index.toString() ? (
-                                                            <ion-icon style={{
-                                                                float: 'right',
-                                                                fontSize: 20,
-                                                                position: 'relative',
-                                                                top: 3,
-                                                            }} name="chevron-down"/>
-                                                        ) : (
-                                                            <ion-icon style={{
-                                                                float: 'right',
-                                                                fontSize: 20,
-                                                                position: 'relative',
-                                                                top: 3,
-                                                            }} name="chevron-up"/>
-                                                        )
-                                                    }
-                                                </Accordion.Toggle>
-                                            </Card.Header>
-                                            <Accordion.Collapse eventKey={index.toString()}>
-                                                <Card.Body>
-                                                    {
-                                                        (item.programs || []).map((program, ind) => (
-                                                            <div onClick={() => this.selectProgram(program)} className={`program ${(program.passed_users || []).indexOf(((user || {})._id || 'WW@@#').toString()) > -1 ? 'passed' : ''} ${this.state.program._id == (program.timeline || {})._id ? 'current' : ''}`} key={ind}>
-                                                                {
-                                                                    (program.timeline || {}).type === 'video' ? (
-                                                                        <ion-icon name="videocam"/>
-                                                                    ) : (
-                                                                        (program.timeline || {}).type === 'audio' ? (
-                                                                            <ion-icon name="videocam"/>
-                                                                        ) : (
-                                                                            <ion-icon name="document-text"/>
-                                                                        )
-                                                                    )
-                                                                }
-                                                                <p>{(program.timeline || {}).title}</p>
-                                                                {
-                                                                    program.timeline.minutes > 0 ? (
-                                                                        <span>{(program.timeline || {}).minutes} мин</span>
-                                                                    ) : null
-                                                                }
-                                                            </div>
-                                                        ))
-                                                    }
-                                                </Card.Body>
-                                            </Accordion.Collapse>
-                                        </Card>
-                                    ))
-                                }
-                            </Accordion>
-                        </div>
-                    </Scrollbars>
-                    <Loader status={loadingView}>
-                        <div className="view-cont" style={{marginLeft: this.state.collapse ? 380 : 0}}>
-                            <div className="view-header">
-                                {
-                                    this.state.collapse ? (
-                                        <ion-icon name="chevron-back-outline" onClick={() => this.setState({collapse: false})}/>
-                                    ) : (
-                                        <ion-icon name="menu-outline" onClick={() => this.setState({collapse: true})}/>
+                                    program.type === 'video' ? null : (
+                                        <h6 className="tit">{program.title}</h6>
                                     )
                                 }
-                                <h5>
-                                    {lessonView.title}
-                                    <ion-icon name="close" style={{
-                                        position: 'absolute',
-                                        top: -3,
-                                        right: -10,
-                                    }} onClick={() => this.props.history.push(`/lesson/${lessonView.slug}`)}/>
-                                </h5>
-                            </div>
-                            <div className={`program-cont ${program.type === 'video' ? 'video' : ''}`}>
                                 {
-                                    program._id ? (
-                                        <div>
-                                            {
-                                                program.type === 'video' ? null : (
-                                                    <h6 className="tit">{program.title}</h6>
-                                                )
-                                            }
-                                            {
-                                                program.content ? (
-                                                    <div className="content-prog" dangerouslySetInnerHTML={{__html : program.content}}/>
-                                                ) : null
-                                            }
-                                            {
-                                                program.video && mediaUrl && program.type === 'video' ? (
-                                                    <ReactPlayer
-                                                        playing
-                                                        onError={() => config.get('emitter').emit('warning', 'Хандах эрх хүрэхгүй байна.')}
-                                                        controls
-                                                        light={`${config.get('hostMedia')}${program.video.thumbnail}`}
-                                                        autoPlay={false}
-                                                        height={560}
-                                                        playIcon={<ion-icon style={{fontSize: 74, color: '#fff'}} name="play-circle"/>}
-                                                        width={"100%"}
-                                                        url={mediaUrl}
-                                                        config={{
-                                                            file: {
-                                                                attributes: {
-                                                                    controlsList : "nodownload"
-                                                                }
-                                                            }
-                                                        }}
-                                                    />
-                                                ) : null
-                                            }
-                                            {
-                                                program.pdf && mediaUrl && program.type === 'pdf' ? (
-                                                    <div className={'PdfView'}>
-                                                        <div style={{padding: '0px 0px 10px'}}>
-                                                            <AmjiltPdf src={mediaUrl} hideHeader={true}/>
-                                                        </div>
-                                                    </div>
-                                                ) : null
-                                            }
-                                            {
-                                                program.type === 'video' ? (
-                                                    <h6 className="tit" style={{marginTop: 20}}>{program.title}</h6>
-                                                ) : null
-                                            }
+                                    program.content ? (
+                                        <div className="content-prog" dangerouslySetInnerHTML={{__html : program.content}}/>
+                                    ) : null
+                                }
+                                {
+                                    program.video && mediaUrl && program.type === 'video' ? (
+                                        <ReactPlayer
+                                            playing
+                                            onError={() => config.get('emitter').emit('warning', 'Хандах эрх хүрэхгүй байна.')}
+                                            controls
+                                            light={`${config.get('hostMedia')}${program.video.thumbnail}`}
+                                            autoPlay={false}
+                                            height={560}
+                                            playIcon={<ion-icon style={{fontSize: 74, color: '#fff'}} name="play-circle"/>}
+                                            width={"100%"}
+                                            url={mediaUrl}
+                                            config={{
+                                                file: {
+                                                    attributes: {
+                                                        controlsList : "nodownload"
+                                                    }
+                                                }
+                                            }}
+                                        />
+                                    ) : null
+                                }
+                                {
+                                    program.pdf && mediaUrl && program.type === 'pdf' ? (
+                                        <div className={'PdfView'}>
+                                            <div style={{padding: '0px 0px 10px'}}>
+                                                <AmjiltPdf src={mediaUrl} hideHeader={true}/>
+                                            </div>
                                         </div>
-                                    ) : (
-                                        null
-                                    )
+                                    ) : null
+                                }
+                                {
+                                    program.type === 'video' ? (
+                                        <h6 className="tit" style={{marginTop: 20}}>{program.title}</h6>
+                                    ) : null
                                 }
                             </div>
-                        </div>
-                    </Loader>
+                        ) : (
+                            null
+                        )
+                    }
                 </div>
             </React.Fragment>
-        );
+        )
+    }
+    renderSide() {
+        const {main: {user}, lesson: {lessonView}} = this.props;
+        return (
+            (lessonView.levels || []).map((item, index) => (
+                <Card key={index}>
+                    <Card.Header>
+                        <Accordion.Toggle onClick={() => this.setState({activeIndex: this.state.activeIndex === index.toString() ? '' : index.toString()})} as={Button} variant="link" eventKey={index.toString()}>
+                            {item.title}
+                            {
+                                this.state.activeIndex == index.toString() ? (
+                                    <ion-icon style={{
+                                        float: 'right',
+                                        fontSize: 20,
+                                        position: 'relative',
+                                        top: 3,
+                                    }} name="chevron-down"/>
+                                ) : (
+                                    <ion-icon style={{
+                                        float: 'right',
+                                        fontSize: 20,
+                                        position: 'relative',
+                                        top: 3,
+                                    }} name="chevron-up"/>
+                                )
+                            }
+                        </Accordion.Toggle>
+                    </Card.Header>
+                    <Accordion.Collapse eventKey={index.toString()}>
+                        <Card.Body>
+                            {
+                                (item.programs || []).map((program, ind) => (
+                                    <div onClick={() => this.selectProgram(program)} className={`program ${(program.passed_users || []).indexOf(((user || {})._id || 'WW@@#').toString()) > -1 ? 'passed' : ''} ${this.state.program._id == (program.timeline || {})._id ? 'current' : ''}`} key={ind}>
+                                        {
+                                            (program.timeline || {}).type === 'video' ? (
+                                                <ion-icon name="videocam"/>
+                                            ) : (
+                                                (program.timeline || {}).type === 'audio' ? (
+                                                    <ion-icon name="videocam"/>
+                                                ) : (
+                                                    <ion-icon name="document-text"/>
+                                                )
+                                            )
+                                        }
+                                        <p>{(program.timeline || {}).title}</p>
+                                        {
+                                            program.timeline.minutes > 0 ? (
+                                                <span>{(program.timeline || {}).minutes} мин</span>
+                                            ) : null
+                                        }
+                                    </div>
+                                ))
+                            }
+                        </Card.Body>
+                    </Accordion.Collapse>
+                </Card>
+            ))
+        )
     }
 }
 
