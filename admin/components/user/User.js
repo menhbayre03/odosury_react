@@ -37,7 +37,9 @@ class User extends React.Component {
     onChangeHandler(e) {
         if(e.target.name === 'phone' ){
             const phoneRegex = /[0-9]/;
-            if(phoneRegex.test(e.target.value)){
+            if(isNaN(e.target.value) || e.target.value === '') {
+                this.props.dispatch(actions.userChangeHandler({name:e.target.name, value: ''}));
+            } else if(phoneRegex.test(e.target.value)){
                 this.props.dispatch(actions.userChangeHandler({name:e.target.name, value: e.target.value}));
             }
         } else {
@@ -74,8 +76,8 @@ class User extends React.Component {
             return config.get('emitter').emit('warning', ("Имэйл бичиглэл буруу байна!"));
         }
         if(!user.phone){
-            return config.get('emitter').emit('warning', ("Утас оруулна уу!"));
-        } else if((!phoneRegex.test(user.phone))){
+
+        } else if(user.phone && (!phoneRegex.test(user.phone))){
             return config.get('emitter').emit('warning', ("Утас бичиглэл буруу байна!"));
         }
         if(!user.role || (user.role && user.role.trim() === '' )){
