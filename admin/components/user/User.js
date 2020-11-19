@@ -56,14 +56,16 @@ class User extends React.Component {
         } else if((!usernameRegex.test(user.username))){
             return config.get('emitter').emit('warning', ("Хэрэглэгчийн нэр бичиглэл буруу байна!"));
         }
-        if(!user.last_name || (user.last_name && user.last_name.trim() === '' )){
-            return config.get('emitter').emit('warning', ("Овог оруулна уу!"));
-        } else if((!nameRegex.test(user.last_name))){
+        // if(!user.last_name || (user.last_name && user.last_name.trim() === '' )){
+        //     return config.get('emitter').emit('warning', ("Овог оруулна уу!"));
+        // } else
+        if((!nameRegex.test(user.last_name))){
             return config.get('emitter').emit('warning', ("Овог бичиглэл буруу байна!"));
         }
-        if(!user.first_name || (user.first_name && user.first_name.trim() === '' )){
-            return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
-        } else if((!nameRegex.test(user.first_name))){
+        // if(!user.first_name || (user.first_name && user.first_name.trim() === '' )){
+        //     return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
+        // } else
+        if((!nameRegex.test(user.first_name))){
             return config.get('emitter').emit('warning', ("Нэр бичиглэл буруу байна!"));
         }
         if(!user.email){
@@ -410,12 +412,12 @@ class User extends React.Component {
                             // help=""
                         >
                             <Select
-                                value={user.premium === 'pq'}
+                                value={user.premium ? user.premium : ''}
                                 onChange={this.onChangeSelect2.bind(this)}
                                 style={{fontWeight: 700, color:'#000000'}}
                             >
-                                <Option value={''}>Энгийн хэрэглэгч</Option>
-                                <Option value={'pr'}>Премиум хэрэглэгч</Option>
+                                <Option value=''>Энгийн хэрэглэгч</Option>
+                                <Option value='pr'>Премиум хэрэглэгч</Option>
                             </Select>
                         </Form.Item>
                         :

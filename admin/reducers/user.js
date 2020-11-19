@@ -137,7 +137,7 @@ export default(state = initialState, action) => {
                                 run.role = action.json.data.role;
                                 run.status = action.json.data.status;
                                 run.password = action.json.data.password;
-                                run.premium = !!action.json.data.premium;
+                                run.premium = action.json.data.premium ? action.json.data.premium : '';
                             }
                             return run;
                         })
