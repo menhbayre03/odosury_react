@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Header from "../include/Header";
 import Footer from "../include/Footer";
-import { Container, Row, Col, Button, Tabs, Tab, Accordion, Card, Spinner } from "react-bootstrap";
+import { Container, Row, Col, Button, Tabs, Tab, Accordion, Card, Spinner, Modal } from "react-bootstrap";
 import * as actions from '../../actions/lesson_actions';
+import {getQpay, checkQpay} from '../../actions/card_actions';
 import Sticky from 'react-sticky-el';
 import ReactStars from "react-rating-stars-component";
 import config from "../../config";
@@ -13,6 +14,7 @@ import {
     isMobile
 } from "react-device-detect";
 import Cookies from "js-cookie";
+import QRCode from "react-qr-code";
 const reducer = ({ main, lesson }) => ({ main, lesson });
 
 class Lesson extends Component {
@@ -21,6 +23,7 @@ class Lesson extends Component {
         this.state = {
             active: '',
             activeIndex: '0',
+            paymentModal: false,
             card: (Cookies.get('odosuryCard') ? JSON.parse(Cookies.get('odosuryCard')) : {})
         };
     }
@@ -34,34 +37,40 @@ class Lesson extends Component {
     cardAction(){
         const {
             main: { user },
-            lesson: { lesson, addingToCard, removingFromCard },
+            lesson: { lesson, purchase, removingFromCard },
             dispatch
         } = this.props;
-        let hadInCard = (user || {})._id ? ((user || {}).lessons || []).indexOf(lesson._id) > -1 : ((this.state.card || {}).lessons || []).indexOf(lesson._id) > -1;
+        // let hadInCard = (user || {})._id ? ((user || {}).lessons || []).indexOf(lesson._id) > -1 : ((this.state.card || {}).lessons || []).indexOf(lesson._id) > -1;
         if((user || {})._id){
-            if(hadInCard){
-                if(!removingFromCard){
-                    dispatch(actions.removeFromCard({_id: lesson._id}))
+            this.setState({paymentModal: true}, () => {
+                if(!purchase._id){
+                    dispatch(getQpay({amount: lesson.sale || lesson.price}))
                 }
-            } else {
-                if(!addingToCard){
-                    dispatch(actions.addToCard({_id: lesson._id}))
-                }
-            }
+            });
+            // if(hadInCard){
+            //     if(!removingFromCard){
+            //         dispatch(actions.removeFromCard({_id: lesson._id}))
+            //     }
+            // } else {
+            //     if(!addingToCard){
+            //         dispatch(actions.addToCard({_id: lesson._id}))
+            //     }
+            // }
         } else {
-            let card = this.state.card;
-            let lessons = card.lessons || [];
-            if(hadInCard){
-                lessons = lessons.filter((c) => c !== lesson._id);
-            } else {
-                if(lessons.indexOf(lesson._id) === -1){
-                    lessons.push(lesson._id);
-                }
-            }
-            card.lessons = lessons;
-            Cookies.set('odosuryCard', JSON.stringify(card));
-            dispatch(actions.removeFromCookie(lesson._id));
-            this.setState({card: card})
+            config.get('emitter').emit('warning', 'Нэвтрэх шаардлагатай');
+            // let card = this.state.card;
+            // let lessons = card.lessons || [];
+            // if(hadInCard){
+            //     lessons = lessons.filter((c) => c !== lesson._id);
+            // } else {
+            //     if(lessons.indexOf(lesson._id) === -1){
+            //         lessons.push(lesson._id);
+            //     }
+            // }
+            // card.lessons = lessons;
+            // Cookies.set('odosuryCard', JSON.stringify(card));
+            // dispatch(actions.removeFromCookie(lesson._id));
+            // this.setState({card: card})
         }
     }
     addWish(id, add) {
@@ -73,7 +82,7 @@ class Lesson extends Component {
         }
     }
     render() {
-        const {main: {user}, lesson: {lesson, rating, lessonLoading, addingToCard, removingFromCard}, dispatch} = this.props;
+        const {main: {user = {}}, lesson: {lesson, rating, lessonLoading, addingToCard, removingFromCard, gettingQpay, purchase, checkingQpay}, dispatch} = this.props;
         let hadInCard = user ? ((user || {}).lessons || []).indexOf(lesson._id) > -1 : ((this.state.card || {}).lessons || []).indexOf(lesson._id) > -1;
         return (
             <React.Fragment>
@@ -259,8 +268,8 @@ class Lesson extends Component {
                                                                                     addingToCard || removingFromCard ?
                                                                                         <Spinner variant={'light'} animation={'border'} size={'sm'}/>
                                                                                         :
-                                                                                        <ion-icon name={hadInCard ? "trash-outline" : "cart-outline"}/>
-                                                                                } {hadInCard ? "Сагснаас хасах" : "Сагслах"}
+                                                                                        <ion-icon name={'card-outline'}/>
+                                                                                } Худалдаж авах
                                                                             </Button>
                                                                             {
                                                                                 ((user || {}).wish || []).some( aa => aa == lesson._id) ? (
@@ -419,6 +428,88 @@ class Lesson extends Component {
                     </Loader>
                 </div>
                 <Footer/>
+                {
+                    user._id &&
+                    <Modal
+                        size={'lg'}
+                        className={'paymentMethod'}
+                        show={this.state.paymentModal}
+                        onHide={() => this.setState({paymentModal: false})}
+                    >
+                        <div className={'p-m-title'}>
+                            <h5>ХУДАЛДАН АВАЛТ</h5><h6><span>"{lesson.title}"</span></h6>
+                        </div>
+                        <div className="payment-option">
+                            <div>
+                                {
+                                    gettingQpay === 1 ?
+                                        <div className="main-loader">
+                                            <div className="sk-circle">
+                                                <div className="sk-circle1 sk-child"/>
+                                                <div className="sk-circle2 sk-child"/>
+                                                <div className="sk-circle3 sk-child"/>
+                                                <div className="sk-circle4 sk-child"/>
+                                                <div className="sk-circle5 sk-child"/>
+                                                <div className="sk-circle6 sk-child"/>
+                                                <div className="sk-circle7 sk-child"/>
+                                                <div className="sk-circle8 sk-child"/>
+                                                <div className="sk-circle9 sk-child"/>
+                                                <div className="sk-circle10 sk-child"/>
+                                                <div className="sk-circle11 sk-child"/>
+                                                <div className="sk-circle12 sk-child"/>
+                                            </div>
+                                        </div>
+                                    :
+                                        <div style={{textAlign: 'right'}}>
+                                            {
+                                                (purchase.qpay || {}).qPay_QRcode ?
+                                                    <QRCode size={180} value={(purchase.qpay || {}).qPay_QRcode}/>
+                                                : 'QR код авхад алдаа гарлаа.'
+                                            }
+                                        </div>
+                                }
+                            </div>
+                            <div>
+                                <div>
+                                    <ul>
+                                        <li>Дансны дугаар: <b>5028-9616-15</b></li>
+                                        <li>Банк: <b>Хаан банк</b></li>
+                                        <li>Данс эзэмшигч: <b>Амжилт дотком ХХК</b></li>
+                                        <li>Мөнгөн дүн: <b>{config.formatMoney(lesson.sale || lesson.price)}₮</b></li>
+                                        <li>Гүйлгээний утга: <b>{config.lton(user.phone || user.username)}</b></li>
+                                        <li>Холбогдох утас: 8844-5020</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <p className={'p-m-warn'}>
+                                <span>
+                                    Хэрэв та <b>"QPAY"</b> үйлчилгээ ашиглан шилжүүлэх боломжгүй бол доор харагдах дансны мэдээллийн дагуу гүйлгээ хийн худалдан авалт хийх боломжтой.
+                                </span>
+                            <span>
+                                    <b>"Данс"</b> - аар гүйлгээ хийсэн тохиолдолд 5 - 10 минутын дараа худалдан авалт баталгаажих болно. <b>Холбогдох утас: 8844-5020</b>
+                                </span>
+                            <span style={{color: '#f44336'}}>
+                                    Суралцагч худалдан авсан контент хичээлээ буцаах эрхгүй учир сонголт хийхээсээ өмнө жишээ контентоо сайтар үзэж үйлчилгээний нөцөлтэй уншиж танилцаарай.
+                                </span>
+                        </p>
+                        <Modal.Footer>
+                            <div className={'p-m-buttons'}>
+                                <div className={'p-m-btn transparent'} onClick={() => this.setState({paymentModal: false})}>
+                                    <span>
+                                        Хаах
+                                    </span>
+                                </div>
+                                <div className={'p-m-btn primary ' + (checkingQpay ? 'loading disabled' : '')} onClick={() => checkingQpay ? false : dispatch(checkQpay({c: (purchase.qpay || {}).payment_id}))}>
+                                    {checkingQpay && <Spinner variant={'light'} animation={'border'} size={'sm'}/>}
+                                    <span>
+                                        Гүйлгээ шалгах
+                                    </span>
+                                </div>
+                            </div>
+                        </Modal.Footer>
+                    </Modal>
+                }
             </React.Fragment>
         );
     }

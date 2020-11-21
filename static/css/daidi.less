@@ -182,3 +182,90 @@
     }
   }
 }
+.paymentMethod {
+  .p-m-title {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex: 1;
+    margin: 20px;
+    h6 {
+      text-align: right;
+      margin-left: 20px;
+      color: #808080;
+      display: flex;
+      flex: 1;
+      font-size: 14px;
+      font-weight: 300;
+      span {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        word-break: break-all;
+        width: 0;
+        flex: 1;
+      }
+    }
+  }
+  .payment-option {
+    margin: 30px 20px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    div {
+      b {
+        margin: 0 10px;
+      }
+    }
+  }
+  .p-m-warn {
+    margin: 20px;
+    padding: 5px 20px;
+    background: #fbfbfb;
+    border-radius: 10px;
+    line-height: 19px;
+    letter-spacing: 0.5px;
+    color: #808080;
+    font-weight: 300;
+    span {
+      display: block;
+      margin: 10px 0;
+      b {
+        color: #404040;
+      }
+    }
+  }
+  .p-m-buttons {
+    display: flex;
+    align-items: center;
+    .p-m-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      margin: 0 5px;
+      cursor: pointer;
+      color: #313356;
+      &:hover {
+        text-decoration: underline;
+        opacity: 0.9;
+      }
+      &.disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+      &.loading {
+        span {
+          margin-left: 10px;
+        }
+      }
+      &.primary {
+        background: #313356;
+        color: #fff;
+      }
+    }
+  }
+}

@@ -4,6 +4,8 @@ import {
     lessonAddToCard,
     lessonRemoveFromCard,
     setProgress,
+    getQpay,
+    checkQpay,
     getViewArea, addWish
 } from "../actionTypes";
 import config from "../config";
@@ -15,12 +17,40 @@ const initialState = {
     lesson: {},
     lessonView: {},
     loadingView: 1,
+    gettingQpay: 0,
+    purchase: {},
+    checkingQpay: false,
     addingToCard: false,
     removingFromCard: false,
 };
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case checkQpay.REQUEST:
+            return {
+                ...state,
+                checkingQpay: true
+            };
+        case checkQpay.RESPONSE:
+            return {
+                ...state,
+                checkingQpay: false,
+                lesson: {
+                    ...state.lesson,
+                    paid: action.json.success
+                }
+            };
+        case getQpay.REQUEST:
+            return {
+                ...state,
+                gettingQpay: 1
+            };
+        case getQpay.RESPONSE:
+            return {
+                ...state,
+                gettingQpay: action.json.success ? 0 : 2,
+                purchase: action.json.purchase || {}
+            };
         case addWish.REQUEST:
             return {
                 ...state,
