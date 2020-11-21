@@ -84,9 +84,9 @@ class Purchase extends React.Component {
                 title: 'Төлөв',
                 align: 'right',
                 render: (text, record) => (
-                    record.qpay.payment_id ?
+                    record.qpay.payment_id && (record.qpay.payment_info || {}).payment_status === 'PAID' ?
                         <Select bordered={false} defaultValue={'qpay'} value={'qpay'} disabled>
-                            <Option value={'qpay'}>qpay</Option>
+                            <Option value={'qpay'}>Qpay төлөгдсөн</Option>
                         </Select>
                     :
                         <Select defaultValue={record.status || null} bordered={false} placeholder={'Төлөв сонгоно уу.'} loading={record.statusChanging} onChange={(e) => dispatch(setPaymentStatus(record._id, e))}>
