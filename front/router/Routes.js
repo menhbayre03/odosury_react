@@ -6,7 +6,7 @@ import ViewArea from "../components/lesson/ViewArea";
 import Login from "../components/Login";
 import Bundle from "../components/Bundle";
 import NotFound from "../components/NotFound";
-import Card from '../components/card';
+// import Card from '../components/card';
 import Profile from '../components/profile/Profile';
 import Wishlist from '../components/profile/Wishlist';
 import Lessons from '../components/profile/Lessons';
@@ -50,11 +50,11 @@ export default [
                 path: '/bundle/:slug',
                 exact: true
             },
-            {
-                component: Card,
-                path: '/card',
-                exact: true
-            },
+            // {
+            //     component: Card,
+            //     path: '/card',
+            //     exact: true
+            // },
             {
                 component: Profile,
                 path: '/profile/info',
