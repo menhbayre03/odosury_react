@@ -429,7 +429,7 @@ class Lesson extends Component {
                 </div>
                 <Footer/>
                 {
-                    user._id &&
+                    user && user._id &&
                     <Modal
                         size={'lg'}
                         className={'paymentMethod'}
