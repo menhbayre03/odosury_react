@@ -47,26 +47,26 @@ class Bundle extends Component {
                                         {
                                             bundles.length > 0 || lessons.length > 0 ? (
                                                 <div>
-                                                    {
-                                                        bundles.length > 0 ? (
-                                                            <div style={{marginBottom: 20}}>
-                                                                <h5 style={{fontSize:16, fontWeight: 600}}>Багцууд:</h5>
-                                                                {
-                                                                    bundles.map((item , index) => (
-                                                                        <Link to={`/bundle/${item.slug}`} key={index} className={`history-item`}>
-                                                                            <div style={{display: 'inline-block'}}>
-                                                                                <span className="ind">{index+1}</span>
-                                                                                <span className="date">{item.title}</span>
-                                                                            </div>
-                                                                            <div style={{display: 'inline-block', float: 'right'}}>
-                                                                                <span className={`date`}>{moment(item.trans_date).format('YYYY/MM/DD')}</span>
-                                                                            </div>
-                                                                        </Link>
-                                                                    ))
-                                                                }
-                                                            </div>
-                                                        ) : null
-                                                    }
+                                                    {/*{*/}
+                                                    {/*    bundles.length > 0 ? (*/}
+                                                    {/*        <div style={{marginBottom: 20}}>*/}
+                                                    {/*            <h5 style={{fontSize:16, fontWeight: 600}}>Багцууд:</h5>*/}
+                                                    {/*            {*/}
+                                                    {/*                bundles.map((item , index) => (*/}
+                                                    {/*                    <Link to={`/bundle/${item.slug}`} key={index} className={`history-item`}>*/}
+                                                    {/*                        <div style={{display: 'inline-block'}}>*/}
+                                                    {/*                            <span className="ind">{index+1}</span>*/}
+                                                    {/*                            <span className="date">{item.title}</span>*/}
+                                                    {/*                        </div>*/}
+                                                    {/*                        <div style={{display: 'inline-block', float: 'right'}}>*/}
+                                                    {/*                            <span className={`date`}>{moment(item.trans_date).format('YYYY/MM/DD')}</span>*/}
+                                                    {/*                        </div>*/}
+                                                    {/*                    </Link>*/}
+                                                    {/*                ))*/}
+                                                    {/*            }*/}
+                                                    {/*        </div>*/}
+                                                    {/*    ) : null*/}
+                                                    {/*}*/}
                                                     {
                                                         lessons.length > 0 ? (
                                                             <div>

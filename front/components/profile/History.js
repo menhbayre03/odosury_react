@@ -67,13 +67,13 @@ class Bundle extends Component {
                                                             <span className="ind">{index+1}</span>
                                                             <span className="date">{moment(item.created).format('YYYY/MM/DD')}</span>
                                                             <span className="items">
-                                                                {
-                                                                    item.bundles && item.bundles.length > 0 ? (
-                                                                        <React.Fragment>
-                                                                            багц: <span style={{marginRight: 10}}>{item.bundles.length}</span>
-                                                                        </React.Fragment>
-                                                                    ) : null
-                                                                }
+                                                                {/*{*/}
+                                                                {/*    item.bundles && item.bundles.length > 0 ? (*/}
+                                                                {/*        <React.Fragment>*/}
+                                                                {/*            багц: <span style={{marginRight: 10}}>{item.bundles.length}</span>*/}
+                                                                {/*        </React.Fragment>*/}
+                                                                {/*    ) : null*/}
+                                                                {/*}*/}
                                                                 {
                                                                     item.lessons && item.lessons.length > 0 ? (
                                                                         <React.Fragment>

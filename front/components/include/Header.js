@@ -183,18 +183,18 @@ class Header extends Component {
                                 {
                                     user._id ? (
                                         <div className="user-menu">
-                                            <Link to="/card" style={{marginRight: 15, position: 'relative'}}>
-                                                <span>{(user.bundles || []).length + (user.lessons || []).length}</span>
-                                                <ion-icon name="basket"/>
-                                            </Link>
+                                            {/*<Link to="/card" style={{marginRight: 15, position: 'relative'}}>*/}
+                                            {/*    <span>{(user.bundles || []).length + (user.lessons || []).length}</span>*/}
+                                            {/*    <ion-icon name="basket"/>*/}
+                                            {/*</Link>*/}
                                             <Link to="/profile/info">{isMobile ? null : 'Профайл'}<ion-icon name="person"/></Link>
                                         </div>
                                     ) : (
                                         <div className="user-menu">
-                                            <Link to="/card" style={{marginRight: 15, position: 'relative'}}>
-                                                <span>{(card.bundles || []).length + (card.lessons || []).length}</span>
-                                                <ion-icon name="basket"/>
-                                            </Link>
+                                            {/*<Link to="/card" style={{marginRight: 15, position: 'relative'}}>*/}
+                                            {/*    <span>{(card.bundles || []).length + (card.lessons || []).length}</span>*/}
+                                            {/*    <ion-icon name="basket"/>*/}
+                                            {/*</Link>*/}
                                             <Link to="/login">
                                                 {
                                                     isMobile ? <ion-icon name="person"/> : (
