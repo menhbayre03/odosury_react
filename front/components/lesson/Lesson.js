@@ -34,17 +34,28 @@ class Lesson extends Component {
         this.setState({active: 'overview'});
         dispatch(actions.getLesson(match.params.slug));
     }
+
+    componentWillUnmount() {
+        const {dispatch} = this.props;
+        dispatch(actions.clearLesson());
+    }
+
+    closeModal() {
+        const {dispatch} = this.props;
+        this.setState({paymentModal: false}, () => dispatch(actions.clearPurchase()));
+    }
+
     cardAction(){
         const {
             main: { user },
-            lesson: { lesson, purchase, removingFromCard },
+            lesson: { lesson, purchase },
             dispatch
         } = this.props;
         // let hadInCard = (user || {})._id ? ((user || {}).lessons || []).indexOf(lesson._id) > -1 : ((this.state.card || {}).lessons || []).indexOf(lesson._id) > -1;
         if((user || {})._id){
             this.setState({paymentModal: true}, () => {
                 if(!purchase._id){
-                    dispatch(getQpay({amount: lesson.sale || lesson.price}))
+                    dispatch(getQpay({amount: lesson.sale || lesson.price, lesson_id: lesson._id}))
                 }
             });
             // if(hadInCard){
@@ -434,7 +445,7 @@ class Lesson extends Component {
                         size={'lg'}
                         className={'paymentMethod'}
                         show={this.state.paymentModal}
-                        onHide={() => this.setState({paymentModal: false})}
+                        onHide={() => this.closeModal()}
                     >
                         <div className={'p-m-title'}>
                             <h5>ХУДАЛДАН АВАЛТ</h5><h6><span>"{lesson.title}"</span></h6>
@@ -495,7 +506,7 @@ class Lesson extends Component {
                         </p>
                         <Modal.Footer>
                             <div className={'p-m-buttons'}>
-                                <div className={'p-m-btn transparent'} onClick={() => this.setState({paymentModal: false})}>
+                                <div className={'p-m-btn transparent'} onClick={() => this.closeModal()}>
                                     <span>
                                         Хаах
                                     </span>

@@ -33,6 +33,12 @@ export const addWish = {
 export const removeFromCookieLesson = {
     REQUEST:'removeFromCookieLesson_REQ'
 };
+export const clearLesson = {
+    REQUEST:'clearLesson_REQ'
+};
+export const clearPurchase = {
+    REQUEST:'clearPurchase_REQ'
+};
 export const removeFromCookieBundle = {
     REQUEST:'removeFromCookieBundle_REQ'
 };
