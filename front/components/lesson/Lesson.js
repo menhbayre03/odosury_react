@@ -487,7 +487,7 @@ class Lesson extends Component {
                                         <li>Банк: <b>Хаан банк</b></li>
                                         <li>Данс эзэмшигч: <b>Амжилт дотком ХХК</b></li>
                                         <li>Мөнгөн дүн: <b>{config.formatMoney(lesson.sale || lesson.price)}₮</b></li>
-                                        <li>Гүйлгээний утга: <b>{config.lton(user.phone || user.username)}</b></li>
+                                        <li>Гүйлгээний утга: <b>{user.phone || user.username}</b></li>
                                         <li>Холбогдох утас: 8844-5020</li>
                                     </ul>
                                 </div>
