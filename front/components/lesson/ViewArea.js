@@ -5,6 +5,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import * as actions from '../../actions/lesson_actions';
 import Cookies from "js-cookie";
 import ReactPlayer from "react-player";
+import Download from "downloadjs";
 import config from "../../config";
 import Loader from "../include/Loader";
 import AmjiltPdf from './pdf';
@@ -47,6 +48,20 @@ class Bundle extends Component {
                 }
             }, 100)
         })
+    }
+
+    downloadFile(zip){
+        let url = config.get('hostMedia') + "/api/zip/"+zip._id+"?token="+Cookies.get('token');
+        setTimeout(() => {
+            var x = new XMLHttpRequest();
+            x.open("GET", url, true);
+            x.responseType = 'blob';
+            x.onload = function (e) {
+                Download(x.response, zip.path, "application/octet-stream");
+            }
+            x.send();
+
+        }, 200);
     }
 
     selectProgram(program) {
@@ -124,6 +139,9 @@ class Bundle extends Component {
         if(program.video) {
             mediaUrl = config.get('hostMedia')+"/api/video/show/"+program.video._id+'?lessonId='+lessonView._id+'&token='+Cookies.get('token');
         }
+        if(program.audio) {
+            mediaUrl = config.get('hostMedia')+"/api/audio/show/"+program.audio._id+'?lessonId='+lessonView._id+'&token='+Cookies.get('token');
+        }
         if(program.pdf) {
             mediaUrl = config.get('hostMedia')+"/api/pdf/show/"+program.pdf._id+'?lessonId='+lessonView._id+'&token='+Cookies.get('token');
         }
@@ -189,6 +207,31 @@ class Bundle extends Component {
                                     ) : null
                                 }
                                 {
+                                    program.audio && mediaUrl && program.type === 'audio' ? (
+                                        <div>
+                                            <div style={{padding: '0px 20px 10px'}}>
+                                                <ReactPlayer
+                                                    playing
+                                                    controls
+                                                    onError={() => config.get('emitter').emit('warning', 'Хандах эрх хүрэхгүй байна.')}
+                                                    playIcon={<ion-icon style={{fontSize: 74, color: '#fff'}} name="play-circle"/>}
+                                                    height={60}
+                                                    width={"100%"}
+                                                    url={mediaUrl}
+                                                    config={{
+                                                        file: {
+                                                            forceAudio: true,
+                                                            attributes: {
+                                                                controlsList : "nodownload"
+                                                            }
+                                                        }
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    ) : null
+                                }
+                                {
                                     program.pdf && mediaUrl && program.type === 'pdf' ? (
                                         <div className={'PdfView'}>
                                             <div style={{padding: '0px 0px 10px'}}>
@@ -242,25 +285,32 @@ class Bundle extends Component {
                         <Card.Body>
                             {
                                 (item.programs || []).map((program, ind) => (
-                                    <div onClick={() => this.selectProgram(program)} className={`program ${(program.passed_users || []).indexOf(((user || {})._id || 'WW@@#').toString()) > -1 ? 'passed' : ''} ${this.state.program._id == (program.timeline || {})._id ? 'current' : ''}`} key={ind}>
-                                        {
-                                            (program.timeline || {}).type === 'video' ? (
-                                                <ion-icon name="videocam"/>
-                                            ) : (
-                                                (program.timeline || {}).type === 'audio' ? (
+                                    <React.Fragment>
+                                        <div onClick={() => this.selectProgram(program)} className={`program ${(program.passed_users || []).indexOf(((user || {})._id || 'WW@@#').toString()) > -1 ? 'passed' : ''} ${this.state.program._id == (program.timeline || {})._id ? 'current' : ''}`} key={ind}>
+                                            {
+                                                (program.timeline || {}).type === 'video' ? (
                                                     <ion-icon name="videocam"/>
                                                 ) : (
-                                                    <ion-icon name="document-text"/>
+                                                    (program.timeline || {}).type === 'audio' ? (
+                                                        <ion-icon name="videocam"/>
+                                                    ) : (
+                                                        <ion-icon name="document-text"/>
+                                                    )
                                                 )
-                                            )
-                                        }
-                                        <p>{(program.timeline || {}).title}</p>
-                                        {
-                                            program.timeline.minutes > 0 ? (
-                                                <span>{(program.timeline || {}).minutes} мин</span>
-                                            ) : null
-                                        }
-                                    </div>
+                                            }
+                                            <p>{(program.timeline || {}).title}</p>
+                                            {
+                                                program.timeline.minutes > 0 ? (
+                                                    <span>{(program.timeline || {}).minutes} мин</span>
+                                                ) : null
+                                            }
+                                            {
+                                                (program.timeline || {}).include_zip ? (
+                                                    <span className="include_zip" onClick={() => this.downloadFile((program.timeline || {}).include_zip)}>Нэмэлт файл</span>
+                                                ) : null
+                                            }
+                                        </div>
+                                    </React.Fragment>
                                 ))
                             }
                         </Card.Body>

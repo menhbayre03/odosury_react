@@ -46,6 +46,7 @@
     "array-move": "^2.2.2",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
+    "downloadjs": "^1.4.7",
     "express": "^4.17.1",
     "facebook-login": "^1.4.1",
     "fbemitter": "^2.1.1",
