@@ -35,6 +35,16 @@ export function removeFromCookie(lesson) {
         lesson
     }
 }
+export function clearLesson() {
+    return {
+        type: constants.clearLesson.REQUEST
+    }
+}
+export function clearPurchase() {
+    return {
+        type: constants.clearPurchase.REQUEST
+    }
+}
 export function getLessonAll() {
     let url = `/api/lesson/get/all`;
     return networkActions.requestGet(constants.getLessonAll, url);

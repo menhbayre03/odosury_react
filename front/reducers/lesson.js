@@ -6,7 +6,7 @@ import {
     setProgress,
     getQpay,
     checkQpay,
-    getViewArea, addWish
+    getViewArea, addWish, clearLesson, clearPurchase
 } from "../actionTypes";
 import config from "../config";
 const initialState = {
@@ -26,6 +26,15 @@ const initialState = {
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case clearPurchase.REQUEST:
+            return {
+                ...state,
+                purchase: {}
+            };
+        case clearLesson.REQUEST:
+            return {
+                ...initialState
+            };
         case checkQpay.REQUEST:
             return {
                 ...state,
