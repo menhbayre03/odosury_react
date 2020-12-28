@@ -26,6 +26,7 @@ class Bundle extends Component {
     }
 
     componentDidMount() {
+        document.body.classList.add('hide-mess');
         window.scroll(0, 0);
         let self = this;
         const {dispatch,location,  match, main: {user}} = this.props;
@@ -48,6 +49,9 @@ class Bundle extends Component {
                 }
             }, 100)
         })
+    }
+    componentWillUnmount() {
+        document.body.classList.remove('hide-mess');
     }
 
     downloadFile(zip){

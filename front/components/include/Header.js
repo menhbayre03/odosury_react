@@ -148,7 +148,7 @@ class Header extends Component {
                         <Row className="header-top">
                             <Col md={6} sm={9} xs={9} className="section-1">
                                 <div className="logo" style={{display: 'inline-block'}}>
-                                    <Link to={'/'}><img src="/images/logo.svg" alt=""/></Link>
+                                    <Link to={'/'}><img src="/images/logo.png" alt=""/></Link>
                                     {/*<Link to={'/'}><img src="/images/logo-small.png" alt=""/></Link>*/}
                                 </div>
                                 <div className="category-menu" style={{display: 'inline-block', position: 'relative'}}>

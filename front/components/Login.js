@@ -456,6 +456,7 @@ class Home extends Component {
                                                 <FacebookLogin
                                                     appId="1025498560826970"
                                                     autoLoad={false}
+                                                    isMobile={false}
                                                     callback={(response)=>this.responseFacebook(response)}
                                                     render={renderProps => (
                                                         <Button variant="danger" onClick={renderProps.onClick}>
