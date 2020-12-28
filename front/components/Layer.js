@@ -9,8 +9,8 @@ const reducer = ({ main }) => ({ main });
 class Layer extends React.Component{
     constructor(props){
         super(props);
-        // ReactGA.initialize('UA-72176933-1');
-        // ReactGA.pageview(window.location.pathname + window.location.search);
+        ReactGA.initialize('UA-185344943-1');
+        ReactGA.pageview(window.location.pathname + window.location.search);
         this.state = { hasError: false };
     }
 
