@@ -1,5 +1,5 @@
 import React from 'react';
-// import ReactGA from 'react-ga';
+import ReactGA from 'react-ga';
 import {connect} from "react-redux";
 import { Button } from 'react-bootstrap';
 import * as actions from "../actions/index";
