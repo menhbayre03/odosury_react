@@ -15,6 +15,7 @@ import {
 } from "react-device-detect";
 import Cookies from "js-cookie";
 import QRCode from "react-qr-code";
+import ReactPlayer from "react-player";
 const reducer = ({ main, lesson }) => ({ main, lesson });
 
 class Lesson extends Component {
@@ -24,6 +25,7 @@ class Lesson extends Component {
             active: '',
             activeIndex: '0',
             paymentModal: false,
+            vidModal: false,
             card: (Cookies.get('odosuryCard') ? JSON.parse(Cookies.get('odosuryCard')) : {})
         };
     }
@@ -43,6 +45,14 @@ class Lesson extends Component {
     closeModal() {
         const {dispatch} = this.props;
         this.setState({paymentModal: false}, () => dispatch(actions.clearPurchase()));
+    }
+
+    closeModalVid() {
+        this.setState({vidModal: false});
+    }
+
+    openModalVid() {
+        this.setState({vidModal: true});
     }
 
     cardAction(){
@@ -95,6 +105,10 @@ class Lesson extends Component {
     render() {
         const {main: {user = {}}, lesson: {lesson, rating, lessonLoading, addingToCard, removingFromCard, gettingQpay, purchase, checkingQpay}, dispatch} = this.props;
         let hadInCard = user ? ((user || {}).lessons || []).indexOf(lesson._id) > -1 : ((this.state.card || {}).lessons || []).indexOf(lesson._id) > -1;
+        let mediaUrl = '';
+        if(lesson.video) {
+            mediaUrl = config.get('hostMedia')+"/api/video/show/"+lesson.video._id+'?lessonId='+lesson._id+'&intro='+'yes'+'&token='+Cookies.get('token');
+        }
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
@@ -104,15 +118,31 @@ class Lesson extends Component {
                             <div className="head-inner">
                                 {
                                     isMobile ? (
-                                        <img src={(lesson.thumbnailSmall || {}).path ? `${config.get('hostMedia')}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}
-                                            style={{
-                                                height: 'auto',
-                                                margin: '0 40px',
-                                                width: 'calc(100% - 80px)',
-                                                marginBottom: 40,
-                                                borderRadius: 10,
-                                            }}
-                                        />
+                                        lesson.video ? (
+                                            <div className="vid-rom mobi" onClick={() => this.openModalVid()}>
+                                                <img src={(lesson.thumbnailSmall || {}).path ? `${config.get('hostMedia')}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}
+                                                     style={{
+                                                         height: 'auto',
+                                                         margin: '0 40px',
+                                                         width: 'calc(100% - 80px)',
+                                                         marginBottom: 40,
+                                                         borderRadius: 10,
+                                                     }}
+                                                />
+                                                <ion-icon name="play"/>
+                                            </div>
+                                        ) : (
+                                            <img src={(lesson.thumbnailSmall || {}).path ? `${config.get('hostMedia')}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}
+                                                 style={{
+                                                     height: 'auto',
+                                                     margin: '0 40px',
+                                                     width: 'calc(100% - 80px)',
+                                                     marginBottom: 40,
+                                                     borderRadius: 10,
+                                                 }}
+                                            />
+                                        )
+
                                     ) : null
                                 }
                                 <Container>
@@ -232,7 +262,16 @@ class Lesson extends Component {
                                                     <div>
                                                         <Sticky className={'stacka'} onFixedToggle={(e) => this.setState({fixed: e})} topOffset={-90} stickyStyle={{top: 90}}>
                                                             <div className="sticky-side">
-                                                                <img src={(lesson.thumbnailSmall || {}).path ? `${config.get('hostMedia')}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
+                                                                {
+                                                                    lesson.video ? (
+                                                                        <div className="vid-rom" onClick={() => this.openModalVid()}>
+                                                                            <img src={(lesson.thumbnailSmall || {}).path ? `${config.get('hostMedia')}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
+                                                                            <ion-icon name="play"/>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <img src={(lesson.thumbnailSmall || {}).path ? `${config.get('hostMedia')}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
+                                                                    )
+                                                                }
                                                                 {
                                                                     lesson.paid ? (
                                                                         <div className="inner">
@@ -515,6 +554,48 @@ class Lesson extends Component {
                                     {checkingQpay && <Spinner variant={'light'} animation={'border'} size={'sm'}/>}
                                     <span>
                                         Гүйлгээ шалгах
+                                    </span>
+                                </div>
+                            </div>
+                        </Modal.Footer>
+                    </Modal>
+                }
+                {
+                    lesson.video &&
+                    <Modal
+                        size={'lg'}
+                        className={'paymentMethod'}
+                        show={this.state.vidModal}
+                        onHide={() => this.closeModalVid()}
+                    >
+                        <Modal.Body>
+                            <div className={'p-m-title'}>
+                                <h5>Танилцуулга бичлэг</h5>
+                            </div>
+                            <ReactPlayer
+                                playing
+                                onError={() => config.get('emitter').emit('warning', 'Хандах эрх хүрэхгүй байна.')}
+                                controls
+                                light={(lesson.thumbnailSmall || {}).path ? `${config.get('hostMedia')}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}
+                                autoPlay={false}
+                                height={isMobile ? 260 : 460}
+                                playIcon={<ion-icon style={{fontSize: 74, color: '#fff'}} name="play-circle"/>}
+                                width={"100%"}
+                                url={mediaUrl}
+                                config={{
+                                    file: {
+                                        attributes: {
+                                            controlsList : "nodownload"
+                                        }
+                                    }
+                                }}
+                            />
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <div className={'p-m-buttons'}>
+                                <div className={'p-m-btn transparent'} onClick={() => this.closeModalVid()}>
+                                    <span>
+                                        Хаах
                                     </span>
                                 </div>
                             </div>

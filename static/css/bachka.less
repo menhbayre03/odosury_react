@@ -902,6 +902,12 @@
     }
   }
 }
+.paymentMethod {
+  .react-player__preview {
+    background-size: cover !important;
+    background-repeat: no-repeat;
+  }
+}
 .lesson-single {
   background: #edeff0;
   min-height: calc(100vh - 185px);
@@ -932,6 +938,39 @@
         color: #e8e8e8;
         font-size: 16px;
       }
+    }
+  }
+  .vid-rom {
+    position: relative;
+    cursor: pointer;
+    ion-icon {
+      position: absolute;
+      top: calc(50% - 35px);
+      left: calc(50% - 35px);
+      font-size: 44px;
+      color: #fff;
+      background: #0000008a;
+      border-radius: 50px;
+      padding: 15px 13px 15px 18px;
+      -webkit-transition: 0.3s;
+      -moz-transition: 0.3s;
+      -ms-transition: 0.3s;
+      -o-transition: 0.3s;
+      transition: 0.3s;
+    }
+  }
+  .vid-rom.mobi {
+    ion-icon {
+      position: absolute;
+      top: calc(50% - 55px);
+      left: calc(50% - 35px);
+      font-size: 44px;
+      padding: 15px 13px 15px 18px;
+    }
+  }
+  .vid-rom:hover {
+    ion-icon {
+      background: #000;
     }
   }
   .sticky-side {
@@ -2005,6 +2044,7 @@ div.facebook-login>span button {
   background: #0046BE;
   color: #fff;
 }
+
 @media(max-width: 1200px){
   .profile-sidebar li span {
     text-overflow: ellipsis;
@@ -2089,6 +2129,13 @@ div.facebook-login>span button {
   .lesson-single .tab-menu span.active:after {
     height: 41px;
     top: 0;
+  }
+
+  .paymentMethod {
+    .react-player__preview {
+      background-size: contain !important;
+      background-repeat: no-repeat;
+    }
   }
 }
 @media(max-width: 768px){
