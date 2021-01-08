@@ -70,7 +70,7 @@ class Lessons extends Component {
                 key: 'num',
                 title: '№',
                 render: (text, record, idx) => (
-                    (this.state.pageNum * this.state.pageNum) + idx + 1
+                    (this.state.pageNum * this.state.pageSize) + idx + 1
                 ),
             },
             {
