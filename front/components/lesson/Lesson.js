@@ -107,20 +107,20 @@ class Lesson extends Component {
         let hadInCard = user ? ((user || {}).lessons || []).indexOf(lesson._id) > -1 : ((this.state.card || {}).lessons || []).indexOf(lesson._id) > -1;
         let mediaUrl = '';
         if(lesson.video) {
-            mediaUrl = config.get('hostMedia')+"/api/video/show/"+lesson.video._id+'?lessonId='+lesson._id+'&intro='+'yes'+'&token='+Cookies.get('token');
+            mediaUrl = (lesson.video || {}).url+"/api/video/show/"+lesson.video._id+'?lessonId='+lesson._id+'&intro='+'yes'+'&token='+Cookies.get('token');
         }
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
                 <div className="lesson-single">
                     <Loader status={lessonLoading}>
-                        <div className="lesson-head" style={{backgroundImage: (lesson.thumbnail || {}).path ? `url('${config.get('hostMedia')}${(lesson.thumbnail || {}).path}')` : 'none'}}>
+                        <div className="lesson-head" style={{backgroundImage: (lesson.thumbnail || {}).path ? `url('${(lesson.thumbnail || {}).url}${(lesson.thumbnail || {}).path}')` : 'none'}}>
                             <div className="head-inner">
                                 {
                                     isMobile ? (
                                         lesson.video ? (
                                             <div className="vid-rom mobi" onClick={() => this.openModalVid()}>
-                                                <img src={(lesson.thumbnailSmall || {}).path ? `${config.get('hostMedia')}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}
+                                                <img src={(lesson.thumbnailSmall || {}).path ? `${(lesson.thumbnailSmall || {}).url}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}
                                                      style={{
                                                          height: 'auto',
                                                          margin: '0 40px',
@@ -132,7 +132,7 @@ class Lesson extends Component {
                                                 <ion-icon name="play"/>
                                             </div>
                                         ) : (
-                                            <img src={(lesson.thumbnailSmall || {}).path ? `${config.get('hostMedia')}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}
+                                            <img src={(lesson.thumbnailSmall || {}).path ? `${(lesson.thumbnailSmall || {}).url}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}
                                                  style={{
                                                      height: 'auto',
                                                      margin: '0 40px',
@@ -265,11 +265,11 @@ class Lesson extends Component {
                                                                 {
                                                                     lesson.video ? (
                                                                         <div className="vid-rom" onClick={() => this.openModalVid()}>
-                                                                            <img src={(lesson.thumbnailSmall || {}).path ? `${config.get('hostMedia')}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
+                                                                            <img src={(lesson.thumbnailSmall || {}).path ? `${(lesson.thumbnailSmall || {}).url}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
                                                                             <ion-icon name="play"/>
                                                                         </div>
                                                                     ) : (
-                                                                        <img src={(lesson.thumbnailSmall || {}).path ? `${config.get('hostMedia')}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
+                                                                        <img src={(lesson.thumbnailSmall || {}).path ? `${(lesson.thumbnailSmall || {}).url}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
                                                                     )
                                                                 }
                                                                 {
@@ -576,7 +576,7 @@ class Lesson extends Component {
                                 playing
                                 onError={() => config.get('emitter').emit('warning', 'Хандах эрх хүрэхгүй байна.')}
                                 controls
-                                light={(lesson.thumbnailSmall || {}).path ? `${config.get('hostMedia')}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}
+                                light={(lesson.thumbnailSmall || {}).path ? `${(lesson.thumbnailSmall || {}).url}${lesson.thumbnailSmall.path}` : '/images/default-lesson.jpg'}
                                 autoPlay={false}
                                 height={isMobile ? 260 : 460}
                                 playIcon={<ion-icon style={{fontSize: 74, color: '#fff'}} name="play-circle"/>}
