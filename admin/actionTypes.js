@@ -121,6 +121,28 @@ export const deleteCategory = {
     RESPONSE:'deleteCategory_RESPONSE',
 };
 
+export const openAudioCategoryModal = {
+    REQUEST:'openAudioCategoryModal_REQUEST',
+};
+export const closeAudioCategoryModal = {
+    REQUEST:'closeAudioCategoryModal_REQUEST',
+};
+export const audioCategoryChangeHandler = {
+    REQUEST:'audioCategoryChangeHandler_REQUEST',
+};
+export const submitAudioCategory = {
+    REQUEST:'submitAudioCategory_REQUEST',
+    RESPONSE:'submitAudioCategory_RESPONSE',
+};
+export const getAudioCategory = {
+    REQUEST:'getAudioCategory_REQUEST',
+    RESPONSE:'getAudioCategory_RESPONSE',
+};
+export const deleteAudioCategory = {
+    REQUEST:'deleteAudioCategory_REQUEST',
+    RESPONSE:'deleteAudioCategory_RESPONSE',
+};
+
 export const openLessonModal = {
     REQUEST:'openLessonModal_REQUEST',
 };
@@ -277,4 +299,40 @@ export const getPayments = {
 export const setPaymentStatus = {
     REQUEST: 'setPaymentStatus_REQ',
     RESPONSE: 'setPaymentStatus_RES'
+};
+
+
+export const getAudios = {
+    REQUEST:'getAudios_REQUEST',
+    RESPONSE:'getAudios_RESPONSE',
+};
+export const submitAudio = {
+    REQUEST:'submitAudio_REQUEST',
+    RESPONSE:'submitAudio_RESPONSE',
+};
+export const deleteAudio = {
+    REQUEST:'deleteAudio_REQUEST',
+    RESPONSE:'deleteAudio_RESPONSE',
+};
+export const openAudioModal = {
+    REQUEST:'openAudioModal_REQUEST',
+    RESPONSE:'openAudioModal_RESPONSE',
+};
+export const audioChangeHandler = {
+    REQUEST:'audioChangeHandler_REQUEST',
+    RESPONSE:'audioChangeHandler_RESPONSE',
+};
+
+export const setAudioFeatured = {
+    REQUEST:'setAudioFeatured_REQUEST',
+};
+export const closeAudioModal = {
+    REQUEST:'closeAudioModal_REQUEST',
+};
+
+export const chooseMediaAudioEdit = {
+    REQUEST:'chooseMediaAudioEdit_REQUEST',
+};
+export const removeUploadedFileAudioEdit = {
+    REQUEST:'removeUploadedFileAudioEdit_REQUEST',
 };

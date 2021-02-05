@@ -1,9 +1,11 @@
 import index from "../components/index";
 import Home from "../components/home/Home";
-import Teachers from "../components/teacher/Teachers";
 import User from "../components/user/User";
 import Category from "../components/category/Category";
+import AudioCategory from "../components/audioCategory/AudioCategory";
 import Lessons from "../components/lesson/Lessons";
+import Audios from "../components/audio/Audios";
+import AudioLevels from "../components/audio/AudioLevels";
 import LessonLevels from "../components/lesson/LessonLevels";
 import Bundles from "../components/bundle/Bundles";
 import Purchase from "../components/purchase/Purchase";
@@ -30,6 +32,21 @@ export default [
             {
                 component: Category,
                 path: '/admin/category',
+                exact: true
+            },
+            {
+                component: AudioCategory,
+                path: '/admin/audioCategory',
+                exact: true
+            },
+            {
+                component: Audios,
+                path: '/admin/audios',
+                exact: true
+            },
+            {
+                component: AudioLevels,
+                path: '/admin/audios/programs/:id',
                 exact: true
             },
             {

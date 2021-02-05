@@ -8,6 +8,9 @@ import category from "./category";
 import bundle from "./bundle";
 import media from "./media";
 import purchase from "./purchase";
+import audio from "./audio";
+import audioLevel from "./audioLevel";
+import audioCategory from "./audioCategory";
 export default combineReducers({
     main: main,
     lesson: lesson,
@@ -18,4 +21,7 @@ export default combineReducers({
     bundle: bundle,
     media: media,
     purchase: purchase,
+    audio: audio,
+    audioLevel: audioLevel,
+    audioCategory: audioCategory,
 });

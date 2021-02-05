@@ -107,6 +107,16 @@ class index extends React.Component {
                                     <span>Хичээл</span>
                                 </Link>
                             </Menu.Item>
+                            <Menu.Item key="audios" icon={<FileTextFilled />}>
+                                <Link to="/admin/audios">
+                                    <span>Сонсдог ном</span>
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item key="audioCategory" icon={<DatabaseFilled />}>
+                                <Link to="/admin/audioCategory">
+                                    <span>Сонсдог Ангилал</span>
+                                </Link>
+                            </Menu.Item>
                             <Menu.Item key="bundles" icon={<LayoutFilled />}>
                                 <Link to="/admin/bundles">
                                     <span>Багц</span>
