@@ -47,7 +47,7 @@ class Footer extends Component {
                                     textAlign: 'right'
                                 }
                             }>
-                                © 2020 All Rights Reserved.  Powered by Amjilt.com
+                                © 2021 All Rights Reserved.
                             </span>
                             </div>
                         </Col>

@@ -56,6 +56,7 @@ class Bundle extends Component {
     }
     componentWillUnmount() {
         document.body.classList.remove('hide-mess');
+        this.setProgram.remove();
     }
 
     downloadFile(zip){
