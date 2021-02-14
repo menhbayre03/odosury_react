@@ -10,6 +10,7 @@ const initialState = {
     watching: [],
     newLessons: [],
     featuredLessons: [],
+    newAudios: [],
     bundles: [],
     premiumModal: {
         visible: false,
@@ -94,6 +95,7 @@ export default(state = initialState, action) => {
                     watching: action.json.results.watching || [],
                     newLessons: action.json.results.newLessons || [],
                     featuredLessons: action.json.results.featuredLessons || [],
+                    newAudios: action.json.results.newAudios || [],
                     bundles: action.json.results.bundles || [],
                     loading:0
                 };

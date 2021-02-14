@@ -5,6 +5,7 @@ import home from "./home";
 import lesson from "./lesson";
 import bundle from "./bundle";
 import profile from "./profile";
+import audio from "./audio";
 import card from "./card";
 export default combineReducers({
     main: main,
@@ -13,5 +14,6 @@ export default combineReducers({
     lesson: lesson,
     bundle: bundle,
     profile: profile,
+    audio: audio,
     card: card,
 });

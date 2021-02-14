@@ -229,8 +229,8 @@ class Lesson extends Component {
                                                                                 addingToCard || removingFromCard ?
                                                                                     <Spinner variant={'light'} animation={'border'} size={'sm'}/>
                                                                                     :
-                                                                                    <ion-icon name={hadInCard ? "trash-outline" : "cart-outline"}/>
-                                                                            } {hadInCard ? "Сагснаас хасах" : "Сагслах"}
+                                                                                    <ion-icon name={'card-outline'}/>
+                                                                            } Худалдаж авах
                                                                         </Button>
                                                                         {
                                                                             ((user || {}).wish || []).some( aa => aa == lesson._id) ? (
@@ -260,7 +260,7 @@ class Lesson extends Component {
                                             isMobile ? null : (
                                                 <Col lg={4} md={5} className={`fixeee ${this.state.fixed ? 'fixeed' : 'not-fixeed'}`}>
                                                     <div>
-                                                        <Sticky className={'stacka'} onFixedToggle={(e) => this.setState({fixed: e})} topOffset={-90} stickyStyle={{top: 90}}>
+                                                        <Sticky className={'stacka'} onFixedToggle={(e) => this.setState({fixed: e})} topOffset={-130} stickyStyle={{top: 130}}>
                                                             <div className="sticky-side">
                                                                 {
                                                                     lesson.video ? (

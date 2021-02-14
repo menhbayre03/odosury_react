@@ -5,6 +5,7 @@ import Header from "./include/Header";
 import Footer from "./include/Footer";
 import Loader from "./include/Loader";
 import GridItem from "./include/GridItem";
+import GridItemAudio from "./include/GridItemAudio";
 import { Container, Row, Col } from "react-bootstrap";
 import Swiper from "react-id-swiper";
 import * as actions from '../actions/home_actions';
@@ -17,6 +18,7 @@ class Home extends Component {
         this.state = {
         };
         this.swiper = React.createRef();
+        this.swiperAudio = React.createRef();
         this.swiperWatching = React.createRef();
     }
     componentDidMount() {
@@ -37,6 +39,18 @@ class Home extends Component {
         }
     };
 
+    goNextAudio() {
+        if (this.swiperAudio.current && this.swiperAudio.current.swiper) {
+            this.swiperAudio.current.swiper.slideNext();
+        }
+    };
+
+    goPrevAudio() {
+        if (this.swiper.current != null && this.swiper.current.swiper != null) {
+            this.swiper.current.swiper.slidePrev();
+        }
+    };
+
     goNextWatching() {
         if (this.swiperWatching.current && this.swiperWatching.current.swiper) {
             this.swiperWatching.current.swiper.slideNext();
@@ -50,8 +64,28 @@ class Home extends Component {
     };
 
     render() {
-        const {main : {user, categories}, home : {loading, watching, newLessons, featuredLessons, bundles}} = this.props;
+        const {main : {user, categories}, home : {loading, watching, newLessons, featuredLessons, newAudios}} = this.props;
         const gridSlider = {
+            slidesPerView: 1,
+            slidesPerGroup: 1,
+            spaceBetween: 30,
+            containerClass: 'swiper-container gridSlider',
+            breakpoints: {
+                1024: {
+                    slidesPerView: 4,
+                    slidesPerGroup: 4,
+                },
+                768: {
+                    slidesPerView: 3,
+                    slidesPerGroup: 3,
+                },
+                640: {
+                    slidesPerView: 2,
+                    slidesPerGroup: 2,
+                }
+            }
+        };
+        const gridSliderAudio = {
             slidesPerView: 1,
             slidesPerGroup: 1,
             spaceBetween: 30,
@@ -183,6 +217,32 @@ class Home extends Component {
                                         <ion-icon name="chevron-forward"/>
                                     </div>
                                     <div onClick={this.goPrev.bind(this)} className="grid-prev">
+                                        <ion-icon name="chevron-back"/>
+                                    </div>
+                                </Container>
+                            </div>
+                        ) : null
+                    }
+                    {
+                        newAudios && newAudios.length > 0 ? (
+                            <div className="section-new">
+                                <Container style={{position: 'relative'}}>
+                                    <h3>Сонсдог ном</h3>
+                                    <div>
+                                        <Swiper ref={this.swiperAudio} {...gridSliderAudio}>
+                                            {
+                                                newAudios.map((item, index) => (
+                                                    <div key={index}>
+                                                        <GridItemAudio item={item}/>
+                                                    </div>
+                                                ))
+                                            }
+                                        </Swiper>
+                                    </div>
+                                    <div onClick={this.goNextAudio.bind(this)} className="grid-next">
+                                        <ion-icon name="chevron-forward"/>
+                                    </div>
+                                    <div onClick={this.goPrevAudio.bind(this)} className="grid-prev">
                                         <ion-icon name="chevron-back"/>
                                     </div>
                                 </Container>

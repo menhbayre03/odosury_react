@@ -2,18 +2,19 @@
   padding-top: 2px;
 
   span {
-    color: #fff;
     font-size: 12px;
     padding: 2px 15px;
     border-radius: 5px;
     user-select: none;
+    background: gold;
+    cursor: pointer;
+    color: #000;
+    font-weight: 700;
+    img {
+      filter: grayscale(1) invert(1);
+    }
     &:hover {
       text-decoration: underline;
-    }
-
-    &:not(.pq) {
-      background: #313356;
-      cursor: pointer;
     }
   }
 }

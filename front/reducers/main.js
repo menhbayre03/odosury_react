@@ -21,7 +21,7 @@ export default(state = initialState, action) => {
                 ...state,
                 user: {
                     ...state.user,
-                    premium: action.json.success ? 'pr' : '',
+                    premium: action.json.success ? 'pr' : 'pq',
                     premiumDate: new Date()
                 }
             };

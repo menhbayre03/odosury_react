@@ -119,3 +119,26 @@ export const checkQpayForPremium = {
     REQUEST: 'checkQpayForPremium_REQ',
     RESPONSE: 'checkQpayForPremium_RES',
 };
+
+
+
+export const getListAudio = {
+    REQUEST: 'getListAudio_REQ',
+    RESPONSE: 'getListAudio_RES',
+};
+export const clearAudio = {
+    REQUEST: 'clearAudio_REQ',
+    RESPONSE: 'clearAudio_RES',
+};
+export const setProgressAudio = {
+    REQUEST: 'setProgressAudio_REQ',
+    RESPONSE: 'setProgressAudio_RES',
+};
+export const getViewAreaAudio = {
+    REQUEST: 'getViewAreaAudio_REQ',
+    RESPONSE: 'getViewAreaAudio_RES',
+};
+export const getAudio = {
+    REQUEST: 'getAudio_REQ',
+    RESPONSE: 'getAudio_RES',
+};

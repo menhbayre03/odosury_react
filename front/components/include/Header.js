@@ -2,9 +2,8 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import config from '../../config';
-import { Button, Container, Col, Row, Modal, Spinner } from 'react-bootstrap';
+import { Button, Container, Col, Row, Modal, Spinner, Badge } from 'react-bootstrap';
 import * as actions from '../../actions/home_actions';
-import Cookies from "js-cookie";
 import QRCode from "react-qr-code";
 import {
     isMobile
@@ -49,14 +48,13 @@ class Header extends Component {
         config.get('history').push(`/lessons/all`, {search: this.state.search})
     }
     buyPre(){
-        const {main, dispatch} = this.props;
-        let user = main.user || {};
+        const {user = {}, dispatch} = this.props;
         //pr === 'premium'
         //pq === 'premiumRequest
         if(user.premium === 'pr'){
             return false;
-        } else if(user.premium === 'pq'){
-            config.get('emitter').emit('warning', 'Premium хүсэлт илгээгдсэн байна.');
+        // } else if(user.premium === 'pq'){
+        //     config.get('emitter').emit('warning', 'Premium хүсэлт илгээгдсэн байна.');
         } else {
             if(user._id){
                 dispatch(actions.setPremiumModal({visible: true}));
@@ -82,13 +80,11 @@ class Header extends Component {
     }
     render() {
         const {
-            main,
+            user,
+            categories,
             premiumModal: {visible, step, type, gettingTransaction, transaction, checkingQpay},
             dispatch
         } = this.props;
-        let categories = main.categories || [];
-        let user = main.user || {};
-        let card = (Cookies.get('odosuryCard') ? JSON.parse(Cookies.get('odosuryCard')) : {});
         const renderBankDetails = () => (
             <div className={'paymentMethodDet bankdetail'}>
                 <p>
@@ -225,44 +221,55 @@ class Header extends Component {
                             </Col>
                         </Row>
                     </Container>
-                </div>
-                <div className="header-bottom">
-                    <Container>
-                        <div className="section-1">
-                            <div className="header-menu">
-                                <ul>
-                                    <li>
+                    <div className="header-bottom">
+                        <Container>
+                            <div className="section-1">
+                                <div className="header-menu">
+                                    <ul>
+                                        <li>
                                         <span className={(user.premium === 'pr' || user.premium === 'pq' ? 'ds' : '')} onClick={this.buyPre.bind(this)}>
+                                            <img style={{
+                                                position: 'relative',
+                                                top: -2,
+                                                left: -7,
+                                            }} src="/images/crown.png" alt="" height={13}/>
                                             {
                                                 user.premium === 'pr' ?
                                                     'Premium хэрэглэгч'
-                                                : user.premium === 'pq' ?
+                                                    : user.premium === 'pq' ?
                                                     'Premium хүсэлт илгээсэн'
-                                                :   'Premium эрх авах'
+                                                    :   'Premium эрх авах'
                                             }
                                         </span>
-                                    </li>
-                                </ul>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        <div className="section-2">
-                            <div className="header-menu">
-                                <ul>
-                                    <li>
-                                        <Link to={`/lessons/all`}>
-                                            Хичээлүүд
-                                        </Link>
-                                    </li>
-                                    {/*<li>*/}
-                                    {/*    <Link to={'#'}>*/}
-                                    {/*        Заавар*/}
-                                    {/*    </Link>*/}
-                                    {/*</li>*/}
-                                </ul>
+                            <div className="section-2">
+                                <div className="header-menu">
+                                    <ul>
+                                        <li>
+                                            <Link to={`/lessons/all`}>
+                                                Хичээлүүд
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link to={`/audios/all`}>
+                                                Сонсдог ном
+                                                <Badge variant="danger" style={{
+                                                    position: 'relative',
+                                                    top: -1,
+                                                    marginLeft: 6,
+                                                }}>New</Badge>
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                    </Container>
+                        </Container>
+                    </div>
                 </div>
+                <div style={{marginTop: 83, display: 'inline-block'}}/>
                 <div onClick={() => this.setState({cate: false})} style={{visibility: this.state.cate ? 'visible': 'hidden', opacity: this.state.cate ? 0.5 : 0}} className="cate-back"/>
                 <Modal
                     show={visible}
@@ -490,7 +497,8 @@ class Header extends Component {
 
 function mapStateToProps(state){
     return {
-        main: state.main,
+        user: state.main.user,
+        categories: state.main.categories,
         premiumModal: state.home.premiumModal
     }
 }
