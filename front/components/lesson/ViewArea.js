@@ -12,7 +12,6 @@ import AmjiltPdf from './pdf';
 import {
     isMobile
 } from "react-device-detect";
-import {setProgress} from "../../../../odosury_app/src/actions/course_actions";
 const reducer = ({ main, lesson }) => ({ main, lesson });
 
 class Bundle extends Component {
@@ -46,7 +45,7 @@ class Bundle extends Component {
                                 self.setState({program: prog.timeline, activeIndex: index.toString()}, () => dispatch(actions.setProgress(lessonView._id, prog)));
                             } else if(index+1 === (lessonView.levels || []).length && indP+1 === item.programs.length && aa === 0) {
                                 aa = 1;
-                                self.setState({program: (lessonView.levels || [])[0].programs[0].timeline, activeIndex: '0'.toString()}, () => dispatch(setProgress(lessonView._id, prog)));
+                                self.setState({program: (lessonView.levels || [])[0].programs[0].timeline, activeIndex: '0'.toString()}, () => dispatch(actions.setProgress(lessonView._id, prog)));
                             }
                         })
                     })
