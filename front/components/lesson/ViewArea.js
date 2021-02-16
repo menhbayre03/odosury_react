@@ -176,7 +176,7 @@ class Bundle extends Component {
                 </div>
                 <div className={`program-cont ${program.type === 'video' ? 'video' : ''}`}
                     style={{
-                        padding: (isMobile || (program.type === 'video' || program.type === 'pdf')) ? '20px 0 0 0' : '40px 30px'
+                        padding: (isMobile ) ? '20px 0 0 0' : (program.type === 'video' || program.type === 'pdf') ? '40px 0 0 0' : '40px 30px'
                     }}
                 >
                     {
@@ -184,7 +184,7 @@ class Bundle extends Component {
                             <div>
                                 {
                                     program.type === 'video' ? null : (
-                                        <h6 className="tit">{program.title}</h6>
+                                        <h6 className="tit" style={{marginTop: 20}}>{program.title}</h6>
                                     )
                                 }
                                 {
