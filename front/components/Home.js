@@ -64,7 +64,7 @@ class Home extends Component {
     };
 
     render() {
-        const {main : {user, categories}, home : {loading, watching, newLessons, featuredLessons, newAudios}} = this.props;
+        const {home : {loading, watching, newLessons, featuredLessons, newAudios, bundles}} = this.props;
         const gridSlider = {
             slidesPerView: 1,
             slidesPerGroup: 1,
@@ -92,16 +92,16 @@ class Home extends Component {
             containerClass: 'swiper-container gridSlider',
             breakpoints: {
                 1024: {
-                    slidesPerView: 4,
-                    slidesPerGroup: 4,
+                    slidesPerView: 6,
+                    slidesPerGroup: 6,
                 },
                 768: {
-                    slidesPerView: 3,
-                    slidesPerGroup: 3,
+                    slidesPerView: 5,
+                    slidesPerGroup: 5,
                 },
                 640: {
-                    slidesPerView: 2,
-                    slidesPerGroup: 2,
+                    slidesPerView: 3,
+                    slidesPerGroup: 3,
                 }
             }
         };
@@ -223,35 +223,49 @@ class Home extends Component {
                             </div>
                         ) : null
                     }
-                    {
-                        newAudios && newAudios.length > 0 ? (
-                            <div className="section-new">
-                                <Container style={{position: 'relative'}}>
-                                    <h3>Сонсдог ном</h3>
-                                    <div>
-                                        <Swiper ref={this.swiperAudio} {...gridSliderAudio}>
-                                            {
-                                                newAudios.map((item, index) => (
-                                                    <div key={index}>
-                                                        <GridItemAudio item={item}/>
-                                                    </div>
-                                                ))
-                                            }
-                                        </Swiper>
-                                    </div>
-                                    <div onClick={this.goNextAudio.bind(this)} className="grid-next">
-                                        <ion-icon name="chevron-forward"/>
-                                    </div>
-                                    <div onClick={this.goPrevAudio.bind(this)} className="grid-prev">
-                                        <ion-icon name="chevron-back"/>
-                                    </div>
-                                </Container>
-                            </div>
-                        ) : null
-                    }
+                    <div className="section-bundle">
+                        <Container>
+                            <h3>Сонсдог ном</h3>
+                            <Row style={{marginTop: -20}}>
+                                {
+                                    newAudios.map(item => (
+                                        <Col md={3}>
+                                            <GridItemAudio item={item}/>
+                                        </Col>
+                                    ))
+                                }
+                            </Row>
+                        </Container>
+                    </div>
+                    {/*{*/}
+                    {/*    newAudios && newAudios.length > 0 ? (*/}
+                    {/*        <div className="section-new">*/}
+                    {/*            <Container style={{position: 'relative'}}>*/}
+                    {/*                <h3>Сонсдог ном</h3>*/}
+                    {/*                <div>*/}
+                    {/*                    <Swiper ref={this.swiperAudio} {...gridSliderAudio}>*/}
+                    {/*                        {*/}
+                    {/*                            newAudios.map((item, index) => (*/}
+                    {/*                                <div key={index}>*/}
+                    {/*                                    <GridItemAudio item={item}/>*/}
+                    {/*                                </div>*/}
+                    {/*                            ))*/}
+                    {/*                        }*/}
+                    {/*                    </Swiper>*/}
+                    {/*                </div>*/}
+                    {/*                <div onClick={this.goNextAudio.bind(this)} className="grid-next">*/}
+                    {/*                    <ion-icon name="chevron-forward"/>*/}
+                    {/*                </div>*/}
+                    {/*                <div onClick={this.goPrevAudio.bind(this)} className="grid-prev">*/}
+                    {/*                    <ion-icon name="chevron-back"/>*/}
+                    {/*                </div>*/}
+                    {/*            </Container>*/}
+                    {/*        </div>*/}
+                    {/*    ) : null*/}
+                    {/*}*/}
                     {
                         featuredLessons && featuredLessons.length > 0 ? (
-                            <div className="section-new">
+                            <div className="section-featured">
                                 <Container style={{position: 'relative'}}>
                                     <h3>Онцлох хичээлүүд</h3>
                                     <Row>

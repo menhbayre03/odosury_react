@@ -51,12 +51,12 @@ class Header extends Component {
         const {user = {}, dispatch} = this.props;
         //pr === 'premium'
         //pq === 'premiumRequest
-        if(user.premium === 'pr'){
+        if((user || {}).premium === 'pr'){
             return false;
         // } else if(user.premium === 'pq'){
         //     config.get('emitter').emit('warning', 'Premium хүсэлт илгээгдсэн байна.');
         } else {
-            if(user._id){
+            if((user || {})._id){
                 dispatch(actions.setPremiumModal({visible: true}));
             } else {
                 config.get('emitter').emit('warning', 'Нэвтрэх шаардлагатай');
@@ -80,7 +80,7 @@ class Header extends Component {
     }
     render() {
         const {
-            user,
+            user = {},
             categories,
             premiumModal: {visible, step, type, gettingTransaction, transaction, checkingQpay},
             dispatch
@@ -124,7 +124,7 @@ class Header extends Component {
                         {'Гүйлгээний утга'.toUpperCase()}:
                     </span>
                     <span>
-                        {user.username || user.email}
+                        {(user || {}).username || (user || {}).email}
                     </span>
                 </p>
                 <p>
@@ -177,7 +177,7 @@ class Header extends Component {
                                     )
                                 }
                                 {
-                                    user._id ? (
+                                    (user || {})._id ? (
                                         <div className="user-menu">
                                             {/*<Link to="/card" style={{marginRight: 15, position: 'relative'}}>*/}
                                             {/*    <span>{(user.bundles || []).length + (user.lessons || []).length}</span>*/}
@@ -227,16 +227,16 @@ class Header extends Component {
                                 <div className="header-menu">
                                     <ul>
                                         <li>
-                                        <span className={(user.premium === 'pr' || user.premium === 'pq' ? 'ds' : '')} onClick={this.buyPre.bind(this)}>
+                                        <span className={((user || {}).premium === 'pr' || (user || {}).premium === 'pq' ? 'ds' : '')} onClick={this.buyPre.bind(this)}>
                                             <img style={{
                                                 position: 'relative',
                                                 top: -2,
                                                 left: -7,
                                             }} src="/images/crown.png" alt="" height={13}/>
                                             {
-                                                user.premium === 'pr' ?
+                                                (user || {}).premium === 'pr' ?
                                                     'Premium хэрэглэгч'
-                                                    : user.premium === 'pq' ?
+                                                    : (user || {}).premium === 'pq' ?
                                                     'Premium хүсэлт илгээсэн'
                                                     :   'Premium эрх авах'
                                             }
@@ -382,7 +382,7 @@ class Header extends Component {
                                                                 {'Гүйлгээний утга'.toUpperCase()}:
                                                             </span>
                                                             <span>
-                                                                {user.username || user.email}
+                                                                {(user || {}).username || (user || {}).email}
                                                             </span>
                                                         </p>
                                                         <p>

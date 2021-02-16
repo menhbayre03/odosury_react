@@ -252,7 +252,10 @@
   }
 }
 .section-bundle {
-  margin-top: 60px;
+  padding-top: 60px;
+  position: relative;
+  margin-top: 40px;
+  padding-bottom: 40px;
   h3 {
     text-align: center;
     font-size: 1.6625pc;
@@ -267,52 +270,78 @@
     margin-bottom: 0.45625in;
     color: #3e416d;
   }
-  .bundle-item {
-    margin-bottom: 40px;
-    height: 72px;
-    box-shadow: -7.5pt 10px 14px -0.09375in rgba(25, 42, 70, 0.23);
-    -webkit-border-radius: 0.09375in;
-    -moz-border-radius: 0.09375in;
-    border-radius: 0.09375in;
-    background-color: #fff;
-    position: relative;
-    -webkit-transition: 0.3s;
-    -moz-transition: 0.3s;
-    -ms-transition: 0.3s;
-    -o-transition: 0.3s;
-    img {
-      box-shadow: 0 2.25pt 8.25pt -0.02083333in rgba(0, 0, 0, 0.33);
-      margin-top: -0.6pc;
-      height: 4.275pc;
-      margin-left: 0.6pc;
-      position: absolute;
-      border-radius: 10px;
+}
+.section-bundle::after {
+  margin-left: -40%;
+  bottom: 0;
+  left: 50%;
+  width: 80%;
+  height: 0.0625pc;
+  position: absolute;
+  content: "";
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.2) 0, rgba(255, 255, 255, 0) 75%);
+}
+.bundle-item {
+  margin-top: 50px;
+  height: 100px;
+  box-shadow: -7.5pt 10px 14px -0.09375in rgba(25, 42, 70 , 23%);
+  -webkit-border-radius: 0.09375in;
+  -moz-border-radius: 0.09375in;
+  border-radius: 0.09375in;
+  background-color: #fff;
+  position: relative;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -ms-transition: 0.3s;
+  -o-transition: 0.3s;
+  img {
+    box-shadow: 0 2.25pt 8.25pt -0.02083333in rgba(0, 0, 0 , 33%);
+    margin-top: -10px;
+    height: 119px;
+    width: 74px;
+    object-fit: cover;
+    margin-left: 0.6pc;
+    position: absolute;
+    border-radius: 10px;
+  }
+  .bundle-detail {
+    display: block;
+    margin-left: 95px;
+    padding-top: 1px;
+    padding-right: 10px;
+    h4 {
+      font-size: 16px;
+      margin-top: 12px;
+      width: 100%;
+      color: #3e416d;
+      font-weight: 600;
+      margin-bottom: 20px;
+      line-height: 20px;
+      -webkit-line-clamp: 2;
+      text-align: left;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      height: 40px;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .bundle-detail {
-      display: block;
-      margin-left: 80px;
-      padding-top: 1px;
-      h4 {
-        font-size: 16px;
-        font-weight: 600;
-        margin-top: 12px;
-        color: #3e416d;
-        width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      p {
-        margin-bottom: 0;
-        font-size: 14px;
-        font-weight: 600;
-        color: #757575;
+    p.skill-card-subtitle {
+      margin-bottom: 0;
+      font-size: 13px;
+      font-weight: 500;
+      color: #757575;
+      display: flex;
+      justify-content: space-between;
+      ion-icon {
+        position: relative;
+        top: 1px;
+        margin-right: 3px;
       }
     }
   }
-  .bundle-item:hover {
-    box-shadow: -7.5pt 10px 14px -0.09375in rgba(25, 42, 70, 0.45);
-  }
+}
+.bundle-item:hover {
+  box-shadow: -7.5pt 10px 14px -0.09375in rgba(25, 42, 70, 0.45);
 }
 .home-hero {
   height: 480px;
@@ -338,6 +367,22 @@
     }
   }
 }
+.section-featured {
+  position: relative;
+  margin-bottom: 30px;
+  padding-top: 60px;
+  margin-top: 40px;
+  .swiper-container {
+    padding-bottom: 40px;
+  }
+  h3 {
+    text-align: center;
+    font-size: 1.6625pc;
+    font-weight: 700;
+    margin-bottom: 40px;
+    color: #3e416d;
+  }
+}
 .section-new {
   position: relative;
   margin-bottom: 30px;
@@ -353,6 +398,16 @@
     margin-bottom: 40px;
     color: #3e416d;
   }
+}
+.section-new::after {
+  margin-left: -40%;
+  bottom: 0;
+  left: 50%;
+  width: 80%;
+  height: 0.0625pc;
+  position: absolute;
+  content: "";
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.2) 0, rgba(255, 255, 255, 0) 75%);
 }
 .section-watching {
   position: relative;
@@ -2178,6 +2233,33 @@ div.facebook-login>span button {
     margin-left: 20px;
     height: 26px;
     padding: 0 15px;
+    font-size: 10px;
+  }
+  .header-bottom .section-1 ul li:first-child span {
+    font-size: 10px;
+    padding: 2px 5px;
+    border-radius: 5px;
+    user-select: none;
+    background: gold;
+    cursor: pointer;
+    color: #000;
+    font-weight: 700;
+  }
+  .header-bottom .section-1 ul li:first-child span img {
+    top: -2px !important;
+    left: -3px !important;
+    height: 10px !important;
+  }
+  .header-bottom .section-2 ul {
+     margin-top: 2px;
+     padding-left: 0;
+     margin-bottom: 0;
+   }
+  .header-bottom .section-2 ul li {
+    padding: 0 10px;
+  }
+  .header-bottom .section-2 ul li a {
+    color: #fff;
     font-size: 10px;
   }
 }

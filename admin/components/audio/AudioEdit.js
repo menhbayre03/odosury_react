@@ -334,13 +334,13 @@ class AudioEdit extends React.Component {
                                             steps[current].content === 'content-content' ?
                                                 <div className='content-content'>
                                                     <Form.Item
-                                                        label='Том зураг'
+                                                        label='Зураг'
                                                         labelCol={{span: 4}}
-                                                        help='Зурагны хэмжээ хамгийн багадаа 800 x 450 байх'
+                                                        help='Зурагны хэмжээ хамгийн багадаа 250 x 400 байх'
                                                         style={{marginBottom: 10}}
                                                     >
                                                         <div>
-                                                            <Button onClick={this.openMediaLib.bind(this, 'image', 'lessonSmall')} style={{marginBottom: 10}}>
+                                                            <Button onClick={this.openMediaLib.bind(this, 'image', 'audio')} style={{marginBottom: 10}}>
                                                                 <UploadOutlined /> {audioImage && audioImage._id? 'Солих' : 'Зураг'}
                                                             </Button>
                                                             {audioImage && audioImage._id ?

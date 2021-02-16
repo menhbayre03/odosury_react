@@ -139,12 +139,12 @@ class ListAudio extends Component {
                                             onChange={(values) => this.setState({sort: values[0]})}
                                         />
                                     </div>
-                                    <div className="list-items">
+                                    <div className="list-items" style={{marginBottom: 60, marginTop: -20}}>
                                         <Loader status={loading}>
                                             <Row>
                                                 {
                                                     list.map((item, index) => (
-                                                        <Col lg={4} md={6} sm={6} style={{marginBottom: 30}}>
+                                                        <Col lg={4} md={6} sm={6}>
                                                             <div key={index}>
                                                                 <GridItemAudio item={item}/>
                                                             </div>
