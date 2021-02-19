@@ -54,19 +54,14 @@ export default(state = initialState, action) => {
                     ...state,
                     lessonView: {
                         ...state.lessonView,
-                        levels: state.lessonView.levels.map(level => {
-                            return {
-                                ...level,
-                                programs: level.programs.map(prog => {
-                                    if(prog._id.toString() === action.json.program.toString()) {
-                                        return {
-                                            ...prog,
-                                            passed_users: [...prog.passed_users || [], action.json.user_id]
-                                        }
-                                    } else {
-                                        return prog
-                                    }
-                                })
+                        programs: state.lessonView.programs.map(prog => {
+                            if(prog._id.toString() === action.json.program.toString()) {
+                                return {
+                                    ...prog,
+                                    passed_users: [...prog.passed_users || [], action.json.user_id]
+                                }
+                            } else {
+                                return prog
                             }
                         })
                     }

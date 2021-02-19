@@ -28,10 +28,6 @@ class GridItemAudio extends Component {
                 }
             })
         }
-        let rating = 0;
-        if((item.rating || []).length > 0) {
-            rating = item.rating.reduce((total, rate) => (total + rate.rate), 0) / item.rating.length
-        }
         if(hours < 1 && hours !== 0) {
             hours = hours * 60;
             hoursText = 'Минут';
