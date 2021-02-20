@@ -17,7 +17,7 @@ class GridItemAudio extends Component {
         const {main: {user}, item, watching} = this.props;
         let lectures = (item.programs || []).length;
         let hours = (item.programs || []).reduce(function (subTotal, program) {
-            return subTotal + (subTotal + ((program || {}).timeline || {}).minutes || 0)
+            return subTotal + ((program || {}).timeline || {}).minutes || 0
         }, 0) / 60;
         let hoursText = 'Цаг';
         let progress = 0;
