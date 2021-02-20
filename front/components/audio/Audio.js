@@ -51,9 +51,13 @@ class Audio extends Component {
                                              style={{
                                                  height: 'auto',
                                                  margin: '0 40px',
-                                                 width: 'calc(100% - 80px)',
+                                                 // width: 'calc(100% - 160px)',
                                                  marginBottom: 40,
                                                  borderRadius: 10,
+                                                 width: '50%',
+                                                 marginLeft: 'auto',
+                                                 marginRight: 'auto',
+                                                 display: 'block',
                                              }}
                                         />
                                     ) : null
@@ -101,12 +105,12 @@ class Audio extends Component {
                                                                     lesson.paid ? (
                                                                         <Link to={`/audio/view/${lesson.slug}`}>
                                                                             <Button variant="secondary">
-                                                                                <ion-icon name="play" /> Үзэх
+                                                                                <ion-icon name="play" /> Сонсох
                                                                             </Button>
                                                                         </Link>
                                                                     ) : (
-                                                                        <Button onClick={() => config.get('emitter').emit('warning', 'Premium эрх авна уу')} variant="secondary">
-                                                                            <ion-icon name="play" /> Үзэх
+                                                                        <Button onClick={() => config.get('emitter').emit('premiumReq')} variant="secondary" style={{background: 'gold', display: 'flex', justifyContent: 'center',alignItems: 'center', fontSize: 16}}>
+                                                                            <img src="/images/crown.png" alt="" height={37} style={{width: 'auto', filter: 'grayscale(1) invert(1)'}}/> Premium Эрх авах
                                                                         </Button>
                                                                     )
                                                                 }
@@ -115,7 +119,7 @@ class Audio extends Component {
                                                     ) : null
                                                 }
                                                 <div className="tab-menu">
-                                                    <span onClick={() => this.setState({active : 'timeline'})} className={`${this.state.active === 'timeline' ? 'active' : ''}`}>Хөтөлбөр</span>
+                                                    <span onClick={() => this.setState({active : 'timeline'})} className={`${this.state.active === 'timeline' ? 'active' : ''}`}>Бүлэг</span>
                                                     <span onClick={() => this.setState({active : 'overview'})} className={`${this.state.active === 'overview' ? 'active' : ''}`}>Танилцуулга</span>
                                                     {/*<span onClick={() => this.setState({active : 'review'})} className={`${this.state.active === 'review' ? 'active' : ''}`}>Үнэлгээ</span>*/}
                                                 </div>
@@ -127,18 +131,27 @@ class Audio extends Component {
                                                     <div>
                                                         <Sticky className={'stacka'} onFixedToggle={(e) => this.setState({fixed: e})} topOffset={-130} stickyStyle={{top: 130}}>
                                                             <div className="sticky-side">
-                                                                <img src={(lesson.thumbnail || {}).path ? `${(lesson.thumbnail || {}).url}${lesson.thumbnail.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
+                                                                <img
+                                                                    style={{
+                                                                        width: '50%',
+                                                                        padding: 10,
+                                                                        borderRadius: 17,
+                                                                        marginLeft: 'auto',
+                                                                        marginRight: 'auto',
+                                                                        display: 'block',
+                                                                    }}
+                                                                    src={(lesson.thumbnail || {}).path ? `${(lesson.thumbnail || {}).url}${lesson.thumbnail.path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
                                                                 <div className="inner">
                                                                     {
                                                                         lesson.paid ? (
                                                                             <Link to={`/audio/view/${lesson.slug}`}>
                                                                                 <Button variant="secondary">
-                                                                                    <ion-icon name="play" /> Үзэх
+                                                                                    <ion-icon name="play" /> Сонсох
                                                                                 </Button>
                                                                             </Link>
                                                                         ) : (
-                                                                            <Button onClick={() => config.get('emitter').emit('warning', 'Premium эрх авна уу')} variant="secondary">
-                                                                                <ion-icon name="play" /> Үзэх
+                                                                            <Button onClick={() => config.get('emitter').emit('premiumReq')} variant="secondary" style={{background: 'gold', display: 'flex', justifyContent: 'center',alignItems: 'center', fontSize: 16}}>
+                                                                                <img src="/images/crown.png" alt="" height={37} style={{width: 'auto', filter: 'grayscale(1) invert(1)'}}/> Premium Эрх авах
                                                                             </Button>
                                                                         )
                                                                     }
@@ -157,7 +170,7 @@ class Audio extends Component {
                             <Row>
                                 <Col lg={8} md={12}>
                                     <Tabs activeKey={this.state.active}>
-                                        <Tab eventKey="timeline" title={<span>Хөтөлбөр<ion-icon name="chevron-down"></ion-icon></span>}>
+                                        <Tab eventKey="timeline" title={<span>Бүлэг<ion-icon name="chevron-down"></ion-icon></span>}>
                                             <div className="timeline-cont">
                                                 <Accordion activeKey={this.state.activeIndex}>
                                                     <Card>
@@ -168,7 +181,7 @@ class Audio extends Component {
                                                                         lesson.paid ? (
                                                                             <Link style={{textDecoration: 'none'}} to={{pathname: `/audio/view/${lesson.slug}`, state: {levelIndex: 0, programIndex: ind}}}>
                                                                                 <div className={`program ${(program.passed_users || []).indexOf(((user || {})._id || 'WW@@#').toString()) > -1 ? 'passed' : ''}`} key={ind}>
-                                                                                    <ion-icon name="videocam"/>
+                                                                                    <ion-icon name="musical-notes"/>
                                                                                     <p>{(program.timeline || {}).title}</p>
                                                                                     {
                                                                                         program.timeline.minutes > 0 ? (
@@ -179,7 +192,7 @@ class Audio extends Component {
                                                                             </Link>
                                                                         ) : (
                                                                             <div className={`program ${(program.passed_users || []).indexOf(((user || {})._id || 'WW@@#').toString()) > -1 ? 'passed' : ''}`} key={ind}>
-                                                                                <ion-icon name="videocam"/>
+                                                                                <ion-icon name="musical-notes"/>
                                                                                 <p>{(program.timeline || {}).title}</p>
                                                                                 {
                                                                                     program.timeline.minutes > 0 ? (

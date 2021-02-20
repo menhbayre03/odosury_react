@@ -22,7 +22,11 @@ class Header extends Component {
     }
 
     componentDidMount() {
+        let self = this;
         window.addEventListener('scroll', this.handleScroll);
+        this.premiumReq = config.get('emitter').addListener('premiumReq', function () {
+            self.buyPre()
+        })
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -33,6 +37,7 @@ class Header extends Component {
 
     componentWillUnmount() {
         window.removeEventListener('scroll', this.handleScroll);
+        this.premiumReq && this.premiumReq.remove();
     }
 
     handleScroll() {
