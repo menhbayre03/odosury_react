@@ -293,7 +293,7 @@ class Header extends Component {
                                         <Col className={'pre'}>
                                             <span>
                                                 Хичээл зүтгэл дуусаагүй цагт хүний амжилт дундрахгүй.
-                                                Амжилт PREMIUM багцын хэрэглэгчид бүх түвшний курс хичээлүүдийг үзэх боломжтой
+                                                Odosury PREMIUM багцын хэрэглэгчид бүх түвшний курс хичээлүүдийг үзэх боломжтой
                                             </span>
                                         </Col>
                                         <Col className={'dawuu-taluud'}>
