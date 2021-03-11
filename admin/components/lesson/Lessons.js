@@ -81,6 +81,13 @@ class Lessons extends Component {
                 ),
             },
             {
+                key: 'eish',
+                title: 'EISH',
+                render: (text, record) => (
+                    record.eish ? 'ЕЭШ' : ''
+                ),
+            },
+            {
                 key: 'created',
                 title: 'Огноо',
                 render: (text, record) => (

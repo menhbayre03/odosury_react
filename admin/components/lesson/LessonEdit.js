@@ -145,9 +145,6 @@ class LessonEdit extends React.Component {
             if(!selectedMember || !selectedMember._id){
                 return config.get('emitter').emit('warning', ("Багш сонгоно уу!"));
             }
-            if(!lesson.category || (lesson.category && lesson.category.trim() === '' )){
-                return config.get('emitter').emit('warning', ("Ангилал сонгоно уу!"));
-            }
             if(!lesson.price || (lesson.price && lesson.price === 0 )){
                 return config.get('emitter').emit('warning', ("Үнэ оруулна уу!"));
             }
@@ -207,6 +204,9 @@ class LessonEdit extends React.Component {
     }
     setFeatured(e){
         this.props.dispatch(actions.setFeatured());
+    }
+    setEish(e){
+        this.props.dispatch(actions.setEish());
     }
     render() {
         let { main:{user}, lesson:{imageUploadLoading, lessonImage, lessonSmallImage, videoUploadLoading, lessonVideo, status, openModal, lessonVideoProgress, lessonImageProgress, lesson, lessons, submitLessonLoader, all, searchTeachersResult, searchTeacherLoader, categories, level} } = this.props;
@@ -372,6 +372,11 @@ class LessonEdit extends React.Component {
                                                         }
                                                     </Form.Item>
                                                     <Form.Item
+                                                        label='ЕЭШ'
+                                                    >
+                                                        <Switch checked={!!lesson.eish} onChange={this.setEish.bind(this)} />
+                                                    </Form.Item>
+                                                    <Form.Item
                                                         label='Ангилал'
                                                     >
                                                         <TreeSelect
@@ -384,6 +389,7 @@ class LessonEdit extends React.Component {
                                                             placeholder="Please select"
                                                             allowClear
                                                             onChange={this.onChangeHandle2.bind(this, 'category')}
+                                                            disabled={lesson.eish}
                                                         >
                                                             {categories && categories.length > 0 ?
                                                                 categories.map((run, idx) =>

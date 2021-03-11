@@ -15,6 +15,7 @@ import {
     openLevelSingle,
     closeLevelSingle,
     removeUploadedFileLessonEdit,
+    setEish,
     chooseMediaLessonEdit,
 } from "../actionTypes";
 const initialState = {
@@ -50,6 +51,16 @@ export default(state = initialState, action) => {
                 lesson:{
                     ...state.lesson,
                     featured: !featured
+                }
+            };
+        case setEish.REQUEST:
+            let eish = !!state.lesson.eish
+            return {
+                ...state,
+                lesson:{
+                    ...state.lesson,
+                    eish: !eish,
+                    category: ''
                 }
             };
         case chooseMediaLessonEdit.REQUEST:

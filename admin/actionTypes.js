@@ -256,6 +256,9 @@ export const chooseMediaLessonEdit = {
 export const setFeatured = {
     REQUEST:'setFeatured_REQUEST',
 };
+export const setEish = {
+    REQUEST:'setEish_REQUEST',
+};
 
 
 export const getLessonSingle = {
@@ -333,6 +336,51 @@ export const closeAudioModal = {
 export const chooseMediaAudioEdit = {
     REQUEST:'chooseMediaAudioEdit_REQUEST',
 };
+
 export const removeUploadedFileAudioEdit = {
     REQUEST:'removeUploadedFileAudioEdit_REQUEST',
+};
+
+
+// AUDIO LEVEL
+
+export const getAudioSingle = {
+    REQUEST:'getAudioSingle_REQUEST',
+    RESPONSE:'getAudioSingle_RESPONSE',
+};
+
+export const removeAudioTimeline = {
+    REQUEST:'removeAudioTimeline_REQUEST',
+    RESPONSE:'removeAudioTimeline_RESPONSE',
+};
+
+export const openEditAudioTimeline = {
+    REQUEST:'openEditAudioTimeline_REQUEST',
+    RESPONSE:'openEditAudioTimeline_RESPONSE',
+};
+
+export const submitTimelineAudio = {
+    REQUEST:'submitTimelineAudio_REQUEST',
+    RESPONSE:'submitTimelineAudio_RESPONSE',
+};
+
+export const orderLevelsAudio = {
+    REQUEST:'orderLevelsAudio_REQUEST',
+    RESPONSE:'orderLevelsAudio_RESPONSE',
+};
+
+export const chooseMediaAudio = {
+    REQUEST:'chooseMediaAudio_REQUEST',
+};
+
+export const closeEditTimelineAudio = {
+    REQUEST:'closeEditTimelineAudio_REQUEST',
+};
+
+export const onChangeHandlerLevelTimelineAudio = {
+    REQUEST:'onChangeHandlerLevelTimelineAudio_REQUEST',
+};
+
+export const removeUploadedFileAudio = {
+    REQUEST:'removeUploadedFileAudio_REQUEST',
 };

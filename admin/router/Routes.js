@@ -1,5 +1,5 @@
 import index from "../components/index";
-import Home from "../components/home/Home";
+// import Home from "../components/home/Home";
 import User from "../components/user/User";
 import Category from "../components/category/Category";
 import AudioCategory from "../components/audioCategory/AudioCategory";
@@ -15,7 +15,7 @@ export default [
         component: index,
         routes: [
             {
-                component: Home,
+                component: Purchase,
                 path: '/admin',
                 exact: true
             },
@@ -46,7 +46,7 @@ export default [
             },
             {
                 component: AudioLevels,
-                path: '/admin/audios/programs/:id',
+                path: '/admin/audio/programs/:id',
                 exact: true
             },
             {
@@ -64,11 +64,11 @@ export default [
                 path: '/admin/bundles',
                 exact: true
             },
-            {
-                component: Purchase,
-                path: '/admin/purchases',
-                exact: true
-            },
+            // {
+            //     component: Purchase,
+            //     path: '/admin/purchases',
+            //     exact: true
+            // },
             {
                 component: NotFound,
                 path: '/not-found'

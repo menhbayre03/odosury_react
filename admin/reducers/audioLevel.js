@@ -1,259 +1,185 @@
 import {
-    closeLessonModalLevel,
-    getLessonSingle,
-    lessonAddLevel,
-    lessonChangeHandlerLevel,
-    openLessonModalLevel,
-    orderLevels,
-    openModalLevelTimline,
-    closeModalLevelTimline,
-    onChangeHandlerLevelTimeline,
-    submitTimeline,
-    onChangeHandlerLevelTimelineSelect,
-    deleteLevel,
-    removeTimeline,
-    uploadTimelineVideo,
-    uploadTimelineAudio,
-    uploadTimelineFile,
-    openEditTimeline,
-    closeEditTimeline,
-    removeUploadedFile,
-    chooseMedia,
+    // closeLessonModalLevel,
+    getAudioSingle,
+    openEditAudioTimeline,
+    // lessonAddLevel,
+    // lessonChangeHandlerLevel,
+    // openLessonModalLevel,
+    orderLevelsAudio,
+    // openModalLevelTimline,
+    // closeModalLevelTimline,
+    onChangeHandlerLevelTimelineAudio,
+    submitTimelineAudio,
+    // onChangeHandlerLevelTimelineSelect,
+    // deleteLevel,
+    removeAudioTimeline,
+    // uploadTimelineVideo,
+    // uploadTimelineAudio,
+    // uploadTimelineFile,
+    closeEditTimelineAudio,
+    removeUploadedFileAudio,
+    chooseMediaAudio,
 } from "../actionTypes";
 const initialState = {
     status: 1,
-    lesson: {},
+    audio: {},
 
-    openModalLevel: false,
-    level: {},
-    levelType: '',
-    levelIdx: null,
-
-    openModalLevelTimline: false,
+    // openModalLevel: false,
+    // levelType: '',
+    // levelIdx: null,
+    //
+    // openModalLevelTimline: false,
     timeline: {},
-    levelIndex: '',
-    timelineType: '',
-    level_id: '',
-    timelineIdx: null,
-    timelineSubmitLoader: false,
-
-    timelineVideo: {},
-    timelineVideoProgress: {},
-    videoUploadLoadingT: false,
+    // levelIndex: '',
+    // timelineIdx: null,
+    // timelineSubmitLoader: false,
+    //
+    // timelineVideo: {},
+    // timelineVideoProgress: {},
+    // videoUploadLoadingT: false,
 
     timelineAudio: {},
     timelineAudioProgress: {},
-    audioUploadLoadingT: false,
-
-    timelinePdf: {},
-    timelinePdfProgress: {},
-    pdfUploadLoadingT: false,
-
-    timelineFile: {},
-    timelineFileProgress: {},
-    fileUploadLoadingT: false,
-
+    // audioUploadLoadingT: false,
+    //
+    // timelinePdf: {},
+    // timelinePdfProgress: {},
+    // pdfUploadLoadingT: false,
+    //
+    // timelineFile: {},
+    // timelineFileProgress: {},
+    // fileUploadLoadingT: false,
+    //
     editTimelineLoader: false,
     openEditTimeline: false,
-
-    orderLoader: [],
+    //
+    orderLoader: false,
 };
 
 export default(state = initialState, action) => {
     switch (action.type) {
-        case chooseMedia.REQUEST:
-            if(action.json.medType === 'video'){
-                return {
-                    ...state,
-                    timelineVideo: action.json.data[0]
-                };
-            }
+        case chooseMediaAudio.REQUEST:
             if(action.json.medType === 'audio'){
                 return {
                     ...state,
                     timelineAudio: action.json.data[0]
                 };
-            }
-            if(action.json.medType === 'file'){
+            } else {
                 return {
                     ...state,
-                    timelineFile: action.json.data[0]
                 };
             }
-            if(action.json.medType === 'pdf'){
-                return {
-                    ...state,
-                    timelinePdf: action.json.data[0]
-                };
-            }
-            return {
-                ...state,
-            };
-        case removeUploadedFile.REQUEST:
+        case removeUploadedFileAudio.REQUEST:
             return {
                 ...state,
                 [action.json.name]: {},
             };
-        case openEditTimeline.REQUEST:
+        case openEditAudioTimeline.REQUEST:
             return {
                 ...state,
                 editTimelineLoader: true,
             };
-        case openEditTimeline.RESPONSE:
+        case openEditAudioTimeline.RESPONSE:
             return {
                 ...state,
                 editTimelineLoader: false,
                 openEditTimeline: true,
-                timelineVideo: (action.json.timeline.video || null),
-                timelineAudio: (action.json.timeline.audio || null),
-                timelinePdf: (action.json.timeline.pdf || null),
-                timelineFile: (action.json.timeline.include_zip || null),
-                timeline:action.json.timeline,
-                timelineType: action.json.type,
-                level_id: action.json.level_id,
+                timelineAudio: action.json.type === 'new' ? null : (action.json.timeline.audio || null),
+                timeline:action.json.type === 'new' ? action.json.timelineId : action.json.timeline,
             };
-        case closeEditTimeline.REQUEST:
+        case closeEditTimelineAudio.REQUEST:
             return {
                 ...state,
                 openEditTimeline: false,
                 editTimelineLoader: false,
                 timeline: {},
             };
-        case uploadTimelineFile.REQUEST:
-            return {
-                ...state,
-                fileUploadLoadingT: true,
-                timelineFile:{}
-            };
-        case uploadTimelineFile.PROGRESS:
-            return {
-                ...state,
-                timelineFileProgress: (action.json || {})
-            };
-        case uploadTimelineFile.RESPONSE:
-            if(action.json.success){
-                return {
-                    ...state,
-                    fileUploadLoadingT: false,
-                    timelineFile: action.json.result
-                };
-            } else {
-                return {
-                    ...state,
-                    fileUploadLoadingT: false
-                };
-            }
-        case uploadTimelineAudio.REQUEST:
-            return {
-                ...state,
-                audioUploadLoadingT: true,
-                timelineAudio:{}
-            };
-        case uploadTimelineAudio.PROGRESS:
-            return {
-                ...state,
-                timelineAudioProgress: (action.json || {})
-            };
-        case uploadTimelineAudio.RESPONSE:
-            if(action.json.success){
-                return {
-                    ...state,
-                    audioUploadLoadingT: false,
-                    timelineAudio: action.json.result
-                };
-            } else {
-                return {
-                    ...state,
-                    audioUploadLoadingT: false
-                };
-            }
-        case uploadTimelineVideo.REQUEST:
-            return {
-                ...state,
-                videoUploadLoadingT: true,
-                timelineVideo:{}
-            };
-        case uploadTimelineVideo.PROGRESS:
-            return {
-                ...state,
-                timelineVideoProgress: (action.json || {})
-            };
-        case uploadTimelineVideo.RESPONSE:
-            if(action.json.success){
-                return {
-                    ...state,
-                    videoUploadLoadingT: false,
-                    timelineVideo: action.json.result
-                };
-            } else {
-                return {
-                    ...state,
-                    videoUploadLoadingT: false
-                };
-            }
-        case removeTimeline.REQUEST:
-            if(action.json.level_id){
-                let lvls = (state.lesson.levels || []);
-                lvls.map( function (run) {
-                    if (run._id.toString() === action.json.level_id.toString()) {
-                        (run.programs || []).map(function (aa) {
-                            if(aa.timeline._id === action.json.timeline_id){
-                                aa.timeline.loading = true;
-                            }
-                        })
-                    }
-                });
-                return {
-                    ...state,
-                    lesson: {
-                        ...state.lesson,
-                        levels: lvls
-                    },
-                }
-            } else {
-                return {
-                    ...state
-                };
-            }
-        case removeTimeline.RESPONSE:
-            if(action.json.level_id){
-                let lvls = (state.lesson.levels || []).map(function (run) {
-                    if(run._id.toString() === action.json.level_id.toString()){
-                        let holdRun = (run.programs || []).filter(function (pr) {
-                            if(pr.timeline._id.toString() !== action.json.timeline_id.toString()){
-                                return pr;
-                            }
-                        });
-                        return {_id:run._id,progress:run.progress, title:run.title, programs: holdRun};
+        // case uploadTimelineFile.REQUEST:
+        //     return {
+        //         ...state,
+        //         fileUploadLoadingT: true,
+        //         timelineFile:{}
+        //     };
+        // case uploadTimelineFile.PROGRESS:
+        //     return {
+        //         ...state,
+        //         timelineFileProgress: (action.json || {})
+        //     };
+        // case uploadTimelineFile.RESPONSE:
+        //     if(action.json.success){
+        //         return {
+        //             ...state,
+        //             fileUploadLoadingT: false,
+        //             timelineFile: action.json.result
+        //         };
+        //     } else {
+        //         return {
+        //             ...state,
+        //             fileUploadLoadingT: false
+        //         };
+        //     }
+        // case uploadTimelineAudio.REQUEST:
+        //     return {
+        //         ...state,
+        //         audioUploadLoadingT: true,
+        //         timelineAudio:{}
+        //     };
+        // case uploadTimelineAudio.PROGRESS:
+        //     return {
+        //         ...state,
+        //         timelineAudioProgress: (action.json || {})
+        //     };
+        // case uploadTimelineAudio.RESPONSE:
+        //     if(action.json.success){
+        //         return {
+        //             ...state,
+        //             audioUploadLoadingT: false,
+        //             timelineAudio: action.json.result
+        //         };
+        //     } else {
+        //         return {
+        //             ...state,
+        //             audioUploadLoadingT: false
+        //         };
+        //     }
+        // case uploadTimelineVideo.REQUEST:
+        //     return {
+        //         ...state,
+        //         videoUploadLoadingT: true,
+        //         timelineVideo:{}
+        //     };
+        // case uploadTimelineVideo.PROGRESS:
+        //     return {
+        //         ...state,
+        //         timelineVideoProgress: (action.json || {})
+        //     };
+        // case uploadTimelineVideo.RESPONSE:
+        //     if(action.json.success){
+        //         return {
+        //             ...state,
+        //             videoUploadLoadingT: false,
+        //             timelineVideo: action.json.result
+        //         };
+        //     } else {
+        //         return {
+        //             ...state,
+        //             videoUploadLoadingT: false
+        //         };
+        //     }
+        case removeAudioTimeline.REQUEST:
+            if(action.json.progId){
+                let aaa = (state.audio.programs || []).map(function (aa) {
+                    if(aa._id === action.json.progId){
+                        return {...aa, loading: true};
                     } else {
-                        return run;
-                    }
-                })
-                return {
-                    ...state,
-                    lesson: {
-                        ...state.lesson,
-                        levels: lvls
-                    },
-                }
-            } else {
-                return {
-                    ...state
-                };
-            }
-        case deleteLevel.REQUEST:
-            if(action.json.level_id){
-                let lvls = (state.lesson.levels || []);
-                lvls.map( function (run) {
-                    if (run._id.toString() === action.json.level_id.toString()) {
-                        run.loading = true;
+                        return aa
                     }
                 });
                 return {
                     ...state,
-                    lesson: {
-                        ...state.lesson,
-                        levels: lvls
+                    audio: {
+                        ...state.audio,
+                        programs: aaa
                     },
                 }
             } else {
@@ -261,18 +187,16 @@ export default(state = initialState, action) => {
                     ...state
                 };
             }
-        case deleteLevel.RESPONSE:
-            if(action.json.level_id){
-                let lvls = (state.lesson.levels || []).filter( function (run) {
-                    if (run._id.toString() !== action.json.level_id.toString()) {
-                        return run;
-                    }
+        case removeAudioTimeline.RESPONSE:
+            if(action.json.progId && action.json.success){
+                let holdRun = (state.audio.programs || []).filter(function (pr) {
+                    return pr._id.toString() !== action.json.progId.toString()
                 });
                 return {
                     ...state,
-                    lesson: {
-                        ...state.lesson,
-                        levels: lvls
+                    audio: {
+                        ...state.audio,
+                        programs: holdRun
                     },
                 }
             } else {
@@ -280,86 +204,125 @@ export default(state = initialState, action) => {
                     ...state
                 };
             }
-        case submitTimeline.REQUEST:
+        // case deleteLevel.REQUEST:
+        //     if(action.json.level_id){
+        //         let lvls = (state.lesson.levels || []);
+        //         lvls.map( function (run) {
+        //             if (run._id.toString() === action.json.level_id.toString()) {
+        //                 run.loading = true;
+        //             }
+        //         });
+        //         return {
+        //             ...state,
+        //             lesson: {
+        //                 ...state.lesson,
+        //                 levels: lvls
+        //             },
+        //         }
+        //     } else {
+        //         return {
+        //             ...state
+        //         };
+        //     }
+        // case deleteLevel.RESPONSE:
+        //     if(action.json.level_id){
+        //         let lvls = (state.lesson.levels || []).filter( function (run) {
+        //             if (run._id.toString() !== action.json.level_id.toString()) {
+        //                 return run;
+        //             }
+        //         });
+        //         return {
+        //             ...state,
+        //             lesson: {
+        //                 ...state.lesson,
+        //                 levels: lvls
+        //             },
+        //         }
+        //     } else {
+        //         return {
+        //             ...state
+        //         };
+        //     }
+        case submitTimelineAudio.REQUEST:
             return {
                 ...state,
                 timelineSubmitLoader: true
             };
-        case submitTimeline.RESPONSE:
+        case submitTimelineAudio.RESPONSE:
             if(action.json.success){
                 let timeline = {
                     _id: action.json.data._id,
-                    lesson: action.json.data.lesson,
-                    type: action.json.data.type,
+                    audioBook: action.json.data.audioBook,
                     title: action.json.data.title,
                     minutes: action.json.data.minutes,
                     created: action.json.data.created,
-                    description: action.json.data.description,
-                    video: action.json.data.video,
                     audio: action.json.data.audio,
-                    pdf: action.json.data.pdf,
-                    include_zip: action.json.data.include_zip,
-                    content: action.json.data.content,
                     user: action.json.data.user,
                 };
                 if(action.json.timelineType === 'new'){
-                    let levels = (state.lesson.levels || []).map(function (run) {
-                        if(run._id === action.json.level_id){
-                            if(run.programs && run.programs.length>0){
-                                run.programs.push({timeline:timeline, passed_users:[]})
-                            } else {
-                                run.programs = [{timeline:timeline, passed_users:[]}];
-                            }
-                        }
-                        return run;
-                    });
+                    let programs = [];
+                    if(state.audio.programs && state.audio.programs.length > 0) {
+                        programs = [...state.audio.programs, {_id: action.json.progId, timeline:timeline, passed_users:[]}]
+                    } else {
+                        programs = [{_id: action.json.progId, timeline:timeline, passed_users:[]}]
+                    }
                     return {
                         ...state,
                         timelineSubmitLoader: false,
-                        openModalLevelTimline: false,
-                        lesson:{
-                            ...state.lesson,
-                            levels: levels
+                        editTimelineLoader: false,
+                        openEditTimeline: false,
+                        audio:{
+                            ...state.audio,
+                            programs: programs
                         }
                     };
                 } else if(action.json.timelineType === 'update'){
-                    let levels = (state.lesson.levels || []).map(function (run) {
-                        if(run._id === action.json.level_id){
-                            if(run.programs && run.programs.length>0){
-                                run.programs.map(function (dss) {
-                                    if(dss.timeline._id === timeline._id){
-                                        dss.timeline = timeline
-                                    }
-                                });
+                    let programs = state.audio.programs.map(function (dss) {
+                        if(dss.timeline._id === timeline._id){
+                            return {
+                                ...dss,
+                                timeline: timeline
                             }
+                        } else {
+                            return dss
                         }
-                        return run;
                     });
                     return {
                         ...state,
                         timelineSubmitLoader: false,
                         editTimelineLoader: false,
                         openEditTimeline: false,
-                        lesson:{
-                            ...state.lesson,
-                            levels: levels
+                        audio:{
+                            ...state.audio,
+                            programs: programs
                         }
                     };
+                } else {
+                    return {
+                        ...state,
+                        timelineSubmitLoader: false,
+                        editTimelineLoader: false,
+                        openEditTimeline: false,
+                    };
                 }
-                return {
-                    ...state,
-                    timelineSubmitLoader: false,
-                    openModalLevelTimline: false,
-                };
             }else {
                 return {
                     ...state,
                     openModalLevelTimline: false,
+                    editTimelineLoader: false,
                     timelineSubmitLoader: false,
                 };
             }
-
-        case onChangeHandlerLevelTimelineSelect.REQUEST:
+        //
+        // case onChangeHandlerLevelTimelineSelect.REQUEST:
+        //     return {
+        //         ...state,
+        //         timeline:{
+        //             ...state.timeline,
+        //             [action.json.name]:action.json.value
+        //         },
+        //     };
+        case onChangeHandlerLevelTimelineAudio.REQUEST:
             return {
                 ...state,
                 timeline:{
@@ -367,117 +330,99 @@ export default(state = initialState, action) => {
                     [action.json.name]:action.json.value
                 },
             };
-        case onChangeHandlerLevelTimeline.REQUEST:
+        // case openModalLevelTimline.REQUEST:
+        //     return {
+        //         ...state,
+        //         openModalLevelTimline: true,
+        //         level_id: action.json.level_id,
+        //         timelineType: action.json.type,
+        //         timeline: action.json.timeline,
+        //         timelineFile : {},
+        //         timelineAudio : {},
+        //         timelineVideo : {},
+        //         timelinePdf : {},
+        //     };
+        // case closeModalLevelTimline.REQUEST:
+        //     return {
+        //         ...state,
+        //         openModalLevelTimline: false,
+        //         timeline: {},
+        //         level_id: '',
+        //         timelineType: '',
+        //         timelineFile : {},
+        //         timelineAudio : {},
+        //         timelineVideo : {},
+        //     };
+        case orderLevelsAudio.REQUEST:
             return {
                 ...state,
-                timeline:{
-                    ...state.timeline,
-                    [action.json.name]:action.json.value
-                },
+                orderLoader: true
             };
-        case openModalLevelTimline.REQUEST:
+        case orderLevelsAudio.RESPONSE:
             return {
-                ...state,
-                openModalLevelTimline: true,
-                level_id: action.json.level_id,
-                timelineType: action.json.type,
-                timeline: action.json.timeline,
-                timelineFile : {},
-                timelineAudio : {},
-                timelineVideo : {},
-                timelinePdf : {},
-            };
-        case closeModalLevelTimline.REQUEST:
-            return {
-                ...state,
-                openModalLevelTimline: false,
-                timeline: {},
-                level_id: '',
-                timelineType: '',
-                timelineFile : {},
-                timelineAudio : {},
-                timelineVideo : {},
-            };
-        case orderLevels.REQUEST:
-            return {
-                ...state,
-                orderLoader: [
-                    ...state.orderLoader,
-                    action.json.level_id
-                ]
-            };
-        case orderLevels.RESPONSE:
-            let holdLvl = (state.lesson.levels || []);
-            holdLvl = holdLvl.map(function (run, idx) {
-                if(idx === action.json.collection){
-                    run.programs = action.json.sineLevel
-                }
-                return run;
-            });
-            return {
-                orderLoader: state.orderLoader.filter(run => run !== action.json.level_id),
-                lesson: {
-                    ...state.lesson,
-                    levels: holdLvl
+                orderLoader: false,
+                audio: {
+                    ...state.audio,
+                    programs: action.json.sineLevel
                 }
             };
-        case lessonAddLevel.REQUEST:
-            return {
-                ...state,
-            };
-        case lessonAddLevel.RESPONSE:
-            let holdLesson = state.lesson;
-            if(action.json.levelType === 'new'){
-                if(holdLesson && holdLesson.levels && holdLesson.levels.length>0){
-                    holdLesson.levels.push({...state.level, _id: action.json._id});
-                } else {
-                    holdLesson.levels = [{...state.level, _id: action.json._id}];
-                }
-            } else if(action.json.levelType === 'update') {
-                // holdLesson.levels[state.levelIdx]._id = action.json._id;
-                holdLesson.levels[state.levelIdx].title = state.level.title;
-            }
-            return {
-                ...state,
-                lesson: holdLesson,
-                level:{},
-                openModalLevel: false,
-            };
-        case lessonChangeHandlerLevel.REQUEST:
-            return {
-                ...state,
-                level:{
-                    ...state.level,
-                    [action.json.name]:action.json.value
-                },
-            };
-        case openLessonModalLevel.REQUEST:
-            return {
-                ...state,
-                openModalLevel: true,
-                orderLoader: [],
-                level:action.json.level,
-                levelType: action.json.type,
-                levelIdx: action.json.idx,
-            };
-        case closeLessonModalLevel.REQUEST:
-            return {
-                ...state,
-                openModalLevel: false,
-                level: {},
-                levelType: '',
-                levelIdx: null,
-            };
-        case getLessonSingle.REQUEST:
+        // case lessonAddLevel.REQUEST:
+        //     return {
+        //         ...state,
+        //     };
+        // case lessonAddLevel.RESPONSE:
+        //     let holdLesson = state.lesson;
+        //     if(action.json.levelType === 'new'){
+        //         if(holdLesson && holdLesson.levels && holdLesson.levels.length>0){
+        //             holdLesson.levels.push({...state.level, _id: action.json._id});
+        //         } else {
+        //             holdLesson.levels = [{...state.level, _id: action.json._id}];
+        //         }
+        //     } else if(action.json.levelType === 'update') {
+        //         // holdLesson.levels[state.levelIdx]._id = action.json._id;
+        //         holdLesson.levels[state.levelIdx].title = state.level.title;
+        //     }
+        //     return {
+        //         ...state,
+        //         lesson: holdLesson,
+        //         level:{},
+        //         openModalLevel: false,
+        //     };
+        // case lessonChangeHandlerLevel.REQUEST:
+        //     return {
+        //         ...state,
+        //         level:{
+        //             ...state.level,
+        //             [action.json.name]:action.json.value
+        //         },
+        //     };
+        // case openLessonModalLevel.REQUEST:
+        //     return {
+        //         ...state,
+        //         openModalLevel: true,
+        //         orderLoader: [],
+        //         level:action.json.level,
+        //         levelType: action.json.type,
+        //         levelIdx: action.json.idx,
+        //     };
+        // case closeLessonModalLevel.REQUEST:
+        //     return {
+        //         ...state,
+        //         openModalLevel: false,
+        //         level: {},
+        //         levelType: '',
+        //         levelIdx: null,
+        //     };
+        case getAudioSingle.REQUEST:
             return {
                 ...state,
                 status: 1
             };
-        case getLessonSingle.RESPONSE:
+        case getAudioSingle.RESPONSE:
             return {
                 ...state,
                 status: 0,
-                lesson: (action.json.lesson || {})
+                audio: (action.json.audio || {})
             };
         default:
             return state;

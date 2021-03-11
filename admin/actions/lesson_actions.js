@@ -71,3 +71,9 @@ export function setFeatured(data){
         json: data
     }
 }
+export function setEish(data){
+    return {
+        type: constants.setEish.REQUEST,
+        json: data
+    }
+}

@@ -14,10 +14,12 @@ import 'react-notifications-component/dist/theme.css'
 import 'react-photoswipe/lib/photoswipe.css';
 import "react-datepicker/dist/react-datepicker.css";
 import 'swiper/swiper.less'
-require("../../static/css/front.less");
 import io from "socket.io-client";
 import * as actions from "../actions/card_actions";
 import * as homeActions from "../actions/home_actions";
+import SmartBanner from 'react-smartbanner';
+import '../../node_modules/react-smartbanner/dist/main.css';
+require("../../static/css/front.less");
 const socket = io(`${config.get('host')}:8021`, {path:'/api/socket',transports:['websocket']});
 
 const reducer = ({ main }) => ({ main });
@@ -119,6 +121,7 @@ class index extends React.Component{
                 <ReactNotification />
                 <Layer>
                     {renderRoutes(Routes)}
+                    <SmartBanner title={'Odosury'} daysHidden={1} daysReminder={1} appStoreLanguage={'mn'} author={'Том Амжилт ХХК'} button={'Харах'} price={{ ios: 'Үнэгүй', android: 'Үнэгүй' }} position={'top'}/>
                 </Layer>
             </BrowserRouter>
         )

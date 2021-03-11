@@ -40,11 +40,12 @@ class index extends React.Component {
     render() {
         let { main:{user}, location, route: {routes} } = this.props;
         function setDefault(){
-            let res = 'home';
+            let res = 'purchases';
             let a = location.pathname.split('/');
             switch(a[2]){
                 case null: res = 'home'; break;
                 case 'bundles': res = 'bundles'; break;
+                case 'purchases': res = 'purchases'; break;
                 case 'teachers': res = 'teachers'; break;
                 case 'category': res = 'category'; break;
                 case 'lessons': res = 'lessons'; break;
@@ -82,9 +83,14 @@ class index extends React.Component {
                                 }
                         </div>
                         <Menu theme="light" defaultSelectedKeys={[setDefault()]}  mode="inline">
-                            <Menu.Item key="home" icon={<HomeFilled />}>
+                            {/*<Menu.Item key="home" icon={<HomeFilled />}>*/}
+                            {/*    <Link to="/admin">*/}
+                            {/*        <span>Нүүр</span>*/}
+                            {/*    </Link>*/}
+                            {/*</Menu.Item>*/}
+                            <Menu.Item key="purchases" icon={<DollarCircleFilled />}>
                                 <Link to="/admin">
-                                    <span>Нүүр</span>
+                                    <span>Худалдан авалт</span>
                                 </Link>
                             </Menu.Item>
                             {/*<Menu.Item key="teachers" icon={<UserOutlined />}>*/}
@@ -97,36 +103,35 @@ class index extends React.Component {
                                     <span>Хэрэглэгч</span>
                                 </Link>
                             </Menu.Item>
-                            <Menu.Item key="category" icon={<DatabaseFilled />}>
-                                <Link to="/admin/category">
-                                    <span>Ангилал</span>
-                                </Link>
-                            </Menu.Item>
-                            <Menu.Item key="lessons" icon={<FileTextFilled />}>
-                                <Link to="/admin/lessons">
-                                    <span>Хичээл</span>
-                                </Link>
-                            </Menu.Item>
-                            <Menu.Item key="audios" icon={<FileTextFilled />}>
-                                <Link to="/admin/audios">
-                                    <span>Сонсдог ном</span>
-                                </Link>
-                            </Menu.Item>
-                            <Menu.Item key="audioCategory" icon={<DatabaseFilled />}>
-                                <Link to="/admin/audioCategory">
-                                    <span>Сонсдог Ангилал</span>
-                                </Link>
-                            </Menu.Item>
-                            <Menu.Item key="bundles" icon={<LayoutFilled />}>
-                                <Link to="/admin/bundles">
-                                    <span>Багц</span>
-                                </Link>
-                            </Menu.Item>
-                            <Menu.Item key="purchases" icon={<DollarCircleFilled />}>
-                                <Link to="/admin/purchases">
-                                    <span>Худалдан авалт</span>
-                                </Link>
-                            </Menu.Item>
+                            <Menu.SubMenu key="lesson" icon={<FileTextFilled />} title="Хичээлүүд">
+                                <Menu.Item key="lessons" icon={<FileTextFilled />}>
+                                    <Link to="/admin/lessons">
+                                        <span>Хичээл</span>
+                                    </Link>
+                                </Menu.Item>
+                                <Menu.Item key="category" icon={<DatabaseFilled />}>
+                                    <Link to="/admin/category">
+                                        <span>Ангилал</span>
+                                    </Link>
+                                </Menu.Item>
+                            </Menu.SubMenu>
+                            <Menu.SubMenu key="audio" icon={<FileTextFilled />} title="Сонсдог ном">
+                                <Menu.Item key="audios" icon={<FileTextFilled />}>
+                                    <Link to="/admin/audios">
+                                        <span>Номнууд</span>
+                                    </Link>
+                                </Menu.Item>
+                                <Menu.Item key="audioCategory" icon={<DatabaseFilled />}>
+                                    <Link to="/admin/audioCategory">
+                                        <span>Ангилал</span>
+                                    </Link>
+                                </Menu.Item>
+                            </Menu.SubMenu>
+                            {/*<Menu.Item key="bundles" icon={<LayoutFilled />}>*/}
+                            {/*    <Link to="/admin/bundles">*/}
+                            {/*        <span>Багц</span>*/}
+                            {/*    </Link>*/}
+                            {/*</Menu.Item>*/}
                             <Button style={{
                                 marginLeft: 'auto',
                                 marginRight: 'auto',
