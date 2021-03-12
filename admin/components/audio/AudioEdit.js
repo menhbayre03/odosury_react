@@ -138,7 +138,7 @@ class AudioEdit extends React.Component {
 
     }
     submitLesson(){
-        const {audio:{audio, audioImage }} = this.props;
+        const {audio:{audio, audioImage, introAudio }} = this.props;
         if(!audioImage || !audioImage.path || audioImage.path === '' || !audioImage.type || audioImage.type !== 'image' ){
             return config.get('emitter').emit('warning', ("Жижиг зураг оруулна уу!"));
         }
@@ -146,6 +146,7 @@ class AudioEdit extends React.Component {
             ...audio,
             intro_desc: (this.state.holdEditor || null),
             audioImage: audioImage,
+            audio: introAudio,
         };
         this.props.dispatch(actions.submitAudio(cc));
     }
@@ -171,7 +172,7 @@ class AudioEdit extends React.Component {
         this.props.dispatch(actions.setFeatured());
     }
     render() {
-        let { main:{user}, audio:{imageUploadLoading, audioImage, status, openModal, audioImageProgress, audio, audios, submitAudioLoader, all, searchTeachersResult, searchTeacherLoader, categories, level} } = this.props;
+        let { main:{user}, audio:{introAudio, audioImage, status, openModal, audioImageProgress, audio, audios, submitAudioLoader, all, searchTeachersResult, searchTeacherLoader, categories, level} } = this.props;
         let avatar = '/images/default-avatar.png';
         if (this.state.selectedMember && this.state.selectedMember.avatar && this.state.selectedMember.avatar !== '') {
             avatar = this.state.selectedMember.avatar;
@@ -185,10 +186,6 @@ class AudioEdit extends React.Component {
             {
                 title: 'Тохиргоо',
                 content: 'settings-content',
-            },
-            {
-                title: 'Шаардлага',
-                content: 'requirement-content',
             },
             {
                 title: 'Контент',
@@ -324,13 +321,6 @@ class AudioEdit extends React.Component {
                                                 null
                                         }
                                         {
-                                            steps[current].content === 'requirement-content' ?
-                                                <div className='requirement-content'>
-                                                </div>
-                                                :
-                                                null
-                                        }
-                                        {
                                             steps[current].content === 'content-content' ?
                                                 <div className='content-content'>
                                                     <Form.Item
@@ -349,6 +339,29 @@ class AudioEdit extends React.Component {
                                                                         <img src={`${config.get('hostMedia')}${audioImage.path}`} />
                                                                     </span>
                                                                     <span onClick={this.removeUploadedFile.bind(this, 'audioImage')} className='uploaded-i-action'>
+                                                                        <DeleteFilled />
+                                                                    </span>
+                                                                </div>
+                                                                :
+                                                                null
+                                                            }
+                                                        </div>
+                                                    </Form.Item>
+                                                    <Form.Item
+                                                        label='Intro Audio'
+                                                        labelCol={{span: 4}}
+                                                        className='upload-m'
+                                                    >
+                                                        <div>
+                                                            <Button onClick={this.openMediaLib.bind(this, 'audio')} style={{marginBottom: 10}}>
+                                                                <UploadOutlined /> {introAudio && introAudio._id? 'Солих' : 'Сонгох'}
+                                                            </Button>
+                                                            {introAudio && introAudio._id ?
+                                                                <div className='uploaded-v'>
+                                                                    <span className='uploaded-v-name'>
+                                                                        {introAudio.original_name}
+                                                                    </span>
+                                                                    <span onClick={this.removeUploadedFile.bind(this, 'introAudio')} className='uploaded-v-action'>
                                                                         <DeleteFilled />
                                                                     </span>
                                                                 </div>

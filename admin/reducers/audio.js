@@ -31,6 +31,7 @@ const initialState = {
     levelType: '',
     levelIdx: null,
     audioImage: {},
+    introAudio: {},
     imageUploadLoading: false,
     openLevelSingle: false,
     audioImageProgress: {},
@@ -48,10 +49,17 @@ export default(state = initialState, action) => {
                 }
             };
         case chooseMediaAudioEdit.REQUEST:
-            return {
-                ...state,
-                audioImage: action.json.data[0]
-            };
+            if(action.json.medType === 'audio'){
+                return {
+                    ...state,
+                    introAudio: action.json.data[0]
+                };
+            } else {
+                return {
+                    ...state,
+                    audioImage: action.json.data[0]
+                };
+            }
         case removeUploadedFileAudioEdit.REQUEST:
             return {
                 ...state,
@@ -202,6 +210,7 @@ export default(state = initialState, action) => {
                 openModal: true,
                 audio:action.json,
                 audioImage:action.json.thumbnail,
+                introAudio:action.json.audio,
                 audioImageProgress: {},
             };
         case closeAudioModal.REQUEST:
@@ -210,6 +219,7 @@ export default(state = initialState, action) => {
                 openModal: false,
                 audio:{},
                 audioImage: {},
+                introAudio: {},
                 audioImageProgress: {},
             };
         case submitAudio.REQUEST:
@@ -224,12 +234,13 @@ export default(state = initialState, action) => {
                         ...state,
                         submitAudioLoader: false,
                         openModal: false,
-                        lessons: state.lessons.map(function (run) {
+                        audios: state.audios.map(function (run) {
                             if(run._id === action.json._id){
                                 run.category= action.json.data.category;
                                 run.description= action.json.data.description;
                                 run.intro_desc= action.json.data.intro_desc;
                                 run.thumbnail= action.json.data.audioImage;
+                                run.audio= action.json.data.audio;
                                 run.featured= action.json.data.featured;
                                 run.title= action.json.data.title;
                                 run.created= action.json.data.created;
@@ -244,6 +255,7 @@ export default(state = initialState, action) => {
                         description: action.json.data.description,
                         intro_desc: action.json.data.intro_desc,
                         thumbnail: action.json.data.audioImage,
+                        audio: action.json.data.audio,
                         featured: action.json.data.featured,
                         title: action.json.data.title,
                         created: action.json.data.created,
