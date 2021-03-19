@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Header from "../include/Header";
 import Footer from "../include/Footer";
-import {Container, Row, Col, Button, Modal} from "react-bootstrap";
+import {Container, Row, Col, Modal} from "react-bootstrap";
 import * as actions from '../../actions/profile_actions';
 import config from "../../config";
 import Loader from "../include/Loader";
@@ -22,6 +22,7 @@ class Bundle extends Component {
 
     componentDidMount() {
         const {dispatch, history, main: {user}} = this.props;
+        config.get('ga').pageview(window.location.pathname + window.location.search);
         if(user) {
             window.scroll(0, 0);
             dispatch(actions.getHistory(user._id));

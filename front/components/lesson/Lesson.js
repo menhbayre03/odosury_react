@@ -31,6 +31,7 @@ class Lesson extends Component {
     }
 
     componentDidMount() {
+        config.get('ga').pageview(window.location.pathname + window.location.search);
         window.scroll(0, 0);
         const {dispatch, match} = this.props;
         this.setState({active: 'overview'});

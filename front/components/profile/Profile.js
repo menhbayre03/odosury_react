@@ -2,11 +2,8 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import Header from "../include/Header";
 import Footer from "../include/Footer";
-import {Container, Row, Col, Button, Tabs, Tab, Accordion, Card, Form} from "react-bootstrap";
-import * as actions from '../../actions/bundle_actions';
+import {Container, Row, Col, Button, Form} from "react-bootstrap";
 import config from "../../config";
-import GridItem from "../include/GridItem";
-import Loader from "../include/Loader";
 import Sidebar from "./Sidebar";
 import Api from "../../../admin/actions/api";
 import ReactPasswordStrength from "react-password-strength";
@@ -40,6 +37,7 @@ class Bundle extends Component {
 
     componentDidMount() {
         const {history, main: {user}} = this.props;
+        config.get('ga').pageview(window.location.pathname + window.location.search);
         if(user) {
             window.scroll(0, 0);
             this.setState({email: user.email || '', phone: user.phone || '', username: user.username || ''})

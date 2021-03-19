@@ -26,6 +26,7 @@ class Bundle extends Component {
     }
 
     componentDidMount() {
+        config.get('ga').pageview(window.location.pathname + window.location.search);
         document.body.classList.add('hide-mess');
         window.scroll(0, 0);
         let self = this;

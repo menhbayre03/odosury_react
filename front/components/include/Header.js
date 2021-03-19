@@ -54,12 +54,8 @@ class Header extends Component {
     }
     buyPre(){
         const {user = {}, dispatch} = this.props;
-        //pr === 'premium'
-        //pq === 'premiumRequest
         if((user || {}).premium === 'pr'){
             return false;
-        // } else if(user.premium === 'pq'){
-        //     config.get('emitter').emit('warning', 'Premium хүсэлт илгээгдсэн байна.');
         } else {
             if((user || {})._id){
                 dispatch(actions.setPremiumModal({visible: true}));
@@ -149,8 +145,7 @@ class Header extends Component {
                         <Row className="header-top">
                             <Col md={6} sm={9} xs={9} className="section-1">
                                 <div className="logo" style={{display: 'inline-block'}}>
-                                    <Link to={'/'}><img src="/images/logo.png" alt=""/></Link>
-                                    {/*<Link to={'/'}><img src="/images/logo-small.png" alt=""/></Link>*/}
+                                    <Link to={'/'}><img src="/images/odosuryo.png" alt=""/></Link>
                                 </div>
                                 <div className="category-menu" style={{display: 'inline-block', position: 'relative'}}>
                                     <Button onClick={() => this.setState({cate: !this.state.cate})}>
@@ -181,63 +176,10 @@ class Header extends Component {
                                         </div>
                                     )
                                 }
-                                {
-                                    (user || {})._id ? (
-                                        <div className="user-menu">
-                                            {/*<Link to="/card" style={{marginRight: 15, position: 'relative'}}>*/}
-                                            {/*    <span>{(user.bundles || []).length + (user.lessons || []).length}</span>*/}
-                                            {/*    <ion-icon name="basket"/>*/}
-                                            {/*</Link>*/}
-                                            <Link to="/profile/info">{isMobile ? null : 'Профайл'}<ion-icon name="person"/></Link>
-                                        </div>
-                                    ) : (
-                                        <div className="user-menu">
-                                            {/*<Link to="/card" style={{marginRight: 15, position: 'relative'}}>*/}
-                                            {/*    <span>{(card.bundles || []).length + (card.lessons || []).length}</span>*/}
-                                            {/*    <ion-icon name="basket"/>*/}
-                                            {/*</Link>*/}
-                                            <Link to="/login">
-                                                {
-                                                    isMobile ? <ion-icon name="person"/> : (
-                                                        <span style={{
-                                                            width: 158,
-                                                            display: 'block',
-                                                            fontSize: 12,
-                                                            color: '#fff',
-                                                            padding: '6px 0px 6px 15px',
-                                                            marginRight: -25,
-                                                            cursor: 'pointer',
-                                                            background: 'unset',
-                                                            position: 'unset',
-                                                            top: 'unset',
-                                                            right: 'unset',
-                                                            minWidth: 'unset',
-                                                            textAlign: 'unset',
-                                                            lineHeight: 'unset',
-                                                        }}>
-                                                    Нэвтрэх / Бүртгүүлэх
-                                                </span>
-                                                    )
-                                                }
-                                            </Link>
-                                        </div>
-                                    )
-                                }
-                            </Col>
-                        </Row>
-                    </Container>
-                    <div className="header-bottom">
-                        <Container>
-                            <div className="section-1">
-                                <div className="header-menu">
-                                    <ul>
-                                        <li>
-                                        <span className={((user || {}).premium === 'pr' || (user || {}).premium === 'pq' ? 'ds' : '')} onClick={this.buyPre.bind(this)}>
-                                            <img style={{
-                                                position: 'relative',
-                                                top: -2,
-                                                left: -7,
-                                            }} src="/images/crown.png" alt="" height={13}/>
+                                    <span className={((user || {}).premium === 'pr section-3' || (user || {}).premium === 'pq section-3' ? 'ds section-3' : 'section-3')} onClick={this.buyPre.bind(this)}>
+                                        <img src="/images/crown.png" alt="" height={13}/>
+                                        <div>
+                                            <span>
                                             {
                                                 (user || {}).premium === 'pr' ?
                                                     'Premium хэрэглэгч'
@@ -245,12 +187,15 @@ class Header extends Component {
                                                     'Premium хүсэлт илгээсэн'
                                                     :   'Premium эрх авах'
                                             }
-                                        </span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="section-2">
+                                            </span>
+                                        </div>
+                                    </span>
+                            </Col>
+                        </Row>
+                    </Container>
+                    <div className="header-bottom">
+                        <Container>
+                            <div className="section-1">
                                 <div className="header-menu">
                                     <ul>
                                         <li>
@@ -261,6 +206,11 @@ class Header extends Component {
                                         <li>
                                             <Link to={`/audios/all`}>
                                                 Сонсдог ном
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link to={`/audios/all`}>
+                                                ЭЕШ
                                                 <Badge variant="danger" style={{
                                                     position: 'relative',
                                                     top: -1,
@@ -271,10 +221,37 @@ class Header extends Component {
                                     </ul>
                                 </div>
                             </div>
+                            <div className="section-2">
+                                <div className="header-menu">
+                                    <ul>
+                                        <li>
+                                            {
+                                                (user || {})._id ? (
+                                                    <div className="user-menu">
+                                                        <Link to="/profile/info"><span style={{top: 4}} className="userrOn"><ion-icon style={{top: 4, fontSize: 18}} name="person"/>{isMobile ? null : 'Профайл'}<span style={{textTransform: 'lowercase', marginLeft: 10, display: 'unset', position: 'unset', border: 'none'}}>({user.username})</span></span></Link>
+                                                    </div>
+                                                ) : (
+                                                    <div className="user-menu">
+                                                        <Link to="/login">
+                                                            {
+                                                                isMobile ? <ion-icon name="person"/> : (
+                                                                    <span>
+                                                                <ion-icon name="log-in-outline"></ion-icon> Нэвтрэх / Бүртгүүлэх
+                                                            </span>
+                                                                )
+                                                            }
+                                                        </Link>
+                                                    </div>
+                                                )
+                                            }
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </Container>
                     </div>
                 </div>
-                <div style={{marginTop: 83, display: 'inline-block'}}/>
+                <div style={{height: 79, display: 'block', background: '#000'}}/>
                 <div onClick={() => this.setState({cate: false})} style={{visibility: this.state.cate ? 'visible': 'hidden', opacity: this.state.cate ? 0.5 : 0}} className="cate-back"/>
                 <Modal
                     show={visible}

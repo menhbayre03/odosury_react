@@ -20,6 +20,7 @@ class Home extends Component {
 
                 emailRegister: false,
                 usernameRegister: false,
+                usernameErrorText: null,
                 phoneRegister: false,
                 passwordRegister: false,
                 passwordRepeatRegister: false,
@@ -71,6 +72,7 @@ class Home extends Component {
 
     async componentDidMount() {
         const {main: {userReset, token}} = this.props;
+        config.get('ga').pageview(window.location.pathname + window.location.search);
         window.scroll(0,0);
         // config.get('fbApi').whenLoaded().then(() => this.setState({sdkLoaded: true}));
         if(this.props.match.params.token) {
@@ -224,6 +226,7 @@ class Home extends Component {
 
     async handleSubmitRegister(e) {
         e.preventDefault();
+        const usernameRegex = /^[0-9a-za-z_]*$/;
         this.setState({registerLoading: true});
         let errors = {};
         let noErr = {};
@@ -232,10 +235,16 @@ class Home extends Component {
         } else {
             noErr.emailRegister = false
         }
+
         if(this.state.usernameRegister == null || this.state.usernameRegister === '') {
-            errors.usernameRegister = true
+            errors.usernameRegister = true;
+            errors.usernameErrorText = null;
+        } else if(!usernameRegex.test(this.state.usernameRegister.trim())){
+            errors.usernameRegister = true;
+            errors.usernameErrorText = 'Хэрэглэгчийн нэр бичиглэл буруу байна! Жижиг a-z, тоо болон _ оруулж болно.';
         } else {
-            noErr.usernameRegister = false
+            noErr.usernameRegister = false;
+            noErr.usernameErrorText = null;
         }
         if(this.state.phoneRegister.toString() != null && this.state.phoneRegister.toString() !== '' && !isNaN(this.state.phoneRegister)) {
             if(this.state.phoneRegister.toString().length === 8) {
@@ -289,7 +298,8 @@ class Home extends Component {
                 if(response.alemod) {
                     config.get('emitter').emit('successs', response.msg);
                 }
-                this.setState({resendLoading: false, registerLoading: false, registerDone: true, accessToken: response.accessToken});
+                // this.setState({resendLoading: false, registerLoading: false, registerDone: true, accessToken: response.accessToken});
+                this.setState({resendLoading: false, registerLoading: false, registerDone: true, username: response.username});
             } else {
                 this.setState({registerLoading: false});
                 config.get('emitter').emit('warning', response.msg);
@@ -563,28 +573,37 @@ class Home extends Component {
                                                                 }}>Амжилттай бүртгэгдлээ.</h3>
                                                             )
                                                         }
-                                                        <p style={{
-                                                            marginBottom: 2,
-                                                            fontSize: 16,
-                                                            fontWeight: 400
-                                                        }}>Имэйл - ээ баталгаажуулна уу.</p>
-                                                        <p style={{
-                                                            fontSize: 16,
-                                                            fontWeight: 400
-                                                        }}>Имэйл хаяг: <span style={{color: 'black', fontWeight: 700}}>{ this.state.pendingEmail ? (this.state.pendingEmail || '') : (this.state.emailRegister || '')}</span></p>
-                                                        <Button onClick={() => this.reSend()} style={{position: 'relative', paddingLeft: this.state.resendLoading ? 35 : 20}} disabled={this.state.resendLoading} type="submit" className="btn btn-btn btn-submit">
-                                                            {
-                                                                this.state.resendLoading ? (
-                                                                    <img src="/images/sync-outline.svg" className="spinner"/>
-                                                                ) :  (
-                                                                    null
-                                                                )
-                                                            }
-                                                            Дахин илгээх
-                                                        </Button>
-                                                        <Button variant="secondary" onClick={() => this.closeActivate()} style={{marginLeft: 15}} type="button">
-                                                            Бүртгүүлэх
-                                                        </Button>
+                                                        {
+                                                            this.state.pendingEmail ? (
+                                                                <React.Fragment>
+                                                                    <p style={{
+                                                                        marginBottom: 2,
+                                                                        fontSize: 16,
+                                                                        fontWeight: 400
+                                                                    }}>Имэйл - ээ баталгаажуулна уу.</p>
+                                                                    <p style={{
+                                                                        fontSize: 16,
+                                                                        fontWeight: 400
+                                                                    }}>Имэйл хаяг: <span style={{color: 'black', fontWeight: 700}}>{ this.state.pendingEmail ? (this.state.pendingEmail || '') : (this.state.emailRegister || '')}</span></p>
+                                                                    <Button onClick={() => this.reSend()} style={{position: 'relative', paddingLeft: this.state.resendLoading ? 35 : 20}} disabled={this.state.resendLoading} type="submit" className="btn btn-btn btn-submit">
+                                                                        {
+                                                                            this.state.resendLoading ? (
+                                                                                <img src="/images/sync-outline.svg" className="spinner"/>
+                                                                            ) :  (
+                                                                                null
+                                                                            )
+                                                                        }
+                                                                        Дахин илгээх
+                                                                    </Button>
+                                                                    <Button variant="secondary" onClick={() => this.closeActivate()} style={{marginLeft: 15}} type="button">
+                                                                        Бүртгүүлэх
+                                                                    </Button>
+                                                                </React.Fragment>
+                                                            ) : (
+                                                                null
+                                                            )
+                                                        }
+
                                                     </div>
                                                 ) : (
                                                     <div className="log-block login">
@@ -611,7 +630,7 @@ class Home extends Component {
                                                                     isInvalid={!!this.state.error.usernameRegister}
                                                                 />
                                                                 <Form.Control.Feedback type="invalid">
-                                                                    Хэрэглэгчийн нэр оруулна уу.
+                                                                    {this.state.error.usernameErrorText ? this.state.error.usernameErrorText : 'Хэрэглэгчийн нэр оруулна уу.'}
                                                                 </Form.Control.Feedback>
                                                             </Form.Group>
                                                             <Form.Group>

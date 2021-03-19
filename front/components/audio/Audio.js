@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Header from "../include/Header";
 import Footer from "../include/Footer";
-import { Container, Row, Col, Button, Tabs, Tab, Accordion, Card, Spinner, Modal } from "react-bootstrap";
+import { Container, Row, Col, Button, Tabs, Tab, Accordion, Card } from "react-bootstrap";
 import * as actions from '../../actions/audio_actions';
 import Sticky from 'react-sticky-el';
 import ReactStars from "react-rating-stars-component";
@@ -12,7 +12,6 @@ import Loader from "../include/Loader";
 import {
     isMobile
 } from "react-device-detect";
-import Cookies from "js-cookie";
 const reducer = ({ main, audio }) => ({ main, audio });
 
 class Audio extends Component {
@@ -25,6 +24,7 @@ class Audio extends Component {
     }
 
     componentDidMount() {
+        config.get('ga').pageview(window.location.pathname + window.location.search);
         window.scroll(0, 0);
         const {dispatch, match} = this.props;
         this.setState({active: 'overview'});

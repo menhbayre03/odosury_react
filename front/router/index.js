@@ -13,7 +13,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-notifications-component/dist/theme.css'
 import 'react-photoswipe/lib/photoswipe.css';
 import "react-datepicker/dist/react-datepicker.css";
-import 'swiper/swiper.less'
+// import 'swiper/swiper.less'
 import io from "socket.io-client";
 import * as actions from "../actions/card_actions";
 import * as homeActions from "../actions/home_actions";

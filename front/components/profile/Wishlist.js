@@ -2,12 +2,13 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import Header from "../include/Header";
 import Footer from "../include/Footer";
-import {Container, Row, Col, Button} from "react-bootstrap";
+import {Container, Row, Col } from "react-bootstrap";
 import * as actions from '../../actions/profile_actions';
 import {addWish} from '../../actions/lesson_actions';
 import Loader from "../include/Loader";
 import Sidebar from "./Sidebar";
 import GridItem from "../include/GridItem";
+import config from "../../config";
 const reducer = ({ main, profile }) => ({ main, profile });
 
 class Wishlist extends Component {
@@ -21,6 +22,7 @@ class Wishlist extends Component {
 
     componentDidMount() {
         const {dispatch, history, main: {user}} = this.props;
+        config.get('ga').pageview(window.location.pathname + window.location.search);
         if(user) {
             window.scroll(0, 0);
             dispatch(actions.getWishlist(user._id));

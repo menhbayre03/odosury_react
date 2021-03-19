@@ -16,15 +16,25 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            top: 6,
+            up: false
         };
         this.swiper = React.createRef();
-        this.swiperAudio = React.createRef();
+        this.swiperMain = React.createRef();
         this.swiperWatching = React.createRef();
     }
     componentDidMount() {
         window.scroll(0, 0);
+        config.get('ga').pageview(window.location.pathname + window.location.search);
         const {dispatch} = this.props;
         dispatch(actions.getHome());
+        this.interval = setInterval(() => this.setState({ 
+            up: (this.state.top > 248) ? true : this.state.top < 5 ? false : this.state.up,
+            top:  this.state.up ? this.state.top - 6 : this.state.top + 6
+        }), 50);
+    }
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     goNext() {
@@ -39,15 +49,15 @@ class Home extends Component {
         }
     };
 
-    goNextAudio() {
-        if (this.swiperAudio.current && this.swiperAudio.current.swiper) {
-            this.swiperAudio.current.swiper.slideNext();
+    goNextMain() {
+        if (this.swiperMain.current && this.swiperMain.current.swiper) {
+            this.swiperMain.current.swiper.slideNext();
         }
     };
 
-    goPrevAudio() {
-        if (this.swiper.current != null && this.swiper.current.swiper != null) {
-            this.swiper.current.swiper.slidePrev();
+    goPrevMain() {
+        if (this.swiperMain.current != null && this.swiperMain.current.swiper != null) {
+            this.swiperMain.current.swiper.slidePrev();
         }
     };
 
@@ -64,7 +74,7 @@ class Home extends Component {
     };
 
     render() {
-        const {home : {loading, watching, newLessons, featuredLessons, newAudios, bundles}} = this.props;
+        const {home : {loading, watching, newLessons, featuredLessons, newAudios}, main: {categories}} = this.props;
         const gridSlider = {
             slidesPerView: 1,
             slidesPerGroup: 1,
@@ -85,25 +95,14 @@ class Home extends Component {
                 }
             }
         };
-        const gridSliderAudio = {
-            slidesPerView: 1,
-            slidesPerGroup: 1,
-            spaceBetween: 30,
-            containerClass: 'swiper-container gridSlider',
-            breakpoints: {
-                1024: {
-                    slidesPerView: 6,
-                    slidesPerGroup: 6,
-                },
-                768: {
-                    slidesPerView: 5,
-                    slidesPerGroup: 5,
-                },
-                640: {
-                    slidesPerView: 3,
-                    slidesPerGroup: 3,
-                }
-            }
+        const mainSlider = {
+            effect: 'fade',
+            pagination: {
+                el: '.swiper-pagination',
+                type: 'bullets',
+              },
+            spaceBetween: 0,
+            containerClass: 'swiper-container mainSlider',
         };
         const gridWatching = {
             slidesPerView: 1,
@@ -128,25 +127,91 @@ class Home extends Component {
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
-                <div className="home-hero" style={{backgroundImage: "url('/images/cover.png')", position: 'relative'}}>
-                    <Container>
-                        <div className="hero-inner">
-                            <h1>БҮХ ТӨРЛИЙН МЭДЛЭГИЙН <br/> САН <span style={{color: '#E26A98'}}>ODOSURY</span></h1>
-                            <h4 className="my-lg-4" style={{
-                                marginTop: '0 !important',
-                                textTransform: 'uppercase'
-                            }}>Өөрийн бүтээлч сэтгэлгээг нэмэгдүүлж, <br/>
-                            оюундаа хөрөнгө оруулж, ирээдүйнхээ <br/> төлөө одооноос сурцгаая.
-                            </h4>
-                            {/*<a href="#" className="btn btn-default">Free trailer </a>*/}
+                <div className="hero-new">
+                    <div style={{position: 'relative'}}>
+                        <Swiper ref={this.swiperMain} {...mainSlider}>
+                            <div className="mainSlider-inner" style={{backgroundImage: 'url("/images/bg-hero-1.jpg")'}}>
+                                <Container>
+                                    <div className="mainSlider-cont">
+                                        <h5
+                                            style={{
+                                                color: '#fff',
+                                                fontSize: 36,
+                                                fontWeight: 800,
+                                                textAlign: 'center',
+                                                marginTop: 40,
+                                            }}
+                                        >PREMIUM ЭРХ</h5>
+                                    </div>
+                                </Container>
+                            </div>
+                            <div className="mainSlider-inner" style={{backgroundImage: 'url("/images/bg-hero-1.jpg")'}}>
+                                <Container>
+                                    <div className="mainSlider-cont">
+                                        <h5
+                                            style={{
+                                                color: '#fff',
+                                                fontSize: 36,
+                                                fontWeight: 800,
+                                                textAlign: 'center',
+                                                marginTop: 40,
+                                            }}
+                                        >ЭЕШ</h5>
+                                    </div>
+                                </Container>
+                            </div>
+                        </Swiper>
+                        <div style={{position: 'absolute', top: 0, width: '100%'}}>
+                            <Container>
+                                <div className="mainSlider-cont">
+                                    <div onClick={this.goNextMain.bind(this)} className="grid-next">
+                                        <ion-icon name="chevron-forward"/>
+                                    </div>
+                                    <div onClick={this.goPrevMain.bind(this)} className="grid-prev">
+                                        <ion-icon name="chevron-back"/>
+                                    </div>
+                                </div>
+                            </Container>
                         </div>
-                    </Container>
-                    <img style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        right: '20%',
-                        maxHeight: '80%',
-                    }} src="/images/cover-woman.png" alt=""/>
+                        <div className="hero-pos">
+                            <Container>
+                                <div className="hero-div">
+                                    <div className="cates">
+                                        <h4 style={{textAlign: 'left'}}>Хичээлийн ангилал</h4>
+                                        <ul className="left">
+                                            <div className="beforeU"/>
+                                            <div className="afterU" style={{top: this.state.top}}/>
+                                            {
+                                                (categories).map((item, index) => (
+                                                    <Link to={`list/${item.slug}`}>
+                                                        <li>
+                                                            {item.title}
+                                                        </li>
+                                                    </Link>
+                                                ))
+                                            }
+                                        </ul>
+                                    </div>
+                                    <div className="cates">
+                                        <h4 style={{textAlign: 'right'}}>Номны ангилал</h4>
+                                        <ul className="right">
+                                            <div className="beforeU"/>
+                                            <div className="afterU" style={{top: (this.state.top - 251)*-1}}/>
+                                            {
+                                                (categories).map((item, index) => (
+                                                    <Link to={`list/${item.slug}`}>
+                                                        <li>
+                                                            {item.title}
+                                                        </li>
+                                                    </Link>
+                                                ))
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </Container>
+                        </div>
+                    </div>
                 </div>
                 <Loader status={loading}>
                     {

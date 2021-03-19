@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { Button, Accordion, Card } from "react-bootstrap";
+import { Accordion, Card } from "react-bootstrap";
 import { Scrollbars } from 'react-custom-scrollbars';
 import * as actions from '../../actions/audio_actions';
 import Cookies from "js-cookie";
@@ -24,6 +24,7 @@ class ViewAreaAudio extends Component {
     }
 
     componentDidMount() {
+        config.get('ga').pageview(window.location.pathname + window.location.search);
         document.body.classList.add('hide-mess');
         window.scroll(0, 0);
         let self = this;

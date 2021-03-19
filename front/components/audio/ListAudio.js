@@ -11,6 +11,7 @@ import Loader from "../include/Loader";
 import {
     isMobile
 } from "react-device-detect";
+import config from "../../config";
 const reducer = ({ main, audio }) => ({ main, audio });
 
 class ListAudio extends Component {
@@ -23,6 +24,7 @@ class ListAudio extends Component {
     }
 
     componentDidMount() {
+        config.get('ga').pageview(window.location.pathname + window.location.search);
         window.scroll(0, 0);
         const {dispatch, match} = this.props;
         dispatch(actions.getListAudio(match.params.slug, {sort: this.state.sort.value, search: this.state.search}));

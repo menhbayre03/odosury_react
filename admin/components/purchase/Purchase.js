@@ -1,13 +1,13 @@
 import React from "react";
 import { connect } from 'react-redux';
-import config from "../../config";
 import {
-    Card, Table, Select, Button, List, Row, Col, Typography
+    DatePicker, Card, Table, Select, Button, List, Row, Col, Typography, Form, Input
 } from 'antd';
 import { getPayments, setPaymentStatus } from '../../actions/purchase_actions';
-import { DeleteFilled, EyeFilled } from '@ant-design/icons';
+import { DeleteFilled , CloseCircleFilled , SearchOutlined} from '@ant-design/icons';
 import NumberFormat from 'react-number-format';
 import moment from 'moment';
+const { RangePicker } = DatePicker;
 
 const { Option } = Select;
 const { Text } = Typography;
@@ -19,16 +19,32 @@ class Purchase extends React.Component {
         super(props);
         this.state = {
             search: '',
-            mediaType: '',
+            status: '',
+            startDate: null,
+            endDate: null,
         };
     }
     componentDidMount() {
         this.props.dispatch(getPayments());
     }
+    searchUser(e){
+        e.preventDefault();
+        const {dispatch } = this.props;
+        let cc = {
+            skip: 0,
+            search: this.state.search,
+            status: this.state.status,
+            startDate: this.state.startDate,
+            endDate: this.state.endDate
+        };
+        dispatch(getPayments(cc));
+    }
+    onDateChange(dates, dateString) {
+        this.setState({startDate: dateString[0] || null, endDate: dateString[1] || null})
+    }
     render() {
         let {
             dispatch,
-            main:{ user },
             purchase:{ status, transactions, all = 0, pageNum = 1 }
         } = this.props;
         let pagination = {
@@ -113,43 +129,27 @@ class Purchase extends React.Component {
                 bordered={true}
                 loading={status}
             >
+                <Form onFinish={this.searchUser.bind(this)}>
+                    <Input addonAfter={<CloseCircleFilled style={{color:'white'}} onClick={() => this.setState({search:''})} />} maxLength={60} size='small' placeholder='Нэр, Имэйл, Утас' style={{width: 200, marginRight: 20}} value={this.state.search} name='search' onChange={(e) => this.setState({search: e.target.value})} />
+                    <Select style={{width: 142, marginRight: 20}} size='small' name='role' value={this.state.status} onChange={(e) => this.setState({status: e})}
+                    >
+                        <Option value=''>Бүгд</Option>
+                        <Option value='success'>Амжилттай</Option>
+                        <Option value='pending'>Хүлээгдэж буй</Option>
+                        <Option value='cancel'>Цуцлагдсан</Option>
+                    </Select>
+                    <RangePicker size="small" onChange={this.onDateChange.bind(this)} allowEmpty={[true, true]} value={[this.state.startDate ? moment(this.state.startDate) : null, this.state.endDate ? moment(this.state.endDate) : null]} format="YYYY-MM-DD" />
+                    <Button style={{marginLeft: 20}} loading={status} type="primary" htmlType="submit" size='small' icon={<SearchOutlined />} onClick={this.searchUser.bind(this)} >Хайх</Button>
+                </Form>
                 <Table
                     size="small"
                     dataSource={transactions}
                     columns={columns}
                     pagination={pagination}
                     expandable={{
-                        rowExpandable: record => (record.bundles || []).length > 0 || (record.lessons || []).length > 0,
+                        rowExpandable: record => (record.lessons || []).length > 0,
                         expandedRowRender: record =>
                             <Row gutter={[8, 8]}>
-                                {
-                                    (record.bundles || []).length > 0 ?
-                                        <Col span={(record.lessons || []).length > 0 ? 12 : 24}>
-                                            <Card
-                                                title={'Багцууд: '}
-                                                size={'small'}
-                                                extra={<Text type="secondary" strong>( {(record.bundles || []).length} )</Text>}
-                                            >
-                                                {
-                                                    (record.bundles || []).map((item) =>
-                                                        <List.Item
-                                                            actions={[
-                                                                <NumberFormat value={item.cost || 0} displayType={'text'} thousandSeparator={true} renderText={value => <Text>{value}₮</Text>}/>
-                                                            ]}
-                                                        >
-                                                            <Text
-                                                                copyable
-                                                                ellipsis
-                                                            >
-                                                                {(item.bundle || {}).title || ''}
-                                                            </Text>
-                                                        </List.Item>
-                                                    )
-                                                }
-                                            </Card>
-                                        </Col>
-                                    : null
-                                }
                                 {
                                     (record.lessons || []).length > 0 ?
                                         <Col span={(record.bundles || []).length > 0 ? 12 : 24}>

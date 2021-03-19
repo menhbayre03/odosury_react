@@ -1,6 +1,7 @@
 import Main from "../components/Main";
 import Home from "../components/Home";
 import Lesson from "../components/lesson/Lesson";
+import ListEish from "../components/lesson/ListEish";
 import List from "../components/lesson/List";
 import ListAudio from "../components/audio/ListAudio";
 import Audio from "../components/audio/Audio";
@@ -40,6 +41,11 @@ export default [
             {
                 component: Audio,
                 path: '/audio/:slug',
+                exact: true
+            },
+            {
+                component: ListEish,
+                path: '/eish',
                 exact: true
             },
             {

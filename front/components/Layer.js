@@ -3,6 +3,7 @@ import ReactGA from 'react-ga';
 import {connect} from "react-redux";
 import { Button } from 'react-bootstrap';
 import * as actions from "../actions/index";
+import config from "../config";
 
 const reducer = ({ main }) => ({ main });
 
@@ -10,7 +11,7 @@ class Layer extends React.Component{
     constructor(props){
         super(props);
         ReactGA.initialize('UA-191984364-1');
-        ReactGA.pageview(window.location.pathname + window.location.search);
+        config.config({'ga' : ReactGA});
         this.state = { hasError: false };
     }
 
