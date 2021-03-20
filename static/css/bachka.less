@@ -2241,6 +2241,23 @@ div.facebook-login>span button {
             background-size: cover;
         }
     }
+    span.swiper-pagination-bullet {
+        border-radius: 5px;
+        height: 4px;
+        width: 20px;
+        -webkit-transition: 0.3s;
+        -moz-transition: 0.3s;
+        -ms-transition: 0.3s;
+        -o-transition: 0.3s;
+        transition: 0.3s;
+    }
+    span.swiper-pagination-bullet.swiper-pagination-bullet-active {
+        color: #fff;
+        background: #fff;
+        width: 50px;
+        height: 4px;
+        border-radius: 5px;
+    }
     .mainSlider-cont {
         width: calc(100% - 520px);
         position: relative;
@@ -2249,6 +2266,45 @@ div.facebook-login>span button {
         position: relative;
         left: -4px;
         height: 400px;
+        h5 {
+            color: rgb(255, 255, 255);
+            font-size: 36px;
+            font-weight: 800;
+            text-align: center;
+            margin-top: 60px;
+        }
+        p {
+            font-size: 16px;
+            font-weight: 700;
+            color: rgb(255, 255, 255);
+            padding: 0px 50px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .banner-button {
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            margin-top: 80px;
+            font-size: 18px;
+            text-transform: uppercase;
+            font-weight: 700;
+            background: #d22f9e;
+            border: none;
+            outline: none;
+            box-shadow: none;
+            padding: 5px 30px;
+            -webkit-transition: 0.3s;
+            -moz-transition: 0.3s;
+            -ms-transition: 0.3s;
+            -o-transition: 0.3s;
+            transition: 0.3s;
+        }
+        .banner-button:hover {
+            background: #fff;
+            color: #d22f9e;
+        }
     }
     .hero-pos {
         position: absolute;
@@ -2278,11 +2334,51 @@ div.facebook-login>span button {
                     margin-top: 30px;
                     a {
                         color: #fff;
+                        font-size: 18px;
+                        display: block;
+                        font-weight: 600;
+                        position: relative;
+                        li {
+                            width: 200px;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            display: block;
+                            height: 36px;
+                            line-height: 36px;
+                        }
                     }
                 }
                 ul.left {
                     margin-left: 26px;
                     position: relative;
+                    a:after {
+                        position: absolute;
+                        box-shadow: 0px 0px 20px 3px #008fee;
+                        display: block;
+                        content: " ";
+                        width: 0px;
+                        height: 0px;
+                        z-index: -1;
+                        bottom: 18px;
+                        border-radius: 15px;
+                          -webkit-transition: 0.5s;
+                          -moz-transition: 0.5s;
+                          -ms-transition: 0.5s;
+                          -o-transition: 0.5s;
+                          transition: 0.5s;
+                    }
+                    a:hover {
+                        text-decoration: none;
+                    }
+                    a:hover:after {
+                        width: 100%;
+                          -webkit-transition: 0.5s;
+                          -moz-transition: 0.5s;
+                          -ms-transition: 0.5s;
+                          -o-transition: 0.5s;
+                          transition: 0.5s;
+                    }
                 }
                 ul.left .beforeU {
                     background: rgba(255, 255, 255, 0.6);
@@ -2312,6 +2408,34 @@ div.facebook-login>span button {
                     text-align: right;
                     margin-right: 26px;
                     position: relative;
+                    a:before {
+                        position: absolute;
+                        box-shadow: 0px 0px 20px 3px #D22F9E;
+                        display: block;
+                        content: " ";
+                        width: 0px;
+                        height: 0px;
+                        bottom: 18px;
+                        right: 0;
+                        z-index: -1;
+                        border-radius: 15px;
+                          -webkit-transition: 0.5s;
+                          -moz-transition: 0.5s;
+                          -ms-transition: 0.5s;
+                          -o-transition: 0.5s;
+                          transition: 0.5s;
+                    }
+                    a:hover {
+                        text-decoration: none;
+                    }
+                    a:hover:before {
+                        width: 100%;
+                          -webkit-transition: 0.5s;
+                          -moz-transition: 0.5s;
+                          -ms-transition: 0.5s;
+                          -o-transition: 0.5s;
+                          transition: 0.5s;
+                    }
                 }
                 ul.right .beforeU {
                     background: rgba(255, 255, 255, 0.6);
@@ -2340,6 +2464,17 @@ div.facebook-login>span button {
             }
         }
     }
+    
+}
+ .parallax-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 130%;
+    height: 100%;
+    background-image: url(../images/bg-hero-1.jpg);
+    background-position: center;
+    background-size: cover;
 }
 span.section-3 {
     cursor: pointer;
@@ -2370,6 +2505,19 @@ span.section-3:hover {
     background: white;
 }
 @media(max-width: 1200px){
+    .hero-new {
+        .mainSlider-cont  {
+            h5 {
+                font-size: 26px;
+            }
+            p {
+                font-size: 14px;
+            }
+            .banner-button {
+                font-size: 14px;
+            }
+        }
+    }
   .profile-sidebar li span {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -2412,6 +2560,23 @@ span.section-3:hover {
 }
 
 @media(max-width: 992px){
+    .hero-new {
+        .mainSlider-cont  {
+            .banner-button {
+                margin-top: 30px;
+            }
+        }
+    }
+    .hero-pos {
+        display: none;
+    }
+    .hero-new .mainSlider-cont {
+        width: 100%;
+            height: 280px;
+    }
+    .hero-new .mainSlider {
+        height: 280px;
+    }
   .register-login {
     margin-top: 50px;
   }
@@ -2537,6 +2702,17 @@ span.section-3:hover {
   .header .header-top .section-1 .logo img {
     height: 16px;
   }
+  .hero-new .mainSlider-cont p {
+    font-size: 12px;
+    margin-top: 10px;
+}
+.hero-new .mainSlider-cont h5 {
+    font-size: 18px;
+}
+.hero-new .mainSlider-cont .banner-button {
+    font-size: 12px;
+    margin-top: 20px;
+}
   .header .header-top .section-1 .logo {
     padding: 18px 0;
   }

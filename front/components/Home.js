@@ -6,7 +6,7 @@ import Footer from "./include/Footer";
 import Loader from "./include/Loader";
 import GridItem from "./include/GridItem";
 import GridItemAudio from "./include/GridItemAudio";
-import { Container, Row, Col } from "react-bootstrap";
+import { Button, Container, Row, Col } from "react-bootstrap";
 import Swiper from "react-id-swiper";
 import * as actions from '../actions/home_actions';
 import config from "../config";
@@ -37,49 +37,17 @@ class Home extends Component {
         clearInterval(this.interval);
     }
 
-    goNext() {
-        if (this.swiper.current && this.swiper.current.swiper) {
-            this.swiper.current.swiper.slideNext();
-        }
-    };
-
-    goPrev() {
-        if (this.swiper.current != null && this.swiper.current.swiper != null) {
-            this.swiper.current.swiper.slidePrev();
-        }
-    };
-
-    goNextMain() {
-        if (this.swiperMain.current && this.swiperMain.current.swiper) {
-            this.swiperMain.current.swiper.slideNext();
-        }
-    };
-
-    goPrevMain() {
-        if (this.swiperMain.current != null && this.swiperMain.current.swiper != null) {
-            this.swiperMain.current.swiper.slidePrev();
-        }
-    };
-
-    goNextWatching() {
-        if (this.swiperWatching.current && this.swiperWatching.current.swiper) {
-            this.swiperWatching.current.swiper.slideNext();
-        }
-    };
-
-    goPrevWatching() {
-        if (this.swiperWatching.current != null && this.swiperWatching.current.swiper != null) {
-            this.swiperWatching.current.swiper.slidePrev();
-        }
-    };
-
     render() {
-        const {home : {loading, watching, newLessons, featuredLessons, newAudios}, main: {categories}} = this.props;
+        const {home : {loading, watching, newLessons, featuredLessons, newAudios}, main: {categories, audioCategories}} = this.props;
         const gridSlider = {
             slidesPerView: 1,
             slidesPerGroup: 1,
             spaceBetween: 30,
             containerClass: 'swiper-container gridSlider',
+            navigation: {
+                nextEl: "#nextGrid",
+                prevEl: "#prevGrid"
+            },
             breakpoints: {
                 1024: {
                     slidesPerView: 4,
@@ -96,16 +64,33 @@ class Home extends Component {
             }
         };
         const mainSlider = {
-            effect: 'fade',
+            // effect: 'fade',
+            autoplay: {
+               delay: 3000,
+            },
             pagination: {
                 el: '.swiper-pagination',
                 type: 'bullets',
-              },
+            },
             spaceBetween: 0,
             containerClass: 'swiper-container mainSlider',
+            navigation: {
+                nextEl: "#nextMain",
+                prevEl: "#prevMain"
+            },
+            speed: 600,
+            parallax: true,
+            parallaxEl: {
+                el: '.parallax-bg',
+                value: '-23%'
+            },
         };
         const gridWatching = {
             slidesPerView: 1,
+            navigation: {
+                nextEl: "#nextWatching",
+                prevEl: "#prevWatching"
+            },
             slidesPerGroup: 1,
             spaceBetween: 30,
             containerClass: 'swiper-container gridSlider',
@@ -130,33 +115,26 @@ class Home extends Component {
                 <div className="hero-new">
                     <div style={{position: 'relative'}}>
                         <Swiper ref={this.swiperMain} {...mainSlider}>
-                            <div className="mainSlider-inner" style={{backgroundImage: 'url("/images/bg-hero-1.jpg")'}}>
+                            <div className="mainSlider-inner">
                                 <Container>
                                     <div className="mainSlider-cont">
-                                        <h5
-                                            style={{
-                                                color: '#fff',
-                                                fontSize: 36,
-                                                fontWeight: 800,
-                                                textAlign: 'center',
-                                                marginTop: 40,
-                                            }}
-                                        >PREMIUM ЭРХ</h5>
+                                        <h5>PREMIUM ЭРХ</h5>
+                                        <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old</p>
+                                        <Button className="banner-button">
+                                            Premium эрх авах
+                                        </Button>
                                     </div>
                                 </Container>
                             </div>
-                            <div className="mainSlider-inner" style={{backgroundImage: 'url("/images/bg-hero-1.jpg")'}}>
+                            {/* <div className="mainSlider-inner" style={{backgroundImage: 'url("/images/bg-hero-2.jpg")'}}> */}
+                            <div className="mainSlider-inner" >
                                 <Container>
                                     <div className="mainSlider-cont">
-                                        <h5
-                                            style={{
-                                                color: '#fff',
-                                                fontSize: 36,
-                                                fontWeight: 800,
-                                                textAlign: 'center',
-                                                marginTop: 40,
-                                            }}
-                                        >ЭЕШ</h5>
+                                        <h5>ЭЕШ</h5>
+                                        <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old</p>
+                                        <Button className="banner-button">
+                                            ЭЕШ эрх авах
+                                        </Button>
                                     </div>
                                 </Container>
                             </div>
@@ -164,10 +142,10 @@ class Home extends Component {
                         <div style={{position: 'absolute', top: 0, width: '100%'}}>
                             <Container>
                                 <div className="mainSlider-cont">
-                                    <div onClick={this.goNextMain.bind(this)} className="grid-next">
+                                    <div className="grid-next" id="nextMain">
                                         <ion-icon name="chevron-forward"/>
                                     </div>
-                                    <div onClick={this.goPrevMain.bind(this)} className="grid-prev">
+                                    <div className="grid-prev" id="prevMain">
                                         <ion-icon name="chevron-back"/>
                                     </div>
                                 </div>
@@ -182,7 +160,7 @@ class Home extends Component {
                                             <div className="beforeU"/>
                                             <div className="afterU" style={{top: this.state.top}}/>
                                             {
-                                                (categories).map((item, index) => (
+                                                (categories.slice(0, 8)).map((item, index) => (
                                                     <Link to={`list/${item.slug}`}>
                                                         <li>
                                                             {item.title}
@@ -198,7 +176,7 @@ class Home extends Component {
                                             <div className="beforeU"/>
                                             <div className="afterU" style={{top: (this.state.top - 251)*-1}}/>
                                             {
-                                                (categories).map((item, index) => (
+                                                (audioCategories.slice(0, 8)).map((item, index) => (
                                                     <Link to={`list/${item.slug}`}>
                                                         <li>
                                                             {item.title}
@@ -229,39 +207,16 @@ class Home extends Component {
                                             }
                                         </Swiper>
                                     </div>
-                                    <div onClick={this.goNextWatching.bind(this)} className="grid-next">
+                                    <div id="nextWatching" className="grid-next">
                                         <ion-icon name="chevron-forward"/>
                                     </div>
-                                    <div onClick={this.goPrevWatching.bind(this)} className="grid-prev">
+                                    <div id="prevWatching" className="grid-prev">
                                         <ion-icon name="chevron-back"/>
                                     </div>
                                 </Container>
                             </div>
                         ) : null
                     }
-                    {/*<div className="section-bundle">*/}
-                    {/*    <Container>*/}
-                    {/*        <h3>Багц хичээлүүд</h3>*/}
-                    {/*        <h5> With our growing catalog of over 30 Nanodegree programs from beginner to advanced</h5>*/}
-                    {/*        <Row>*/}
-                    {/*            {*/}
-                    {/*                bundles.map(item => (*/}
-                    {/*                    <Col md={3}>*/}
-                    {/*                        <Link style={{textDecoration: 'none'}} to={`/bundle/${item.slug}`}>*/}
-                    {/*                            <div className="bundle-item">*/}
-                    {/*                                <img src={(item.thumbnail || {}).path ? `${config.get('hostMedia')}${(item.thumbnail || {}).path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`} className="cover-img"/>*/}
-                    {/*                                <div className="bundle-detail">*/}
-                    {/*                                    <h4>{item.title}</h4>*/}
-                    {/*                                    <p className="skill-card-subtitle">{` ${(item.levels || []).length} түвшин  ${(item.levels || []).reduce((total, aa) => total + (aa.lessons || []).length, 0)} хичээл`}</p>*/}
-                    {/*                                </div>*/}
-                    {/*                            </div>*/}
-                    {/*                        </Link>*/}
-                    {/*                    </Col>*/}
-                    {/*                ))*/}
-                    {/*            }*/}
-                    {/*        </Row>*/}
-                    {/*    </Container>*/}
-                    {/*</div>*/}
                     {
                         newLessons && newLessons.length > 0 ? (
                             <div className="section-new">
@@ -278,10 +233,10 @@ class Home extends Component {
                                             }
                                         </Swiper>
                                     </div>
-                                    <div onClick={this.goNext.bind(this)} className="grid-next">
+                                    <div id="nextGrid"className="grid-next">
                                         <ion-icon name="chevron-forward"/>
                                     </div>
-                                    <div onClick={this.goPrev.bind(this)} className="grid-prev">
+                                    <div id="prevGrid" className="grid-prev">
                                         <ion-icon name="chevron-back"/>
                                     </div>
                                 </Container>
@@ -302,32 +257,6 @@ class Home extends Component {
                             </Row>
                         </Container>
                     </div>
-                    {/*{*/}
-                    {/*    newAudios && newAudios.length > 0 ? (*/}
-                    {/*        <div className="section-new">*/}
-                    {/*            <Container style={{position: 'relative'}}>*/}
-                    {/*                <h3>Сонсдог ном</h3>*/}
-                    {/*                <div>*/}
-                    {/*                    <Swiper ref={this.swiperAudio} {...gridSliderAudio}>*/}
-                    {/*                        {*/}
-                    {/*                            newAudios.map((item, index) => (*/}
-                    {/*                                <div key={index}>*/}
-                    {/*                                    <GridItemAudio item={item}/>*/}
-                    {/*                                </div>*/}
-                    {/*                            ))*/}
-                    {/*                        }*/}
-                    {/*                    </Swiper>*/}
-                    {/*                </div>*/}
-                    {/*                <div onClick={this.goNextAudio.bind(this)} className="grid-next">*/}
-                    {/*                    <ion-icon name="chevron-forward"/>*/}
-                    {/*                </div>*/}
-                    {/*                <div onClick={this.goPrevAudio.bind(this)} className="grid-prev">*/}
-                    {/*                    <ion-icon name="chevron-back"/>*/}
-                    {/*                </div>*/}
-                    {/*            </Container>*/}
-                    {/*        </div>*/}
-                    {/*    ) : null*/}
-                    {/*}*/}
                     {
                         featuredLessons && featuredLessons.length > 0 ? (
                             <div className="section-featured">
