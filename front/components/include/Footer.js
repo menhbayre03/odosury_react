@@ -15,7 +15,7 @@ class Footer extends Component {
 
     render() {
         return (
-            <div style={{backgroundColor: '#313356'}}>
+            <div style={{backgroundColor: '#151314'}}>
                 <Container>
                     <Row style={{alignItems: 'center', padding: '30px 0'}}>
                         <Col md={6} className="section-1" style={{

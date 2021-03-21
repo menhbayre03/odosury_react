@@ -47,6 +47,10 @@
       }
     }
   }
+  .header.trans .header-bottom .user-menu a ion-icon {
+    top: -2px;
+    font-size: 14px;
+}
 }
 .header {
   -webkit-transition: 0.3s;
@@ -162,7 +166,7 @@
           background: #e5e5e5;
         }
         input {
-          font-size: 14px;
+          font-size: 12px;
           color: #777;
           background: #fff;
           border: 0;
@@ -248,11 +252,11 @@
             font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
-            height: 30px;
+            height: 36px;
             display: inline-block;
-            line-height: 30px;
+            line-height: 36px;
             position: relative;
-            top: -11px;
+            top: -13px;
         }
       }
       li:hover {
@@ -262,6 +266,7 @@
           }
       }
       li:first-child {
+        payment-top: 0;
         padding-left: 0;
         a {
             padding-left: 0;
@@ -343,7 +348,6 @@
           font-size: 24px;
             position: relative;
             top: 8px;
-            margin-right: 10px;
       }
     }
     .userrOn {
@@ -2560,6 +2564,9 @@ span.section-3:hover {
 }
 
 @media(max-width: 992px){
+    .header .header-top .section-2 .section-1-1 {
+        visibility: hidden;
+    }
     .hero-new {
         .mainSlider-cont  {
             .banner-button {
@@ -2657,13 +2664,6 @@ span.section-3:hover {
     font-size: 14px;
     font-weight: 600;
   }
-  .header .header-top .section-1 .logo {
-    height: 60px;
-    padding: 17px 0;
-  }
-  .header .header-top .section-1 .logo img {
-    height: 24px;
-  }
   .header .header-top .section-1 .category-menu button.btn-primary {
     margin-left: 20px;
     height: 26px;
@@ -2700,7 +2700,7 @@ span.section-3:hover {
 }
 @media(max-width: 576px){
   .header .header-top .section-1 .logo img {
-    height: 16px;
+    height: 14px;
   }
   .hero-new .mainSlider-cont p {
     font-size: 12px;
@@ -2709,13 +2709,27 @@ span.section-3:hover {
 .hero-new .mainSlider-cont h5 {
     font-size: 18px;
 }
+.header .header-top .section-1 {
+    display: inline-block;
+    max-width: 160px;
+}
+.header .header-top .section-2 {
+    display: flex;
+    justify-content: flex-end;
+}
+.header-bottom .section-1 ul li a {
+    font-size: 11px;
+}
+.header-bottom .section-1 ul li {
+    padding: 0 10px;
+}
+.header .category-menu {
+    display: none !important;
+}
 .hero-new .mainSlider-cont .banner-button {
     font-size: 12px;
     margin-top: 20px;
 }
-  .header .header-top .section-1 .logo {
-    padding: 18px 0;
-  }
   .lesson-single .tab-menu span.active:before {
     height: 37px;
   }

@@ -37,8 +37,21 @@ class Home extends Component {
         clearInterval(this.interval);
     }
 
+    buyPre(){
+        const { main: {user}, dispatch} = this.props;
+        if((user || {}).premium === 'pr'){
+            return false;
+        } else {
+            if((user || {})._id){
+                dispatch(actions.setPremiumModal({visible: true}));
+            } else {
+                config.get('emitter').emit('warning', 'Нэвтрэх шаардлагатай');
+                config.get('history').push('login')
+            }
+        }
+    }
     render() {
-        const {home : {loading, watching, newLessons, featuredLessons, newAudios}, main: {categories, audioCategories}} = this.props;
+        const {home : {loading, watching, newLessons, featuredLessons, newAudios}, main: {user, categories, audioCategories}} = this.props;
         const gridSlider = {
             slidesPerView: 1,
             slidesPerGroup: 1,
@@ -120,24 +133,30 @@ class Home extends Component {
                                     <div className="mainSlider-cont">
                                         <h5>PREMIUM ЭРХ</h5>
                                         <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old</p>
-                                        <Button className="banner-button">
-                                            Premium эрх авах
+                                        
+                                        <Button  onClick={this.buyPre.bind(this)} className="banner-button">
+                                            {
+                                                (user || {}).premium === 'pr' ?
+                                                    'Premium хэрэглэгч'
+                                                    : (user || {}).premium === 'pq' ?
+                                                    'Premium хүсэлт илгээсэн'
+                                                    :   'Premium эрх авах'
+                                            }
                                         </Button>
                                     </div>
                                 </Container>
                             </div>
-                            {/* <div className="mainSlider-inner" style={{backgroundImage: 'url("/images/bg-hero-2.jpg")'}}> */}
-                            <div className="mainSlider-inner" >
-                                <Container>
-                                    <div className="mainSlider-cont">
-                                        <h5>ЭЕШ</h5>
-                                        <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old</p>
-                                        <Button className="banner-button">
-                                            ЭЕШ эрх авах
-                                        </Button>
-                                    </div>
-                                </Container>
-                            </div>
+                            {/* <div className="mainSlider-inner" > */}
+                            {/*     <Container> */}
+                            {/*         <div className="mainSlider-cont"> */}
+                            {/*             <h5>ЭЕШ</h5> */}
+                            {/*             <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old</p> */}
+                            {/*             <Button className="banner-button"> */}
+                            {/*                 ЭЕШ эрх авах */}
+                            {/*             </Button> */}
+                            {/*         </div> */}
+                            {/*     </Container> */}
+                            {/* </div> */}
                         </Swiper>
                         <div style={{position: 'absolute', top: 0, width: '100%'}}>
                             <Container>
@@ -161,7 +180,7 @@ class Home extends Component {
                                             <div className="afterU" style={{top: this.state.top}}/>
                                             {
                                                 (categories.slice(0, 8)).map((item, index) => (
-                                                    <Link to={`list/${item.slug}`}>
+                                                    <Link to={`lessons/${item.slug}`}>
                                                         <li>
                                                             {item.title}
                                                         </li>
@@ -177,7 +196,7 @@ class Home extends Component {
                                             <div className="afterU" style={{top: (this.state.top - 251)*-1}}/>
                                             {
                                                 (audioCategories.slice(0, 8)).map((item, index) => (
-                                                    <Link to={`list/${item.slug}`}>
+                                                    <Link to={`audios/${item.slug}`}>
                                                         <li>
                                                             {item.title}
                                                         </li>
@@ -249,7 +268,7 @@ class Home extends Component {
                             <Row style={{marginTop: -20}}>
                                 {
                                     newAudios.map(item => (
-                                        <Col md={3}>
+                                        <Col md={6} xl={3} xs={12}>
                                             <GridItemAudio item={item}/>
                                         </Col>
                                     ))

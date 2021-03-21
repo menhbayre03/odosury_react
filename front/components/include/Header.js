@@ -61,6 +61,7 @@ class Header extends Component {
                 dispatch(actions.setPremiumModal({visible: true}));
             } else {
                 config.get('emitter').emit('warning', 'Нэвтрэх шаардлагатай');
+                config.get('history').push('login')
             }
         }
     }
@@ -165,7 +166,7 @@ class Header extends Component {
                                     </ul>
                                 </div>
                             </Col>
-                            <Col md={6} sm={3} xs={3} className="section-2">
+                            <Col md={6} sm={isMobile ? 6 : 3} xs={isMobile ? 6 : 3} className="section-2">
                                 {
                                     isMobile ? null : (
                                         <div className="section-1-1">
@@ -208,16 +209,16 @@ class Header extends Component {
                                                 Сонсдог ном
                                             </Link>
                                         </li>
-                                        <li>
-                                            <Link to={`/audios/all`}>
-                                                ЭЕШ
-                                                <Badge variant="danger" style={{
-                                                    position: 'relative',
-                                                    top: -1,
-                                                    marginLeft: 6,
-                                                }}>New</Badge>
-                                            </Link>
-                                        </li>
+                                        {/* <li> */}
+                                        {/*     <Link to={`/audios/all`}> */}
+                                        {/*         ЭЕШ */}
+                                        {/*         <Badge variant="danger" style={{ */}
+                                        {/*             position: 'relative', */}
+                                        {/*             top: -1, */}
+                                        {/*             marginLeft: 6, */}
+                                        {/*         }}>New</Badge> */}
+                                        {/*     </Link> */}
+                                        {/* </li> */}
                                     </ul>
                                 </div>
                             </div>
@@ -228,18 +229,14 @@ class Header extends Component {
                                             {
                                                 (user || {})._id ? (
                                                     <div className="user-menu">
-                                                        <Link to="/profile/info"><span style={{top: 4}} className="userrOn"><ion-icon style={{top: 4, fontSize: 18}} name="person"/>{isMobile ? null : 'Профайл'}<span style={{textTransform: 'lowercase', marginLeft: 10, display: 'unset', position: 'unset', border: 'none'}}>({user.username})</span></span></Link>
+                                                        <Link to="/profile/info"><span style={{top: 4}} className="userrOn"><ion-icon style={{top: 4, fontSize: 18, marginRight: 10}} name="person"/>{isMobile ? ' ' : 'Профайл'}<span style={{textTransform: 'lowercase', display: 'unset', position: 'unset', border: 'none'}}>({user.username})</span></span></Link>
                                                     </div>
                                                 ) : (
                                                     <div className="user-menu">
                                                         <Link to="/login">
-                                                            {
-                                                                isMobile ? <ion-icon name="person"/> : (
-                                                                    <span>
-                                                                <ion-icon name="log-in-outline"></ion-icon> Нэвтрэх / Бүртгүүлэх
+                                                            <span>
+                                                                <ion-icon name="log-in-outline"/> {isMobile ? 'Нэвтрэх' : 'Нэвтрэх / Бүртгүүлэх'}
                                                             </span>
-                                                                )
-                                                            }
                                                         </Link>
                                                     </div>
                                                 )

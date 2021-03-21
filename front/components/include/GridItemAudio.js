@@ -34,64 +34,10 @@ class GridItemAudio extends Component {
         } else if(hours === 0) {
             hoursText = false;
         }
-        // return (
-        //     <div className={`grid-item ${watching ? 'watching' : ''}`}>
-        //         <div title={item.title}>
-        //             <div className="grid-item-box">
-        //                 <Link to={`/audio/${item.slug}`} title={item.title}>
-        //                     <img src={(item.thumbnail || {}).path ? `${(item.thumbnail || {}).url}${(item.thumbnail || {}).path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
-        //                 </Link>
-        //                 <div className="contents">
-        //                     <Link to={`/audio/${item.slug}`} title={item.title}>
-        //                         <h3>{item.title}</h3>
-        //                     </Link>
-        //                     {
-        //                         watching ? (
-        //                             <div className="progressbar">
-        //                                 <div className="filler" style={{width:`${progress}%`}}/>
-        //                             </div>
-        //                         ) : (
-        //                             <div>
-        //                                 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end'}}>
-        //                                     <div style={{display: 'flex', justifyContent: 'start', alignItems: 'center'}}>
-        //                                         <ReactStars
-        //                                             count={5}
-        //                                             value={rating}
-        //                                             edit={false}
-        //                                             size={16}
-        //                                         />
-        //                                         <span style={{fontSize: 12, color: '#909090', marginLeft: 5}}>({(item.rating || []).length})</span>
-        //                                     </div>
-        //                                 </div>
-        //                             </div>
-        //                         )
-        //                     }
-        //                 </div>
-        //                 {
-        //                     watching ? null : (
-        //                         <div className="footer">
-        //                             <h5><ion-icon name="library"/> {lectures} Бүлэг </h5>
-        //                             <div>
-        //                                 {
-        //                                     hoursText ? (
-        //                                         <h5>
-        //                                             <ion-icon name="time"/>
-        //                                             {Math.ceil(hours)} {hoursText}
-        //                                         </h5>
-        //                                     ) : null
-        //                                 }
-        //                             </div>
-        //                         </div>
-        //                     )
-        //                 }
-        //             </div>
-        //         </div>
-        //     </div>
-        // );
         return (
             <Link style={{textDecoration: 'none'}} to={`/audio/${item.slug}`}>
                 <div className="bundle-item">
-                    <img src={(item.thumbnail || {}).path ? `${config.get('hostMedia')}${(item.thumbnail || {}).path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`} className="cover-img"/>
+                    <img src={(item.thumbnail || {}).path ? `${(item.thumbnail || {}).url}${(item.thumbnail || {}).path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`} className="cover-img"/>
                     <div className="bundle-detail">
                         <h4>{item.title}</h4>
                         <p className="skill-card-subtitle">
