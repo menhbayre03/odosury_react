@@ -132,7 +132,7 @@ class Home extends Component {
                                 <Container>
                                     <div className="mainSlider-cont">
                                         <h5>PREMIUM ЭРХ</h5>
-                                        <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old</p>
+                                        <p>Хичээл зүтгэл дуусаагүй цагт хүний амжилт дундрахгүй. Odosury PREMIUM багцын хэрэглэгчид бүх түвшний курс хичээлүүдийг үзэх боломжтой</p>
                                         
                                         <Button  onClick={this.buyPre.bind(this)} className="banner-button">
                                             {
