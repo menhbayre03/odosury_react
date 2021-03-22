@@ -131,9 +131,8 @@ class Home extends Component {
                             <div className="mainSlider-inner">
                                 <Container>
                                     <div className="mainSlider-cont">
-                                        <h5>PREMIUM ЭРХ</h5>
-                                        <p>Хичээл зүтгэл дуусаагүй цагт хүний амжилт дундрахгүй. Odosury PREMIUM багцын хэрэглэгчид бүх түвшний курс хичээлүүдийг үзэх боломжтой</p>
-                                        
+                                        <h5>АНХДАГЧ 1000 <span style={{color: 'gold'}}>PREMIUM</span> ХЭРЭГЛЭГЧ</h5>
+                                        <p>99'000₮ төлөөд насан туршдаа сурч хөгжих боломжийг тултал ашигла та бусдаас түрүүлж алх хэзээ ч юунаас ч хоцрохгүй тогтвортой хөгжиж мэдлэгээ хязгааргүй тэл.</p>
                                         <Button  onClick={this.buyPre.bind(this)} className="banner-button">
                                             {
                                                 (user || {}).premium === 'pr' ?
