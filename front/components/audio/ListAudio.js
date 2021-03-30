@@ -123,7 +123,7 @@ class ListAudio extends Component {
                             <Col xl={9} lg={8} md={7} sm={12}>
                                 <div className="list-content">
                                     <div className="list-header">
-                                        <h3>Сонсдог ном</h3>
+                                        <h3>Сонсдог номны хураагуй</h3>
                                         <Select
                                             placeholder="Эрэмбэ"
                                             valueField="value"

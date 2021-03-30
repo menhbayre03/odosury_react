@@ -263,7 +263,7 @@ class Home extends Component {
                     }
                     <div className="section-bundle">
                         <Container>
-                            <h3>Сонсдог ном</h3>
+                            <h3>Сонсдог номны хураангуй</h3>
                             <Row style={{marginTop: -20}}>
                                 {
                                     newAudios.map(item => (
