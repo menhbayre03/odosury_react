@@ -102,7 +102,7 @@ class Header extends Component {
                         {'Дансны дугаар'.toUpperCase()}:
                     </span>
                     <span>
-                        5028961615
+                        5069405809
                     </span>
                 </p>
                 <p>
@@ -110,7 +110,7 @@ class Header extends Component {
                         {'Данс эзэмшигч'.toUpperCase()}:
                     </span>
                     <span>
-                        Амжилт дотком
+                        Том-Амжилт ХХК
                     </span>
                 </p>
                 <p>
@@ -380,22 +380,22 @@ class Header extends Component {
                                                             <span>₮</span>
                                                             Дансны шилжүүлэг
                                                         </div>
-                                                        <div className={'qpay method'} onClick={() => dispatch(actions.setQpay())}>
-                                                            <img src="/images/qpay1.png" alt="qpay_logo"/>
-                                                            QPAY үйлчилгээ ашиглан шилжүүлэх.
-                                                        </div>
+                                                        {/*<div className={'qpay method'} onClick={() => dispatch(actions.setQpay())}>*/}
+                                                        {/*    <img src="/images/qpay1.png" alt="qpay_logo"/>*/}
+                                                        {/*    QPAY үйлчилгээ ашиглан шилжүүлэх.*/}
+                                                        {/*</div>*/}
                                                     </div>
                                                     <div className={'paymentMethodDet'}>
-                                                        <p>
-                                                            QPAY - ээр шилжүүлэх:
-                                                            <span>
-                                                                QPAY үйлчилгээ ашиглан шилжүүлэх.
-                                                            </span>
-                                                        </p>
+                                                        {/*<p>*/}
+                                                        {/*    QPAY - ээр шилжүүлэх:*/}
+                                                        {/*    <span>*/}
+                                                        {/*        QPAY үйлчилгээ ашиглан шилжүүлэх.*/}
+                                                        {/*    </span>*/}
+                                                        {/*</p>*/}
                                                         <p>
                                                             Дансаар шилжүүлэх:
                                                             <span>
-                                                                Та "АМЖИЛТ ДОТКОМ ХХК" - ийн 5028 961615 тоот дансруу шилжүүлгэ хийснээс 5 - 10 минутын дараа таны худалдан авалт хийгдэх болно.
+                                                                Та "Том-Амжилт ХХК" - ийн 5069405809 тоот дансруу шилжүүлгэ хийснээс 5 - 10 минутын дараа таны худалдан авалт хийгдэх болно.
                                                             </span>
                                                         </p>
                                                     </div>

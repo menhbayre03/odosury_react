@@ -491,41 +491,41 @@ class Lesson extends Component {
                             <h5>ХУДАЛДАН АВАЛТ</h5><h6><span>"{lesson.title}"</span></h6>
                         </div>
                         <div className="payment-option">
-                            <div>
-                                {
-                                    gettingQpay === 1 ?
-                                        <div className="main-loader">
-                                            <div className="sk-circle">
-                                                <div className="sk-circle1 sk-child"/>
-                                                <div className="sk-circle2 sk-child"/>
-                                                <div className="sk-circle3 sk-child"/>
-                                                <div className="sk-circle4 sk-child"/>
-                                                <div className="sk-circle5 sk-child"/>
-                                                <div className="sk-circle6 sk-child"/>
-                                                <div className="sk-circle7 sk-child"/>
-                                                <div className="sk-circle8 sk-child"/>
-                                                <div className="sk-circle9 sk-child"/>
-                                                <div className="sk-circle10 sk-child"/>
-                                                <div className="sk-circle11 sk-child"/>
-                                                <div className="sk-circle12 sk-child"/>
-                                            </div>
-                                        </div>
-                                    :
-                                        <div style={{textAlign: 'right'}}>
-                                            {
-                                                (purchase.qpay || {}).qPay_QRcode ?
-                                                    <QRCode size={180} value={(purchase.qpay || {}).qPay_QRcode}/>
-                                                : 'QR код авхад алдаа гарлаа.'
-                                            }
-                                        </div>
-                                }
-                            </div>
+                            {/*<div>*/}
+                            {/*    {*/}
+                            {/*        gettingQpay === 1 ?*/}
+                            {/*            <div className="main-loader">*/}
+                            {/*                <div className="sk-circle">*/}
+                            {/*                    <div className="sk-circle1 sk-child"/>*/}
+                            {/*                    <div className="sk-circle2 sk-child"/>*/}
+                            {/*                    <div className="sk-circle3 sk-child"/>*/}
+                            {/*                    <div className="sk-circle4 sk-child"/>*/}
+                            {/*                    <div className="sk-circle5 sk-child"/>*/}
+                            {/*                    <div className="sk-circle6 sk-child"/>*/}
+                            {/*                    <div className="sk-circle7 sk-child"/>*/}
+                            {/*                    <div className="sk-circle8 sk-child"/>*/}
+                            {/*                    <div className="sk-circle9 sk-child"/>*/}
+                            {/*                    <div className="sk-circle10 sk-child"/>*/}
+                            {/*                    <div className="sk-circle11 sk-child"/>*/}
+                            {/*                    <div className="sk-circle12 sk-child"/>*/}
+                            {/*                </div>*/}
+                            {/*            </div>*/}
+                            {/*        :*/}
+                            {/*            <div style={{textAlign: 'right'}}>*/}
+                            {/*                {*/}
+                            {/*                    (purchase.qpay || {}).qPay_QRcode ?*/}
+                            {/*                        <QRCode size={180} value={(purchase.qpay || {}).qPay_QRcode}/>*/}
+                            {/*                    : 'QR код авхад алдаа гарлаа.'*/}
+                            {/*                }*/}
+                            {/*            </div>*/}
+                            {/*    }*/}
+                            {/*</div>*/}
                             <div>
                                 <div>
                                     <ul>
-                                        <li>Дансны дугаар: <b>5028-9616-15</b></li>
+                                        <li>Дансны дугаар: <b>5069-4058-09</b></li>
                                         <li>Банк: <b>Хаан банк</b></li>
-                                        <li>Данс эзэмшигч: <b>Амжилт дотком ХХК</b></li>
+                                        <li>Данс эзэмшигч: <b>Том-Амжилт ХХК</b></li>
                                         <li>Мөнгөн дүн: <b>{config.formatMoney(lesson.sale || lesson.price)}₮</b></li>
                                         <li>Гүйлгээний утга: <b>{user.phone || user.username}</b></li>
                                         <li>Холбогдох утас: 8844-5020</li>
@@ -534,9 +534,9 @@ class Lesson extends Component {
                             </div>
                         </div>
                         <p className={'p-m-warn'}>
-                            <span>
-                                Хэрэв та <b>"QPAY"</b> үйлчилгээ ашиглан шилжүүлэх боломжгүй бол дээр харагдах дансны мэдээллийн дагуу гүйлгээ хийн худалдан авалт хийх боломжтой.
-                            </span>
+                            {/*<span>*/}
+                            {/*    Хэрэв та <b>"QPAY"</b> үйлчилгээ ашиглан шилжүүлэх боломжгүй бол дээр харагдах дансны мэдээллийн дагуу гүйлгээ хийн худалдан авалт хийх боломжтой.*/}
+                            {/*</span>*/}
                             <span>
                                 <b>"Данс"</b> - аар гүйлгээ хийсэн тохиолдолд 5 - 10 минутын дараа худалдан авалт баталгаажих болно. <b>Холбогдох утас: 8844-5020</b>
                             </span>
