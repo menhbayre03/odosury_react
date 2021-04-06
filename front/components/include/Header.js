@@ -380,18 +380,18 @@ class Header extends Component {
                                                             <span>₮</span>
                                                             Дансны шилжүүлэг
                                                         </div>
-                                                        {/*<div className={'qpay method'} onClick={() => dispatch(actions.setQpay())}>*/}
-                                                        {/*    <img src="/images/qpay1.png" alt="qpay_logo"/>*/}
-                                                        {/*    QPAY үйлчилгээ ашиглан шилжүүлэх.*/}
-                                                        {/*</div>*/}
+                                                        <div className={'qpay method'} onClick={() => dispatch(actions.setQpay())}>
+                                                            <img src="/images/qpay1.png" alt="qpay_logo"/>
+                                                            QPAY үйлчилгээ ашиглан шилжүүлэх.
+                                                        </div>
                                                     </div>
                                                     <div className={'paymentMethodDet'}>
-                                                        {/*<p>*/}
-                                                        {/*    QPAY - ээр шилжүүлэх:*/}
-                                                        {/*    <span>*/}
-                                                        {/*        QPAY үйлчилгээ ашиглан шилжүүлэх.*/}
-                                                        {/*    </span>*/}
-                                                        {/*</p>*/}
+                                                        <p>
+                                                            QPAY - ээр шилжүүлэх:
+                                                            <span>
+                                                                QPAY үйлчилгээ ашиглан шилжүүлэх.
+                                                            </span>
+                                                        </p>
                                                         <p>
                                                             Дансаар шилжүүлэх:
                                                             <span>
