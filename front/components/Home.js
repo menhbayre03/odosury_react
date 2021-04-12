@@ -236,14 +236,14 @@ class Home extends Component {
                         ) : null
                     }
                     {
-                        newLessons && newLessons.length > 0 ? (
+                        featuredLessons && featuredLessons.length > 0 ? (
                             <div className="section-new">
                                 <Container style={{position: 'relative'}}>
-                                    <h3>Шинээр нэмэгдсэн хичээлүүд</h3>
+                                    <h3>Онцлох хичээлүүд</h3>
                                     <div>
                                         <Swiper ref={this.swiper} {...gridSlider}>
                                             {
-                                                newLessons.map((item, index) => (
+                                                featuredLessons.map((item, index) => (
                                                     <div key={index}>
                                                         <GridItem item={item}/>
                                                     </div>
@@ -261,6 +261,22 @@ class Home extends Component {
                             </div>
                         ) : null
                     }
+                    <div className="section-app" style={{backgroundImage: `url('/images/bg-app.png')`}}>
+                        <div className="cont">
+                            <Container>
+                                <img className="glass" src="/images/glass.png" alt=""/>
+                                <div className="inner-img">
+                                    <div>
+                                        <img src="/images/apple_qr.png" alt=""/>
+                                    </div>
+                                    <img className="app-ss" src="/images/phone.png" alt=""/>
+                                    <div>
+                                        <img src="/images/android_qr.png" alt=""/>
+                                    </div>
+                                </div>
+                            </Container>
+                        </div>
+                    </div>
                     <div className="section-bundle">
                         <Container>
                             <h3>Сонсдог номны хураангуй</h3>
@@ -276,13 +292,13 @@ class Home extends Component {
                         </Container>
                     </div>
                     {
-                        featuredLessons && featuredLessons.length > 0 ? (
+                        newLessons && newLessons.length > 0 ? (
                             <div className="section-featured">
                                 <Container style={{position: 'relative'}}>
-                                    <h3>Онцлох хичээлүүд</h3>
+                                    <h3>Шинээр нэмэгдсэн хичээлүүд</h3>
                                     <Row>
                                         {
-                                            featuredLessons.map((item, index) => (
+                                            newLessons.map((item, index) => (
                                                 <Col key={index} md={3} style={{marginBottom: 30}}>
                                                     <div>
                                                         <GridItem item={item}/>

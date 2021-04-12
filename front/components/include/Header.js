@@ -209,16 +209,16 @@ class Header extends Component {
                                                 Сонсдог ном
                                             </Link>
                                         </li>
-                                        {/* <li> */}
-                                        {/*     <Link to={`/audios/all`}> */}
-                                        {/*         ЭЕШ */}
-                                        {/*         <Badge variant="danger" style={{ */}
-                                        {/*             position: 'relative', */}
-                                        {/*             top: -1, */}
-                                        {/*             marginLeft: 6, */}
-                                        {/*         }}>New</Badge> */}
-                                        {/*     </Link> */}
-                                        {/* </li> */}
+                                         <li>
+                                             <Link to={`/eish`}>
+                                                 ЭЕШ
+                                                 <Badge variant="danger" style={{
+                                                     position: 'relative',
+                                                     top: -1,
+                                                     marginLeft: 6,
+                                                 }}>New</Badge>
+                                             </Link>
+                                         </li>
                                     </ul>
                                 </div>
                             </div>

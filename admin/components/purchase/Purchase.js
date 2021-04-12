@@ -20,6 +20,7 @@ class Purchase extends React.Component {
         this.state = {
             search: '',
             status: '',
+            id: '',
             startDate: null,
             endDate: null,
         };
@@ -34,6 +35,7 @@ class Purchase extends React.Component {
             skip: 0,
             search: this.state.search,
             status: this.state.status,
+            id: this.state.id,
             startDate: this.state.startDate,
             endDate: this.state.endDate
         };
@@ -139,6 +141,8 @@ class Purchase extends React.Component {
                         <Option value='cancel'>Цуцлагдсан</Option>
                     </Select>
                     <RangePicker size="small" onChange={this.onDateChange.bind(this)} allowEmpty={[true, true]} value={[this.state.startDate ? moment(this.state.startDate) : null, this.state.endDate ? moment(this.state.endDate) : null]} format="YYYY-MM-DD" />
+
+                    <Input addonAfter={<CloseCircleFilled style={{color:'white'}} onClick={() => this.setState({id:''})} />} maxLength={60} size='small' placeholder='ID' style={{width: 200, marginLeft: 20}} value={this.state.id} name='search' onChange={(e) => this.setState({id: e.target.value})} />
                     <Button style={{marginLeft: 20}} loading={status} type="primary" htmlType="submit" size='small' icon={<SearchOutlined />} onClick={this.searchUser.bind(this)} >Хайх</Button>
                 </Form>
                 <Table
