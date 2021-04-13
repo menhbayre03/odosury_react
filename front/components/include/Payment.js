@@ -239,7 +239,7 @@ class Payment extends Component {
                                             type === 'eish' ? (
                                                 <div className="eish-payment">
                                                     <div className="pre">
-                                                        <span>Хичээл зүтгэл дуусаагүй цагт хүний амжилт дундрахгүй. Odosury PREMIUM багцын хэрэглэгчид бүх түвшний курс хичээлүүдийг үзэх боломжтой</span>
+                                                        <span>Хичээл зүтгэл дуусаагүй цагт хүний амжилт дундрахгүй. Odosury ЭЕШ багцын хэрэглэгчид бүх ЭЕШ хичээлүүдийг үзэх боломжтой</span>
                                                     </div>
                                                     <div className="dawuu-taluud">
                                                         <p>
@@ -250,13 +250,10 @@ class Payment extends Component {
                                                             <span>100% практикт суурилсан</span></p>
                                                         <p>
                                                             <ion-icon name="heart"/>
-                                                            <span>Багштайгаа холбогдох боломж</span></p>
-                                                        <p>
-                                                            <ion-icon name="heart"/>
                                                             <span>Эх хэл дээрх тусламж</span></p>
                                                         <p>
                                                             <ion-icon name="heart"/>
-                                                            <span>Супер хямд <span className="sl"><span className="sale">365k</span> - {config.formatMoney(premiumPrice)}₮</span></span>
+                                                            <span>Супер хямд <span className="sl"><span className="sale">149k</span> - {config.formatMoney(eishPrice)}₮</span></span>
                                                         </p>
                                                     </div>
                                                 </div>
