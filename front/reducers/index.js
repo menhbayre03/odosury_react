@@ -4,18 +4,16 @@ import auth from "./auth";
 import home from "./home";
 import lesson from "./lesson";
 import lessonEish from "./lessonEish";
-import bundle from "./bundle";
 import profile from "./profile";
 import audio from "./audio";
-import card from "./card";
+import payment from "./payment";
 export default combineReducers({
     main: main,
     auth: auth,
     home: home,
     lesson: lesson,
     lessonEish: lessonEish,
-    bundle: bundle,
     profile: profile,
     audio: audio,
-    card: card,
+    payment: payment,
 });

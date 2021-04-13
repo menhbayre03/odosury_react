@@ -42,20 +42,26 @@ export default(state = initialState, action) => {
                 })
             };
         case setPaymentStatus.RESPONSE:
-            return {
-                ...state,
-                transactions: state.transactions.map((c) => {
-                    delete c.statusChanging;
-                    delete c.deleting;
-                    if(action.json.success && c._id === action.json.payment_id){
-                        c.status = action.json.typo || c.status;
-                        if(action.json.typo === 'delete'){
-                            c = null;
+            if(action.json.success) {
+                return {
+                    ...state,
+                    transactions: state.transactions.map((c) => {
+                        delete c.statusChanging;
+                        delete c.deleting;
+                        if(action.json.success && c._id === action.json.payment_id){
+                            c.status = action.json.typo || c.status;
+                            if(action.json.typo === 'delete'){
+                                c = null;
+                            }
                         }
-                    }
-                    return c;
-                }).filter(a => a)
-            };
+                        return c;
+                    }).filter(a => a)
+                };
+            } else {
+                return {
+                    ...state,
+                };
+            }
         default:
             return state;
     }

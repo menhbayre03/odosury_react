@@ -19,9 +19,6 @@ class Home extends Component {
             top: 6,
             up: false
         };
-        this.swiper = React.createRef();
-        this.swiperMain = React.createRef();
-        this.swiperWatching = React.createRef();
     }
     componentDidMount() {
         window.scroll(0, 0);
@@ -37,21 +34,8 @@ class Home extends Component {
         clearInterval(this.interval);
     }
 
-    buyPre(){
-        const { main: {user}, dispatch} = this.props;
-        if((user || {}).premium === 'pr'){
-            return false;
-        } else {
-            if((user || {})._id){
-                dispatch(actions.setPremiumModal({visible: true}));
-            } else {
-                config.get('emitter').emit('warning', 'Нэвтрэх шаардлагатай');
-                config.get('history').push('login')
-            }
-        }
-    }
     render() {
-        const {home : {loading, watching, newLessons, featuredLessons, newAudios}, main: {user, categories, audioCategories}} = this.props;
+        const {home : {loading, watching, newLessons, featuredLessons, newAudios}, main: {premium, categories, audioCategories}} = this.props;
         const gridSlider = {
             slidesPerView: 1,
             slidesPerGroup: 1,
@@ -127,18 +111,16 @@ class Home extends Component {
                 <Header location={this.props.location}/>
                 <div className="hero-new">
                     <div style={{position: 'relative'}}>
-                        <Swiper ref={this.swiperMain} {...mainSlider}>
+                        <Swiper {...mainSlider}>
                             <div className="mainSlider-inner">
                                 <Container>
                                     <div className="mainSlider-cont">
                                         <h5>АНХДАГЧ 1000 <span style={{color: 'gold'}}>PREMIUM</span> ХЭРЭГЛЭГЧ</h5>
                                         <p>99'000₮ төлөөд насан туршдаа сурч хөгжих боломжийг тултал ашигла та бусдаас түрүүлж алх хэзээ ч юунаас ч хоцрохгүй тогтвортой хөгжиж мэдлэгээ хязгааргүй тэл.</p>
-                                        <Button  onClick={this.buyPre.bind(this)} className="banner-button">
+                                        <Button  onClick={() => premium ? console.log('gz') : config.get('emitter').emit('paymentModal', {type: 'premium'})} className="banner-button">
                                             {
-                                                (user || {}).premium === 'pr' ?
+                                                premium ?
                                                     'Premium хэрэглэгч'
-                                                    : (user || {}).premium === 'pq' ?
-                                                    'Premium хүсэлт илгээсэн'
                                                     :   'Premium эрх авах'
                                             }
                                         </Button>
@@ -179,7 +161,7 @@ class Home extends Component {
                                             <div className="afterU" style={{top: this.state.top}}/>
                                             {
                                                 (categories.slice(0, 8)).map((item, index) => (
-                                                    <Link to={`lessons/${item.slug}`}>
+                                                    <Link to={`lessons/${item.slug}`} key={index+'cate'}>
                                                         <li>
                                                             {item.title}
                                                         </li>
@@ -195,7 +177,7 @@ class Home extends Component {
                                             <div className="afterU" style={{top: (this.state.top - 251)*-1}}/>
                                             {
                                                 (audioCategories.slice(0, 8)).map((item, index) => (
-                                                    <Link to={`audios/${item.slug}`}>
+                                                    <Link to={`audios/${item.slug}`} key={index+'cateww'}>
                                                         <li>
                                                             {item.title}
                                                         </li>
@@ -215,7 +197,7 @@ class Home extends Component {
                             <div className="section-watching">
                                 <Container style={{position: 'relative'}}>
                                     <div>
-                                        <Swiper ref={this.swiperWatching} {...gridWatching}>
+                                        <Swiper {...gridWatching}>
                                             {
                                                 watching.map((item, index) => (
                                                     <div key={index}>
@@ -241,7 +223,7 @@ class Home extends Component {
                                 <Container style={{position: 'relative'}}>
                                     <h3>Онцлох хичээлүүд</h3>
                                     <div>
-                                        <Swiper ref={this.swiper} {...gridSlider}>
+                                        <Swiper {...gridSlider}>
                                             {
                                                 featuredLessons.map((item, index) => (
                                                     <div key={index}>
@@ -267,11 +249,15 @@ class Home extends Component {
                                 <img className="glass" src="/images/glass.png" alt=""/>
                                 <div className="inner-img">
                                     <div>
-                                        <img src="/images/apple_qr.png" alt=""/>
+                                        <a href="https://apps.apple.com/us/app/id1553006256" target="_blank">
+                                            <img src="/images/apple_qr.png" alt=""/>
+                                        </a>
                                     </div>
                                     <img className="app-ss" src="/images/phone.png" alt=""/>
                                     <div>
-                                        <img src="/images/android_qr.png" alt=""/>
+                                        <a href="https://play.google.com/store/apps/details?id=com.odosury.dot.com&hl=en&gl=US" target="_blank">
+                                            <img src="/images/android_qr.png" alt=""/>
+                                        </a>
                                     </div>
                                 </div>
                             </Container>
@@ -283,7 +269,7 @@ class Home extends Component {
                             <Row style={{marginTop: -20}}>
                                 {
                                     newAudios.map(item => (
-                                        <Col md={6} xl={3} xs={12}>
+                                        <Col md={6} xl={3} xs={12} key={item._id+'audio'}>
                                             <GridItemAudio item={item}/>
                                         </Col>
                                     ))

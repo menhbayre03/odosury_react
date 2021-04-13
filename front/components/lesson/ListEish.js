@@ -37,21 +37,13 @@ class ListEish extends Component {
         }
     }
 
-    onSearch(e) {
-        if(e) {
-            e.preventDefault();
-        }
-        const {dispatch} = this.props;
-        dispatch(actions.getList({sort: this.state.sort.value, search: this.state.search}));
-    }
-
     onChange(e) {
         this.setState({search: e.target.value})
     }
 
 
     render() {
-        const {lessonEish: {list, loading}} = this.props;
+        const {lessonEish: {list, loading}, main: {premium, eish}} = this.props;
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
@@ -63,7 +55,16 @@ class ListEish extends Component {
                                     <img src="/images/eish.png" alt=""/>
                                     <h4>ЭЕШ БАГЦ</h4>
                                     <p>2021 оны шинэ хөтөлбөр дагуу Амжилт кибер сургуулийн мэргэжлийн багш нараар бэлтгэгдсэн ЭЕШ-ийн хичээлүүд 49'000₮</p>
-                                    <Button onClick={() => config.get('emitter').emit('warning', 'Тун удахгүй')}>Худалдаж авах</Button>
+                                    <Button onClick={() => premium || eish ? console.log('gz') : config.get('emitter').emit('paymentModal', {type: 'eish'})}>
+                                        {
+                                            premium ?
+                                                'Premium хэрэглэгч'
+                                                :  eish ?
+                                                    'ЭЕШ хэрэглэгч'
+                                                    : 'Худалдаж авах'
+                                        }
+
+                                    </Button>
                                 </div>
                                 <div className="list-content">
                                     <div className="list-header">
@@ -91,7 +92,7 @@ class ListEish extends Component {
                                                 {
                                                     list && list.length > 0 ? (
                                                         list.map((item, index) => (
-                                                            <Col lg={4} md={6} sm={6} style={{marginBottom: 30}}>
+                                                            <Col lg={3} md={4} sm={6} style={{marginBottom: 30}}>
                                                                 <div key={index}>
                                                                     <GridItem item={item}/>
                                                                 </div>

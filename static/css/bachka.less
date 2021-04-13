@@ -2412,11 +2412,11 @@ div.facebook-login>span button {
                     border-radius: 103px;
                 }
                 ul.left .afterU {
-                  -webkit-transition: 0.05s easy-in-out;
-                  -moz-transition: 0.05s easy-in-out;
-                  -ms-transition: 0.05s easy-in-out;
-                  -o-transition: 0.05s easy-in-out;
-                  transition: 0.05s easy-in-out;
+                  -webkit-transition: 0.05s ease-in-out;
+                  -moz-transition: 0.05s ease-in-out;
+                  -ms-transition: 0.05s ease-in-out;
+                  -o-transition: 0.05s ease-in-out;
+                  transition: 0.05s ease-in-out;
                     background: #fff;
                     box-shadow: 0px 0px 20px 9px #008fee;
                     height: 30px;
@@ -2469,11 +2469,11 @@ div.facebook-login>span button {
                     border-radius: 103px;
                 }
                 ul.right .afterU {
-                  -webkit-transition: 0.05s easy-in-out;
-                  -moz-transition: 0.05s easy-in-out;
-                  -ms-transition: 0.05s easy-in-out;
-                  -o-transition: 0.05s easy-in-out;
-                  transition: 0.05s easy-in-out;
+                  -webkit-transition: 0.05s ease-in-out;
+                  -moz-transition: 0.05s ease-in-out;
+                  -ms-transition: 0.05s ease-in-out;
+                  -o-transition: 0.05s ease-in-out;
+                  transition: 0.05s ease-in-out;
                     background: #fff;
                     box-shadow: 0px 0px 20px 9px #D22F9E;
                     height: 30px;
@@ -2642,11 +2642,11 @@ span.section-3:hover {
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
-    -webkit-transition: 0.3s easy-in-out;
-    -moz-transition: 0.3s easy-in-out;
-    -ms-transition: 0.3s easy-in-out;
-    -o-transition: 0.3s easy-in-out;
-    transition: 0.3s easy-in-out;
+    -webkit-transition: 0.3s ease-in-out;
+    -moz-transition: 0.3s ease-in-out;
+    -ms-transition: 0.3s ease-in-out;
+    -o-transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in-out;
   }
   button:hover, button:active, button:focus  {
     background: #f030bb !important;
@@ -2657,6 +2657,319 @@ span.section-3:hover {
     -moz-box-shadow: none !important;
     box-shadow: none !important;
   }
+}
+.paymentModal {
+  position: fixed;
+  height: 100%;
+  z-index: 12;
+  top: 0;
+  right: 480px;
+  width: 480px;
+  display: block;
+  background: #fff;
+  transition: right 0.3s linear;
+  .inner-payment {
+    height: calc(100% - 60px);
+  }
+  .footer-payment {
+    height: 60px;
+    background: #fff;
+    text-align: center;
+    padding: 10px 20px;
+    border-top: 1px solid #f3f3f3;
+    button.payment-button {
+      height: 40px;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      border-radius: 5px;
+      background: #313356;
+      border: none;
+      outline: none;
+      box-shadow: none;
+      color: #fff;
+      padding: 0 30px;
+      -webkit-transition: 0.3s ease-in-out;
+      -moz-transition: 0.3s ease-in-out;
+      -ms-transition: 0.3s ease-in-out;
+      -o-transition: 0.3s ease-in-out;
+      transition: 0.3s ease-in-out;
+    }
+    button.payment-button:hover, button.payment-button:active ,button.payment-button:focus {
+      background: #1f203f;
+    }
+    button.payment-button2 {
+      height: 40px;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      border-radius: 5px;
+      background: #e8e8e8;
+      border: none;
+      outline: none;
+      box-shadow: none;
+      color: #313356;
+      padding: 0 20px;
+      -webkit-transition: 0.3s ease-in-out;
+      -moz-transition: 0.3s ease-in-out;
+      -ms-transition: 0.3s ease-in-out;
+      -o-transition: 0.3s ease-in-out;
+      transition: 0.3s ease-in-out;
+      margin-right: 15px;
+    }
+    button.payment-button2:hover, button.payment-button2:active ,button.payment-button2:focus {
+      background: #d5d5d5;
+    }
+  }
+  .payment-header {
+    padding: 10px 15px;
+    border-bottom: 1px solid #f3f3f3;
+    h4 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 0;
+      display: inline-block;
+    }
+    .close {
+      float: right;
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1;
+      color: #000;
+      text-shadow: 0 1px 0 #fff;
+      opacity: 1;
+      padding: 9px 26px 8px 30px;
+      position: relative;
+      top: -10px;
+      right: -30px;
+      cursor: pointer;
+      ion-icon {
+        color: #000;
+        font-size: 24px;
+      }
+    }
+  }
+  .payment-body {
+    width: 100%;
+    padding: 20px 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: block;
+    height: calc(100% - 45px);
+    width: 100%;
+    position: relative;
+    top: -10px;
+    .scrollBarX(8px);
+    h4 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-top: 10px;
+      border-top: 1px solid #f5f5f5;
+      padding-top: 20px;
+      margin-bottom: 20px;
+    }
+    .detail {
+      p {
+        font-size: 14px;
+        font-weight: 500;
+        color: #565656;
+        margin-bottom: -13px;
+        padding-bottom: 3px;
+        display: block;
+        span.rigthT {
+          width: 110px;
+          display: inline-block;
+        }
+        span.leftT {
+          margin-left: 115px;
+          color: #000;
+          font-weight: 600;
+          display: block;
+          position: relative;
+          top: -22px;
+          font-size: 16px;
+        }
+        span.leftT.trough {
+          text-decoration: line-through;
+          color: #777777;
+          font-weight: 600;
+        }
+      }
+    }
+    .pre {
+      h2 {
+        color: #313356;
+        font-size: 24px;
+        margin: 0;
+      }
+      span {
+        display: block;
+        background: #fbfbfb;
+        padding: 7px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        letter-spacing: 0.5px;
+        line-height: 22px;
+        color: #000000;
+        font-weight: 500;
+        margin: 10px auto;
+      }
+    }
+    .dawuu-taluud {
+      padding: 7px 20px;
+      p {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        letter-spacing: 0.5px;
+        margin: 3px 0;
+        ion-icon {
+          color: #d22f9e;
+          font-size: 16px;
+        }
+        span  {
+          margin-left: 10px;
+          &.sl {
+            background: #31335670;
+            border-radius: 5px;
+            color: #fff;
+            padding: 0 10px;
+          }
+          &.sale {
+            margin-left: 0;
+            font-size: 12px;
+            text-decoration: line-through;
+            text-decoration-width: 2px;
+          }
+        }
+      }
+    }
+    .paymentMethod {
+      padding: 10px 20px;
+      margin: 30px auto;
+      .method {
+        padding: 10px;
+        margin-bottom: 20px;
+      }
+      .method.bank {
+        cursor: pointer;
+        font-size: 20px;
+        color: #313356;
+        border-radius: 5px;
+        span {
+          background: #313356;
+          font-size: 18px;
+          color: #fff;
+          font-weight: 600;
+          padding: 2px 10px;
+          border-radius: 5px;
+          margin-right: 15px;
+        }
+      }
+      .method.bank.active {
+        color: #fff;
+        background: #313356;
+        span {
+          background: #fff;
+          color: #313356;
+        }
+      }
+      .method.qpay {
+        cursor: pointer;
+        font-size: 18px;
+        color: #313356;
+        border-radius: 5px;
+        font-weight: 600;
+        img {
+          width: 30px;
+          height: 30px;
+          object-fit: cover;
+          margin-right: 15px;
+        }
+      }
+      .method.qpay.active {
+        color: #fff;
+        background: #313356;
+        img {
+          filter: brightness(0) invert(1);
+        }
+      }
+    }
+    .qrPayment {
+      svg {
+        display: block;
+        margin: 10px auto 30px;
+      }
+      .paymentMethodDet.bankdetail {
+        margin: 30px auto;
+        background: #fbfbfb;
+        border-radius: 5px;
+        padding: 10px 20px;
+        p span {
+          color: #808080;
+          margin-left: 0;
+          font-weight: 200;
+          font-size: 12px;
+        }
+        p span:last-child {
+          color: #404040;
+          margin-left: 10px;
+          font-weight: 600;
+          font-size: 16px;
+        }
+        p {
+          margin: 5px auto;
+        }
+      }
+    }
+    .paymentMethodDet {
+      margin: 20px auto;
+      background: #fbfbfb;
+      border-radius: 5px;
+      padding: 10px 20px;
+      p {
+        margin: auto;
+        color: #808080;
+        letter-spacing: 0.5px;
+        line-height: 18px;
+        font-size: 14px;
+      }
+      p span:last-child {
+        color: #404040;
+        margin-left: 10px;
+        font-weight: 600;
+        font-size: 16px;
+      }
+    }
+  }
+  .lesson-payment {
+    img {
+      width: 240px;
+      border-radius: 10px;
+      margin: 0 auto 20px auto;
+      display: block;
+      box-shadow: 0pt 0pc 5px 2px rgb(25 42 70 / 13%);
+    }
+    p {
+      font-size: 14px;
+      font-weight: 500;
+      color: #545454;
+    }
+  }
+}
+.paymentMask {
+  background: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  position: fixed;
+  height: 100%;
+  top: 0;
+  z-index: 11;
+  right: 0;
+  -webkit-transition: 0.4s ease-in-out;
+  -moz-transition: 0.4s ease-in-out;
+  -ms-transition: 0.4s ease-in-out;
+  -o-transition: 0.4s ease-in-out;
+  transition: 0.4s ease-in-out;
 }
 @media(max-width: 1200px){
     .hero-new {
@@ -2925,6 +3238,38 @@ span.section-3:hover {
   }
 }
 @media(max-width: 576px){
+  .paymentModal {
+    right: 100%;
+    width: 100%;
+  }
+  .paymentModal .inner-payment {
+    height: calc(100% - 90px);
+  }
+  .paymentModal .payment-body .detail p span.leftT {
+    margin-bottom: 20px;
+    margin-left: 0;
+    top: 0;
+  }
+  .paymentModal .footer-payment {
+    height: 90px;
+  }
+  .paymentModal .payment-body .detail p span.rigthT {
+    width: 100%;
+    display: block;
+  }
+  .paymentModal .footer-payment button.payment-button2 {
+    height: 30px;
+    font-size: 12px;
+    margin: 0 auto;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .paymentModal .footer-payment button.payment-button {
+    height: 30px;
+    display: block;
+    font-size: 12px;
+    margin: 0 auto;
+  }
   .eish-head img {
     display: none;
   }

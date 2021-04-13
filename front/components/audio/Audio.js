@@ -109,8 +109,8 @@ class Audio extends Component {
                                                                             </Button>
                                                                         </Link>
                                                                     ) : (
-                                                                        <Button onClick={() => config.get('emitter').emit('premiumReq')} variant="secondary" style={{background: 'gold', display: 'flex', justifyContent: 'center',alignItems: 'center', fontSize: 16}}>
-                                                                            <img src="/images/crown.png" alt="" height={37} style={{width: 'auto', filter: 'grayscale(1) invert(1)'}}/> Premium Эрх авах
+                                                                        <Button onClick={() => config.get('emitter').emit('paymentModal', {type: 'premium'})} variant="secondary" style={{background: 'gold', display: 'flex', justifyContent: 'center',alignItems: 'center', fontSize: 16}}>
+                                                                            <img src="/images/crown.png" alt="" height={37} style={{width: 'auto', filter: 'grayscale(1) invert(1)'}}/> Premium эрх авах
                                                                         </Button>
                                                                     )
                                                                 }
@@ -150,8 +150,8 @@ class Audio extends Component {
                                                                                 </Button>
                                                                             </Link>
                                                                         ) : (
-                                                                            <Button onClick={() => config.get('emitter').emit('premiumReq')} variant="secondary" style={{background: 'gold', display: 'flex', justifyContent: 'center',alignItems: 'center', fontSize: 16}}>
-                                                                                <img src="/images/crown.png" alt="" height={37} style={{width: 'auto', filter: 'grayscale(1) invert(1)'}}/> Premium Эрх авах
+                                                                            <Button onClick={() => config.get('emitter').emit('paymentModal', {type: 'premium'})} variant="secondary" style={{background: 'gold', display: 'flex', justifyContent: 'center',alignItems: 'center', fontSize: 16}}>
+                                                                                <img src="/images/crown.png" alt="" height={37} style={{width: 'auto', filter: 'grayscale(1) invert(1)'}}/> Premium эрх авах
                                                                             </Button>
                                                                         )
                                                                     }
@@ -170,7 +170,7 @@ class Audio extends Component {
                             <Row>
                                 <Col lg={8} md={12}>
                                     <Tabs activeKey={this.state.active}>
-                                        <Tab eventKey="timeline" title={<span>Бүлэг<ion-icon name="chevron-down"></ion-icon></span>}>
+                                        <Tab eventKey="timeline" title={<span>Бүлэг<ion-icon name="chevron-down"/></span>}>
                                             <div className="timeline-cont">
                                                 <Accordion activeKey={this.state.activeIndex}>
                                                     <Card>
@@ -209,7 +209,7 @@ class Audio extends Component {
                                                 </Accordion>
                                             </div>
                                         </Tab>
-                                        <Tab eventKey="overview" title={<span>Танилцуулга<ion-icon name="chevron-down"></ion-icon></span>}>
+                                        <Tab eventKey="overview" title={<span>Танилцуулга<ion-icon name="chevron-down"/></span>}>
                                             <div className="inner-tab overview">
                                                 <h4>Номны тухай</h4>
                                                 <p dangerouslySetInnerHTML={{__html : lesson.intro_desc}}/>

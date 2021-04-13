@@ -17,35 +17,12 @@ export function setProgress(lesson_id, program) {
     let url = `/api/lesson/setProgram/${lesson_id}`;
     return networkActions.requestGet(constants.setProgress, url, {program: program._id});
 }
-export function addToCard(data) {
-    let url = `/api/lesson/add/to/card`;
-    return networkActions.requestPost(constants.lessonAddToCard, url, data);
-}
-export function removeFromCard(data) {
-    let url = `/api/lesson/remove/from/card`;
-    return networkActions.requestPost(constants.lessonRemoveFromCard, url, data);
-}
 export function addWish(id, data) {
     let url = `/api/lesson/addWish/${id}`;
     return networkActions.requestGet(constants.addWish, url, data);
-}
-export function removeFromCookie(lesson) {
-    return {
-        type: constants.removeFromCookieLesson.REQUEST,
-        lesson
-    }
 }
 export function clearLesson() {
     return {
         type: constants.clearLesson.REQUEST
     }
-}
-export function clearPurchase() {
-    return {
-        type: constants.clearPurchase.REQUEST
-    }
-}
-export function getLessonAll() {
-    let url = `/api/lesson/get/all`;
-    return networkActions.requestGet(constants.getLessonAll, url);
 }

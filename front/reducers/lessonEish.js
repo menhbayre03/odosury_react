@@ -1,7 +1,6 @@
 import {
     getListEish,
 } from "../actionTypes";
-import config from "../config";
 const initialState = {
     loading: 1,
     list: [],

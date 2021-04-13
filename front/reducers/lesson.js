@@ -1,12 +1,12 @@
 import {
     getList,
     getLesson,
-    lessonAddToCard,
-    lessonRemoveFromCard,
     setProgress,
-    getQpay,
-    checkQpay,
-    getViewArea, addWish, clearLesson, clearPurchase
+    getViewArea,
+    addWish,
+    clearLesson,
+    checkBankPayment,
+    checkQpayPayment
 } from "../actionTypes";
 import config from "../config";
 const initialState = {
@@ -17,48 +17,13 @@ const initialState = {
     lesson: {},
     lessonView: {},
     loadingView: 1,
-    gettingQpay: 0,
-    purchase: {},
-    checkingQpay: false,
-    addingToCard: false,
-    removingFromCard: false,
 };
 
 export default(state = initialState, action) => {
     switch (action.type) {
-        case clearPurchase.REQUEST:
-            return {
-                ...state,
-                purchase: {}
-            };
         case clearLesson.REQUEST:
             return {
                 ...initialState
-            };
-        case checkQpay.REQUEST:
-            return {
-                ...state,
-                checkingQpay: true
-            };
-        case checkQpay.RESPONSE:
-            return {
-                ...state,
-                checkingQpay: false,
-                lesson: {
-                    ...state.lesson,
-                    paid: action.json.success
-                }
-            };
-        case getQpay.REQUEST:
-            return {
-                ...state,
-                gettingQpay: 1
-            };
-        case getQpay.RESPONSE:
-            return {
-                ...state,
-                gettingQpay: action.json.success ? 0 : 2,
-                purchase: action.json.purchase || {}
             };
         case addWish.REQUEST:
             return {
@@ -173,26 +138,70 @@ export default(state = initialState, action) => {
                     loadingView:2
                 };
             }
-        case lessonAddToCard.REQUEST:
-            return {
-                ...state,
-                addingToCard: true
-            };
-        case lessonAddToCard.RESPONSE:
-            return {
-                ...state,
-                addingToCard: false
-            };
-        case lessonRemoveFromCard.REQUEST:
-            return {
-                ...state,
-                removingFromCard: true
-            };
-        case lessonRemoveFromCard.RESPONSE:
-            return {
-                ...state,
-                removingFromCard: false
-            };
+        case checkBankPayment.RESPONSE:
+            if(action.json.success && (state.lesson || {})._id) {
+                if ((action.json.transaction || {}).type === 'lesson' && ((action.json.transaction || {}).lesson || 'fd').toString() === ((state.lesson || {})._id || 'ww').toString()) {
+                    return {
+                        ...state,
+                        lesson: {
+                            ...state.lesson,
+                            paid: true
+                        },
+                    };
+                } else if ((action.json.transaction || {}).type === 'premium' || (action.json.transaction || {}).type === 'eish') {
+                    let paid = ((action.json.transaction || {}).type === 'eish' && state.lesson.eish);
+                    if ((action.json.transaction || {}).type === 'premium') {
+                        paid = true
+                    }
+                    return {
+                        ...state,
+                        lesson: {
+                            ...state.lesson,
+                            paid: paid
+                        },
+                    };
+                } else {
+                    return {
+                        ...state,
+                    };
+                }
+            } else {
+                return {
+                    ...state,
+                };
+            }
+        case checkQpayPayment.RESPONSE:
+            if(action.json.success && (state.lesson || {})._id) {
+                if((action.json.transaction || {}).type === 'lesson' && ((action.json.transaction || {}).lesson || 'fd').toString() === ((state.lesson || {})._id || 'ww').toString()) {
+                    return {
+                        ...state,
+                        lesson: {
+                            ...state.lesson,
+                            paid: true
+                        },
+                    };
+                } else if((action.json.transaction || {}).type === 'premium' || (action.json.transaction || {}).type === 'eish') {
+                    let paid = ((action.json.transaction || {}).type === 'eish' && state.lesson.eish);
+                    if((action.json.transaction || {}).type === 'premium') {
+                        paid = true
+                    }
+                    return {
+                        ...state,
+                        lesson: {
+                            ...state.lesson,
+                            paid: paid
+                        },
+                    };
+                } else {
+                    return {
+                        ...state,
+                    };
+                }
+            } else {
+                return {
+                    ...state,
+                };
+            }
         default:
             return state;
     }

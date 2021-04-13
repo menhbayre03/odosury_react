@@ -37,8 +37,8 @@ class Bundle extends Component {
                 return 'Хүлээгдэж буй';
             case "success":
                 return 'Амжилттай';
-            case "fail":
-                return 'Цуцлагдсан';
+            case "finished":
+                return 'Дууссан';
             default:
                 return ''
         }
@@ -68,19 +68,22 @@ class Bundle extends Component {
                                                             <span className="ind">{index+1}</span>
                                                             <span className="date">{moment(item.created).format('YYYY/MM/DD')}</span>
                                                             <span className="items">
-                                                                {/*{*/}
-                                                                {/*    item.bundles && item.bundles.length > 0 ? (*/}
-                                                                {/*        <React.Fragment>*/}
-                                                                {/*            багц: <span style={{marginRight: 10}}>{item.bundles.length}</span>*/}
-                                                                {/*        </React.Fragment>*/}
-                                                                {/*    ) : null*/}
-                                                                {/*}*/}
                                                                 {
-                                                                    item.lessons && item.lessons.length > 0 ? (
+                                                                    item.type === 'premium' ? (
                                                                         <React.Fragment>
-                                                                            хичээл: <span>{item.lessons.length}</span>
+                                                                            Premium эрх
                                                                         </React.Fragment>
-                                                                    ) : null
+                                                                    ) : (
+                                                                        item.type === 'eish' ? (
+                                                                            <React.Fragment>
+                                                                                ЭЕШ эрх
+                                                                            </React.Fragment>
+                                                                        ) : (
+                                                                            <React.Fragment>
+                                                                                Хичээл 1
+                                                                            </React.Fragment>
+                                                                        )
+                                                                    )
                                                                 }
                                                             </span>
                                                         </div>
@@ -114,37 +117,22 @@ class Bundle extends Component {
                     <Modal.Body>
                         <div className="histmodal-item">
                             <span className="date">Огноо: <span>{moment(data.created).format('YYYY/MM/DD')}</span></span>
+                            {
+                                data.accepted && data.status === 'success' ? (
+                                    <span className="date">Идэвхэжсэн огноо: <span>{moment(data.accepted).format('YYYY/MM/DD')}</span></span>
+                                ) : null
+                            }
                             <span className="date">
                                 Гүйлгээний утга: <span>{data.description}</span>
                             </span>
                             {
-                                data.bundles && data.bundles.length > 0 ? (
-                                    <React.Fragment>
-                                        <span className="date" style={{marginTop: 15, marginBottom: 5}}>Багц:</span>
-                                        <div>
-                                            {
-                                                data.bundles.map((item, ind) => (
-                                                    <div key={ind} className="item">
-                                                        <p><Link target="_blank" to={`/bundle/${item.bundle.slug}`} className="tit">{item.bundle.title}</Link><span className="cost">{config.formatMoney(item.cost)}₮</span></p>
-                                                    </div>
-                                                ))
-                                            }
-                                        </div>
-                                    </React.Fragment>
-                                ) : null
-                            }
-                            {
-                                data.lessons && data.lessons.length > 0 ? (
+                                data.lesson ? (
                                     <React.Fragment>
                                         <span className="date" style={{marginTop: 15}}>Хичээл:</span>
                                         <div>
-                                            {
-                                                data.lessons.map((item, ind) => (
-                                                    <div key={ind} className="item">
-                                                        <p><Link target="_blank" to={`/lesson/${item.lesson.slug}`} className="tit">{item.lesson.title}</Link><span className="cost">{config.formatMoney(item.cost)}₮</span></p>
-                                                    </div>
-                                                ))
-                                            }
+                                            <div className="item">
+                                                <p><Link target="_blank" to={`/lesson/${data.lesson.slug}`} className="tit">{data.lesson.title}</Link><span className="cost">{config.formatMoney(data.amount)}₮</span></p>
+                                            </div>
                                         </div>
                                     </React.Fragment>
                                 ) : null

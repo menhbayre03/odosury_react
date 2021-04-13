@@ -3,7 +3,7 @@ import {
     getAudio,
     setProgressAudio,
     getViewAreaAudio,
-    clearAudio,
+    clearAudio, checkBankPayment, checkQpayPayment,
 } from "../actionTypes";
 import config from "../config";
 const initialState = {
@@ -115,6 +115,46 @@ export default(state = initialState, action) => {
                     ...state,
                     lessonView: {},
                     loadingView:2
+                };
+            }
+        case checkBankPayment.RESPONSE:
+            if(action.json.success) {
+                if ((action.json.transaction || {}).type === 'premium' && (state.lesson || {})._id) {
+                    return {
+                        ...state,
+                        lesson: {
+                            ...state.lesson,
+                            paid: true
+                        },
+                    };
+                } else {
+                    return {
+                        ...state,
+                    };
+                }
+            } else {
+                return {
+                    ...state,
+                };
+            }
+        case checkQpayPayment.RESPONSE:
+            if(action.json.success) {
+                if ((action.json.transaction || {}).type === 'premium' && (state.lesson || {})._id) {
+                    return {
+                        ...state,
+                        lesson: {
+                            ...state.lesson,
+                            paid: true
+                        },
+                    };
+                } else {
+                    return {
+                        ...state,
+                    };
+                }
+            } else {
+                return {
+                    ...state,
                 };
             }
         default:

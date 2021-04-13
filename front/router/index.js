@@ -7,16 +7,11 @@ import {connect} from "react-redux";
 import config from "../config";
 import ReactNotification from 'react-notifications-component'
 import { store } from 'react-notifications-component';
-// import facebookLogin from 'facebook-login';
-// const api = facebookLogin({ appId: '1025498560826970' });
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-notifications-component/dist/theme.css'
 import 'react-photoswipe/lib/photoswipe.css';
 import "react-datepicker/dist/react-datepicker.css";
-// import 'swiper/swiper.less'
 import io from "socket.io-client";
-import * as actions from "../actions/card_actions";
-import * as homeActions from "../actions/home_actions";
 import SmartBanner from 'react-smartbanner';
 import '../../node_modules/react-smartbanner/dist/main.css';
 require("../../static/css/front.less");
@@ -27,9 +22,6 @@ const reducer = ({ main }) => ({ main });
 class index extends React.Component{
     constructor(props){
         super(props);
-        // config.config({
-        //     'fbApi': api
-        // });
         this.socket = socket;
     }
 
@@ -78,7 +70,7 @@ class index extends React.Component{
             }
         });
         this.error = config.get('emitter').addListener('error',function(text){
-            if(text != undefined && text != ''){
+            if(text != null && text !== ''){
                 store.addNotification({
                     ...optios,
                     message: text,
@@ -87,7 +79,7 @@ class index extends React.Component{
             }
         });
         this.warning = config.get('emitter').addListener('warning',function(text){
-            if(text != undefined && text != ''){
+            if(text != null && text !== ''){
                 store.addNotification({
                     ...optios,
                     message: text,
@@ -103,14 +95,14 @@ class index extends React.Component{
         });
         if(((this.props.main || {}).user || {})._id){
             this.socket.on('odosuryphk', (data) => {
-                if(data.payment_id && (data.user === ((this.props.main || {}).user || {})._id)){
-                    this.props.dispatch(actions.checkQpay({c: data.payment_id}))
-                }
+                // if(data.payment_id && (data.user === ((this.props.main || {}).user || {})._id)){
+                //     this.props.dispatch(actions.checkQpay({c: data.payment_id}))
+                // }
             });
             this.socket.on('odosuryphkPremium', (data) => {
-                if(data.payment_id && (data.user === ((this.props.main || {}).user || {})._id)){
-                    this.props.dispatch(homeActions.checkQpay({c: data.payment_id}))
-                }
+                // if(data.payment_id && (data.user === ((this.props.main || {}).user || {})._id)){
+                //     this.props.dispatch(homeActions.checkQpay({c: data.payment_id}))
+                // }
             });
         }
     }

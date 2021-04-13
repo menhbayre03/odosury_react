@@ -8,7 +8,6 @@ import Audio from "../components/audio/Audio";
 import ViewAreaAudio from "../components/audio/ViewAreaAudio";
 import ViewArea from "../components/lesson/ViewArea";
 import Login from "../components/Login";
-import Bundle from "../components/Bundle";
 import NotFound from "../components/NotFound";
 import Profile from '../components/profile/Profile';
 import Wishlist from '../components/profile/Wishlist';
@@ -68,16 +67,6 @@ export default [
                 path: '/audio/view/:slug',
                 exact: true
             },
-            {
-                component: Bundle,
-                path: '/bundle/:slug',
-                exact: true
-            },
-            // {
-            //     component: Card,
-            //     path: '/card',
-            //     exact: true
-            // },
             {
                 component: Profile,
                 path: '/profile/info',

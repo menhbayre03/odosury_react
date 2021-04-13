@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from 'react-redux';
 import {
-    DatePicker, Card, Table, Select, Button, List, Row, Col, Typography, Form, Input
+    DatePicker, Card, Table, Select, Button, List, Row, Col, Typography, Form, Input, Tag
 } from 'antd';
 import { getPayments, setPaymentStatus } from '../../actions/purchase_actions';
 import { DeleteFilled , CloseCircleFilled , SearchOutlined} from '@ant-design/icons';
@@ -73,29 +73,40 @@ class Purchase extends React.Component {
                 )
             },
             {
-                key: 'description',
-                title: 'Утга',
-                dataIndex: 'description'
+                key: 'date',
+                title: 'Огноо',
+                render: (text, record) => moment(record.created).format('YYYY/MM/DD hh:mm')
             },
             {
-                key: 'buy',
-                title: 'Худалдан авалт',
+                key: 'type',
+                title: 'Төрөл',
+                dataIndex: 'type',
                 render: (text, record) => (
-                    <React.Fragment>
-                        <span>Багц: {(record.bundles || {}).length || 0}, </span>
-                        <span>Хичээл: {(record.lessons || {}).length || 0}</span>
-                    </React.Fragment>
+                    text === 'premium' ? (
+                        <Tag color="#108ee9">Premium</Tag>
+                    ) : text === 'eish' ? (
+                        <Tag color="#2db7f5">ЭЕШ</Tag>
+                    ) : (
+                        <Tag color="#87d068">Хичээл</Tag>
+                    )
+                )
+            },
+            {
+                key: 'method',
+                title: 'Төлөлт',
+                dataIndex: 'method',
+                render: (text, record) => (
+                    text === 'bank' ? (
+                        'Банкаар'
+                    ) : text === 'qpay' ? (
+                        'QPay'
+                    ) : ''
                 )
             },
             {
                 key: 'amount',
                 title: 'Мөнгөн дүн',
                 render: (text, record) => <NumberFormat value={record.amount || 0} displayType={'text'} thousandSeparator={true} renderText={value => <span>{value}₮</span>}/>
-            },
-            {
-                key: 'date',
-                title: 'Огноо',
-                render: (text, record) => moment(record.created).format('YYYY/MM/DD hh:mm')
             },
             {
                 key: 'actions',
@@ -108,8 +119,8 @@ class Purchase extends React.Component {
                         </Select>
                     :
                         <Select defaultValue={record.status || null} bordered={false} placeholder={'Төлөв сонгоно уу.'} loading={record.statusChanging} onChange={(e) => dispatch(setPaymentStatus(record._id, e))}>
-                            <Option value={'success'}>Зөвшөөрөх</Option>
-                            <Option value={'cancel'}>Цуцлах</Option>
+                            <Option value={'success'}>Идэвхитэй</Option>
+                            <Option value={'finished'}>Дууссан</Option>
                             <Option value={'pending'}>Хүлээгдэж буй</Option>
                         </Select>
                 )
@@ -136,9 +147,9 @@ class Purchase extends React.Component {
                     <Select style={{width: 142, marginRight: 20}} size='small' name='role' value={this.state.status} onChange={(e) => this.setState({status: e})}
                     >
                         <Option value=''>Бүгд</Option>
-                        <Option value='success'>Амжилттай</Option>
-                        <Option value='pending'>Хүлээгдэж буй</Option>
-                        <Option value='cancel'>Цуцлагдсан</Option>
+                        <Option value={'success'}>Идэвхитэй</Option>
+                        <Option value={'finished'}>Дууссан</Option>
+                        <Option value={'pending'}>Хүлээгдэж буй</Option>
                     </Select>
                     <RangePicker size="small" onChange={this.onDateChange.bind(this)} allowEmpty={[true, true]} value={[this.state.startDate ? moment(this.state.startDate) : null, this.state.endDate ? moment(this.state.endDate) : null]} format="YYYY-MM-DD" />
 
@@ -148,36 +159,32 @@ class Purchase extends React.Component {
                 <Table
                     size="small"
                     dataSource={transactions}
+                    rowClassName={(record, index) => record.status === 'success' ? 'success' : record.status === 'pending' ? 'pending' : record.status === 'finished' ? 'finished' : ''}
                     columns={columns}
                     pagination={pagination}
                     expandable={{
-                        rowExpandable: record => (record.lessons || []).length > 0,
+                        rowExpandable: record => !!record.lesson,
                         expandedRowRender: record =>
                             <Row gutter={[8, 8]}>
                                 {
-                                    (record.lessons || []).length > 0 ?
-                                        <Col span={(record.bundles || []).length > 0 ? 12 : 24}>
+                                    record.lesson ?
+                                        <Col span={24}>
                                             <Card
-                                                title={'Хичээлүүд: '}
+                                                title={'Хичээл: '}
                                                 size={'small'}
-                                                extra={<Text type="secondary" strong>( {(record.lessons || []).length} )</Text>}
                                             >
-                                                {
-                                                    (record.lessons || []).map((item) =>
-                                                        <List.Item
-                                                            actions={[
-                                                                <NumberFormat value={item.cost || 0} displayType={'text'} thousandSeparator={true} renderText={value => <Text>{value}₮</Text>}/>
-                                                            ]}
-                                                        >
-                                                            <Text
-                                                                copyable
-                                                                ellipsis
-                                                            >
-                                                                {(item.lesson || {}).title || ''}
-                                                            </Text>
-                                                        </List.Item>
-                                                    )
-                                                }
+                                                <List.Item
+                                                    actions={[
+                                                        <NumberFormat value={record.amount || 0} displayType={'text'} thousandSeparator={true} renderText={value => <Text>{value}₮</Text>}/>
+                                                    ]}
+                                                >
+                                                    <Text
+                                                        copyable
+                                                        ellipsis
+                                                    >
+                                                        <a target="_blank" href={`/lesson/${(record.lesson || {}).slug}`}>{(record.lesson || {}).title || ''}</a>
+                                                    </Text>
+                                                </List.Item>
                                             </Card>
                                         </Col>
                                     : null

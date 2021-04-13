@@ -157,9 +157,6 @@ class User extends React.Component {
     onChangeSelect1(value){
         this.props.dispatch(actions.userChangeHandler({name:'status', value: value}));
     };
-    onChangeSelect2(value){
-        this.props.dispatch(actions.userChangeHandler({name:'premium', value: value}));
-    };
     render() {
         let { user:{status, openModal, user, users, submitUserLoader, all, imageUploadLoading} } = this.props;
         let pagination = {
@@ -213,20 +210,6 @@ class User extends React.Component {
                 ),
             },
             {
-                key: 'role',
-                title: 'Эрх',
-                render: (text, record) => (
-                    record.role ?
-                        record.role === 'admin'? 'Админ' :
-                            record.role === 'teacher'? 'Багш' :
-                                record.role === 'user' && record.premium === 'pr' ? <span style={{color: 'green'}}>Premium</span> :
-                                    record.role === 'user' && record.premium === 'pq' ? <span>Premium хүсэлттэй</span> :
-                                        record.role === 'user'? 'Хэрэглэгч' : record.role
-                        :
-                        '-'
-                ),
-            },
-            {
                 key: 'created',
                 title: 'Огноо',
                 render: (text, record, idx) => (
@@ -256,15 +239,6 @@ class User extends React.Component {
                         >
                             <EditFilled /> Засах
                         </Button>
-                        {/*{record.status !== 'active'?*/}
-                        {/*    <Button size={"small"} type={"primary"} style={{marginRight: 10}}*/}
-                        {/*            onClick = {this.changeCategoryStatus.bind(this, record._id, 'active')}*/}
-                        {/*    >*/}
-                        {/*        <EditFilled /> Идэвхжүүлэх*/}
-                        {/*    </Button>*/}
-                        {/*    :*/}
-                        {/*    null*/}
-                        {/*}*/}
                         <Popconfirm
                             title={`Та устгах гэж байна!`}
                             onConfirm={this.delete.bind(this, record._id)}
@@ -303,16 +277,12 @@ class User extends React.Component {
                 }
             >
                 <div style={{marginBottom: 20}}>
-                    {/*<Input addonAfter={<CloseOutlined onClick={() => this.setState({search:''})} />} maxLength={60} size='small' placeholder='Хайх /бүх талбар/' style={{width: 200, marginRight: 20}} value={this.state.search} name='search' onChange={(e) => this.setState({search: e.target.value})} />*/}
-                    {/*<Input addonAfter={<CloseCircleOutlined style={{color:'white'}} onClick={() => this.setState({search:''})} />} maxLength={60} size='small' placeholder='Хайх /бүх талбар/' style={{width: 200, marginRight: 20}} value={this.state.search} name='search' onChange={(e) => this.setState({search: e.target.value})} />*/}
                     <Input addonAfter={<CloseCircleFilled style={{color:'white'}} onClick={() => this.setState({search:''})} />} maxLength={60} size='small' placeholder='Хайх /бүх талбар/' style={{width: 200, marginRight: 20}} value={this.state.search} name='search' onChange={(e) => this.setState({search: e.target.value})} />
                     <Select style={{width: 142, marginRight: 20}} size='small' name='role' value={this.state.role} onChange={(e) => this.setState({role: e})}
                     >
                         <Option value=''>Эрх сонгоно уу</Option>
                         <Option value='teacher'>Багш</Option>
                         <Option value='user'>Хэрэглэгч</Option>
-                        <Option value='pr'>Premium хэрэглэгч</Option>
-                        <Option value='pq'>Premium хүсэлттэй хэрэглэгч</Option>
                     </Select>
                     <Button loading={status} type="primary" size='small' icon={<SearchOutlined />} onClick={this.searchUser.bind(this)} >Хайх</Button>
                 </div>
@@ -368,35 +338,30 @@ class User extends React.Component {
                     <Form.Item
                         label='Нэр'
                         labelCol={{span: 5}}
-                        // help=""
                     >
                         <Input maxLength={60} value={user.first_name? user.first_name : ''} name='first_name' onChange={this.onChangeHandler.bind(this)} />
                     </Form.Item>
                     <Form.Item
                         label='Танилцуулга'
                         labelCol={{span: 5}}
-                        // help=""
                     >
                         <TextArea rows={4} value={user.bio? user.bio : ''} name='bio' onChange={this.onChangeHandler.bind(this)} />
                     </Form.Item>
                     <Form.Item
                         label='Имэйл'
                         labelCol={{span: 5}}
-                        // help=""
                     >
                         <Input maxLength={60} value={user.email? user.email : ''} name='email' onChange={this.onChangeHandler.bind(this)} />
                     </Form.Item>
                     <Form.Item
                         label='Утас'
                         labelCol={{span: 5}}
-                        // help=""
                     >
                         <Input maxLength={8} type='text' value={user.phone? user.phone : ''} name='phone' onChange={this.onChangeHandler.bind(this)} />
                     </Form.Item>
                     <Form.Item
                         label='Эрх'
                         labelCol={{span: 5}}
-                        // help=""
                     >
                         <Select
                             value={user.role ? user.role : ''}
@@ -407,24 +372,6 @@ class User extends React.Component {
                             <Option value="user">Хэрэглэгч</Option>
                         </Select>
                     </Form.Item>
-                    {user.role && user.role === 'user'?
-                        <Form.Item
-                            label='Премиум'
-                            labelCol={{span: 5}}
-                            // help=""
-                        >
-                            <Select
-                                value={user.premium ? user.premium : ''}
-                                onChange={this.onChangeSelect2.bind(this)}
-                                style={{fontWeight: 700, color:'#000000'}}
-                            >
-                                <Option value=''>Энгийн хэрэглэгч</Option>
-                                <Option value='pr'>Премиум хэрэглэгч</Option>
-                            </Select>
-                        </Form.Item>
-                        :
-                        null
-                    }
                     <Form.Item
                         label='Статус'
                         labelCol={{span: 5}}
@@ -444,7 +391,6 @@ class User extends React.Component {
                     >
 
                         <Input.Password name="password" type="password" value={user.password? user.password : ''} onChange={this.onChangeHandler.bind(this)}/>
-                        {/*<Input type='password' maxLength={20} value={user.password? user.password : ''} name='last_name' onChange={this.onChangeHandler.bind(this)} />*/}
                     </Form.Item>
                 </Modal>
 
