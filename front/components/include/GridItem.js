@@ -44,59 +44,61 @@ class Header extends Component {
             <div className={`grid-item ${watching ? 'watching' : ''}`}>
                 <div title={item.title}>
                     <div className="grid-item-box">
-                        <Link to={`/lesson/${item.slug}`} title={item.title}>
+                        <Link to={`/lesson/${item.slug}`} title={item.title} className="imga">
                             <img src={(item.thumbnailSmall || {}).path ? `${(item.thumbnailSmall || {}).url}${(item.thumbnailSmall || {}).path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
+                            <span className={`type ${item.eish ? 'eish' : ''}`}>{item.eish ? 'ЭЕШ' : 'Premium'}</span>
                         </Link>
                         <div className="contents">
-                            <Link to={`/lesson/${item.slug}`} title={item.title}>
-                                <h3>{item.title}</h3>
-                            </Link>
                             {
                                 watching ? (
                                     <div className="progressbar">
                                         <div className="filler" style={{width:`${progress}%`}}/>
                                     </div>
-                                ) : (
+                                ) : null
+                            }
+                            <Link to={`/lesson/${item.slug}`} title={item.title}>
+                                <h3>{item.title}</h3>
+                            </Link>
+                            {
+                                watching ? null : (
                                     <div>
                                         {/*<Link className="teacher" to={`/teacher/${item.slug}`} title={`${(item.teacher || {}).last_name} ${(item.teacher || {}).first_name}`}>*/}
                                         {/*    {((item.teacher || {}).last_name || '').slice(0, 1)}. {(item.teacher || {}).first_name}*/}
                                         {/*</Link>*/}
-                                        <span className="teacher">{((item.teacher || {}).last_name || '').slice(0, 1)}. {(item.teacher || {}).first_name}</span>
+                                        <span className="teacher">{item.eish ? 'Элсэлтийн ерөнхий шалгалт' : (item.category || {}).title}</span>
                                         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end'}}>
-                                            <div style={{display: 'flex', justifyContent: 'start', alignItems: 'center'}}>
-                                                <ReactStars
-                                                    count={5}
-                                                    value={rating}
-                                                    edit={false}
-                                                    size={16}
-                                                />
-                                                <span style={{fontSize: 12, color: '#909090', marginLeft: 5}}>({(item.rating || []).length})</span>
-                                            </div>
+                                            {/*<div style={{display: 'flex', justifyContent: 'start', alignItems: 'center'}}>*/}
+                                            {/*    <ReactStars*/}
+                                            {/*        count={5}*/}
+                                            {/*        value={rating}*/}
+                                            {/*        edit={false}*/}
+                                            {/*        size={16}*/}
+                                            {/*    />*/}
+                                            {/*    <span style={{fontSize: 12, color: '#909090', marginLeft: 5}}>({(item.rating || []).length})</span>*/}
+                                            {/*</div>*/}
                                             {
-                                                item.sale > 0 ? (
+                                                item.sale > 0 && !item.eish ? (
                                                     <div style={{
                                                         textAlign: 'right',
-                                                        marginTop: 2,
-                                                        height: 43,
-                                                        alignItems: 'flex-end',
+                                                        marginTop: 10,
+                                                        alignItems: 'center',
                                                         display: 'flex',
-                                                        flexDirection: 'column',
-                                                        justifyContent: 'flex-end',
+                                                        flexDirection: 'row',
+                                                        justifyContent: 'flex-start',
                                                     }}>
+                                                        <span style={{fontSize: 14, color: '#3e416d', display: 'block', fontWeight: 600, marginRight: 15}}>{config.formatMoney(item.sale)}₮</span>
                                                         <span style={{fontSize: 12, color: '#909090', display: 'block', fontWeight: 600 , textDecoration: 'line-through'}}>{config.formatMoney(item.price)}₮</span>
-                                                        <span style={{fontSize: 14, color: '#000000', display: 'block', fontWeight: 600}}>{config.formatMoney(item.sale)}₮</span>
                                                     </div>
                                                 ) : (
                                                     <div style={{
                                                         textAlign: 'right',
-                                                        marginTop: 2,
-                                                        height: 43,
+                                                        marginTop: 10,
                                                         alignItems: 'flex-end',
                                                         display: 'flex',
                                                         flexDirection: 'column',
                                                         justifyContent: 'flex-end',
                                                     }}>
-                                                        <span style={{fontSize: 14, color: '#000000', display: 'block', fontWeight: 600}}>{config.formatMoney(item.price)}₮</span>
+                                                        <span style={{fontSize: 14, color: '#3e416d', display: 'block', fontWeight: 600}}>{item.eish ? 'ЭЕШ БАГЦ' :config.formatMoney(item.price)+'₮'}</span>
                                                     </div>
                                                 )
                                             }
@@ -105,23 +107,23 @@ class Header extends Component {
                                 )
                             }
                         </div>
-                        {
-                            watching ? null : (
-                                <div className="footer">
-                                    <h5><ion-icon name="library"/> {lectures} Хичээл </h5>
-                                    <div>
-                                        {
-                                            hoursText ? (
-                                                <h5>
-                                                    <ion-icon name="time"/>
-                                                    {Math.ceil(hours)} {hoursText}
-                                                </h5>
-                                            ) : null
-                                        }
-                                    </div>
-                                </div>
-                            )
-                        }
+                        {/*{*/}
+                        {/*    watching ? null : (*/}
+                        {/*        <div className="footer">*/}
+                        {/*            <h5><ion-icon name="library"/> {lectures} Хичээл </h5>*/}
+                        {/*            <div>*/}
+                        {/*                {*/}
+                        {/*                    hoursText ? (*/}
+                        {/*                        <h5>*/}
+                        {/*                            <ion-icon name="time"/>*/}
+                        {/*                            {Math.ceil(hours)} {hoursText}*/}
+                        {/*                        </h5>*/}
+                        {/*                    ) : null*/}
+                        {/*                }*/}
+                        {/*            </div>*/}
+                        {/*        </div>*/}
+                        {/*    )*/}
+                        {/*}*/}
                     </div>
                 </div>
             </div>

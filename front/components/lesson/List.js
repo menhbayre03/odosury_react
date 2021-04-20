@@ -158,7 +158,7 @@ class List extends Component {
                                             onChange={(values) => this.setState({sort: values[0]})}
                                         />
                                     </div>
-                                    <div className="list-items">
+                                    <div className="list-items maraa">
                                         <Loader status={loading}>
                                             <Row>
                                                 {

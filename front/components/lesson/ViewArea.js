@@ -307,7 +307,8 @@ class Bundle extends Component {
                                                     )
                                                 )
                                             }
-                                            <p>{(program.timeline || {}).title}</p>
+                                            <p>{(program.timeline || {}).title}
+                                                <span>{(program.timeline || {}).description}</span></p>
                                             {
                                                 program.timeline.minutes > 0 ? (
                                                     <span>{(program.timeline || {}).minutes} мин</span>

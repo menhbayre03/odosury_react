@@ -95,8 +95,8 @@ class Header extends Component {
                                             <span>
                                                 {
                                                     premium ?
-                                                        'Premium хэрэглэгч'
-                                                        : 'Premium эрх авах'
+                                                        (isMobile ? 'Premium' : 'Premium хэрэглэгч')
+                                                        : (isMobile ? 'Premium' : 'Premium эрх авах')
                                                 }
                                             </span>
                                         </div>

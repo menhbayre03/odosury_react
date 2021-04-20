@@ -146,7 +146,7 @@ class Lesson extends Component {
                                                                 ) : (
                                                                     <div className="inner">
                                                                         {
-                                                                            lesson.sale > 0 ? (
+                                                                            lesson.sale > 0 && !lesson.eish ? (
                                                                                 <div style={{
                                                                                     textAlign: 'right',
                                                                                     height: 43,
@@ -167,7 +167,7 @@ class Lesson extends Component {
                                                                                     flexDirection: 'column',
                                                                                     justifyContent: 'flex-end'
                                                                                 }}>
-                                                                                    <span style={{fontSize: 24, color: '#fff', display: 'block', fontWeight: 700}}>{config.formatMoney(lesson.price)}₮</span>
+                                                                                    <span style={{fontSize: 24, color: '#fff', display: 'block', fontWeight: 700}}>{lesson.eish ? 'ЭЕШ БАГЦ' : config.formatMoney(lesson.price)+'₮'}</span>
                                                                                 </div>
                                                                             )
                                                                         }
@@ -239,7 +239,7 @@ class Lesson extends Component {
                                                                     ) : (
                                                                         <div className="inner">
                                                                             {
-                                                                                lesson.sale > 0 ? (
+                                                                                lesson.sale > 0 && !lesson.eish ? (
                                                                                     <div style={{
                                                                                         textAlign: 'right',
                                                                                         height: 43,
@@ -260,7 +260,7 @@ class Lesson extends Component {
                                                                                         flexDirection: 'column',
                                                                                         justifyContent: 'flex-end'
                                                                                     }}>
-                                                                                        <span style={{fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{config.formatMoney(lesson.price)}₮</span>
+                                                                                        <span style={{fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{lesson.eish ? 'ЭЕШ БАГЦ' : config.formatMoney(lesson.price)+'₮'}</span>
                                                                                     </div>
                                                                                 )
                                                                             }
@@ -355,7 +355,8 @@ class Lesson extends Component {
                                                                                                     )
                                                                                                 )
                                                                                             }
-                                                                                            <p>{(program.timeline || {}).title}</p>
+                                                                                            <p>{(program.timeline || {}).title}
+                                                                                                <span>{(program.timeline || {}).description}</span></p>
                                                                                             {
                                                                                                 program.timeline.minutes > 0 ? (
                                                                                                     <span>{(program.timeline || {}).minutes} мин</span>
@@ -376,7 +377,8 @@ class Lesson extends Component {
                                                                                                 )
                                                                                             )
                                                                                         }
-                                                                                        <p>{(program.timeline || {}).title}</p>
+                                                                                        <p>{(program.timeline || {}).title}
+                                                                                            <span>{(program.timeline || {}).description}</span></p>
                                                                                         {
                                                                                             program.timeline.minutes > 0 ? (
                                                                                                 <span>{(program.timeline || {}).minutes} мин</span>
