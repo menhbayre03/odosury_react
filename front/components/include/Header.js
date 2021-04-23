@@ -82,24 +82,33 @@ class Header extends Component {
                                 {
                                     isMobile ? null : (
                                         <div className="section-1-1">
-                                            <form onSubmit={(e) => this.search(e)}>
-                                                <input onChange={(e) => this.setState({search: e.target.value})} style={{width: '100%'}} placeholder="Хичээл хайх ..."/>
-                                                <ion-icon onClick={(e) => this.search(e)} name="search-outline" style={{cursor: 'pointer'}}/>
-                                            </form>
+                                            <p style={{
+                                                color: '#fff',
+                                                marginBottom: 0,
+                                                position: 'relative',
+                                                top: -7,
+                                                height: 20,
+                                            }}><ion-icon style={{
+                                                position: 'relative',
+                                                background: 'transparent',
+                                                color: '#fff',
+                                                top: 8,
+                                            }} name="call"/><span style={{
+                                                fontSize: 14,
+                                                fontWeight: 600,
+                                            }}>+976 8844-5020</span></p>
+                                            {/*<form onSubmit={(e) => this.search(e)}>*/}
+                                            {/*    <input onChange={(e) => this.setState({search: e.target.value})} style={{width: '100%'}} placeholder="Хичээл хайх ..."/>*/}
+                                            {/*    <ion-icon onClick={(e) => this.search(e)} name="search-outline" style={{cursor: 'pointer'}}/>*/}
+                                            {/*</form>*/}
                                         </div>
                                     )
                                 }
-                                    <span className={'section-3'} onClick={() => premium ? console.log('gz') : config.get('emitter').emit('paymentModal', {type: 'premium'})}>
-                                        <img src="/images/crown.png" alt="" height={13}/>
-                                        <div>
-                                            <span>
-                                                {
-                                                    premium ?
-                                                        (isMobile ? 'Premium' : 'Premium хэрэглэгч')
-                                                        : (isMobile ? 'Premium' : 'Premium эрх авах')
-                                                }
-                                            </span>
-                                        </div>
+                                    <span className={'section-3 neon'} onClick={() => premium ? console.log('gz') : config.get('emitter').emit('paymentModal', {type: 'premium'})}>
+                                        {/*<img src="/images/crown.png" alt="" height={13}/>*/}
+                                        <span>
+                                            P<span id="offset">re</span>mium
+                                        </span>
                                     </span>
                             </Col>
                         </Row>

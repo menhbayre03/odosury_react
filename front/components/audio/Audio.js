@@ -12,6 +12,8 @@ import Loader from "../include/Loader";
 import {
     isMobile
 } from "react-device-detect";
+import ReactPlayer from "react-player";
+import Cookies from "js-cookie";
 const reducer = ({ main, audio }) => ({ main, audio });
 
 class Audio extends Component {
@@ -38,6 +40,10 @@ class Audio extends Component {
 
     render() {
         const {main: {user = {}}, audio: {lesson, rating, lessonLoading}} = this.props;
+        let mediaUrl = '';
+        if((lesson.audio || {}).path) {
+            mediaUrl = lesson.audio.url+"/api/audio/show/"+lesson.audio._id+'?lessonId='+lesson._id+'&token='+Cookies.get('token')+ "&intro=yes";
+        }
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
@@ -176,6 +182,38 @@ class Audio extends Component {
                                                     <Card>
                                                         <Accordion.Collapse eventKey={'0'}>
                                                             <Card.Body>
+                                                                {
+                                                                    (lesson.audio || {}).path ? (
+                                                                        <div className={`program intro`} style={{display: 'block'}}>
+                                                                            <ion-icon name="musical-notes" style={{top: 7}}/>
+                                                                            <p>Танилцуулга</p>
+                                                                            <div style={{padding: '0px 20px 10px'}}>
+                                                                                <ReactPlayer
+                                                                                    // playing
+                                                                                    controls
+                                                                                    onError={() => config.get('emitter').emit('warning', 'Хандах эрх хүрэхгүй байна.')}
+                                                                                    playIcon={<ion-icon style={{fontSize: 74, color: '#fff'}} name="play-circle"/>}
+                                                                                    height={60}
+                                                                                    width={"100%"}
+                                                                                    url={mediaUrl}
+                                                                                    config={{
+                                                                                        file: {
+                                                                                            forceAudio: true,
+                                                                                            attributes: {
+                                                                                                controlsList : "nodownload"
+                                                                                            }
+                                                                                        }
+                                                                                    }}
+                                                                                    style={{
+                                                                                        border: 'none',
+                                                                                        outline: 'none',
+                                                                                        boxShadow: 'none',
+                                                                                    }}
+                                                                                />
+                                                                            </div>
+                                                                        </div>
+                                                                    ) : null
+                                                                }
                                                                 {
                                                                     (lesson.programs || []).map((program, ind) => (
                                                                         lesson.paid ? (

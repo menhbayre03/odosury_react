@@ -35,7 +35,7 @@ class Home extends Component {
     }
 
     render() {
-        const {home : {loading, watching, newLessons, featuredLessons, newAudios}, main: {premium, categories, audioCategories}} = this.props;
+        const {home : {loading, watching, newLessons, featuredLessons, newAudios}, main: {premium, eish, categories, audioCategories}} = this.props;
         const gridSlider = {
             slidesPerView: 1,
             slidesPerGroup: 1,
@@ -124,20 +124,31 @@ class Home extends Component {
                                                     :   'Premium эрх авах'
                                             }
                                         </Button>
+                                        {/*<Link to="/premium">*/}
+                                        {/*    <Button className="banner-button">*/}
+                                        {/*        Premium эрх*/}
+                                        {/*    </Button>*/}
+                                        {/*</Link>*/}
                                     </div>
                                 </Container>
                             </div>
-                            {/* <div className="mainSlider-inner" > */}
-                            {/*     <Container> */}
-                            {/*         <div className="mainSlider-cont"> */}
-                            {/*             <h5>ЭЕШ</h5> */}
-                            {/*             <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old</p> */}
-                            {/*             <Button className="banner-button"> */}
-                            {/*                 ЭЕШ эрх авах */}
-                            {/*             </Button> */}
-                            {/*         </div> */}
-                            {/*     </Container> */}
-                            {/* </div> */}
+                             <div className="mainSlider-inner" >
+                                 <Container>
+                                     <div className="mainSlider-cont">
+                                         <h5><span style={{color: 'gold'}}>ЭЕШ</span> БАГЦ</h5>
+                                         <p>2021 оны шинэ хөтөлбөр дагуу Амжилт кибер сургуулийн мэргэжлийн багш нараар бэлтгэгдсэн ЭЕШ-ийн хичээлүүд 49'000₮</p>
+                                         <Button className="banner-button" onClick={() => premium || eish ? console.log('gz') : config.get('emitter').emit('paymentModal', {type: 'eish'})}>
+                                             {
+                                                 premium ?
+                                                     'Premium хэрэглэгч'
+                                                     :  eish ?
+                                                     'ЭЕШ хэрэглэгч'
+                                                     : 'ЭЕШ багц авах'
+                                             }
+                                         </Button>
+                                     </div>
+                                 </Container>
+                             </div>
                         </Swiper>
                         <div style={{position: 'absolute', top: 0, width: '100%'}}>
                             <Container>

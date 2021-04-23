@@ -55,7 +55,7 @@ class Lesson extends Component {
         }
     }
     render() {
-        const {main: {user = {}}, lesson: {lesson, rating, lessonLoading}, dispatch} = this.props;
+        const {main: {user = {}, premiumPrice, eishPrice}, lesson: {lesson, rating, lessonLoading}, dispatch} = this.props;
         let mediaUrl = '';
         if(lesson.video) {
             mediaUrl = (lesson.video || {}).url+"/api/video/show/"+lesson.video._id+'?lessonId='+lesson._id+'&intro='+'yes'+'&token='+Cookies.get('token');
@@ -159,22 +159,33 @@ class Lesson extends Component {
                                                                                     <span style={{marginLeft: 15,fontSize: 24, color: '#fff', display: 'block', fontWeight: 700}}>{config.formatMoney(lesson.sale)}₮</span>
                                                                                 </div>
                                                                             ) : (
-                                                                                <div style={{
-                                                                                    textAlign: 'right',
-                                                                                    height: 43,
-                                                                                    alignItems: 'flex-end',
-                                                                                    display: 'flex',
-                                                                                    flexDirection: 'column',
-                                                                                    justifyContent: 'flex-end'
-                                                                                }}>
-                                                                                    <span style={{fontSize: 24, color: '#fff', display: 'block', fontWeight: 700}}>{lesson.eish ? 'ЭЕШ БАГЦ' : config.formatMoney(lesson.price)+'₮'}</span>
-                                                                                </div>
+                                                                                lesson.eish ? (
+                                                                                    <React.Fragment>
+                                                                                        <p style={{color: '#fff'}}>
+                                                                                            2021 оны шинэ хөтөлбөр дагуу Амжилт кибер сургуулийн мэргэжлийн багш нараар бэлтгэгдсэн ЭЕШ-ийн хичээлүүд <strong>49'000₮</strong>
+                                                                                        </p>
+                                                                                    </React.Fragment>
+                                                                                ) : (
+                                                                                    <div style={{
+                                                                                        textAlign: 'right',
+                                                                                        height: 43,
+                                                                                        alignItems: 'flex-end',
+                                                                                        display: 'flex',
+                                                                                        flexDirection: 'column',
+                                                                                        justifyContent: 'flex-end'
+                                                                                    }}>
+                                                                                        <span style={{fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{lesson.eish ? 'ЭЕШ БАГЦ' : config.formatMoney(lesson.price)+'₮'}</span>
+                                                                                    </div>
+                                                                                )
                                                                             )
                                                                         }
                                                                         {
                                                                             lesson.eish ? (
-                                                                                <Button onClick={() => config.get('emitter').emit('paymentModal', {type: 'eish'})} variant="secondary" style={{background: 'gold', display: 'flex', justifyContent: 'center',alignItems: 'center', fontSize: 16}}>
-                                                                                    <img src="/images/crown.png" alt="" height={37} style={{width: 'auto', filter: 'grayscale(1) invert(1)'}}/> ЭЕШ эрх авах
+                                                                                <Button
+                                                                                    variant="primary"
+                                                                                    onClick={() => config.get('emitter').emit('paymentModal', {type: 'eish'})}
+                                                                                >
+                                                                                    <ion-icon name={'card-outline'}/> ЭЕШ эрх авах
                                                                                 </Button>
                                                                             ) : (
                                                                                 <Button
@@ -196,6 +207,50 @@ class Lesson extends Component {
                                                                                         <ion-icon name="heart" /> Хадгалах
                                                                                     </Button>
                                                                                 )
+                                                                            )
+                                                                        }
+                                                                        {
+                                                                            lesson.paid ? null : (
+                                                                                <React.Fragment>
+                                                                                        <span style={{
+                                                                                            textAlign: 'center',
+                                                                                            display: 'block',
+                                                                                            fontSize: 12,
+                                                                                            margin: '10px 0',
+                                                                                            color: '#636363',
+                                                                                        }}>Эсвэл</span>
+                                                                                    <div className="get-permium" style={{
+                                                                                        background: 'rgb(245, 245, 245)',
+                                                                                        textAlign: 'center',
+                                                                                        display: 'block',
+                                                                                        borderRadius: 10,
+                                                                                        padding: 10,
+                                                                                    }}>
+                                                                                        <p style={{color: '#1d1d1d',fontWeight: 600, lineHeight: '28px',}}>Ердөө <span style={{
+                                                                                            color: 'rgb(249 215 2)',
+                                                                                            fontWeight: 700,
+                                                                                            background: '#313356',
+                                                                                            padding: '0 10px',
+                                                                                            borderRadius: 5,
+                                                                                        }}>{config.formatMoney( premiumPrice - (lesson.sale > 0 ? lesson.sale : lesson.price))+'₮'}</span> нэмж төлөөд бүх хичээлийг үзэх боломжтой</p>
+                                                                                        <Button
+                                                                                            variant="primary"
+                                                                                            onClick={() => config.get('emitter').emit('paymentModal', {type: 'premium'})}
+                                                                                            style={{color: '#313356', background: '#f9d702', position: 'relative'}}
+                                                                                        >
+                                                                                            <img src="/images/crown.png" alt="" height={13} style={{
+                                                                                                position: 'absolute',
+                                                                                                top: 12,
+                                                                                                filter: 'grayscale(1) invert(1)',
+                                                                                                left: 19,
+                                                                                                width: 22,
+                                                                                                padding: 0,
+                                                                                                borderRadius: 0,
+                                                                                                height: 16,
+                                                                                            }}/>Premium эрх авах
+                                                                                        </Button>
+                                                                                    </div>
+                                                                                </React.Fragment>
                                                                             )
                                                                         }
                                                                     </div>
@@ -252,23 +307,34 @@ class Lesson extends Component {
                                                                                         <span style={{marginLeft: 15,fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{config.formatMoney(lesson.sale)}₮</span>
                                                                                     </div>
                                                                                 ) : (
-                                                                                    <div style={{
-                                                                                        textAlign: 'right',
-                                                                                        height: 43,
-                                                                                        alignItems: 'flex-end',
-                                                                                        display: 'flex',
-                                                                                        flexDirection: 'column',
-                                                                                        justifyContent: 'flex-end'
-                                                                                    }}>
-                                                                                        <span style={{fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{lesson.eish ? 'ЭЕШ БАГЦ' : config.formatMoney(lesson.price)+'₮'}</span>
-                                                                                    </div>
-                                                                                )
+                                                                                    lesson.eish ? (
+                                                                                        <React.Fragment>
+                                                                                            <p style={{color: '#2f2f2f'}}>
+                                                                                                2021 оны шинэ хөтөлбөр дагуу Амжилт кибер сургуулийн мэргэжлийн багш нараар бэлтгэгдсэн ЭЕШ-ийн хичээлүүд <strong>49'000₮</strong>
+                                                                                            </p>
+                                                                                        </React.Fragment>
+                                                                                    ) : (
+                                                                                        <div style={{
+                                                                                            textAlign: 'right',
+                                                                                            height: 43,
+                                                                                            alignItems: 'flex-end',
+                                                                                            display: 'flex',
+                                                                                            flexDirection: 'column',
+                                                                                            justifyContent: 'flex-end'
+                                                                                        }}>
+                                                                                            <span style={{fontSize: 24, color: '#000000', display: 'block', fontWeight: 700}}>{lesson.eish ? 'ЭЕШ БАГЦ' : config.formatMoney(lesson.price)+'₮'}</span>
+                                                                                        </div>
+                                                                                    )
+                                                                            )
                                                                             }
 
                                                                             {
                                                                                 lesson.eish ? (
-                                                                                    <Button onClick={() => config.get('emitter').emit('paymentModal', {type: 'eish'})} variant="secondary" style={{background: 'gold', display: 'flex', justifyContent: 'center',alignItems: 'center', fontSize: 16}}>
-                                                                                        <img src="/images/crown.png" alt="" height={37} style={{width: 'auto', filter: 'grayscale(1) invert(1)'}}/> ЭЕШ эрх авах
+                                                                                    <Button
+                                                                                        variant="primary"
+                                                                                        onClick={() => config.get('emitter').emit('paymentModal', {type: 'eish'})}
+                                                                                    >
+                                                                                        <ion-icon name={'card-outline'}/> ЭЕШ багц авах
                                                                                     </Button>
                                                                                 ) : (
                                                                                     <Button
@@ -290,6 +356,51 @@ class Lesson extends Component {
                                                                                             <ion-icon name="heart" /> Хадгалах
                                                                                         </Button>
                                                                                     )
+                                                                                )
+                                                                            }
+
+                                                                            {
+                                                                                lesson.paid ? null : (
+                                                                                    <React.Fragment>
+                                                                                        <span style={{
+                                                                                            textAlign: 'center',
+                                                                                            display: 'block',
+                                                                                            fontSize: 12,
+                                                                                            margin: '10px 0',
+                                                                                            color: '#636363',
+                                                                                        }}>Эсвэл</span>
+                                                                                        <div className="get-permium" style={{
+                                                                                            background: 'rgb(245, 245, 245)',
+                                                                                            textAlign: 'center',
+                                                                                            display: 'block',
+                                                                                            borderRadius: 10,
+                                                                                            padding: 10,
+                                                                                        }}>
+                                                                                            <p style={{color: '#1d1d1d',fontWeight: 600, lineHeight: '28px',}}>Ердөө <span style={{
+                                                                                                color: 'rgb(249 215 2)',
+                                                                                                fontWeight: 700,
+                                                                                                background: '#313356',
+                                                                                                padding: '0 10px',
+                                                                                                borderRadius: 5,
+                                                                                            }}>{config.formatMoney( premiumPrice - (lesson.eish ? eishPrice : (lesson.sale > 0 ? lesson.sale : lesson.price)))+'₮'}</span> нэмж төлөөд манай аппликейшнд байгаа бүх хичээлийг үзэх боломжтой</p>
+                                                                                            <Button
+                                                                                                variant="primary"
+                                                                                                onClick={() => config.get('emitter').emit('paymentModal', {type: 'premium'})}
+                                                                                                style={{color: '#313356', background: '#f9d702', position: 'relative'}}
+                                                                                            >
+                                                                                                <img src="/images/crown.png" alt="" height={13} style={{
+                                                                                                    position: 'absolute',
+                                                                                                    top: 12,
+                                                                                                    filter: 'grayscale(1) invert(1)',
+                                                                                                    left: 19,
+                                                                                                    width: 22,
+                                                                                                    padding: 0,
+                                                                                                    borderRadius: 0,
+                                                                                                    height: 16,
+                                                                                                }}/>Premium эрх авах
+                                                                                            </Button>
+                                                                                        </div>
+                                                                                    </React.Fragment>
                                                                                 )
                                                                             }
                                                                         </div>
@@ -400,6 +511,20 @@ class Lesson extends Component {
                                             <div className="inner-tab overview">
                                                 <h4>Хичээлийн тухай</h4>
                                                 <p dangerouslySetInnerHTML={{__html : lesson.intro_desc}}/>
+                                                {
+                                                    lesson.teacher && lesson.teacher.avatar && lesson.teacher.bio ? (
+                                                        <React.Fragment>
+                                                            <h4>Багш</h4>
+                                                            <div className="teacher-side">
+                                                                <img src={(lesson.teacher || {}).avatar ? `https://odosury.com${lesson.teacher.avatar}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
+                                                                <div>
+                                                                    <h5>Багш: <span>{lesson.teacher.last_name.charAt(0)+ '. ' + lesson.teacher.first_name}</span></h5>
+                                                                    <p>{lesson.teacher.bio}</p>
+                                                                </div>
+                                                            </div>
+                                                        </React.Fragment>
+                                                    ) : null
+                                                }
                                                 {
                                                     (lesson.learn_check_list || []).length > 0 ? (
                                                         <React.Fragment>

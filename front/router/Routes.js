@@ -9,6 +9,7 @@ import ViewAreaAudio from "../components/audio/ViewAreaAudio";
 import ViewArea from "../components/lesson/ViewArea";
 import Login from "../components/Login";
 import NotFound from "../components/NotFound";
+import Premium from "../components/Premium";
 import Profile from '../components/profile/Profile';
 import Wishlist from '../components/profile/Wishlist';
 import Lessons from '../components/profile/Lessons';
@@ -25,6 +26,11 @@ export default [
             {
                 component: Login,
                 path: '/login',
+                exact: true
+            },
+            {
+                component: Premium,
+                path: '/premium',
                 exact: true
             },
             {
