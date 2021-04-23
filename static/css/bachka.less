@@ -217,7 +217,7 @@
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 3;
+  z-index: 4;
   .header-top {
     display: flex;
     justify-content: space-between;
@@ -2902,35 +2902,164 @@ span.section-3 {
 }
 .premium-container {
   position: relative;
-  .head-cont-premium {
-    position: absolute;
-    width: 100%;
-    top: -90px;
+  .main-prem {
+    padding: 100px;
+    color: #000;
+    position: relative;
+    top: 20px;
+    .lifetime {
+      text-align: center;
+      button {
+        display: block;
+        margin: 0 auto;
+        border: none;
+        background: #f9d702;
+        color: #76003b;
+        font-weight: 800;
+        text-align: center;
+        font-size: 24px;
+        padding: 10px 40px;
+        position: relative;
+        border-radius: 10px;
+        margin-top: 20px;
+        text-transform: uppercase;
+        outline: none;
+        box-shadow: none;
+        ion-icon {
+          font-size: 24px;
+          position: relative;
+          left: 20px;
+          top: 4px;
+        }
+      }
+      p {
+        margin-bottom: 0;
+        font-size: 14px;
+        color: #444;
+        font-weight: 600;
+      }
+      p.desc {
+        font-size: 28px;
+        font-weight: 700;
+        color: #790038;
+      }
+      p.life {
+        position: relative;
+        top: -15px;
+        right: -22px;
+        text-transform: uppercase;
+        font-size: 10px;
+        color: #a0a0a0;
+      }
+      ion-icon {
+        color: #790038;
+        font-size: 37px;
+      }
+      p.price {
+        font-size: 18px;
+        font-weight: 800;
+        span {
+          font-weight: 500;
+          text-decoration: line-through;
+          color: #989898;
+          margin-right: 20px;
+        }
+      }
+      h4.neon1 {
+        font-size: 34px;
+        font-weight: 900;
+        color: gold;
+        margin-top: 10px;
+      }
+      .dar ul {
+        text-align: left;
+        li {
+          color: #4e4e4e;
+          font-size: 14px;
+          padding: 5px 0;
+          font-weight: 600;
+        }
+        li:before {
+          content: ' ';
+          height: 4px;
+          width: 15px;
+          background: #790038;
+          display: inline-block;
+          position: relative;
+          top: -2px;
+          left: -10px;
+          border-radius: 3px;
+        }
+      }
+    }
+  }
+  .prem-txts {
+    margin-bottom: 80px;
+    height: 400px;
+    position: relative;
+    .bggg {
+      background-position: center center;
+      background-size: cover;
+      width: 100%;
+      height: 100%;
+      background-attachment: fixed;
+    }
+    .bgg2 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000000c2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
     img {
-      width: 60%;
+      display: block;
+      height: 80px;
+      margin: 0 auto;
+      margin-bottom: 20px;
+    }
+    p {
+      text-align: center;
+      font-size: 14px;
+      padding: 0 20px;
+      font-weight: 400;
+      color: #fff;
+    }
+  }
+  .head-cont-premium {
+    position: relative;
+    width: 100%;
+    top: 30px;
+    img {
+      width: 860px;
+      max-width: 90%;
       margin: 0 auto;
       display: block;
       border-radius: 10px;
-      box-shadow: 0pt 1px 3px 0px rgba(0, 0, 0, 0.67)
+      box-shadow: 0pt 1px 3px 0px rgba(0, 0, 0, 0.67);
+      z-index: 2;
+      position: relative;
     }
   }
   .prem-cont {
     text-align: center;
-    padding-top: 107px;
     padding-bottom: 60px;
     border-radius: 10px;
-    margin-top: 120px;
+    margin-top: 0;
     width: 60%;
     margin-right: auto;
     margin-left: auto;
     .bolomjq {
       margin-top: 30px;
       h4 {
-        font-size: 14px;
+        font-size: 32px;
         text-transform: uppercase;
         text-align: left;
         font-weight: 600;
-        color: #bbb;
+        color: #777;
       }
       ul {
         margin: 0;
@@ -2940,11 +3069,11 @@ span.section-3 {
           list-style: none;
           font-size: 16px;
           padding: 16px 0;
-          font-weight: 200;
+          font-weight: 500;
           position: relative;
           display: flex;
           align-items: center;
-          color: #000;
+          color: #404040;
           span.fir {
             color: #c3c3c3;
             font-size: 38px;
@@ -2957,110 +3086,108 @@ span.section-3 {
         }
       }
     }
-    .datte {
-      background: #780038;
-      border-radius: 50px;
-      display: inline-block;
-      padding: 0 20px;
+  }
+  .dataa{
+    display: block;
+    position: absolute;
+    bottom: -26px;
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+    z-index: 1;
+  }
+  .datte {
+    background: #780038;
+    border-radius: 50px;
+    display: inline-block;
+    padding: 0 20px;
+    bottom: -26px;
+    margin: 0 auto;
+  }
+  .datte1 {
+    background: transparent;
+  }
+  h5 {
+    font-size: 12px;
+    margin-bottom: 0;
+    animation: blinker 1s linear infinite;
+    color: #fff;
+    font-weight: 800;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  @keyframes blinker {
+    100% {
+      opacity: 0;
     }
-    h5 {
-      font-size: 12px;
-      margin-bottom: 0;
-      animation: blinker 1s linear infinite;
-      color: #fff;
-      font-weight: 800;
-      text-transform: uppercase;
-    }
-    @keyframes blinker {
-      100% {
-        opacity: 0;
+  }
+  .clock {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    margin: 0 auto;
+    &-day {
+      &:before {
+        content: var(--timer-day);
       }
     }
-    .clock {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: fit-content;
-      margin: 0 auto;
-      &-day {
-        &:before {
-          content: var(--timer-day);
-        }
-      }
-      &-hours {
-        &:before {
-          content: var(--timer-hours);
-        }
-      }
-      &-minutes {
-        &:before {
-          content: var(--timer-minutes);
-        }
-      }
-      &-seconds {
-        &:before {
-          content: var(--timer-seconds);
-        }
+    &-hours {
+      &:before {
+        content: var(--timer-hours);
       }
     }
-    .clock {
-      &-container {
-        border-radius: 5px;
-        padding: 0px 20px 5px 20px;
-        display: flex;
+    &-minutes {
+      &:before {
+        content: var(--timer-minutes);
       }
-      &-col {
-        text-align: center;
-        min-width: 90px;
-        position: relative;
-        &:not(:last-child):before,
-        &:not(:last-child):after{
-          content: "";
-          background-color: rgba(255, 255, 255, 1);
-          height: 2px;
-          width: 2px;
-          border-radius: 50%;
-          display: block;
-          position: absolute;
-          right: -2px;
-        }
-        &:not(:last-child):before {
-          top: 28%;
-        }
-        &:not(:last-child):after {
-          top: 38%;
-        }
-      }
-      &-timer {
-        color: #fff;
-        margin-bottom: 0px;
-        font-size: 28px;
-        text-transform: uppercase;
-        font-weight: 600;
-      }
-      &-label {
-        color: rgba(255,255,255,.77);
-        text-transform: uppercase;
-        font-size: 10px;
-        margin-bottom: 0;
+    }
+    &-seconds {
+      &:before {
+        content: var(--timer-seconds);
       }
     }
   }
-
-  @media (max-width: 825px) {
-    .clock-container {
-      flex-direction: column;
-      padding-top: 40px;
-      padding-bottom: 40px;
+  .clock {
+    &-container {
+      border-radius: 5px;
+      padding: 0px 20px 5px 20px;
+      display: flex;
     }
-    .clock-col {
-      & + & {
-        margin-top: 20px;
+    &-col {
+      text-align: center;
+      min-width: 90px;
+      position: relative;
+      &:not(:last-child):before,
+      &:not(:last-child):after{
+        content: "";
+        background-color: rgba(255, 255, 255, 1);
+        height: 2px;
+        width: 2px;
+        border-radius: 50%;
+        display: block;
+        position: absolute;
+        right: -2px;
       }
-      &:before,
-      &:after {
-        display: none!important;
+      &:not(:last-child):before {
+        top: 28%;
       }
+      &:not(:last-child):after {
+        top: 38%;
+      }
+    }
+    &-timer {
+      color: #fff;
+      margin-bottom: 0px;
+      font-size: 28px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    &-label {
+      color: rgba(255,255,255,.77);
+      text-transform: uppercase;
+      font-size: 10px;
+      margin-bottom: 0;
     }
   }
 }
@@ -3510,6 +3637,12 @@ span.section-3 {
 }
 
 @media(max-width: 992px){
+  .premium-container .prem-txts p {
+    font-size: 12px;
+  }
+  .premium-container .prem-txts img {
+    height: 60px;
+  }
     .header .header-top .section-2 .section-1-1 {
         visibility: hidden;
     }
@@ -3622,6 +3755,31 @@ span.section-3 {
   }
 }
 @media(max-width: 768px){
+  .premium-container .sec-1 {
+    margin-bottom: 30px;
+  }
+
+  .premium-container .main-prem {
+    padding: 100px 0;
+  }
+  .premium-container .prem-cont {
+    width: 80%;
+  }
+  .premium-container .prem-cont .bolomjq h4 {
+    font-size: 16px;
+  }
+  .premium-container .prem-cont .bolomjq ul li span.fir {
+    font-size: 28px;
+    width: 30px;
+    left: -40px;
+  }
+  .premium-container h5 {
+    font-size: 10px;
+  }
+  .premium-container .clock-timer {
+    font-size: 17px;
+    padding-bottom: 5px;
+  }
   .register-login {
     margin-top: 50px;
   }
@@ -3630,6 +3788,13 @@ span.section-3 {
   }
   .lesson-single .lesson-head .head-inner h2 {
     font-size: 24px;
+  }
+  .header .header-top .section-2 {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .premium-container .prem-txts {
+    height: 590px;
   }
   .home-hero {
     height: 180px;
@@ -3737,6 +3902,34 @@ span.section-3 {
   }
 }
 @media(max-width: 576px){
+  .premium-container .main-prem .lifetime button {
+    font-size: 17px;
+    padding: 5px 40px;
+  }
+  .premium-container .clock-col {
+    text-align: center;
+    min-width: 40px;
+    position: relative;
+  }
+  .premium-container .clock-col:not(:last-child):before {
+    top: 18%;
+  }
+  .premium-container .clock-timer {
+    font-size: 12px;
+    padding-bottom: 6px;
+  }
+  .premium-container .clock-label {
+    color: rgba(255, 255, 255, 0.77);
+    text-transform: uppercase;
+    font-size: 8px;
+    margin-bottom: 0;
+  }
+  .premium-container .clock-col:not(:last-child):after {
+    top: 28%;
+  }
+  .premium-container .prem-txts {
+    height: 660px;
+  }
   .lesson-single .inner-tab.overview .teacher-side {
     display: block;
   }

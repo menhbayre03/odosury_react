@@ -117,18 +117,11 @@ class Home extends Component {
                                     <div className="mainSlider-cont">
                                         <h5>АНХДАГЧ 1000 <span style={{color: 'gold'}}>PREMIUM</span> ХЭРЭГЛЭГЧ</h5>
                                         <p>99'000₮ төлөөд насан туршдаа сурч хөгжих боломжийг тултал ашигла та бусдаас түрүүлж алх хэзээ ч юунаас ч хоцрохгүй тогтвортой хөгжиж мэдлэгээ хязгааргүй тэл.</p>
-                                        <Button  onClick={() => premium ? console.log('gz') : config.get('emitter').emit('paymentModal', {type: 'premium'})} className="banner-button">
-                                            {
-                                                premium ?
-                                                    'Premium хэрэглэгч'
-                                                    :   'Premium эрх авах'
-                                            }
-                                        </Button>
-                                        {/*<Link to="/premium">*/}
-                                        {/*    <Button className="banner-button">*/}
-                                        {/*        Premium эрх*/}
-                                        {/*    </Button>*/}
-                                        {/*</Link>*/}
+                                        <Link to="/premium" style={{textDecoration: 'none'}}>
+                                            <Button className="banner-button">
+                                                Premium эрх
+                                            </Button>
+                                        </Link>
                                     </div>
                                 </Container>
                             </div>

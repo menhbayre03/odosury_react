@@ -233,22 +233,23 @@ class Lesson extends Component {
                                                                                             padding: '0 10px',
                                                                                             borderRadius: 5,
                                                                                         }}>{config.formatMoney( premiumPrice - (lesson.sale > 0 ? lesson.sale : lesson.price))+'₮'}</span> нэмж төлөөд бүх хичээлийг үзэх боломжтой</p>
-                                                                                        <Button
-                                                                                            variant="primary"
-                                                                                            onClick={() => config.get('emitter').emit('paymentModal', {type: 'premium'})}
-                                                                                            style={{color: '#313356', background: '#f9d702', position: 'relative'}}
-                                                                                        >
-                                                                                            <img src="/images/crown.png" alt="" height={13} style={{
-                                                                                                position: 'absolute',
-                                                                                                top: 12,
-                                                                                                filter: 'grayscale(1) invert(1)',
-                                                                                                left: 19,
-                                                                                                width: 22,
-                                                                                                padding: 0,
-                                                                                                borderRadius: 0,
-                                                                                                height: 16,
-                                                                                            }}/>Premium эрх авах
-                                                                                        </Button>
+                                                                                        <Link to="/premium" style={{textDecoration: 'none'}}>
+                                                                                            <Button
+                                                                                                variant="primary"
+                                                                                                style={{color: '#313356', background: '#f9d702', position: 'relative'}}
+                                                                                            >
+                                                                                                <img src="/images/crown.png" alt="" height={13} style={{
+                                                                                                    position: 'absolute',
+                                                                                                    top: 12,
+                                                                                                    filter: 'grayscale(1) invert(1)',
+                                                                                                    left: 19,
+                                                                                                    width: 22,
+                                                                                                    padding: 0,
+                                                                                                    borderRadius: 0,
+                                                                                                    height: 16,
+                                                                                                }}/>Premium эрх авах
+                                                                                            </Button>
+                                                                                        </Link>
                                                                                     </div>
                                                                                 </React.Fragment>
                                                                             )
@@ -383,22 +384,24 @@ class Lesson extends Component {
                                                                                                 padding: '0 10px',
                                                                                                 borderRadius: 5,
                                                                                             }}>{config.formatMoney( premiumPrice - (lesson.eish ? eishPrice : (lesson.sale > 0 ? lesson.sale : lesson.price)))+'₮'}</span> нэмж төлөөд манай аппликейшнд байгаа бүх хичээлийг үзэх боломжтой</p>
-                                                                                            <Button
-                                                                                                variant="primary"
-                                                                                                onClick={() => config.get('emitter').emit('paymentModal', {type: 'premium'})}
-                                                                                                style={{color: '#313356', background: '#f9d702', position: 'relative'}}
-                                                                                            >
-                                                                                                <img src="/images/crown.png" alt="" height={13} style={{
-                                                                                                    position: 'absolute',
-                                                                                                    top: 12,
-                                                                                                    filter: 'grayscale(1) invert(1)',
-                                                                                                    left: 19,
-                                                                                                    width: 22,
-                                                                                                    padding: 0,
-                                                                                                    borderRadius: 0,
-                                                                                                    height: 16,
-                                                                                                }}/>Premium эрх авах
-                                                                                            </Button>
+
+                                                                                            <Link to="/premium" style={{textDecoration: 'none'}}>
+                                                                                                <Button
+                                                                                                    variant="primary"
+                                                                                                    style={{color: '#313356', background: '#f9d702', position: 'relative'}}
+                                                                                                >
+                                                                                                    <img src="/images/crown.png" alt="" height={13} style={{
+                                                                                                        position: 'absolute',
+                                                                                                        top: 12,
+                                                                                                        filter: 'grayscale(1) invert(1)',
+                                                                                                        left: 19,
+                                                                                                        width: 22,
+                                                                                                        padding: 0,
+                                                                                                        borderRadius: 0,
+                                                                                                        height: 16,
+                                                                                                    }}/>Premium эрх авах
+                                                                                                </Button>
+                                                                                            </Link>
                                                                                         </div>
                                                                                     </React.Fragment>
                                                                                 )

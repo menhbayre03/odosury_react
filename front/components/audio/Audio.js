@@ -115,9 +115,11 @@ class Audio extends Component {
                                                                             </Button>
                                                                         </Link>
                                                                     ) : (
-                                                                        <Button onClick={() => config.get('emitter').emit('paymentModal', {type: 'premium'})} variant="secondary" style={{background: 'gold', display: 'flex', justifyContent: 'center',alignItems: 'center', fontSize: 16}}>
-                                                                            <img src="/images/crown.png" alt="" height={37} style={{width: 'auto', filter: 'grayscale(1) invert(1)'}}/> Premium эрх авах
-                                                                        </Button>
+                                                                        <Link to="/premium" style={{textDecoration: 'none'}}>
+                                                                            <Button variant="secondary" style={{background: 'gold', display: 'flex', justifyContent: 'center',alignItems: 'center', fontSize: 16}}>
+                                                                                <img src="/images/crown.png" alt="" height={37} style={{width: 'auto', filter: 'grayscale(1) invert(1)'}}/> Premium эрх авах
+                                                                            </Button>
+                                                                        </Link>
                                                                     )
                                                                 }
                                                             </div>
@@ -156,9 +158,11 @@ class Audio extends Component {
                                                                                 </Button>
                                                                             </Link>
                                                                         ) : (
-                                                                            <Button onClick={() => config.get('emitter').emit('paymentModal', {type: 'premium'})} variant="secondary" style={{background: 'gold', display: 'flex', justifyContent: 'center',alignItems: 'center', fontSize: 16}}>
-                                                                                <img src="/images/crown.png" alt="" height={37} style={{width: 'auto', filter: 'grayscale(1) invert(1)'}}/> Premium эрх авах
-                                                                            </Button>
+                                                                            <Link to="/premium" style={{textDecoration: 'none'}}>
+                                                                                <Button variant="secondary" style={{background: 'gold', display: 'flex', justifyContent: 'center',alignItems: 'center', fontSize: 16}}>
+                                                                                    <img src="/images/crown.png" alt="" height={37} style={{width: 'auto', filter: 'grayscale(1) invert(1)'}}/> Premium эрх авах
+                                                                                </Button>
+                                                                            </Link>
                                                                         )
                                                                     }
                                                                 </div>

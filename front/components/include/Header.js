@@ -56,7 +56,7 @@ class Header extends Component {
                 <div className={`header ${this.state.trans ? 'trans' : ''}`}>
                     <Container>
                         <Row className="header-top">
-                            <Col md={6} sm={9} xs={9} className="section-1">
+                            <Col md={6} sm={isMobile ? 8 : 9} xs={isMobile ? 8 : 9} className="section-1">
                                 <div className="logo" style={{display: 'inline-block'}}>
                                     <Link to={'/'}><img src="/images/odosuryo.png" alt=""/></Link>
                                 </div>
@@ -78,7 +78,7 @@ class Header extends Component {
                                     </ul>
                                 </div>
                             </Col>
-                            <Col md={6} sm={isMobile ? 6 : 3} xs={isMobile ? 6 : 3} className="section-2">
+                            <Col md={6} sm={isMobile ? 4 : 3} xs={isMobile ? 4 : 3} className="section-2">
                                 {
                                     isMobile ? null : (
                                         <div className="section-1-1">
@@ -104,12 +104,13 @@ class Header extends Component {
                                         </div>
                                     )
                                 }
-                                    <span className={'section-3 neon'} onClick={() => premium ? console.log('gz') : config.get('emitter').emit('paymentModal', {type: 'premium'})}>
-                                        {/*<img src="/images/crown.png" alt="" height={13}/>*/}
+                                <Link to="/premium" style={{textDecoration: 'none'}}>
+                                    <span className={'section-3 neon'}>
                                         <span>
                                             P<span id="offset">re</span>mium
                                         </span>
                                     </span>
+                                </Link>
                             </Col>
                         </Row>
                     </Container>

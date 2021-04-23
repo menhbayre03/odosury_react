@@ -50,28 +50,28 @@ class Footer extends Component {
                                 <h6>Шуурхай холбоос</h6>
                                 <ul>
                                     <li>
-                                        <Link to='about'>Бидний тухай</Link>
+                                        <Link to='#'>Бидний тухай</Link>
                                     </li>
                                     <li>
                                         <span>Багш болох</span>
                                     </li>
                                     <li>
-                                        <Link to='about'>Үйлчилгээний нөхцөл</Link>
+                                        <Link to='#'>Үйлчилгээний нөхцөл</Link>
                                     </li>
                                     <li>
-                                        <Link to='about'>Түгээмэл асуултууд</Link>
+                                        <Link to='#'>Түгээмэл асуултууд</Link>
                                     </li>
                                     <li>
-                                        <Link to='about'>Ажлын байр</Link>
+                                        <Link to='#'>Ажлын байр</Link>
                                     </li>
                                     <li>
-                                        <Link to='about'>Байгууллагаар хамтрах</Link>
+                                        <Link to='#'>Байгууллагаар хамтрах</Link>
                                     </li>
                                     <li>
-                                        <Link to='about'>Premium эрх</Link>
+                                        <Link to='/premium'>Premium эрх</Link>
                                     </li>
                                     <li>
-                                        <Link to='about'>ЭЕШ багц</Link>
+                                        <Link to='#'>ЭЕШ багц</Link>
                                     </li>
                                 </ul>
                             </Col>
