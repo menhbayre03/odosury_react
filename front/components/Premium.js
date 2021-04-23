@@ -5,15 +5,6 @@ import config from "../config";
 import moment from "moment";
 import Header from "./include/Header";
 import Footer from "./include/Footer";
-let week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-
-function zeroPadding(num, digit) {
-    let zero = '';
-    for(var i = 0; i < digit; i++) {
-        zero += '0';
-    }
-    return (zero + num).slice(-digit);
-}
 
 const reducer = ({ main, payment}) => ({ main, payment});
 
@@ -55,22 +46,23 @@ class Premium extends Component {
         this.setState({ time: timeLeftVar }, () => this.startTimer());
     }
 
+    componentWillUnmount() {
+        clearInterval(this.timer)
+    }
+
     startTimer() {
-        if (this.timer == 0 && this.state.seconds > 0) {
+        if (this.timer === 0 && this.state.seconds > 0) {
             this.timer = setInterval(this.countDown, 1000);
         }
     }
 
     countDown() {
-        // Remove one second, set state so a re-render happens.
         let seconds = this.state.seconds - 1;
         this.setState({
             time: this.secondsToTime(seconds),
             seconds: seconds,
         });
-
-        // Check if we're at zero.
-        if (seconds == 0) {
+        if (seconds === 0) {
             clearInterval(this.timer);
         }
     }
@@ -82,48 +74,7 @@ class Premium extends Component {
                 <Header location={this.props.location}/>
                 <div className="premium-container" style={{minHeight: 'calc(100vh - 185px)'}}>
                     <div className="head-cont-premium">
-                        <div className="dataa" style={{zIndex: 3}}>
-                            <div className="datte datte1">
-                                <h5>Дуусах хугацаа</h5>
-                                <div className="clock">
-                                    <div className="clock-container">
-                                        <div className="clock-col">
-                                            <p className="clock-day clock-timer">
-                                                {this.state.time.d}
-                                            </p>
-                                            <p className="clock-label">
-                                                Өдөр
-                                            </p>
-                                        </div>
-                                        <div className="clock-col">
-                                            <p className="clock-hours clock-timer">
-                                                {this.state.time.h}
-                                            </p>
-                                            <p className="clock-label">
-                                                Цаг
-                                            </p>
-                                        </div>
-                                        <div className="clock-col">
-                                            <p className="clock-minutes clock-timer">
-                                                {this.state.time.m}
-                                            </p>
-                                            <p className="clock-label">
-                                                Минут
-                                            </p>
-                                        </div>
-                                        <div className="clock-col">
-                                            <p className="clock-seconds clock-timer">
-                                                {this.state.time.s}
-                                            </p>
-                                            <p className="clock-label">
-                                                Сэкүнд
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <img src="/images/premium.png" width={'100%'} alt=""/>
+                        <img src="/images/premium_wh.png" width={'100%'} alt=""/>
                         <div className="dataa">
                             <div className="datte">
                                 <h5>Дуусах хугацаа</h5>
