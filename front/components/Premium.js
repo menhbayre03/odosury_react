@@ -10,12 +10,8 @@ const reducer = ({ main, payment}) => ({ main, payment});
 
 class Premium extends Component {
     constructor(props) {
-        let a = moment();
-        let b = moment('2021/05/15 24:00');
-
-        let difference = (b - a) / 1000;
         super(props);
-        this.state = { time: {}, seconds: difference };
+        this.state = { time: {}, seconds: props.main.difference };
         this.timer = 0;
         this.startTimer = this.startTimer.bind(this);
         this.countDown = this.countDown.bind(this);

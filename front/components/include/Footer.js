@@ -95,7 +95,7 @@ class Footer extends Component {
                                     {
                                         audioCategories.map(item => (
                                             <li key={item._id}>
-                                                <Link to={`/lessons/${item.slug}`}>
+                                                <Link to={`/audios/${item.slug}`}>
                                                     {item.title}
                                                 </Link>
                                             </li>
