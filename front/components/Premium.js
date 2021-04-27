@@ -38,6 +38,8 @@ class Premium extends Component {
         return obj;
     }
     componentDidMount() {
+        window.scroll(0, 0);
+        config.get('ga').pageview(window.location.pathname);
         let timeLeftVar = this.secondsToTime(this.state.seconds);
         this.setState({ time: timeLeftVar }, () => this.startTimer());
     }

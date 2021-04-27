@@ -116,7 +116,7 @@ class User extends React.Component {
             search: this.state.search,
             role: this.state.role
         };
-        this.props.dispatch(actions.getUsers(cc));
+        dispatch(actions.getUsers(cc));
     }
     searchUser(){
         const {dispatch } = this.props;

@@ -41,6 +41,18 @@ class Purchase extends React.Component {
         };
         dispatch(getPayments(cc));
     }
+    onPaginate(current){
+        const {dispatch } = this.props;
+        let cc = {
+            skip: (current - 1) * 50,
+            search: this.state.search,
+            status: this.state.status,
+            id: this.state.id,
+            startDate: this.state.startDate,
+            endDate: this.state.endDate
+        };
+        dispatch(getPayments(cc))
+    }
     onDateChange(dates, dateString) {
         this.setState({startDate: dateString[0] || null, endDate: dateString[1] || null})
     }
@@ -191,7 +203,7 @@ class Purchase extends React.Component {
                                 }
                             </Row>
                     }}
-                    onChange={(e) => dispatch(getPayments({skip: (e.current - 1) * 50}))}
+                    onChange={(e) => this.onPaginate(e.current)}
                 />
             </Card>
         );
