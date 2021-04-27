@@ -50,7 +50,7 @@ class Footer extends Component {
                                 <h6>Шуурхай холбоос</h6>
                                 <ul>
                                     <li>
-                                        <Link to='/about'>Бидний тухай</Link>
+                                        <Link to='#'>Бидний тухай</Link>
                                     </li>
                                     <li>
                                         <span>Багш болох</span>
