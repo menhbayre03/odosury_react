@@ -46,7 +46,7 @@ class Header extends Component {
                     <div className="grid-item-box">
                         <Link to={`/lesson/${item.slug}`} title={item.title} className="imga">
                             <img src={(item.thumbnailSmall || {}).path ? `${(item.thumbnailSmall || {}).url}${(item.thumbnailSmall || {}).path}` : '/images/default-lesson.jpg'}  onError={(e) => e.target.src = `/images/default-lesson.jpg`}/>
-                            <span className={`type ${item.eish ? 'eish' : ''}`}>{item.eish ? 'ЭЕШ' : 'Premium'}</span>
+                            <span className={`type ${item.free ? 'free' : item.eish ? 'eish' : ''}`}>{item.free ? 'Үнэгүй' : item.eish ? 'ЭЕШ' : 'Premium'}</span>
                         </Link>
                         <div className="contents">
                             {

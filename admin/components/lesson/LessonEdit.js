@@ -205,8 +205,10 @@ class LessonEdit extends React.Component {
     setFeatured(e){
         this.props.dispatch(actions.setFeatured());
     }
-    setEish(e){
-        this.props.dispatch(actions.setEish());
+    setEish(name, value){
+        console.log(name)
+        console.log(value)
+        this.props.dispatch(actions.setEish({name, value}));
     }
     render() {
         let { main:{user}, lesson:{imageUploadLoading, lessonImage, lessonSmallImage, videoUploadLoading, lessonVideo, status, openModal, lessonVideoProgress, lessonImageProgress, lesson, lessons, submitLessonLoader, all, searchTeachersResult, searchTeacherLoader, categories, level} } = this.props;
@@ -374,7 +376,7 @@ class LessonEdit extends React.Component {
                                                     <Form.Item
                                                         label='ЕЭШ'
                                                     >
-                                                        <Switch checked={!!lesson.eish} onChange={this.setEish.bind(this)} />
+                                                        <Switch checked={!!lesson.eish} onChange={this.setEish.bind(this, 'eish')} />
                                                     </Form.Item>
                                                     <Form.Item
                                                         label='Ангилал'
@@ -410,6 +412,11 @@ class LessonEdit extends React.Component {
                                                                 null
                                                             }
                                                         </TreeSelect>
+                                                    </Form.Item>
+                                                    <Form.Item
+                                                        label='Үнэгүй'
+                                                    >
+                                                        <Switch checked={!!lesson.free} onChange={this.setEish.bind(this, 'free')} />
                                                     </Form.Item>
                                                     <Form.Item
                                                         label='Онцлох'

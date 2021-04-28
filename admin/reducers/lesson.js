@@ -54,13 +54,12 @@ export default(state = initialState, action) => {
                 }
             };
         case setEish.REQUEST:
-            let eish = !!state.lesson.eish
             return {
                 ...state,
                 lesson:{
                     ...state.lesson,
-                    eish: !eish,
-                    category: ''
+                    [action.json.name]: action.json.value,
+                    category: action.json.name === 'eish' ? '' : state.lesson.category
                 }
             };
         case chooseMediaLessonEdit.REQUEST:
@@ -317,6 +316,8 @@ export default(state = initialState, action) => {
                                 run.teacher= action.json.data.selectedMember;
                                 run.title= action.json.data.title;
                                 run.created= action.json.data.created;
+                                run.eish = action.json.data.eish|| false;
+                                run.free = action.json.data.free || false;
                             }
                             return run;
                         })
@@ -338,6 +339,8 @@ export default(state = initialState, action) => {
                         teacher: action.json.data.selectedMember,
                         title: action.json.data.title,
                         created: action.json.data.created,
+                        eish: action.json.data.eish|| false,
+                        free: action.json.data.free || false,
                     };
                     return {
                         ...state,
