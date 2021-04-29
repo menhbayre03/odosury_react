@@ -4,7 +4,7 @@
 	text-align: center;
 	height: 400px;
 	background-image: url("../images/bus.jpg");
-	margin-bottom: 3%;
+	// margin-bottom: 3%;
 	color: white;
 	width: 100%;
 }
@@ -32,61 +32,132 @@ div.abouttext2 > h3 {
 }
 .abouth1 {
 	text-align: center;
-	font-size: 3em;
+	font-size: 2em;
+	background-color: #e0fbfc;
+	padding-top: 30px;
+	margin-bottom: 0;
 }
 
 //                 TIMELINE
-.sect {
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+.about {
+	width: 100%;
+	min-height: 100vh;
 	display: flex;
-	justify-content: space-between;
-	height: auto;
+	justify-content: center;
 	align-items: center;
+	padding: 100px 0;
+	background-color: #e0fbfc;
 }
-
-.aboutyear {
-	display: inline-block;
-	background-color: cornflowerblue;
-	font-size: large;
-	padding: 0% 7%;
+.timeline {
+	width: 80%;
+	height: auto;
+	max-width: 1400px;
+	margin: 0 auto;
+	position: relative;
+}
+.timeline ul {
+	list-style: none;
+	margin-left: 0;
+}
+.timeline ul li {
+	padding: 20px;
+	background-color: white;
+	border-radius: 10px;
+	margin-bottom: 20px;
+	margin-left: 0;
+}
+.timeline ul li:last-child {
+	margin-bottom: 0;
+}
+.tch2 {
+	font-size: 25px;
+	line-height: 30px;
+	margin-bottom: 10px;
+}
+.tcp {
+	font-size: 16px;
+	line-height: 30px;
+}
+.tcd {
 	text-align: center;
+	background-color: gray;
 	border-radius: 30px;
-	align-self: center;
-	width: auto;
-	color: white;
+	width: 60px;
 }
-.abouth4 {
-	font-size: 4em;
+@media (min-width: 768px) {
+	.timeline::before {
+		content: "";
+		position: absolute;
+		height: 100%;
+		width: 2px;
+		left: 50%;
+		transform: translateX(-50%);
+		background-color: navy;
+	}
+	.timeline ul li {
+		width: 50%;
+		margin-bottom: 50px;
+		position: relative;
+	}
+	.tcd {
+		position: absolute;
+		font-size: 16px;
+		line-height: 30px;
+		// border-radius: 30px;
+		top: 0;
+	}
+	.timeline ul li:nth-child(odd) {
+		float: left;
+		clear: right;
+		// background-color: #d22f9e50;
+		transform: translateX(-30px);
+		border-radius: 20px 0px 20px 20px; //top-left, top-right, bottom-right, bottom-left
+		.tcd {
+			transform: translate(50%, -50%);
+			right: -80px;
+		}
+	}
+	.timeline ul li:nth-child(even) {
+		float: right;
+		clear: left;
+		// background-color: #008fee50;
+		transform: translateX(30px);
+		border-radius: 0px 20px 20px 20px; //top-left, top-right, bottom-right, bottom-left
+		.tcd {
+			transform: translate(-50%, -50%);
+			left: -80px;
+		}
+	}
+	.timeline ul li::after {
+		content: "";
+		position: absolute;
+		height: 20px;
+		width: 20px;
+		background-color: gray;
+		border-radius: 50%;
+		top: 0;
+	}
+	.timeline ul li:nth-child(odd)::after {
+		transform: translate(50%, -50%);
+		right: -30px; // =translateX(n) even/odd
+	}
+	.timeline ul li:nth-child(even)::after {
+		transform: translate(-50%, -50%);
+		left: -30px; // =translateX(n) even/odd
+	}
+	.timeline ul li:hover:after {
+		background-color: green;
+	}
+	.timeline ul li:hover .tcd {
+		background-color: green;
+	}
 }
-.abouth41::before {
-	content: "";
-}
-.aboutyear1 {
-	margin-left: 10%;
-}
-.aboutyear2 {
-	margin-right: 10%;
-}
-.aboutyear3 {
-	margin-left: 3%;
-}
-.makesmall {
-	width: 20px;
-}
-
-//          TEXT
-.abouttext {
-	display: inline-block;
-	width: 46%;
-	margin: 0px 10px;
-}
-.abouth2mid {
-	text-align: right;
-	margin: 0% 10%;
-}
-.sect4 {
-	margin: 30px 0px;
-}
-
+//  				TIMELINE END
 //    BOTTOM
 .abouttitle2 {
 	display: flex;
