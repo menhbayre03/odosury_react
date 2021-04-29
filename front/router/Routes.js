@@ -14,6 +14,7 @@ import Profile from '../components/profile/Profile';
 import Wishlist from '../components/profile/Wishlist';
 import Lessons from '../components/profile/Lessons';
 import History from '../components/profile/History';
+import About from '../components/About';
 export default [
     {
         component: Main,
@@ -91,6 +92,11 @@ export default [
             {
                 component: Lessons,
                 path: '/profile/lessons',
+                exact: true
+            },
+            {
+                component: About,
+                path: '/about',
                 exact: true
             },
             {
