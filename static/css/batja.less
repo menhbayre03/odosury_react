@@ -7,6 +7,26 @@
 	// margin-bottom: 3%;
 	color: white;
 	width: 100%;
+	background-size: cover;
+	background-position: center center;
+	margin-bottom: 60px;
+	.abouttext2 {
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.7);
+		.container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100%;
+			h3 {
+				font-size: 36px;
+				font-weight: 100;
+				line-height: 54px;
+				padding: 0 30px;
+			}
+		}
+	}
 }
 // .abouttitle::before {
 // 	content: "";
@@ -18,13 +38,6 @@
 // 	background-image: url("../images/bus.jpg");
 // 	z-index: -1;
 // }
-.abouttext2 {
-	align-self: center;
-	text-align: center;
-	vertical-align: middle;
-	margin-left: 10%;
-	margin-right: 10%;
-}
 div.abouttext2 > h3 {
 	margin: auto;
 	width: 78%;
@@ -32,10 +45,11 @@ div.abouttext2 > h3 {
 }
 .abouth1 {
 	text-align: center;
-	font-size: 2em;
-	background-color: #e0fbfc;
-	padding-top: 30px;
-	margin-bottom: 0;
+	font-size: 28px;
+	font-weight: 600;
+	margin-bottom: 0px;
+	color: #3e416d;
+	text-transform: uppercase;
 }
 
 //                 TIMELINE
@@ -51,7 +65,6 @@ div.abouttext2 > h3 {
 	justify-content: center;
 	align-items: center;
 	padding: 100px 0;
-	background-color: #e0fbfc;
 }
 .timeline {
 	width: 80%;
@@ -65,29 +78,71 @@ div.abouttext2 > h3 {
 	margin-left: 0;
 }
 .timeline ul li {
-	padding: 20px;
-	background-color: white;
+	padding: 20px 30px;
 	border-radius: 10px;
 	margin-bottom: 20px;
 	margin-left: 0;
+	background: #fff;
+	box-shadow: 0pt 1px 3px 0px rgba(0, 0, 0, 0.04);
 }
 .timeline ul li:last-child {
 	margin-bottom: 0;
 }
 .tch2 {
-	font-size: 25px;
-	line-height: 30px;
+	font-size: 32px;
 	margin-bottom: 10px;
+	color: #3e416d;
+	text-transform: uppercase;
 }
 .tcp {
-	font-size: 16px;
-	line-height: 30px;
+	font-size: 14px;
+	line-height: 24px;
+	color: #292929;
 }
 .tcd {
 	text-align: center;
-	background-color: gray;
 	border-radius: 30px;
-	width: 60px;
+	font-size: 76px;
+	font-weight: 100;
+	top: 30px;
+	color: #d8d8d8;
+	text-shadow: 2px 2px 1px #9a9a9a;
+}
+.abao {
+	display: block;
+	clear: both;
+	margin-bottom: 100px;
+	img {
+		width: 320px;
+		max-width: 100%;
+		display: inline-block;
+		clear: both;
+		float: left;
+		box-shadow: 0pt 1px 3px 0px rgba(0, 0, 0, 0.4);
+		border-radius: 5px;
+	}
+}
+.abouttitle2 {
+	text-align: left;
+	display: inline-block;
+	clear: both;
+	margin-left: 50px;
+	padding-top: 30px;
+	h2.bottomh2 {
+		font-size: 18px;
+		color: #9c9c9c;
+		text-transform: uppercase;
+	}
+	.aboutbox p {
+		font-size: 18px;
+		color: #3e416d;
+		display: block;
+		font-weight: 400;
+		margin-bottom: 5px;
+	}
+	.bottomtext2 {
+		margin-top: 30px;
+	}
 }
 @media (min-width: 768px) {
 	.timeline::before {
@@ -97,7 +152,7 @@ div.abouttext2 > h3 {
 		width: 2px;
 		left: 50%;
 		transform: translateX(-50%);
-		background-color: navy;
+		background-color: #d2d2d2;
 	}
 	.timeline ul li {
 		width: 50%;
@@ -106,20 +161,17 @@ div.abouttext2 > h3 {
 	}
 	.tcd {
 		position: absolute;
-		font-size: 16px;
 		line-height: 30px;
-		// border-radius: 30px;
-		top: 0;
 	}
 	.timeline ul li:nth-child(odd) {
 		float: left;
 		clear: right;
 		// background-color: #d22f9e50;
 		transform: translateX(-30px);
-		border-radius: 20px 0px 20px 20px; //top-left, top-right, bottom-right, bottom-left
+		border-radius: 10px 0px 10px 10px;
 		.tcd {
 			transform: translate(50%, -50%);
-			right: -80px;
+			right: -170px;
 		}
 	}
 	.timeline ul li:nth-child(even) {
@@ -127,10 +179,10 @@ div.abouttext2 > h3 {
 		clear: left;
 		// background-color: #008fee50;
 		transform: translateX(30px);
-		border-radius: 0px 20px 20px 20px; //top-left, top-right, bottom-right, bottom-left
+		border-radius: 0px 10px 10px 10px; //top-left, top-right, bottom-right, bottom-left
 		.tcd {
 			transform: translate(-50%, -50%);
-			left: -80px;
+			left: -170px;
 		}
 	}
 	.timeline ul li::after {
@@ -138,7 +190,7 @@ div.abouttext2 > h3 {
 		position: absolute;
 		height: 20px;
 		width: 20px;
-		background-color: gray;
+		background-color: #d2d2d2;
 		border-radius: 50%;
 		top: 0;
 	}
@@ -151,72 +203,15 @@ div.abouttext2 > h3 {
 		left: -30px; // =translateX(n) even/odd
 	}
 	.timeline ul li:hover:after {
-		background-color: green;
+		background-color: #3e416d;
 	}
-	.timeline ul li:hover .tcd {
-		background-color: green;
+}
+@media (max-width: 768px) {
+	.abouttitle .abouttext2 .container h3 {
+		font-size: 18px;
+		font-weight: 300;
+		line-height: 28px;
+		padding: 0 30px;
 	}
 }
 //  				TIMELINE END
-//    BOTTOM
-.abouttitle2 {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-around;
-	align-items: center;
-	height: auto;
-	background-image: url("https://cdn.pixabay.com/photo/2016/02/19/10/46/curve-1209392_960_720.jpg");
-	// color: white;
-	width: 100%;
-	text-align: center;
-}
-.makesmall2 {
-	width: 40px;
-	display: inline;
-}
-.bottomh2 {
-	width: 100%;
-	margin-bottom: 20px;
-	border-bottom: 1px gray solid;
-	padding-bottom: 10px;
-}
-.bottomh2::after {
-	content: "";
-	background: gray;
-	// position: absolute;
-	height: 10px;
-	width: 60%;
-}
-.bottomtext {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-wrap: wrap;
-	width: 80%;
-}
-div.bottomtext:first-of-type {
-	margin-top: 30px;
-}
-.aboutbox {
-	margin: 0 20px;
-}
-div.aboutbox > p {
-	font-size: 1.5em;
-}
-
-.bottomtext2 {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-wrap: wrap;
-	width: 80%;
-}
-
-@media (max-width: 1001px) {
-	.bottomh2 {
-		font-size: 1.8em;
-	}
-	div.abouttext2 > h3 {
-		font-size: 1.5em;
-	}
-}
