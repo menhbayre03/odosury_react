@@ -1,0 +1,222 @@
+.abouttitle {
+	display: flex;
+	justify-content: center;
+	text-align: center;
+	height: 400px;
+	background-image: url("../images/bus.jpg");
+	// margin-bottom: 3%;
+	color: white;
+	width: 100%;
+}
+// .abouttitle::before {
+// 	content: "";
+// 	width: 100vw;
+// 	height: 100vh;
+// 	position: absolute;
+// 	top: 0;
+// 	left: 0;
+// 	background-image: url("../images/bus.jpg");
+// 	z-index: -1;
+// }
+.abouttext2 {
+	align-self: center;
+	text-align: center;
+	vertical-align: middle;
+	margin-left: 10%;
+	margin-right: 10%;
+}
+div.abouttext2 > h3 {
+	margin: auto;
+	width: 78%;
+	font-size: 2em;
+}
+.abouth1 {
+	text-align: center;
+	font-size: 2em;
+	background-color: #e0fbfc;
+	padding-top: 30px;
+	margin-bottom: 0;
+}
+
+//                 TIMELINE
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+.about {
+	width: 100%;
+	min-height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 100px 0;
+	background-color: #e0fbfc;
+}
+.timeline {
+	width: 80%;
+	height: auto;
+	max-width: 1400px;
+	margin: 0 auto;
+	position: relative;
+}
+.timeline ul {
+	list-style: none;
+	margin-left: 0;
+}
+.timeline ul li {
+	padding: 20px;
+	background-color: white;
+	border-radius: 10px;
+	margin-bottom: 20px;
+	margin-left: 0;
+}
+.timeline ul li:last-child {
+	margin-bottom: 0;
+}
+.tch2 {
+	font-size: 25px;
+	line-height: 30px;
+	margin-bottom: 10px;
+}
+.tcp {
+	font-size: 16px;
+	line-height: 30px;
+}
+.tcd {
+	text-align: center;
+	background-color: gray;
+	border-radius: 30px;
+	width: 60px;
+}
+@media (min-width: 768px) {
+	.timeline::before {
+		content: "";
+		position: absolute;
+		height: 100%;
+		width: 2px;
+		left: 50%;
+		transform: translateX(-50%);
+		background-color: navy;
+	}
+	.timeline ul li {
+		width: 50%;
+		margin-bottom: 50px;
+		position: relative;
+	}
+	.tcd {
+		position: absolute;
+		font-size: 16px;
+		line-height: 30px;
+		// border-radius: 30px;
+		top: 0;
+	}
+	.timeline ul li:nth-child(odd) {
+		float: left;
+		clear: right;
+		// background-color: #d22f9e50;
+		transform: translateX(-30px);
+		border-radius: 20px 0px 20px 20px; //top-left, top-right, bottom-right, bottom-left
+		.tcd {
+			transform: translate(50%, -50%);
+			right: -80px;
+		}
+	}
+	.timeline ul li:nth-child(even) {
+		float: right;
+		clear: left;
+		// background-color: #008fee50;
+		transform: translateX(30px);
+		border-radius: 0px 20px 20px 20px; //top-left, top-right, bottom-right, bottom-left
+		.tcd {
+			transform: translate(-50%, -50%);
+			left: -80px;
+		}
+	}
+	.timeline ul li::after {
+		content: "";
+		position: absolute;
+		height: 20px;
+		width: 20px;
+		background-color: gray;
+		border-radius: 50%;
+		top: 0;
+	}
+	.timeline ul li:nth-child(odd)::after {
+		transform: translate(50%, -50%);
+		right: -30px; // =translateX(n) even/odd
+	}
+	.timeline ul li:nth-child(even)::after {
+		transform: translate(-50%, -50%);
+		left: -30px; // =translateX(n) even/odd
+	}
+	.timeline ul li:hover:after {
+		background-color: green;
+	}
+	.timeline ul li:hover .tcd {
+		background-color: green;
+	}
+}
+//  				TIMELINE END
+//    BOTTOM
+.abouttitle2 {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+	height: auto;
+	background-image: url("https://cdn.pixabay.com/photo/2016/02/19/10/46/curve-1209392_960_720.jpg");
+	// color: white;
+	width: 100%;
+	text-align: center;
+}
+.makesmall2 {
+	width: 40px;
+	display: inline;
+}
+.bottomh2 {
+	width: 100%;
+	margin-bottom: 20px;
+	border-bottom: 1px gray solid;
+	padding-bottom: 10px;
+}
+.bottomh2::after {
+	content: "";
+	background: gray;
+	// position: absolute;
+	height: 10px;
+	width: 60%;
+}
+.bottomtext {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	width: 80%;
+}
+div.bottomtext:first-of-type {
+	margin-top: 30px;
+}
+.aboutbox {
+	margin: 0 20px;
+}
+div.aboutbox > p {
+	font-size: 1.5em;
+}
+
+.bottomtext2 {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	width: 80%;
+}
+
+@media (max-width: 1001px) {
+	.bottomh2 {
+		font-size: 1.8em;
+	}
+	div.abouttext2 > h3 {
+		font-size: 1.5em;
+	}
+}
