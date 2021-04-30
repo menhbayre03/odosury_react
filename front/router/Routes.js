@@ -9,6 +9,7 @@ import ViewAreaAudio from "../components/audio/ViewAreaAudio";
 import ViewArea from "../components/lesson/ViewArea";
 import Login from "../components/Login";
 import NotFound from "../components/NotFound";
+import Eish from "../components/Eish";
 import Premium from "../components/Premium";
 import Profile from '../components/profile/Profile';
 import Wishlist from '../components/profile/Wishlist';
@@ -31,6 +32,11 @@ export default [
             {
                 component: Premium,
                 path: '/premium',
+                exact: true
+            },
+            {
+                component: Eish,
+                path: '/eishPage',
                 exact: true
             },
             {

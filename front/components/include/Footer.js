@@ -23,7 +23,7 @@ class Footer extends Component {
                 <div className="footer-top">
                     <Container>
                         <Row>
-                            <Col md={3}>
+                            <Col lg={3} md={4} sm={6} style={{marginBottom: 30}}>
                                 <div className="logo" style={{display: 'inline-block'}}>
                                     <img src="/images/logo.png" alt="" width={200}/>
                                     <p>Odosury.com нь олон төрлийн хувь хүний хөгжлийн болон мэргэжлийн хичээлүүдийг багтаасан бүх насныханд зориулсан онлайн сургалтын платформ.</p>
@@ -46,7 +46,7 @@ class Footer extends Component {
                                     </li>
                                 </ul>
                             </Col>
-                            <Col md={3}>
+                            <Col lg={3} md={4} sm={6} style={{marginBottom: 30}}>
                                 <h6>Шуурхай холбоос</h6>
                                 <ul>
                                     <li>
@@ -71,11 +71,11 @@ class Footer extends Component {
                                         <Link to='/premium'>Premium эрх</Link>
                                     </li>
                                     <li>
-                                        <Link to='#'>ЭЕШ багц</Link>
+                                        <Link to='/eishPage'>ЭЕШ багц</Link>
                                     </li>
                                 </ul>
                             </Col>
-                            <Col md={3}>
+                            <Col lg={3} md={4} sm={6} style={{marginBottom: 30}}>
                                 <h6>Хичээлийн ангилал</h6>
                                 <ul>
                                     {
@@ -89,7 +89,7 @@ class Footer extends Component {
                                     }
                                 </ul>
                             </Col>
-                            <Col md={3}>
+                            <Col lg={3} md={4} sm={6} style={{marginBottom: 30}}>
                                 <h6>Номны ангилал</h6>
                                 <ul>
                                     {

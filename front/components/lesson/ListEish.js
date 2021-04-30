@@ -11,6 +11,7 @@ import {
     isMobile
 } from "react-device-detect";
 import config from "../../config";
+import {Link} from "react-router-dom";
 const reducer = ({ main, lessonEish }) => ({ main, lessonEish });
 
 class ListEish extends Component {
@@ -55,16 +56,11 @@ class ListEish extends Component {
                                     <img src="/images/eish.png" alt=""/>
                                     <h4>ЭЕШ БАГЦ</h4>
                                     <p>2021 оны шинэ хөтөлбөр дагуу Амжилт кибер сургуулийн мэргэжлийн багш нараар бэлтгэгдсэн ЭЕШ-ийн хичээлүүд 49'000₮</p>
-                                    <Button onClick={() => premium || eish ? console.log('gz') : config.get('emitter').emit('paymentModal', {type: 'eish'})}>
-                                        {
-                                            premium ?
-                                                'Premium хэрэглэгч'
-                                                :  eish ?
-                                                    'ЭЕШ хэрэглэгч'
-                                                    : 'Худалдаж авах'
-                                        }
-
-                                    </Button>
+                                    <Link to="/eishPage" style={{textDecoration: 'none'}}>
+                                        <Button>
+                                            ЭЕШ багц авах
+                                        </Button>
+                                    </Link>
                                 </div>
                                 <div className="list-content">
                                     <div className="list-header">

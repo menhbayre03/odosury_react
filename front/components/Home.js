@@ -130,15 +130,11 @@ class Home extends Component {
                                      <div className="mainSlider-cont">
                                          <h5><span style={{color: 'gold'}}>ЭЕШ</span> БАГЦ</h5>
                                          <p>2021 оны шинэ хөтөлбөр дагуу Амжилт кибер сургуулийн мэргэжлийн багш нараар бэлтгэгдсэн ЭЕШ-ийн хичээлүүд 49'000₮</p>
-                                         <Button className="banner-button" onClick={() => premium || eish ? console.log('gz') : config.get('emitter').emit('paymentModal', {type: 'eish'})}>
-                                             {
-                                                 premium ?
-                                                     'Premium хэрэглэгч'
-                                                     :  eish ?
-                                                     'ЭЕШ хэрэглэгч'
-                                                     : 'ЭЕШ багц авах'
-                                             }
-                                         </Button>
+                                         <Link to="/eishPage" style={{textDecoration: 'none'}}>
+                                             <Button className="banner-button">
+                                                 ЭЕШ багц авах
+                                             </Button>
+                                         </Link>
                                      </div>
                                  </Container>
                              </div>

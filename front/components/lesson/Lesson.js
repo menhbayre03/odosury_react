@@ -197,12 +197,13 @@ class Lesson extends Component {
                                                                                     </Button>
                                                                             ) : (
                                                                                 lesson.eish ? (
-                                                                                    <Button
-                                                                                        variant="primary"
-                                                                                        onClick={() => config.get('emitter').emit('paymentModal', {type: 'eish'})}
-                                                                                    >
-                                                                                        <ion-icon name={'card-outline'}/> ЭЕШ эрх авах
-                                                                                    </Button>
+                                                                                    <Link to="/eishPage" style={{textDecoration: 'none'}}>
+                                                                                        <Button
+                                                                                            variant="primary"
+                                                                                        >
+                                                                                            <ion-icon name={'card-outline'}/> ЭЕШ багц авах
+                                                                                        </Button>
+                                                                                    </Link>
                                                                                 ) : (
                                                                                     <Button
                                                                                         variant="primary"
@@ -364,12 +365,13 @@ class Lesson extends Component {
                                                                                     </Button>
                                                                                 ) : (
                                                                                     lesson.eish ? (
-                                                                                        <Button
-                                                                                            variant="primary"
-                                                                                            onClick={() => config.get('emitter').emit('paymentModal', {type: 'eish'})}
-                                                                                        >
-                                                                                            <ion-icon name={'card-outline'}/> ЭЕШ багц авах
-                                                                                        </Button>
+                                                                                        <Link to="/eishPage" style={{textDecoration: 'none'}}>
+                                                                                            <Button
+                                                                                                variant="primary"
+                                                                                            >
+                                                                                                <ion-icon name={'card-outline'}/> ЭЕШ багц авах
+                                                                                            </Button>
+                                                                                        </Link>
                                                                                     ) : (
                                                                                         <Button
                                                                                             variant="primary"
