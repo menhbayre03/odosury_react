@@ -53,6 +53,12 @@ class About extends Component {
 									<p>- Дэлхийн номер 1 сургалтын платформ болох</p>
 								</div>
 							</div>
+							<div className="bottomtext2">
+								<h2 className="bottomh2">Уриа үг :</h2>
+								<div className="aboutbox">
+									<p>- Тасралтгүй хөгж</p>
+								</div>
+							</div>
 						</div>
 					</div>
 				</Container>
