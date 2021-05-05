@@ -14,6 +14,7 @@ import {
 } from "react-device-detect";
 import ReactPlayer from "react-player";
 import Cookies from "js-cookie";
+import {FacebookIcon, FacebookShareButton, FacebookShareCount, TwitterIcon, TwitterShareButton} from "react-share";
 const reducer = ({ main, audio }) => ({ main, audio });
 
 class Audio extends Component {
@@ -122,6 +123,24 @@ class Audio extends Component {
                                                                         </Link>
                                                                     )
                                                                 }
+                                                                <div style={{textAlign: 'center', marginTop: 20}}>
+                                                                    <FacebookShareButton
+                                                                        style={{marginRight: 15}}
+                                                                        url={`https://odosury.com/lesson/${lesson.slug}`}
+                                                                    >
+                                                                        <FacebookIcon size={32} round={true} />
+                                                                    </FacebookShareButton>
+                                                                    <FacebookShareCount url={`https://odosury.com/lesson/${lesson.slug}`} >
+                                                                        {shareCount => <span className="myShareCountWrapper">{shareCount}</span>}
+                                                                    </FacebookShareCount>
+                                                                    <TwitterShareButton
+                                                                        style={{marginRight: 15}}
+                                                                        url={`https://odosury.com/lesson/${lesson.slug}`}
+                                                                        title={lesson.title}
+                                                                    >
+                                                                        <TwitterIcon size={32} round={true} />
+                                                                    </TwitterShareButton>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     ) : null
@@ -165,6 +184,24 @@ class Audio extends Component {
                                                                             </Link>
                                                                         )
                                                                     }
+                                                                </div>
+                                                                <div style={{textAlign: 'center', marginTop: 20}}>
+                                                                    <FacebookShareButton
+                                                                        style={{marginRight: 15}}
+                                                                        url={`https://odosury.com/audio/${lesson.slug}`}
+                                                                    >
+                                                                        <FacebookIcon size={32} round={true} />
+                                                                    </FacebookShareButton>
+                                                                    <FacebookShareCount url={`https://odosury.com/audio/${lesson.slug}`} >
+                                                                        {shareCount => <span className="myShareCountWrapper">{shareCount}</span>}
+                                                                    </FacebookShareCount>
+                                                                    <TwitterShareButton
+                                                                        style={{marginRight: 15}}
+                                                                        url={`https://odosury.com/audio/${lesson.slug}`}
+                                                                        title={lesson.title}
+                                                                    >
+                                                                        <TwitterIcon size={32} round={true} />
+                                                                    </TwitterShareButton>
                                                                 </div>
                                                             </div>
                                                         </Sticky>

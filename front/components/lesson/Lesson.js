@@ -10,6 +10,14 @@ import ReactStars from "react-rating-stars-component";
 import config from "../../config";
 import Loader from "../include/Loader";
 import {
+    FacebookShareButton,
+    TwitterIcon,
+    FacebookIcon,
+    FacebookShareCount,
+    TwitterShareButton,
+    LinkedinShareButton,
+} from "react-share";
+import {
     isMobile
 } from "react-device-detect";
 import Cookies from "js-cookie";
@@ -275,6 +283,25 @@ class Lesson extends Component {
                                                                     </div>
                                                                 )
                                                             }
+
+                                                            <div style={{textAlign: 'center', marginTop: 20}}>
+                                                                <FacebookShareButton
+                                                                    style={{marginRight: 15}}
+                                                                    url={`https://odosury.com/lesson/${lesson.slug}`}
+                                                                >
+                                                                    <FacebookIcon size={32} round={true} />
+                                                                </FacebookShareButton>
+                                                                <FacebookShareCount url={`https://odosury.com/lesson/${lesson.slug}`} >
+                                                                    {shareCount => <span className="myShareCountWrapper">{shareCount}</span>}
+                                                                </FacebookShareCount>
+                                                                <TwitterShareButton
+                                                                    style={{marginRight: 15}}
+                                                                    url={`https://odosury.com/lesson/${lesson.slug}`}
+                                                                    title={lesson.title}
+                                                                >
+                                                                    <TwitterIcon size={32} round={true} />
+                                                                </TwitterShareButton>
+                                                            </div>
                                                         </div>
                                                     ) : null
                                                 }
@@ -445,6 +472,24 @@ class Lesson extends Component {
                                                                         </div>
                                                                     )
                                                                 }
+                                                                <div style={{textAlign: 'center', marginTop: 20}}>
+                                                                    <FacebookShareButton
+                                                                        style={{marginRight: 15}}
+                                                                        url={`https://odosury.com/lesson/${lesson.slug}`}
+                                                                    >
+                                                                        <FacebookIcon size={32} round={true} />
+                                                                    </FacebookShareButton>
+                                                                    <FacebookShareCount url={`https://odosury.com/lesson/${lesson.slug}`} >
+                                                                        {shareCount => <span className="myShareCountWrapper">{shareCount}</span>}
+                                                                    </FacebookShareCount>
+                                                                    <TwitterShareButton
+                                                                        style={{marginRight: 15}}
+                                                                        url={`https://odosury.com/lesson/${lesson.slug}`}
+                                                                        title={lesson.title}
+                                                                    >
+                                                                        <TwitterIcon size={32} round={true} />
+                                                                    </TwitterShareButton>
+                                                                </div>
                                                             </div>
                                                         </Sticky>
                                                     </div>
