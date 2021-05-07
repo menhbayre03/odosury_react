@@ -11,6 +11,7 @@ import purchase from "./purchase";
 import audio from "./audio";
 import audioLevel from "./audioLevel";
 import audioCategory from "./audioCategory";
+import teacherRequest from './teacherRequest';
 export default combineReducers({
     main: main,
     lesson: lesson,
@@ -24,4 +25,5 @@ export default combineReducers({
     audio: audio,
     audioLevel: audioLevel,
     audioCategory: audioCategory,
+    teacherRequest: teacherRequest,
 });

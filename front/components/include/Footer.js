@@ -4,13 +4,66 @@ import { Link } from 'react-router-dom';
 import {
     isMobile
 } from "react-device-detect";
-import { Container, Col, Row } from 'react-bootstrap';
+import { Container, Col, Row, Form, Modal, Button, Badge, CloseButton } from 'react-bootstrap';
+import * as actions from '../../actions/payment_actions';
 
 class Footer extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            name: '',
+            phone: '',
+            email: '',
+            lesson: '',
+            experience: '',
+            success: false,
+            submitting:false,
+            showModal: false
         }
+    }
+
+    // handleSubmit(){
+    //     this.props.dispatch(actions.teacherRequestSubmit())
+    // }
+    handleSubmit(e){
+        e.preventDefault();
+        const {
+            name,
+            phone,
+            email,
+            lesson,
+            experience,
+        } = this.state;
+        
+            this.setState({submitting: true}, () => {
+                fetch('/teacher/register', {
+                    method: 'post',
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        phone: phone,
+                        email: email,
+                        lesson: lesson,
+                        experience: experience,
+                    })
+                })
+                    .then((e) => e.json())
+                    .then((e) => {
+                        let state = {submitting: false};
+                        if(!e.success && e.check){
+                            state[e.check] = [e.check];
+                        } else if(e.success){
+                            state.success = true;
+                        }
+                        this.setState(state);
+                    })
+                    .catch((e) => console.log(e))
+            });
+        
     }
 
     render() {
@@ -53,7 +106,7 @@ class Footer extends Component {
                                         <Link to='/about'>Бидний тухай</Link>
                                     </li>
                                     <li>
-                                        <span>Багш болох</span>
+                                        <span onClick={() => this.setState({showModal: true})}>Багш болох</span>                              
                                     </li>
                                     <li>
                                         <Link to='#'>Үйлчилгээний нөхцөл</Link>
@@ -120,6 +173,80 @@ class Footer extends Component {
                         </p>
                     </Container>
                 </div>
+                <Modal show={this.state.showModal} onHide={()=> this.setState({showModal: false})} centered >
+                    <CloseButton onClick={()=> this.setState({showModal: false})} style={{
+                        position: 'absolute',
+                        width: '20px',
+                        height: '20px',
+                        right: '5px',
+                        top: '0'
+                    }} />
+                    {this.state.success 
+                    ?
+                    <div className="teacher-request-success" style={{
+                        margin: '30px'
+                    }}>
+                        <h3>
+                        Хүсэлт <Badge variant="success"> АМЖИЛТТАЙ </Badge> илгээгдлээ!
+                        </h3>
+                        <p>Бид тантай тун удахгүй холбогдох болно.</p>
+                    </div> 
+                    :
+                    <div className="teacher-request" style={{margin: '30px', verticalAlign: 'center'}}>
+                        <p>
+                            ODOSURY платформ мэргэжлийн багш нартай хамтран ажиллахад нээлттэй бөгөөд та дараах шаардлагуудыг хангаж байгаа бол бид тантай хамтран ажиллахад үргэлж таатай байх болно : 
+                            <br /> 1.	Тухайн чиглэлээр багшилж байсан
+                            <br /> 2.	Тухайн чиглэлээр ажиллаж байсан туршлагатай байх
+                        </p>
+                        <Form onSubmit={e => this.state.submitting ? false : this.handleSubmit(e)}>
+                            <Form.Group>
+                                <Form.Label>Нэр</Form.Label>
+                                <Form.Control
+                                    placeholder="odosury"
+                                    onChange={(e) => this.setState({name: e.target.value})}
+                                    value={this.state.name}
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Утас</Form.Label>
+                                <Form.Control
+                                    placeholder="99119911"
+                                    onChange={(e) => this.setState({phone: e.target.value})}
+                                    value={this.state.phone}
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Цахим шуудан</Form.Label>
+                                <Form.Control
+                                    placeholder="example@test.com"
+                                    onChange={(e) => this.setState({email: e.target.value})}
+                                    value={this.state.email}
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Хичээл</Form.Label>
+                                <Form.Control
+                                    placeholder="Геометр, Иог, г.м."
+                                    onChange={(e) => this.setState({lesson: e.target.value})}
+                                    value={this.state.lesson}
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Ажлын туршлага</Form.Label>
+                                <Form.Control
+                                    placeholder="2020-"
+                                    onChange={(e) => this.setState({experience: e.target.value})}
+                                    value={this.state.experience}
+                                />
+                            </Form.Group>
+                            <Button type='submit' style={{backgroundColor: '#313356', border: 'none'}}>
+                                Бүртгүүлэх
+                            </Button>
+                        </Form>
+                    </div>
+                    }
+                    
+                </Modal>
             </div>
         );
     }

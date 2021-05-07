@@ -10,6 +10,7 @@ import LessonLevels from "../components/lesson/LessonLevels";
 import Bundles from "../components/bundle/Bundles";
 import Purchase from "../components/purchase/Purchase";
 import NotFound from "../components/NotFound";
+import TeacherRequest from "../components/TeacherRequest";
 export default [
     {
         component: index,
@@ -62,6 +63,11 @@ export default [
             {
                 component: Bundles,
                 path: '/admin/bundles',
+                exact: true
+            },
+            {
+                component: TeacherRequest,
+                path: '/admin/teacherRequest',
                 exact: true
             },
             // {

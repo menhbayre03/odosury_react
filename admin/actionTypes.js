@@ -384,3 +384,9 @@ export const onChangeHandlerLevelTimelineAudio = {
 export const removeUploadedFileAudio = {
     REQUEST:'removeUploadedFileAudio_REQUEST',
 };
+
+//Khubilai
+export const getTeacherRequests = {
+    REQUEST:'getTeacherRequests_REQUEST',
+    RESPONSE:'getTeacherRequests_RESPONSE'
+};

@@ -36,3 +36,7 @@ export function uploadTeacherAvatar(data, type, id) {
     let url = `/admin/api/${type}/upload/uploadTeacherAvatar/${id}`;
     return networkActions.requestUploadPostDirect(constants.uploadTeacherAvatar, url,  {}, null, data );
 }
+export function getTeacherRequests(){
+    let url = '/admin/api/get/teacherRequests';
+    return networkActions.requestPost(constants.getTeacherRequests, url)
+}
