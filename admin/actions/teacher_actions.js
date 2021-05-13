@@ -40,3 +40,7 @@ export function getTeacherRequests(){
     let url = '/admin/api/get/teacherRequests';
     return networkActions.requestPost(constants.getTeacherRequests, url)
 }
+export function getFeedback(){
+    let url = '/admin/api/get/feedBack';
+    return networkActions.requestPost(constants.getFeedback, url)
+}

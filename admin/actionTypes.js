@@ -390,3 +390,7 @@ export const getTeacherRequests = {
     REQUEST:'getTeacherRequests_REQUEST',
     RESPONSE:'getTeacherRequests_RESPONSE'
 };
+export const getFeedback = {
+    REQUEST:'getFeedback_REQUEST',
+    RESPONSE:'getFeedback_RESPONSE'
+};

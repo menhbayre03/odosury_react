@@ -16,6 +16,9 @@ import Wishlist from '../components/profile/Wishlist';
 import Lessons from '../components/profile/Lessons';
 import History from '../components/profile/History';
 import About from '../components/About';
+import Faq from '../components/Faq';
+import Careers from "../components/Careers";
+import Partner from "../components/Partner";
 export default [
     {
         component: Main,
@@ -103,6 +106,21 @@ export default [
             {
                 component: About,
                 path: '/about',
+                exact: true
+            },
+            {
+                component: Faq,
+                path: '/faq',
+                exact: true
+            },
+            {
+                component: Careers,
+                path: '/careers',
+                exact: true
+            },
+            {
+                component: Partner,
+                path: '/partner',
                 exact: true
             },
             {

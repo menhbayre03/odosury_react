@@ -11,6 +11,7 @@ import Bundles from "../components/bundle/Bundles";
 import Purchase from "../components/purchase/Purchase";
 import NotFound from "../components/NotFound";
 import TeacherRequest from "../components/TeacherRequest";
+import Feedback from "../components/Feedback";
 export default [
     {
         component: index,
@@ -68,6 +69,11 @@ export default [
             {
                 component: TeacherRequest,
                 path: '/admin/teacherRequest',
+                exact: true
+            },
+            {
+                component: Feedback,
+                path: '/admin/feedBack',
                 exact: true
             },
             // {
