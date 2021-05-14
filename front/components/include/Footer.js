@@ -115,10 +115,10 @@ class Footer extends Component {
                                 </div>
                                 <div className="social" style={{marginBottom: 20}}>
                                     <h6>Сошиал медиа</h6>
-                                    <a href="https://www.facebook.com/OdoSury" target="_blank" style={{marginRight: 20}}>
+                                    <a href="https://www.instagram.com/odosury/" target="_blank" style={{marginRight: 20}}>
                                         <ion-icon name="logo-instagram"/>
                                     </a>
-                                    <a href="https://www.instagram.com/odosury/" target="_blank">
+                                    <a href="https://www.facebook.com/OdoSury" target="_blank">
                                         <ion-icon name="logo-facebook"/>
                                     </a>
                                 </div>
