@@ -13,6 +13,7 @@ import audioLevel from "./audioLevel";
 import audioCategory from "./audioCategory";
 import teacherRequest from './teacherRequest';
 import feedBack from './feedBack';
+import jobPost from './jobPost';
 export default combineReducers({
     main: main,
     lesson: lesson,
@@ -28,4 +29,5 @@ export default combineReducers({
     audioCategory: audioCategory,
     teacherRequest: teacherRequest,
     feedBack: feedBack,
+    jobPost: jobPost
 });

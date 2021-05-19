@@ -132,3 +132,24 @@ export const checkQpayPayment = {
 };
 
 //PAYMENT END
+
+//JOBPOST
+export const getJobPost = {
+    REQUEST:'getJobPost_REQUEST',
+    RESPONSE:'getJobPost_RESPONSE'
+};
+//JOBPOST END
+
+//TEACHER REQUEST
+export const submitTeacherRequest = {
+    REQUEST: 'submitTeacher_REQUEST',
+    RESPONSE: 'submitTeacher_RESPONSE',
+}
+//TEACHER REQUEST END
+
+//FEEDBACK
+export const submitFeedback = {
+    REQUEST: 'submitFeedback_REQUEST',
+    RESPONSE: 'submitFeedback_RESPONSE',
+}
+//FEEDBACK END
