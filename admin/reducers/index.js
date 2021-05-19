@@ -12,6 +12,7 @@ import audio from "./audio";
 import audioLevel from "./audioLevel";
 import audioCategory from "./audioCategory";
 import teacherRequest from './teacherRequest';
+import feedBack from './feedBack';
 export default combineReducers({
     main: main,
     lesson: lesson,
@@ -26,4 +27,5 @@ export default combineReducers({
     audioLevel: audioLevel,
     audioCategory: audioCategory,
     teacherRequest: teacherRequest,
+    feedBack: feedBack,
 });

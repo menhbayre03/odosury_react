@@ -132,6 +132,11 @@ class index extends React.Component {
                                     <span>Багш хүсэлт</span>
                                 </Link>
                             </Menu.Item>
+                            <Menu.Item key="feedBack" icon={<FileTextFilled />}>
+                                <Link to="/admin/feedBack">
+                                    <span>Санал хүсэлт</span>
+                                </Link>
+                            </Menu.Item>
                             {/*<Menu.Item key="bundles" icon={<LayoutFilled />}>*/}
                             {/*    <Link to="/admin/bundles">*/}
                             {/*        <span>Багц</span>*/}

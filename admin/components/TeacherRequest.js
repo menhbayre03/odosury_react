@@ -1,10 +1,7 @@
 import React, {Component, Fragment} from "react";
 import { connect } from 'react-redux';
-// import config from "../../config";
-// import moment from "moment";
-// import * as actions from "../../actions/user_actions";
+import moment from "moment";
 import {getTeacherRequests} from '../actions/teacher_actions';
-// import moment from 'moment';
 
 import {Card, Table} from 'antd';
 
@@ -60,8 +57,8 @@ class TeacherRequest extends React.Component {
                     {
                         title: 'Илгээсэн он, сар',
                         key: Math.random(),
-                        // render: record => moment(record.created)
-                        render: record => record.created
+                        render: record => moment(record.created).format('YYYY-MM-DD h:mm:ss a')
+                        // render: record => record.created
                     }
                 ]}
                     dataSource={requests}
