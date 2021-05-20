@@ -9,10 +9,9 @@ export function getJobPost() {
 	let url = `/admin/api/getJobPost`;
 	return networkActions.requestPost(constants.getJobPost, url);
 }
-export function openJobSubmitDrawer(data) {
+export function openJobSubmitDrawer() {
 	return {
-		type: constants.openJobSubmitDrawer.REQUEST,
-		json: data
+		type: constants.openJobSubmitDrawer.REQUEST
 	}
 }
 export function closeJobSubmitDrawer() {

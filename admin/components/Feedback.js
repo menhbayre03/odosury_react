@@ -26,23 +26,28 @@ class Feedback extends React.Component {
                 <Table columns={[
                     {
                         title: '№',
+                        width: '50px',
                         key: Math.random(),
+                        fixed: 'left',
                         render: (text, record, idx) => idx + 1
                     },
                     {
                         title: 'Хүсэлт',
                         key: Math.random(),
+                        width: '80%',
                         render: record => record.feedback
                     },
                     {
                         title: 'Илгээсэн он, сар',
                         key: Math.random(),
+                        fixed: 'right',
                         render: record => moment(record.created).format('YYYY-MM-DD h:mm:ss a')
                         // render: record => record.created
                     }
                 ]}
                     dataSource={requests}
                     loading={gettingRequests}
+                    scroll={{x:1300}}
                 />        
             </Card>
             </Fragment>

@@ -1,8 +1,8 @@
 import { submitFeedback, submitTeacherRequest } from "../actionTypes";
 
 const initialState = {
-	feedbacks: [],
-	teacherrequests: [],
+	feedback: [],
+	teacherRequest: [],
 	submittingFeedback: false,
 	submittingTeacherRequest: false,
 	successFeedback: false,
@@ -18,10 +18,11 @@ export default (state = initialState, action) => {
 		case submitFeedback.RESPONSE:
 			return {
 				...state,
-				feedbacks: action.json.success
-					? state.feedbacks.concat(action.json.newFeedback)
-					: state.feedbacks,
-				submittingFeedback: false
+				feedback: action.json.success
+					? state.feedback.concat(action.json.newFeedback)
+					: state.feedback,
+				submittingFeedback: false,
+				successFeedback: true,
 			};
 		case submitTeacherRequest.REQUEST:
 			return {
@@ -31,10 +32,11 @@ export default (state = initialState, action) => {
 		case submitTeacherRequest.RESPONSE:
 			return {
 				...state,
-				teacherrequests: action.json.success
-					? state.teacherrequests.concat(action.json.newTeacherRequest)
-					: state.teacherrequests,
-				submittingTeacherRequest: false
+				teacherRequest: action.json.success
+					? state.teacherRequest.concat(action.json.newTeacherRequest)
+					: state.teacherRequest,
+				submittingTeacherRequest: false,
+				successTeacherRequest: true,
 			};
 		default:
 			return state;

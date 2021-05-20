@@ -1,5 +1,5 @@
 import { getJobPost, submitJobPost, deleteJobPost, openJobSubmitDrawer, closeJobSubmitDrawer } from "../actionTypes";
-
+import config from '../config';
 const initialState = {
 	jobposts: [],
 	successJobPosts: false,
@@ -33,18 +33,39 @@ export default (state = initialState, action) => {
 				submittingJobPosts: true
 			};
 		case submitJobPost.RESPONSE:
+			if(action.json.success) {
+				config.get('emitter').emit('submitJobDone');
+				return {
+					...state,
+					jobposts: [action.json.newJobPost, ...state.jobposts],
+					submittingJobPosts: false,
+					drawerOpen: false,
+				};
+			} else {
+				return {
+					...state,
+					submittingJobPosts: false,
+				};
+			}
 			return {
 				...state,
 				jobposts: action.json.success
-					? state.jobposts.concat(action.json.newJobPost)
+					? [action.json.newJobPost, ...state.jobposts]
 					: state.jobposts,
 				submittingJobPosts: false,
-				opening:'',
-				requirements:'',
-				salary:'',
-				misc:'',
-				successJobPosts: true,
+				drawerOpen: false,
 			};
+		case openJobSubmitDrawer.REQUEST:
+			return {
+				...state,
+				drawerOpen: true,
+
+			};
+		case closeJobSubmitDrawer.REQUEST:
+			return {
+				...state,
+				drawerOpen: false,
+			}
 		default:
 			return state
 	}
