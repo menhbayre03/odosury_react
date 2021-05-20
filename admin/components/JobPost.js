@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { Form, Input, Button, Card, Table, Drawer } from "antd";
 import { connect } from "react-redux";
-import config from '../config';
+import config from "../config";
 import {
 	submitJobPost,
 	getJobPost,
@@ -25,15 +25,17 @@ class JobPost extends Component {
 	componentDidMount() {
 		let self = this;
 		this.props.dispatch(getJobPost());
-		this.fuckaa  = config.get('emitter').addListener('submitJobDone', function() {
-			console.log('aw')
-			self.setState({
-				opening: "",
-				requirements: "",
-				salary: "",
-				misc: ""
-			})
-		})
+		this.fuckaa = config
+			.get("emitter")
+			.addListener("submitJobDone", function () {
+				console.log("aw");
+				self.setState({
+					opening: "",
+					requirements: "",
+					salary: "",
+					misc: ""
+				});
+			});
 	}
 	componentWillUnmount() {
 		this.fuckaa && this.fuckaa.remove();
@@ -43,10 +45,11 @@ class JobPost extends Component {
 	}
 	openDrawer() {
 		this.props.dispatch(openJobSubmitDrawer());
-		resetFields();
 	}
 	closeDrawer() {
-		this.setState(resetFields(), () => this.props.dispatch(closeJobSubmitDrawer()));
+		this.setState(this.props.resetFields(), () =>
+			this.props.dispatch(closeJobSubmitDrawer())
+		);
 	}
 
 	render() {
@@ -86,7 +89,7 @@ class JobPost extends Component {
 							<Input
 								type="text"
 								placeholder={"requirements"}
-								value={this.state.requirements || ''}
+								value={this.state.requirements || ""}
 								onChange={(e) =>
 									this.setState({
 										requirements: e.target.value
