@@ -125,20 +125,30 @@ class Audio extends Component {
                                                                 }
                                                                 <div style={{textAlign: 'center', marginTop: 20}}>
                                                                     <FacebookShareButton
-                                                                        style={{marginRight: 15}}
+                                                                        style={{
+                                                                            marginRight: 15,
+                                                                            background: '#3b5998',
+                                                                            color: '#fff',
+                                                                            borderRadius: 5,
+                                                                            padding: '0px 20px 0px 5px',
+                                                                            fontWeight: 700,
+                                                                        }}
                                                                         url={`https://odosury.com/lesson/${lesson.slug}`}
                                                                     >
-                                                                        <FacebookIcon size={32} round={true} />
+                                                                        <FacebookIcon size={32} round={true}/> <span>Facebook</span>
                                                                     </FacebookShareButton>
-                                                                    <FacebookShareCount url={`https://odosury.com/lesson/${lesson.slug}`} >
-                                                                        {shareCount => <span className="myShareCountWrapper">{shareCount}</span>}
-                                                                    </FacebookShareCount>
                                                                     <TwitterShareButton
-                                                                        style={{marginRight: 15}}
+                                                                        style={{
+                                                                            background: '#00aced',
+                                                                            color: '#fff',
+                                                                            borderRadius: 5,
+                                                                            padding: '0px 20px 0px 5px',
+                                                                            fontWeight: 700,
+                                                                        }}
                                                                         url={`https://odosury.com/lesson/${lesson.slug}`}
                                                                         title={lesson.title}
                                                                     >
-                                                                        <TwitterIcon size={32} round={true} />
+                                                                        <TwitterIcon size={32} round={true} /> <span>Twitter</span>
                                                                     </TwitterShareButton>
                                                                 </div>
                                                             </div>
@@ -187,20 +197,30 @@ class Audio extends Component {
                                                                 </div>
                                                                 <div style={{textAlign: 'center', marginTop: 20}}>
                                                                     <FacebookShareButton
-                                                                        style={{marginRight: 15}}
-                                                                        url={`https://odosury.com/audio/${lesson.slug}`}
+                                                                        style={{
+                                                                            marginRight: 15,
+                                                                            background: '#3b5998',
+                                                                            color: '#fff',
+                                                                            borderRadius: 5,
+                                                                            padding: '0px 20px 0px 5px',
+                                                                            fontWeight: 700,
+                                                                        }}
+                                                                        url={`https://odosury.com/lesson/${lesson.slug}`}
                                                                     >
-                                                                        <FacebookIcon size={32} round={true} />
+                                                                        <FacebookIcon size={32} round={true}/> <span>Facebook</span>
                                                                     </FacebookShareButton>
-                                                                    <FacebookShareCount url={`https://odosury.com/audio/${lesson.slug}`} >
-                                                                        {shareCount => <span className="myShareCountWrapper">{shareCount}</span>}
-                                                                    </FacebookShareCount>
                                                                     <TwitterShareButton
-                                                                        style={{marginRight: 15}}
-                                                                        url={`https://odosury.com/audio/${lesson.slug}`}
+                                                                        style={{
+                                                                            background: '#00aced',
+                                                                            color: '#fff',
+                                                                            borderRadius: 5,
+                                                                            padding: '0px 20px 0px 5px',
+                                                                            fontWeight: 700,
+                                                                        }}
+                                                                        url={`https://odosury.com/lesson/${lesson.slug}`}
                                                                         title={lesson.title}
                                                                     >
-                                                                        <TwitterIcon size={32} round={true} />
+                                                                        <TwitterIcon size={32} round={true} /> <span>Twitter</span>
                                                                     </TwitterShareButton>
                                                                 </div>
                                                             </div>

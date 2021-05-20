@@ -81,7 +81,7 @@ class Purchase extends React.Component {
                 key: 'user',
                 title: 'Худалдан авагч',
                 render: (text, record) => (
-                    <span>{(record.user || {}).username || ''}</span>
+                    <span>{(record.user || {}).username || ''}{(record.user || {}).phone ? ` (${(record.user || {}).phone})` : ''}</span>
                 )
             },
             {
