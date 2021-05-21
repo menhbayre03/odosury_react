@@ -69,20 +69,27 @@ class Careers extends Component {
 										return (
 											<div className="CareersCard">
 												<h2>{job.opening}</h2>
+												<h3>Гүйцэтгэx үүрэг</h3>
+												<ul className="Careerslist">
+													{job.misc.map((msc) => {
+														return <li>{msc}</li>;
+													})}
+												</ul>
 												<h3>Шаардлага</h3>
-												<ul>
+												<ul className="Careerslist">
 													{job.requirements.map(
 														(rqr) => {
-															return <li>{rqr}</li>
+															return (
+																<li>
+																	<ion-icon name="checkmark-outline" />
+																	{rqr}
+																</li>
+															);
 														}
 													)}
 												</ul>
 												<h3>Цалин</h3>
 												<p>{job.salary}</p>
-												<h3>Гүйцэтгэx үүрэг</h3>
-												<ul>{job.misc.map((msc)=>{
-													return <li>{msc}</li>
-												})}</ul>
 											</div>
 										);
 									})}

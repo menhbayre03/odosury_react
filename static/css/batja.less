@@ -302,14 +302,26 @@ div.abouttext2 > h3 {
 // -*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*-
 ///						Careers
 .CareersCards {
-	display: flex;
-	justify-content: space-around;
-	flex-wrap: wrap;
+	// display: flex;
+	// justify-content: space-around;
+	// flex-wrap: wrap;
 	margin-bottom: 60px;
 	.CareersCard{
-		background: cyan;
-		width: 45%;
+		background: white;
+		border-radius: 10px;
+		// width: 45%;
 		margin: 20px 5px;
+		padding: 10px;
+		h2 {
+			word-wrap: break-word;
+			width: 90%;
+			border-bottom: 1px solid #3e416d;
+			font-weight: 300;
+		}
+	}
+	.Careerslist {
+		word-wrap: break-word;
+		line-height: 40px;
 	}
 }
 @media (min-width: 768px) {
@@ -498,6 +510,7 @@ div.abouttext2 > h3 {
 	vertical-align: top;
 	padding: 10px;
 	border-radius: 5px;
+	word-wrap: break-word;
 	div {
 		margin: 5px 0;
 	}

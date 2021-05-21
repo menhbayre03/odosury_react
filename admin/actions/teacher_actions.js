@@ -40,6 +40,14 @@ export function getTeacherRequests(){
     let url = '/admin/api/get/teacherRequests';
     return networkActions.requestPost(constants.getTeacherRequests, url)
 }
+export function deleteTeacherRequests(data){
+    let url = '/admin/api/deleteTeacherRequests';
+    return networkActions.requestPost(constants.deleteTeacherRequests, url, data)
+}
+export function completedTeacherRequests(data){
+    let url = '/admin/api/completedTeacherRequests';
+    return networkActions.requestPost(constants.completedTeacherRequests, url, data)
+}
 export function getFeedback(){
     let url = '/admin/api/get/feedBack';
     return networkActions.requestPost(constants.getFeedback, url)
