@@ -184,6 +184,7 @@ class JobPost extends Component {
 										})
 									}
 									allowClear
+									autoComplete="off"
 									className="JPinput"
 									style={{ width: "350px" }}
 								/>
@@ -197,6 +198,7 @@ class JobPost extends Component {
 									tokenSeparators="&"
 									placeholder="20 жилийн туршлагатай, Физикийн Доктор, г.м."
 									className="JPinput"
+									autoComplete="off"
 									style={{ width: "350px" }}
 								>
 									{children}
@@ -213,6 +215,7 @@ class JobPost extends Component {
 										})
 									}
 									allowClear
+									autoComplete="off"
 									className="JPinput"
 									style={{ width: "350px" }}
 								/>
@@ -223,6 +226,7 @@ class JobPost extends Component {
 									tokenSeparators="&"
 									placeholder="Аппликэйшн хөгжүүлэх, дизайн гаргах, санхүүгийн тайлан гаргах, г.м."
 									className="JPinput"
+									autoComplete="off"
 									style={{ width: "350px" }}
 								>
 									{children}
