@@ -25,7 +25,7 @@ const SortableItem = SortableElement(( {value ,progInd, removeTimeline, openEdit
                 <Popconfirm
                     title={`Та устгах гэж байна!`}
                     onConfirm={removeTimeline.bind(this, progId)}
-                    okText="Усгах"
+                    okText="Устгах"
                     placement="left"
                     cancelText="Болих"
                 >

@@ -394,6 +394,14 @@ export const getFeedback = {
     REQUEST:'getFeedback_REQUEST',
     RESPONSE:'getFeedback_RESPONSE'
 };
+export const deleteFeedback = {
+    REQUEST: 'deleteFeedback_REQUEST',
+    RESPONSE: 'deleteFeedback_RESPONSE'
+}
+export const completedFeedback = {
+    REQUEST: 'completedFeedback_REQUEST',
+    RESPONSE: 'completedFeedback_RESPONSE'
+}
 export const getJobPost = {
     REQUEST:'getJobPost_REQUEST',
     RESPONSE:'getJobPost_RESPONSE'

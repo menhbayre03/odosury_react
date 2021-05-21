@@ -44,3 +44,11 @@ export function getFeedback(){
     let url = '/admin/api/get/feedBack';
     return networkActions.requestPost(constants.getFeedback, url)
 }
+export function deleteFeedback(data){
+    let url = '/admin/api/deleteFeedback';
+    return networkActions.requestPost(constants.deleteFeedback, url, data)
+}
+export function completedFeedback(data){
+    let url = '/admin/api/completedFeedback';
+    return networkActions.requestPost(constants.completedFeedback, url, data)
+}

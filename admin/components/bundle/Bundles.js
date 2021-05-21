@@ -178,7 +178,7 @@ class Bundle extends React.Component {
                                 <Popconfirm
                                     title={`Та устгах гэж байна!`}
                                     onConfirm={this.delete.bind(this, run._id)}
-                                    okText="Усгах"
+                                    okText="Устгах"
                                     placement="left"
                                     cancelText="Болих"
                                 >

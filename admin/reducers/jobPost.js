@@ -1,11 +1,17 @@
-import { getJobPost, submitJobPost, deleteJobPost, openJobSubmitDrawer, closeJobSubmitDrawer } from "../actionTypes";
-import config from '../config';
+import {
+	getJobPost,
+	submitJobPost,
+	deleteJobPost,
+	openJobSubmitDrawer,
+	closeJobSubmitDrawer
+} from "../actionTypes";
+import config from "../config";
 const initialState = {
 	jobposts: [],
 	successJobPosts: false,
 	submittingJobPosts: false,
 	loadingJobPosts: false,
-	submitModalShow: false 
+	submitModalShow: false
 };
 export default (state = initialState, action) => {
 	switch (action.type) {
@@ -33,18 +39,18 @@ export default (state = initialState, action) => {
 				submittingJobPosts: true
 			};
 		case submitJobPost.RESPONSE:
-			if(action.json.success) {
-				config.get('emitter').emit('submitJobDone');
+			if (action.json.success) {
+				config.get("emitter").emit("submitJobDone");
 				return {
 					...state,
 					jobposts: [action.json.newJobPost, ...state.jobposts],
 					submittingJobPosts: false,
-					drawerOpen: false,
+					drawerOpen: false
 				};
 			} else {
 				return {
 					...state,
-					submittingJobPosts: false,
+					submittingJobPosts: false
 				};
 			}
 			return {
@@ -53,20 +59,41 @@ export default (state = initialState, action) => {
 					? [action.json.newJobPost, ...state.jobposts]
 					: state.jobposts,
 				submittingJobPosts: false,
-				drawerOpen: false,
+				drawerOpen: false
 			};
 		case openJobSubmitDrawer.REQUEST:
 			return {
 				...state,
-				drawerOpen: true,
-
+				drawerOpen: true
 			};
 		case closeJobSubmitDrawer.REQUEST:
 			return {
 				...state,
-				drawerOpen: false,
+				drawerOpen: false
+			};
+		case deleteJobPost.REQUEST:
+			return {
+				...state
+			};
+		case deleteJobPost.RESPONSE:
+			if (action.json.success) {
+				let a = state.jobposts.filter((c) => {
+					if (c._id === action.json.id) {
+						c.status = "delete";
+					}
+					return c.status !== "delete";
+				});
+				return {
+					...state,
+					jobposts: a
+				};
+			} else {
+				return {
+					...state,
+					jobposts: state.jobposts
+				};
 			}
 		default:
-			return state
+			return state;
 	}
 };

@@ -112,7 +112,7 @@ class Category extends React.Component {
                         <Popconfirm
                             title={`Та устгах гэж байна!`}
                             onConfirm={this.delete.bind(this, record._id)}
-                            okText="Усгах"
+                            okText="Устгах"
                             placement="left"
                             cancelText="Болих"
                         >

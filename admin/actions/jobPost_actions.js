@@ -19,3 +19,7 @@ export function closeJobSubmitDrawer() {
 		type: constants.closeJobSubmitDrawer.REQUEST
 	}
 }
+export function deleteJobPost(data) {
+	let url = `/admin/api/deleteJobPost`;
+	return networkActions.requestPost(constants.deleteJobPost, url, data);
+}

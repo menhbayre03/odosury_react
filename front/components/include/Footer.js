@@ -49,51 +49,60 @@ class Footer extends Component {
                             <div
                                 className="feedback-success"
                                 style={{
-                                    margin: "30px",
+                                    margin: "30px 0",
                                     color: 'white',
-                                    fontSize: '2rem'
+                                    fontSize: '1.5rem',
+                                    fontWeight: '300'
                                 }}
                             >
-                                <Badge variant='success'>Хүсэлт Амжилттай илгээдлээ!</Badge>
+                                Таны хүсэлтийг амжилттай хүлээн авлаа
                             </div>
                         ) : (
                             <div
                                 className="feedback-request"
                                 style={{ verticalAlign: "center" }}
                             >
-                                <Form onSubmit={this.submitFeedback.bind(this)}>
-                                    <Row><Col><Container><h3 style={{color: 'white', fontWeight: '200'}}>Хичээлийн санал хүсэлт</h3></Container></Col></Row>
-                                    <Row>
-                                        <Col sm={12} md={6} lg={7}>
-                                            <Form.Label column style={{color: 'white'}}>ODOSURY платформд нэмүүлэx хичээлийн санал хүсэлтээ та энд илгээнэ үү.</Form.Label>
-                                        </Col>
-                                        <Col sm={6} md={3} lg={3}>
-                                            <Form.Control
-                                                column
-                                                placeholder="odosury"
-                                                onChange={(e) =>
-                                                    this.setState({
-                                                        feedback: e.target.value
-                                                    })
-                                                }
-                                                value={this.state.feedback}
-                                                required
-                                            />
-                                        </Col>
-                                        <Col sm={6} md={3} lg={2}>
-                                            <Button
-                                                type="submit"
-                                                style={{
-                                                    backgroundColor: "#313356",
-                                                    border: "none",
-                                                    display: "inline"
-                                                }}
-                                            >
-                                                Хүсэлт илгээx
-                                            </Button>
-                                        </Col>
-                                    </Row>
-                                </Form>
+                                {
+                                    submittingFeedback ? 
+                                        <div>
+                                            {/* <img src="/images/sync-outline.svg" className="spinner" /> */}
+                                            <h3 style={{color: 'white'}}>Хүсэлтийг илгээж байна</h3>
+                                        </div> 
+                                    : 
+                                    <Form onSubmit={this.submitFeedback.bind(this)}>
+                                        <Row><Col><Container><h3 style={{color: 'white', fontWeight: '200'}}>Хичээлийн санал хүсэлт</h3></Container></Col></Row>
+                                        <Row>
+                                            <Col sm={12} md={6} lg={7}>
+                                                <Form.Label column style={{color: 'white'}}>ODOSURY платформд нэмүүлэx хичээлийн санал хүсэлтээ та энд илгээнэ үү.</Form.Label>
+                                            </Col>
+                                            <Col sm={6} md={3} lg={3}>
+                                                <Form.Control
+                                                    column
+                                                    placeholder="odosury"
+                                                    onChange={(e) =>
+                                                        this.setState({
+                                                            feedback: e.target.value
+                                                        })
+                                                    }
+                                                    value={this.state.feedback}
+                                                    required
+                                                />
+                                            </Col>
+                                            <Col sm={6} md={3} lg={2}>
+                                                <Button
+                                                    type="submit"
+                                                    style={{
+                                                        backgroundColor: "#313356",
+                                                        border: "none",
+                                                        display: "inline"
+                                                    }}
+                                                >
+                                                    Хүсэлт илгээx
+                                                </Button>
+                                            </Col>
+                                        </Row>
+                                    </Form>
+                                }
                             </div>
                         )}
                     </Container>
