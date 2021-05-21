@@ -64,6 +64,7 @@ class TeacherRequest extends Component {
 			{
 				title: "Статус",
 				key: Math.random(),
+				fixed: "right",
 				render: (record) =>
 					record.status === "active"
 						? "Харсан"
@@ -74,6 +75,7 @@ class TeacherRequest extends Component {
 			{
 				title: "Control",
 				key: Math.random(),
+				fixed: "right",
 				render: (record) => (
 					<Fragment>
 						{record.status === "active" ? null : (
@@ -116,7 +118,9 @@ class TeacherRequest extends Component {
 		];
 		return (
 			<Fragment>
-				<Card>
+				<Card title={"Багш болох санал хүсэлтүүд"}
+                bordered={true}
+                loading={gettingRequests}>
 					<Table
 						rowClassName={(record, index) =>
 							record.status === "active"
