@@ -394,3 +394,30 @@ export const getFeedback = {
     REQUEST:'getFeedback_REQUEST',
     RESPONSE:'getFeedback_RESPONSE'
 };
+export const deleteFeedback = {
+    REQUEST: 'deleteFeedback_REQUEST',
+    RESPONSE: 'deleteFeedback_RESPONSE'
+}
+export const completedFeedback = {
+    REQUEST: 'completedFeedback_REQUEST',
+    RESPONSE: 'completedFeedback_RESPONSE'
+}
+export const getJobPost = {
+    REQUEST:'getJobPost_REQUEST',
+    RESPONSE:'getJobPost_RESPONSE'
+};
+export const submitJobPost = {
+    REQUEST:'submitJobPost_REQUEST',
+    RESPONSE:'submitJobPost_RESPONSE'
+}
+export const deleteJobPost = {
+    REQUEST: 'deleteJobPost_REQUEST',
+    RESPONSE: 'deleteJobPost_RESPONSE'
+}
+export const openJobSubmitDrawer = {
+    REQUEST: 'openJobSubmitDrawer_REQUEST',
+    RESPONSE: 'openJobSubmitDrawer_RESPONSE'
+}
+export const closeJobSubmitDrawer = {
+    REQUEST: 'closeJobSubmitDrawer_REQUEST'
+}

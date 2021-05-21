@@ -43,6 +43,9 @@ class Partner extends Component {
 					<div className="partnercontacts">
 						<Container>
 							<div className="partnericons">
+								<div className="partnericon">
+									<h3>Та бидэнтэй яг одоо холбогдоорой</h3>
+								</div>
 								<div
 									className="partnericon"
 									onClick={() => {
@@ -78,9 +81,6 @@ class Partner extends Component {
 									}}
 								>
 									info@odosury.com
-								</div>
-								<div className="partnericon">
-									<h3>Та бидэнтэй яг одоо холбогдоорой</h3>
 								</div>
 							</div>
 						</Container>

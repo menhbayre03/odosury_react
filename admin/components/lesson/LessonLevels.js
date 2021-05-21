@@ -25,7 +25,7 @@ const SortableItem = SortableElement(( {value ,needRemove, removeTimeline, openE
                 <Popconfirm
                     title={`Та устгах гэж байна!`}
                     onConfirm={removeTimeline.bind(this,needRemove.levelIndex, needRemove.program)}
-                    okText="Усгах"
+                    okText="Устгах"
                     placement="left"
                     cancelText="Болих"
                 >
@@ -330,7 +330,7 @@ class LessonLevels extends React.Component {
                                                     <Popconfirm
                                                         title={`Та устгах гэж байна!`}
                                                         onConfirm={this.deleteLevel.bind(this, run._id)}
-                                                        okText="Усгах"
+                                                        okText="Устгах"
                                                         placement="left"
                                                         cancelText="Болих"
                                                     >

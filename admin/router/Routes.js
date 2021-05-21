@@ -12,6 +12,7 @@ import Purchase from "../components/purchase/Purchase";
 import NotFound from "../components/NotFound";
 import TeacherRequest from "../components/TeacherRequest";
 import Feedback from "../components/Feedback";
+import JobPost from "../components/JobPost";
 export default [
     {
         component: index,
@@ -74,6 +75,11 @@ export default [
             {
                 component: Feedback,
                 path: '/admin/feedBack',
+                exact: true
+            },
+            {
+                component: JobPost,
+                path: '/admin/jobpost',
                 exact: true
             },
             // {

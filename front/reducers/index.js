@@ -7,6 +7,8 @@ import lessonEish from "./lessonEish";
 import profile from "./profile";
 import audio from "./audio";
 import payment from "./payment";
+import jobPost from "./jobPost";
+import requests from "./requests";
 export default combineReducers({
     main: main,
     auth: auth,
@@ -16,4 +18,6 @@ export default combineReducers({
     profile: profile,
     audio: audio,
     payment: payment,
+    jobPost: jobPost,
+    requests: requests
 });

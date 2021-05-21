@@ -4,107 +4,109 @@ import { Link } from 'react-router-dom';
 import {
     isMobile
 } from "react-device-detect";
+
 import { Container, Col, Row, Form, Modal, Button, Badge, CloseButton } from 'react-bootstrap';
-import * as actions from '../../actions/payment_actions';
+import { submitTeacherRequest, submitFeedback } from "../../actions/request_actions"
 
 class Footer extends Component {
     constructor(props) {
         super(props);
-        this.state = {
+        this.state = {            
+            feedback: '',
             name: '',
             phone: '',
             email: '',
             lesson: '',
             experience: '',
-            feedback: '',
-            success: false,
-            success2: false,
-            submitting: false,
-            submitting2: false,
             showModal: false,
-            showModal2: false,
         }
     }
 
-    handleSubmit(e, bly){
+    submitTeacherRequest(e){
         e.preventDefault();
-        if (bly==='teacher') {
-            const {
-                name,
-                phone,
-                email,
-                lesson,
-                experience
-            } = this.state;
-    
-                this.setState({submitting: true}, () => {
-                    fetch('/api/teacher/register', {
-                        method: 'post',
-                        credentials: 'include',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            name: name,
-                            phone: phone,
-                            email: email,
-                            lesson: lesson,
-                            experience: experience,
-                        })
-                    })
-                        .then((e) => e.json())
-                        .then((e) => {
-                            let state = {submitting: false};
-                            if(!e.success && e.check){
-                                state[e.check] = [e.check];
-                            } else if(e.success){
-                                state.success = true;
-                            }
-                            this.setState(state);
-                        })
-                        .catch((e) => console.log(e))
-                });
-        } else if (bly==='feedback') {
-            const {
-                feedback
-            } = this.state;
-    
-                this.setState({submitting2: true}, () => {
-                    fetch('/api/feedback', {
-                        method: 'post',
-                        credentials: 'include',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            feedback: feedback
-                        })
-                    })
-                        .then((e) => e.json())
-                        .then((e) => {
-                            let state = {submitting2: false};
-                            if(!e.success && e.check){
-                                state[e.check] = [e.check];
-                            } else if(e.success){
-                                state.success2 = true;
-                            }
-                            this.setState(state);
-                        })
-                        .catch((e) => console.log(e))
-                });
-        }
-        
-    }
+        this.props.dispatch(submitTeacherRequest({...this.state}));
+    };
+    submitFeedback(e){
+        e.preventDefault();
+        this.props.dispatch(submitFeedback({feedback: this.state.feedback}));
+    };
 
     render() {
         const {
             categories,
-            audioCategories
+            audioCategories,
+            submittingFeedback,
+            submittingTeacherRequest,
+            successFeedback,
+            successTeacherRequest,
         } = this.props;
         return (
             <div style={{backgroundColor: '#151314'}}>
+            <div className="footer-request">
+                    <Container style={{overflow: 'auto'}}>
+                        {/* Feedback */}
+                        {successFeedback ? (
+                            <div
+                                className="feedback-success"
+                                style={{
+                                    margin: "30px 0",
+                                    color: 'white',
+                                    fontSize: '1.5rem',
+                                    fontWeight: '300'
+                                }}
+                            >
+                                Таны хүсэлтийг амжилттай хүлээн авлаа
+                            </div>
+                        ) : (
+                            <div
+                                className="feedback-request"
+                                style={{ verticalAlign: "center" }}
+                            >
+                                {
+                                    submittingFeedback ? 
+                                        <div>
+                                            {/* <img src="/images/sync-outline.svg" className="spinner" /> */}
+                                            <h3 style={{color: 'white'}}>Хүсэлтийг илгээж байна</h3>
+                                        </div> 
+                                    : 
+                                    <Form onSubmit={this.submitFeedback.bind(this)}>
+                                        <Row><Col><Container><h3 style={{color: 'white', fontWeight: '200'}}>Хичээлийн санал хүсэлт</h3></Container></Col></Row>
+                                        <Row>
+                                            <Col sm={12} md={6} lg={7}>
+                                                <Form.Label column style={{color: 'white'}}>ODOSURY платформд нэмүүлэx хичээлийн санал хүсэлтээ та энд илгээнэ үү.</Form.Label>
+                                            </Col>
+                                            <Col sm={6} md={3} lg={3}>
+                                                <Form.Control
+                                                    column
+                                                    placeholder="odosury"
+                                                    onChange={(e) =>
+                                                        this.setState({
+                                                            feedback: e.target.value
+                                                        })
+                                                    }
+                                                    value={this.state.feedback}
+                                                    required
+                                                />
+                                            </Col>
+                                            <Col sm={6} md={3} lg={2}>
+                                                <Button
+                                                    type="submit"
+                                                    style={{
+                                                        backgroundColor: "#313356",
+                                                        border: "none",
+                                                        display: "inline"
+                                                    }}
+                                                >
+                                                    Хүсэлт илгээx
+                                                </Button>
+                                            </Col>
+                                        </Row>
+                                    </Form>
+                                }
+                            </div>
+                        )}
+                    </Container>
+                </div>
                 <div className="footer-top">
                     <Container>
                         <Row>
@@ -134,9 +136,6 @@ class Footer extends Component {
                             <Col lg={3} md={4} sm={6} style={{marginBottom: 30}}>
                                 <h6>Шуурхай холбоос</h6>
                                 <ul>
-									<li>
-                                        <span onClick={() => this.setState({showModal2: true})}>Санал хүсэлт</span>                              
-                                    </li>
                                     <li>
                                         <Link to='/about'>Бидний тухай</Link>
                                     </li>
@@ -208,80 +207,6 @@ class Footer extends Component {
                         </p>
                     </Container>
                 </div>
-                {/* Feedback Modal */}
-
-				<Modal
-					show={this.state.showModal2}
-					onHide={() => this.setState({ showModal2: false })}
-					centered
-				>
-					<CloseButton
-						onClick={() => this.setState({ showModal2: false })}
-						style={{
-							position: "absolute",
-							width: "20px",
-							height: "20px",
-							right: "5px",
-							top: "0"
-						}}
-					/>
-					{this.state.success2 ? (
-						<div
-							className="feedback-success"
-							style={{
-								margin: "30px"
-							}}
-						>
-							<h3>
-								Хүсэлт{" "}
-								<Badge variant="success"> АМЖИЛТТАЙ </Badge>{" "}
-								илгээгдлээ!
-							</h3>
-						</div>
-					) : (
-						<div
-							className="feedback-request"
-							style={{ margin: "30px", verticalAlign: "center" }}
-						>
-							<p>
-								ODOSURY платформд хүргүүлэx санал хүсэлтээ та доор илгээнэ үү.
-							</p>
-							<Form
-								onSubmit={(e) =>
-									this.state.submitting2
-										? false
-										: this.handleSubmit(e, "feedback")
-								}
-							>
-								<Form.Group>
-									<Form.Label>Санал хүсэлт</Form.Label>
-									<Form.Control
-										placeholder="odosury"
-										onChange={(e) =>
-											this.setState({
-												feedback: e.target.value
-											})
-										}
-										value={this.state.feedback}
-										required
-									/>
-								</Form.Group>
-								<Button
-									onClick={(e) =>
-										this.handleSubmit(e, "feedback")
-									}
-									type="submit"
-									style={{
-										backgroundColor: "#313356",
-										border: "none"
-									}}
-								>
-									Хүсэлт илгээx
-								</Button>
-							</Form>
-						</div>
-					)}
-				</Modal>
 
 				{/* Teacher Request Modal */}
 
@@ -300,7 +225,7 @@ class Footer extends Component {
 							top: "0"
 						}}
 					/>
-					{this.state.success ? (
+					{successTeacherRequest ? (
 						<div
 							className="teacher-request-success"
 							style={{
@@ -329,11 +254,7 @@ class Footer extends Component {
 								туршлагатай байх
 							</p>
 							<Form
-								onSubmit={(e) =>
-									this.state.submitting
-										? false
-										: this.handleSubmit(e, "teacher")
-								}
+								onSubmit={this.submitTeacherRequest.bind(this)}
 							>
 								<Form.Group>
 									<Form.Label>Нэр</Form.Label>
@@ -398,9 +319,6 @@ class Footer extends Component {
 									/>
 								</Form.Group>
 								<Button
-									onClick={(e) =>
-										this.handleSubmit(e, "teacher")
-									}
 									type="submit"
 									style={{
 										backgroundColor: "#313356",
@@ -421,7 +339,11 @@ class Footer extends Component {
 function mapStateToProps(state){
     return {
         categories: state.main.categories,
-        audioCategories: state.main.audioCategories
+        audioCategories: state.main.audioCategories,
+        submittingFeedback: state.requests.submittingFeedback,
+        submittingTeacherRequest: state.requests.submittingTeacherRequest,
+        successFeedback: state.requests.successFeedback,
+        successTeacherRequest: state.requests.successTeacherRequest,
     }
 }
 export default  connect(mapStateToProps)(Footer);

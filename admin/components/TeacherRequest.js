@@ -59,6 +59,11 @@ class TeacherRequest extends React.Component {
                         key: Math.random(),
                         render: record => moment(record.created).format('YYYY-MM-DD h:mm:ss a')
                         // render: record => record.created
+                    },
+                    {
+                        title: 'Статус',
+                        key: Math.random(),
+                        render: record=>record.status
                     }
                 ]}
                     dataSource={requests}
