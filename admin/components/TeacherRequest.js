@@ -7,7 +7,7 @@ import {
 	completedTeacherRequests
 } from "../actions/teacher_actions";
 import { DeleteFilled } from "@ant-design/icons";
-import { Card, Table, Button, Popconfirm } from "antd";
+import { Card, Table, Button, Popconfirm, Tag } from "antd";
 
 const reducer = ({ teacherRequest }) => ({ teacherRequest });
 
@@ -62,15 +62,21 @@ class TeacherRequest extends Component {
 				render: (record) => record.experience
 			},
 			{
+				title: "Илгээсэн он, сар",
+				key: Math.random(),
+				render: (record) =>
+					moment(record.created).format("YYYY-MM-DD h:mm:ss a")
+			},
+			{
 				title: "Статус",
 				key: Math.random(),
 				fixed: "right",
 				render: (record) =>
 					record.status === "active"
-						? "Харсан"
+						? <Tag color="#2db7f5">Харсан</Tag>
 						: record.status === "pending"
-						? "Хараагүй"
-						: "Бусад"
+						? <Tag color="#87d068">Хараагүй</Tag>
+						: <Tag color="#fbfbfb">Бусад</Tag>
 			},
 			{
 				title: "Control",
@@ -108,12 +114,6 @@ class TeacherRequest extends Component {
 						</Popconfirm>
 					</Fragment>
 				)
-			},
-			{
-				title: "Илгээсэн он, сар",
-				key: Math.random(),
-				render: (record) =>
-					moment(record.created).format("YYYY-MM-DD h:mm:ss a")
 			}
 		];
 		return (

@@ -7,7 +7,7 @@ import {
 	completedFeedback
 } from "../actions/teacher_actions";
 
-import { Card, Table, Popconfirm, Button } from "antd";
+import { Card, Table, Popconfirm, Button, Tag } from "antd";
 import { DeleteFilled } from "@ant-design/icons";
 
 const reducer = ({ feedBack }) => ({ feedBack });
@@ -43,14 +43,21 @@ class Feedback extends React.Component {
 			{
 				title: "Хүсэлт",
 				key: Math.random(),
-				width: "70%",
 				render: (record) => record.feedback
+			},
+			{
+				title: "Илгээсэн он, сар",
+				key: Math.random(),
+				render: (record) =>
+					moment(record.created).format("YYYY-MM-DD h:mm:ss a")
+				// render: record => record.created
 			},
 			{
 				title: "Статус",
 				key: Math.random(),
 				fixed: "right",
-				render: (record) => (record.status === 'active' ? 'Харсан' : record.status === 'pending' ? 'Хараагүй' : 'Бусад')
+				width: "100px",
+				render: (record) => (record.status === 'active' ? <Tag color="#2db7f5">Харсан</Tag> : record.status === 'pending' ? <Tag color="#87d068">Хараагүй</Tag> : <Tag color="#fbfbfb">Бусад</Tag>)
 			},
 			{
 				title: "action",
@@ -85,14 +92,6 @@ class Feedback extends React.Component {
 						</Popconfirm>
 					</Fragment>
 				)
-			},
-			{
-				title: "Илгээсэн он, сар",
-				key: Math.random(),
-				fixed: "right",
-				render: (record) =>
-					moment(record.created).format("YYYY-MM-DD h:mm:ss a")
-				// render: record => record.created
 			}
 		];
 		return (

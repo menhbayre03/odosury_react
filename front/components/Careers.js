@@ -7,7 +7,8 @@ import {
 	Table,
 	Card,
 	ListGroup,
-	ListGroupItem
+	ListGroupItem,
+	Spinner
 } from "react-bootstrap";
 import Header from "./include/Header";
 import Footer from "./include/Footer";
@@ -62,7 +63,19 @@ class Careers extends Component {
 					<div className="careersposts">
 						<Container>
 							{loadingJobPosts ? (
-								<div>Loading</div>
+								<Spinner
+									animation="border"
+									role="status"
+								></Spinner>
+							) : jobposts.length === 0 ? (
+								<div className="empty-data">
+									<div className="emtry-picture">
+										<img src="/images/empty.svg" />
+									</div>
+									<div className="emtry-text">
+										Тун удахгүй
+									</div>
+								</div>
 							) : (
 								<div className="CareersCards">
 									{jobposts.map((job) => {
@@ -72,7 +85,12 @@ class Careers extends Component {
 												<h3>Гүйцэтгэx үүрэг</h3>
 												<ul className="Careerslist">
 													{job.misc.map((msc) => {
-														return <li>{msc}</li>;
+														return (
+															<li>
+																{/* <ion-icon name="checkmark-outline" />{" "} */}
+																{msc}
+															</li>
+														);
 													})}
 												</ul>
 												<h3>Шаардлага</h3>
@@ -81,7 +99,7 @@ class Careers extends Component {
 														(rqr) => {
 															return (
 																<li>
-																	<ion-icon name="checkmark-outline" />
+																	{/* <ion-icon name="checkmark-outline" />{" "} */}
 																	{rqr}
 																</li>
 															);

@@ -7,7 +7,8 @@ import {
 	Table,
 	Drawer,
 	Select,
-	Popconfirm
+	Popconfirm,
+	Collapse
 } from "antd";
 import {
 	DeleteFilled,
@@ -100,60 +101,60 @@ class JobPost extends Component {
 					>
 						{jobposts.map((job) => {
 							return (
-								<div className="adminjob" key={job._id}>
-									<h4 className="JPdesc">Албан тушаал</h4>
-									<p className="JPcontent">{job.opening}</p>
-									<h4 className="JPdesc">Шаардлага:</h4>
-									<ul>
-										{job.requirements.map((rqr) => {
-											return (
-												<li className="JPcontent">
-													{rqr}
-												</li>
-											);
-										})}
-									</ul>
-									<h4 className="JPdesc">Цалин:</h4>
-									<p className="JPcontent">{job.salary}</p>
-									<h4 className="JPdesc">Ажлын тайлбар:</h4>
-									<ul>
-										{job.misc.map((msc) => {
-											return (
-												<li className="JPcontent">
-													{msc}
-												</li>
-											);
-										})}
-									</ul>
-									<h4 className="JPdesc">
-										Нийтлэсэн он сар:
-									</h4>
-									<p classname="JPcontent">
-										{moment(job.created).format(
-											"YYYY-MM-DD h:mm:ss a"
-										)}
-									</p>
-									<Popconfirm
-										title={`Та устгах гэж байна!`}
-										onConfirm={this.deleteJobPost.bind(
-											this,
-											job
-										)}
-										okText="Устгах"
-										placement="left"
-										cancelText="Болих"
-									>
-										<Button
-											style={{ float: "right" }}
-											type={"primary"}
-											danger
-											size={"small"}
+								<Collapse accordion>
+									<Collapse.Panel header={job.opening} key={job._id} style={{padding: "20px"}}>
+										<h4 className="JPdesc">Шаардлага:</h4>
+										<ul>
+											{job.requirements.map((rqr) => {
+												return (
+													<li className="JPcontent">
+														{rqr}
+													</li>
+												);
+											})}
+										</ul>
+										<h4 className="JPdesc">Цалин:</h4>
+										<p className="JPcontent">{job.salary}</p>
+										<h4 className="JPdesc">Ажлын тайлбар:</h4>
+										<ul>
+											{job.misc.map((msc) => {
+												return (
+													<li className="JPcontent">
+														{msc}
+													</li>
+												);
+											})}
+										</ul>
+										<h4 className="JPdesc">
+											Нийтлэсэн он сар:
+										</h4>
+										<p className="JPcontent">
+											{moment(job.created).format(
+												"YYYY-MM-DD h:mm:ss a"
+											)}
+										</p>
+										<Popconfirm
+											title={`Та устгах гэж байна!`}
+											onConfirm={this.deleteJobPost.bind(
+												this,
+												job
+											)}
+											okText="Устгах"
+											placement="left"
+											cancelText="Болих"
 										>
-											<DeleteFilled />
-											Устгаx
-										</Button>
-									</Popconfirm>
-								</div>
+											<Button
+												style={{ float: "right" }}
+												type={"primary"}
+												danger
+												size={"small"}
+											>
+												<DeleteFilled />
+												Устгаx
+											</Button>
+										</Popconfirm>
+									</Collapse.Panel>
+								</Collapse>
 							);
 						})}
 					</div>

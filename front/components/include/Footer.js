@@ -46,8 +46,18 @@ class Footer extends Component {
                     <Container style={{overflow: 'auto'}}>
                         {/* Feedback */}
                         {successFeedback ? (
-                            <div className="success-container">
-                                
+                            <div className="feedback-success-container">
+                                <div
+                                    className="feedback-success"
+                                    style={{
+                                        margin: "30px 0",
+                                        color: 'white',
+                                        fontSize: '1.5rem',
+                                        fontWeight: '300'
+                                    }}
+                                >
+                                    Таны хүсэлтийг амжилттай хүлээн авлаа
+                                </div>
                             </div>
                         ) : (
                             <div
@@ -211,20 +221,27 @@ class Footer extends Component {
 						}}
 					/>
 					{   
-                        submittingTeacherRequest ? <div className='teacher-request-loading' style={{height:'300px', width: '500px'}}>loading</div> :
                         successTeacherRequest ? (
 						<div
 							className="teacher-request-success"
 							style={{
-                                height: '300px',
-                                width: '500px',
 								padding: "30px"
 							}}
 						>
-							<h3>
-								<Badge variant="success"> Таны хүсэлт амжилттай илгээгдлээ! </Badge>
-							</h3>
-							<p>Бид тантай тун удахгүй холбогдох болно.</p>
+                            <div className="teacher-request-checkmark">
+                                <div class="success-checkmark">
+                                    <div class="check-icon">
+                                        <span class="icon-line line-tip"></span>
+                                        <span class="icon-line line-long"></span>
+                                        <div class="icon-circle"></div>
+                                        <div class="icon-fix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="teacher-request-text">
+                                <h4>Таны хүсэлт амжилттай илгээгдлээ!</h4>
+                                <p>Бид тантай тун удахгүй холбогдох болно.</p>
+                            </div>
 						</div>
 					) : (
 						<div
@@ -312,7 +329,7 @@ class Footer extends Component {
 										border: "none"
 									}}
 								>
-									Бүртгүүлэх
+                                    {submittingTeacherRequest ? <Spinner animation="border" role="status"></Spinner> : "Бүртгүүлэх"}
 								</Button>
 							</Form>
 						</div>
