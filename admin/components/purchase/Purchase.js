@@ -20,6 +20,7 @@ class Purchase extends React.Component {
         this.state = {
             search: '',
             status: '',
+            type: '',
             id: '',
             startDate: null,
             endDate: null,
@@ -35,6 +36,7 @@ class Purchase extends React.Component {
             skip: 0,
             search: this.state.search,
             status: this.state.status,
+            type: this.state.type,
             id: this.state.id,
             startDate: this.state.startDate,
             endDate: this.state.endDate
@@ -47,6 +49,7 @@ class Purchase extends React.Component {
             skip: (current - 1) * 50,
             search: this.state.search,
             status: this.state.status,
+            type: this.state.type,
             id: this.state.id,
             startDate: this.state.startDate,
             endDate: this.state.endDate
@@ -162,6 +165,13 @@ class Purchase extends React.Component {
                         <Option value={'success'}>Идэвхитэй</Option>
                         <Option value={'finished'}>Дууссан</Option>
                         <Option value={'pending'}>Хүлээгдэж буй</Option>
+                    </Select>
+                    <Select style={{width: 142, marginRight: 20}} size='small' name='type' value={this.state.type} onChange={(e) => this.setState({type: e})}
+                    >
+                        <Option value=''>Бүгд</Option>
+                        <Option value={'premium'}>Premium</Option>
+                        <Option value={'eish'}>ЭЕШ</Option>
+                        <Option value={'lesson'}>Хичээл</Option>
                     </Select>
                     <RangePicker size="small" onChange={this.onDateChange.bind(this)} allowEmpty={[true, true]} value={[this.state.startDate ? moment(this.state.startDate) : null, this.state.endDate ? moment(this.state.endDate) : null]} format="YYYY-MM-DD" />
 

@@ -5,7 +5,7 @@ import {
     isMobile
 } from "react-device-detect";
 
-import { Container, Col, Row, Form, Modal, Button, Badge, CloseButton } from 'react-bootstrap';
+import { Container, Col, Row, Form, Modal, Button, Badge, CloseButton, Spinner } from 'react-bootstrap';
 import { submitTeacherRequest, submitFeedback } from "../../actions/request_actions"
 
 class Footer extends Component {
@@ -46,63 +46,48 @@ class Footer extends Component {
                     <Container style={{overflow: 'auto'}}>
                         {/* Feedback */}
                         {successFeedback ? (
-                            <div
-                                className="feedback-success"
-                                style={{
-                                    margin: "30px 0",
-                                    color: 'white',
-                                    fontSize: '1.5rem',
-                                    fontWeight: '300'
-                                }}
-                            >
-                                Таны хүсэлтийг амжилттай хүлээн авлаа
+                            <div className="success-container">
+                                
                             </div>
                         ) : (
                             <div
                                 className="feedback-request"
                                 style={{ verticalAlign: "center" }}
                             >
-                                {
-                                    submittingFeedback ? 
-                                        <div>
-                                            {/* <img src="/images/sync-outline.svg" className="spinner" /> */}
-                                            <h3 style={{color: 'white'}}>Хүсэлтийг илгээж байна</h3>
-                                        </div> 
-                                    : 
-                                    <Form onSubmit={this.submitFeedback.bind(this)}>
-                                        <Row><Col><Container><h3 style={{color: 'white', fontWeight: '200'}}>Хичээлийн санал хүсэлт</h3></Container></Col></Row>
-                                        <Row>
-                                            <Col sm={12} md={6} lg={7}>
-                                                <Form.Label column style={{color: 'white'}}>ODOSURY платформд нэмүүлэx хичээлийн санал хүсэлтээ та энд илгээнэ үү.</Form.Label>
-                                            </Col>
-                                            <Col sm={6} md={3} lg={3}>
-                                                <Form.Control
-                                                    column
-                                                    placeholder="odosury"
-                                                    onChange={(e) =>
-                                                        this.setState({
-                                                            feedback: e.target.value
-                                                        })
-                                                    }
-                                                    value={this.state.feedback}
-                                                    required
-                                                />
-                                            </Col>
-                                            <Col sm={6} md={3} lg={2}>
-                                                <Button
-                                                    type="submit"
-                                                    style={{
-                                                        backgroundColor: "#313356",
-                                                        border: "none",
-                                                        display: "inline"
-                                                    }}
-                                                >
-                                                    Хүсэлт илгээx
-                                                </Button>
-                                            </Col>
-                                        </Row>
-                                    </Form>
-                                }
+                                
+                                <Form onSubmit={this.submitFeedback.bind(this)}>
+                                    <Row><Col><Container><h3 style={{color: 'white', fontWeight: '200'}}>Хичээлийн санал хүсэлт</h3></Container></Col></Row>
+                                    <Row>
+                                        <Col sm={12} md={6} lg={7}>
+                                            <Form.Label column style={{color: 'white'}}>ODOSURY платформд нэмүүлэx хичээлийн санал хүсэлтээ та энд илгээнэ үү.</Form.Label>
+                                        </Col>
+                                        <Col sm={6} md={3} lg={3}>
+                                            <Form.Control
+                                                column
+                                                placeholder="odosury"
+                                                onChange={(e) =>
+                                                    this.setState({
+                                                        feedback: e.target.value
+                                                    })
+                                                }
+                                                value={this.state.feedback}
+                                                required
+                                            />
+                                        </Col>
+                                        <Col sm={6} md={3} lg={2}>
+                                            <Button
+                                                type="submit"
+                                                style={{
+                                                    backgroundColor: "#313356",
+                                                    border: "none",
+                                                    display: "inline"
+                                                }}
+                                            >
+                                                {submittingFeedback ? <Spinner animation="border" role="status"></Spinner> : "Хүсэлт илгээx"}
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </Form>
                             </div>
                         )}
                     </Container>
@@ -225,17 +210,19 @@ class Footer extends Component {
 							top: "0"
 						}}
 					/>
-					{successTeacherRequest ? (
+					{   
+                        submittingTeacherRequest ? <div className='teacher-request-loading' style={{height:'300px', width: '500px'}}>loading</div> :
+                        successTeacherRequest ? (
 						<div
 							className="teacher-request-success"
 							style={{
-								margin: "30px"
+                                height: '300px',
+                                width: '500px',
+								padding: "30px"
 							}}
 						>
 							<h3>
-								Хүсэлт{" "}
-								<Badge variant="success"> АМЖИЛТТАЙ </Badge>{" "}
-								илгээгдлээ!
+								<Badge variant="success"> Таны хүсэлт амжилттай илгээгдлээ! </Badge>
 							</h3>
 							<p>Бид тантай тун удахгүй холбогдох болно.</p>
 						</div>
