@@ -1,9 +1,9 @@
 import React from "react";
 import { connect } from 'react-redux';
 import {
-    DatePicker, Card, Table, Select, Button, List, Row, Col, Typography, Form, Input, Tag
+    DatePicker, Card, Table, Select, Button, List, Row, Col, Typography, Form, Input, Tag, Drawer
 } from 'antd';
-import { getPayments, setPaymentStatus } from '../../actions/purchase_actions';
+import { getPayments, setPaymentStatus, onSaveTrans, onCancelTrans } from '../../actions/purchase_actions';
 import { DeleteFilled , CloseCircleFilled , SearchOutlined} from '@ant-design/icons';
 import NumberFormat from 'react-number-format';
 import moment from 'moment';
@@ -28,6 +28,12 @@ class Purchase extends React.Component {
     }
     componentDidMount() {
         this.props.dispatch(getPayments());
+    }
+    onSave() {
+        this.props.dispatch(onSaveTrans());
+    }
+    onCancel() {
+        this.props.dispatch(onCancelTrans);
     }
     searchUser(e){
         e.preventDefault();
@@ -62,7 +68,7 @@ class Purchase extends React.Component {
     render() {
         let {
             dispatch,
-            purchase:{ status, transactions, all = 0, pageNum = 1 }
+            purchase:{ status, transactions, all = 0, pageNum = 1, submitTransLoader, openModal }
         } = this.props;
         let pagination = {
             total : all,
@@ -215,6 +221,71 @@ class Purchase extends React.Component {
                     }}
                     onChange={(e) => this.onPaginate(e.current)}
                 />
+                <Drawer
+                    title="Эрх олгох"
+                    visible={openModal}
+                    closable={false}
+                    maskClosable={false}
+                    width={'70%'}
+                >
+                    <Form.Item
+                        label='Хэрэглэгч'
+                        labelCol={{span: 5}}
+                    >
+                        <Select
+                            value={user.role ? user.role : ''}
+                            onChange={this.onChangeSelect.bind(this)}
+                        >
+                            <Option value="">Эрх сонгоно уу</Option>
+                            <Option value="teacher">Багш</Option>
+                            <Option value="user">Хэрэглэгч</Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        label='Төрөл'
+                        labelCol={{span: 5}}
+                    >
+                        <Select
+                            value={user.role ? user.role : ''}
+                            onChange={this.onChangeSelect.bind(this)}
+                        >
+                            <Option value="">Эрх сонгоно уу</Option>
+                            <Option value="teacher">Багш</Option>
+                            <Option value="user">Хэрэглэгч</Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        label='Тайлбар'
+                        labelCol={{span: 5}}
+                    >
+                        <Input.TextArea rows={4} value={user.bio? user.bio : ''} name='bio' onChange={this.onChangeHandler.bind(this)} />
+                    </Form.Item>
+                    <div
+                        style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            width: '100%',
+                            borderTop: '1px solid #e8e8e8',
+                            padding: '10px 16px',
+                            textAlign: 'right',
+                            left: 0,
+                            background: '#fff',
+                            borderRadius: '0 0 4px 4px',
+                        }}
+                    >
+                        <Button
+                            style={{
+                                marginRight: 8,
+                            }}
+                            onClick={() => this.onCancel()} disabled={submitTransLoader}
+                        >
+                            Болих
+                        </Button>
+                        <Button onClick={() => this.onSave()} loading={submitTransLoader} type="primary">
+                            Хадгалах
+                        </Button>
+                    </div>
+                </Drawer>
             </Card>
         );
     }

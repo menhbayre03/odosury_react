@@ -304,6 +304,16 @@ export const setPaymentStatus = {
     RESPONSE: 'setPaymentStatus_RES'
 };
 
+export const onCancelTrans = {
+    REQUEST: 'onCancelTrans_REQ',
+    RESPONSE: 'setPaymentStatus_RES'
+};
+
+export const onSaveTrans = {
+    REQUEST: 'onSaveTrans_REQ',
+    RESPONSE: 'onSaveTrans_RES'
+};
+
 
 export const getAudios = {
     REQUEST:'getAudios_REQUEST',
