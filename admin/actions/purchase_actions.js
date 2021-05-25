@@ -12,10 +12,25 @@ export function setPaymentStatus(payment_id, typo) {
 }
 export function onSaveTrans(data) {
     let url = `/admin/api/add/payment`;
-    return networkActions.requestGet(constants.onSaveTrans,url, data);
+    return networkActions.requestPost(constants.onSaveTrans,url, data);
+}
+export function searchUser(data) {
+    let url = `/admin/api/search/user`;
+    return networkActions.requestGet(constants.searchUser,url, data);
 }
 export function onCancelTrans(){
     return {
         type: constants.onCancelTrans.REQUEST,
+    }
+}
+export function openModal(){
+    return {
+        type: constants.openModalTrans.REQUEST,
+    }
+}
+export function changeHandler(data){
+    return {
+        type: constants.changeHandlerPaymentUser.REQUEST,
+        data
     }
 }

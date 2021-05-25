@@ -1,9 +1,9 @@
 import React from "react";
 import { connect } from 'react-redux';
 import {
-    DatePicker, Card, Table, Select, Button, List, Row, Col, Typography, Form, Input, Tag, Drawer
+    DatePicker, Card, Table, Select, Button, List, Row, Col, Typography, Form, Input, Tag, Drawer, Spin, Switch
 } from 'antd';
-import { getPayments, setPaymentStatus, onSaveTrans, onCancelTrans } from '../../actions/purchase_actions';
+import { getPayments, setPaymentStatus, onSaveTrans, onCancelTrans, searchUser, changeHandler, openModal } from '../../actions/purchase_actions';
 import { DeleteFilled , CloseCircleFilled , SearchOutlined} from '@ant-design/icons';
 import NumberFormat from 'react-number-format';
 import moment from 'moment';
@@ -24,16 +24,21 @@ class Purchase extends React.Component {
             id: '',
             startDate: null,
             endDate: null,
+            custom: '',
         };
     }
     componentDidMount() {
         this.props.dispatch(getPayments());
     }
     onSave() {
-        this.props.dispatch(onSaveTrans());
+        const { purchase:{ item }} = this.props;
+        this.props.dispatch(onSaveTrans(item));
     }
     onCancel() {
-        this.props.dispatch(onCancelTrans);
+        this.props.dispatch(onCancelTrans());
+    }
+    openModal() {
+        this.props.dispatch(openModal());
     }
     searchUser(e){
         e.preventDefault();
@@ -45,6 +50,7 @@ class Purchase extends React.Component {
             type: this.state.type,
             id: this.state.id,
             startDate: this.state.startDate,
+            custom: this.state.custom,
             endDate: this.state.endDate
         };
         dispatch(getPayments(cc));
@@ -58,9 +64,38 @@ class Purchase extends React.Component {
             type: this.state.type,
             id: this.state.id,
             startDate: this.state.startDate,
+            custom: this.state.custom,
             endDate: this.state.endDate
         };
         dispatch(getPayments(cc))
+    }
+    searchTeacher(event){
+        let self = this;
+        function submitSearch(event){
+            self.props.dispatch(searchUser({search_user:event}))
+        }
+        if (event !== '') {
+            self.setState({ search_user: event });
+            clearTimeout(self.state.timeOut);
+            let text = event;
+            let timeOut = setTimeout(function(){
+                submitSearch(text)
+            }, 300);
+            self.setState({
+                timeOut:timeOut
+            });
+        }
+    }
+
+    chooseMember(item) {
+        this.props.dispatch(changeHandler({ name: 'user', value: item}))
+    };
+    changeHandler(e, value) {
+        if (typeof e === 'string' || e instanceof String) {
+            this.props.dispatch(changeHandler({ name: e, value: value}))
+        } else {
+            this.props.dispatch(changeHandler({ name: e.target.name, value: e.target.value}))
+        }
     }
     onDateChange(dates, dateString) {
         this.setState({startDate: dateString[0] || null, endDate: dateString[1] || null})
@@ -68,7 +103,7 @@ class Purchase extends React.Component {
     render() {
         let {
             dispatch,
-            purchase:{ status, transactions, all = 0, pageNum = 1, submitTransLoader, openModal }
+            purchase:{ status, transactions, all = 0, pageNum = 1, submitTransLoader, openModal, searchLoader, searchResult, item }
         } = this.props;
         let pagination = {
             total : all,
@@ -104,11 +139,11 @@ class Purchase extends React.Component {
                 dataIndex: 'type',
                 render: (text, record) => (
                     text === 'premium' ? (
-                        <Tag color="#108ee9">Premium</Tag>
+                        <Tag color={record.custom ? 'gray' : '#108ee9'}>Premium</Tag>
                     ) : text === 'eish' ? (
-                        <Tag color="#2db7f5">ЭЕШ</Tag>
+                        <Tag color={record.custom ? 'gray' : '#2db7f5'}>ЭЕШ</Tag>
                     ) : (
-                        <Tag color="#87d068">Хичээл</Tag>
+                        <Tag color={record.custom ? 'gray' : '#87d068'}>Хичээл</Tag>
                     )
                 )
             },
@@ -117,7 +152,9 @@ class Purchase extends React.Component {
                 title: 'Төлөлт',
                 dataIndex: 'method',
                 render: (text, record) => (
-                    text === 'bank' ? (
+                    record.custom ? (
+                        'Үнэгүй'
+                    ) : text === 'bank' ? (
                         'Банкаар'
                     ) : text === 'qpay' ? (
                         'QPay'
@@ -162,32 +199,44 @@ class Purchase extends React.Component {
                 title="Худалдан авалт"
                 bordered={true}
                 loading={status}
+                extra={[
+                    <Button onClick={() => this.openModal()}>ҮҮСГЭХ</Button>
+                ]}
             >
                 <Form onFinish={this.searchUser.bind(this)}>
-                    <Input addonAfter={<CloseCircleFilled style={{color:'white'}} onClick={() => this.setState({search:''})} />} maxLength={60} size='small' placeholder='Нэр, Имэйл, Утас' style={{width: 200, marginRight: 20}} value={this.state.search} name='search' onChange={(e) => this.setState({search: e.target.value})} />
-                    <Select style={{width: 142, marginRight: 20}} size='small' name='role' value={this.state.status} onChange={(e) => this.setState({status: e})}
-                    >
-                        <Option value=''>Бүгд</Option>
-                        <Option value={'success'}>Идэвхитэй</Option>
-                        <Option value={'finished'}>Дууссан</Option>
-                        <Option value={'pending'}>Хүлээгдэж буй</Option>
-                    </Select>
-                    <Select style={{width: 142, marginRight: 20}} size='small' name='type' value={this.state.type} onChange={(e) => this.setState({type: e})}
-                    >
-                        <Option value=''>Бүгд</Option>
-                        <Option value={'premium'}>Premium</Option>
-                        <Option value={'eish'}>ЭЕШ</Option>
-                        <Option value={'lesson'}>Хичээл</Option>
-                    </Select>
-                    <RangePicker size="small" onChange={this.onDateChange.bind(this)} allowEmpty={[true, true]} value={[this.state.startDate ? moment(this.state.startDate) : null, this.state.endDate ? moment(this.state.endDate) : null]} format="YYYY-MM-DD" />
-
-                    <Input addonAfter={<CloseCircleFilled style={{color:'white'}} onClick={() => this.setState({id:''})} />} maxLength={60} size='small' placeholder='ID' style={{width: 200, marginLeft: 20}} value={this.state.id} name='search' onChange={(e) => this.setState({id: e.target.value})} />
-                    <Button style={{marginLeft: 20}} loading={status} type="primary" htmlType="submit" size='small' icon={<SearchOutlined />} onClick={this.searchUser.bind(this)} >Хайх</Button>
+                    <div style={{marginBottom: 15}}>
+                        <Input addonAfter={<CloseCircleFilled style={{color:'white'}} onClick={() => this.setState({search:''})} />} maxLength={60} size='small' placeholder='Нэр, Имэйл, Утас' style={{width: 200, marginRight: 20}} value={this.state.search} name='search' onChange={(e) => this.setState({search: e.target.value})} />
+                        <RangePicker size="small" onChange={this.onDateChange.bind(this)} allowEmpty={[true, true]} value={[this.state.startDate ? moment(this.state.startDate) : null, this.state.endDate ? moment(this.state.endDate) : null]} format="YYYY-MM-DD" />
+                        <Input addonAfter={<CloseCircleFilled style={{color:'white'}} onClick={() => this.setState({id:''})} />} maxLength={60} size='small' placeholder='ID' style={{width: 200, marginLeft: 20}} value={this.state.id} name='search' onChange={(e) => this.setState({id: e.target.value})} />
+                    </div>
+                    <div>
+                        <Select style={{width: 142, marginRight: 20}} size='small' name='role' value={this.state.status} onChange={(e) => this.setState({status: e})}
+                        >
+                            <Option value=''>Бүх төлөв</Option>
+                            <Option value={'success'}>Идэвхитэй</Option>
+                            <Option value={'finished'}>Дууссан</Option>
+                            <Option value={'pending'}>Хүлээгдэж буй</Option>
+                        </Select>
+                        <Select style={{width: 142, marginRight: 20}} size='small' name='type' value={this.state.type} onChange={(e) => this.setState({type: e})}
+                        >
+                            <Option value=''>Бүх төрөл</Option>
+                            <Option value={'premium'}>Premium</Option>
+                            <Option value={'eish'}>ЭЕШ</Option>
+                            <Option value={'lesson'}>Хичээл</Option>
+                        </Select>
+                        <Select style={{width: 142, marginRight: 20}} size='small' name='custom' value={this.state.custom} onChange={(e) => this.setState({custom: e})}
+                        >
+                            <Option value=''>Бүгд</Option>
+                            <Option value={'yes'}>Үнэгүй</Option>
+                            <Option value={'no'}>Энгийн</Option>
+                        </Select>
+                        <Button style={{marginLeft: 20}} loading={status} type="primary" htmlType="submit" size='small' icon={<SearchOutlined />} onClick={this.searchUser.bind(this)} >Хайх</Button>
+                    </div>
                 </Form>
                 <Table
                     size="small"
                     dataSource={transactions}
-                    rowClassName={(record, index) => record.status === 'success' ? 'success' : record.status === 'pending' ? 'pending' : record.status === 'finished' ? 'finished' : ''}
+                    rowClassName={(record, index) => record.custom  ? 'barter' : record.status === 'success' ? 'success' : record.status === 'pending' ? 'pending' : record.status === 'finished' ? 'finished' : ''}
                     columns={columns}
                     pagination={pagination}
                     expandable={{
@@ -228,62 +277,80 @@ class Purchase extends React.Component {
                     maskClosable={false}
                     width={'70%'}
                 >
-                    <Form.Item
-                        label='Хэрэглэгч'
-                        labelCol={{span: 5}}
-                    >
-                        <Select
-                            value={user.role ? user.role : ''}
-                            onChange={this.onChangeSelect.bind(this)}
+                    <div>
+                        <Form.Item
+                            label='Хэрэглэгч'
+                            labelCol={{span: 5}}
                         >
-                            <Option value="">Эрх сонгоно уу</Option>
-                            <Option value="teacher">Багш</Option>
-                            <Option value="user">Хэрэглэгч</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
-                        label='Төрөл'
-                        labelCol={{span: 5}}
-                    >
-                        <Select
-                            value={user.role ? user.role : ''}
-                            onChange={this.onChangeSelect.bind(this)}
+                            <Select
+                                size="middle"
+                                showSearch
+                                style={{width: '100%'}}
+                                value={item.user}
+                                defaultActiveFirstOption={false}
+                                placeholder="Овог нэр, имэйл"
+                                showArrow={false}
+                                filterOption={false}
+                                onSearch={(e) => this.searchTeacher(e)}
+                                onChange={this.chooseMember.bind(this)}
+                                notFoundContent={searchLoader ?
+                                    <Spin size="middle"/> : 'Хэрэглэгч олдсонгүй'}
+                            >
+                                {
+                                    searchResult && searchResult.length > 0 ? (
+                                        searchResult.map(item => (
+                                            <Select.Option
+                                                key={item._id}
+                                                value={item._id}> {`${item.username} ${item.phone || ''}`} </Select.Option>
+                                        ))
+                                    ) : null
+                                }
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            label='Төрөл'
+                            labelCol={{span: 5}}
                         >
-                            <Option value="">Эрх сонгоно уу</Option>
-                            <Option value="teacher">Багш</Option>
-                            <Option value="user">Хэрэглэгч</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
-                        label='Тайлбар'
-                        labelCol={{span: 5}}
-                    >
-                        <Input.TextArea rows={4} value={user.bio? user.bio : ''} name='bio' onChange={this.onChangeHandler.bind(this)} />
-                    </Form.Item>
-                    <div
-                        style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            width: '100%',
-                            borderTop: '1px solid #e8e8e8',
-                            padding: '10px 16px',
-                            textAlign: 'right',
-                            left: 0,
-                            background: '#fff',
-                            borderRadius: '0 0 4px 4px',
-                        }}
-                    >
-                        <Button
+                            <Select
+                                value={item.type}
+                                onChange={this.changeHandler.bind(this, 'type')}
+                            >
+                                <Option value="">Эрх сонгоно уу</Option>
+                                <Option value="eish">ЭЕШ</Option>
+                                <Option value="premium">Premium</Option>
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            label='Тайлбар'
+                            labelCol={{span: 5}}
+                        >
+                            <Input.TextArea rows={4} value={item.description} name='description' onChange={this.changeHandler.bind(this)} />
+                        </Form.Item>
+                        <div
                             style={{
-                                marginRight: 8,
+                                position: 'absolute',
+                                bottom: 0,
+                                width: '100%',
+                                borderTop: '1px solid #e8e8e8',
+                                padding: '10px 16px',
+                                textAlign: 'right',
+                                left: 0,
+                                background: '#fff',
+                                borderRadius: '0 0 4px 4px',
                             }}
-                            onClick={() => this.onCancel()} disabled={submitTransLoader}
                         >
-                            Болих
-                        </Button>
-                        <Button onClick={() => this.onSave()} loading={submitTransLoader} type="primary">
-                            Хадгалах
-                        </Button>
+                            <Button
+                                style={{
+                                    marginRight: 8,
+                                }}
+                                onClick={() => this.onCancel()} disabled={submitTransLoader}
+                            >
+                                Болих
+                            </Button>
+                            <Button onClick={() => this.onSave()} loading={submitTransLoader} type="primary">
+                                Хадгалах
+                            </Button>
+                        </div>
                     </div>
                 </Drawer>
             </Card>

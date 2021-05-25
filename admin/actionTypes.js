@@ -306,12 +306,23 @@ export const setPaymentStatus = {
 
 export const onCancelTrans = {
     REQUEST: 'onCancelTrans_REQ',
-    RESPONSE: 'setPaymentStatus_RES'
+};
+export const changeHandlerPaymentUser = {
+    REQUEST: 'changeHandlerPaymentUser_REQ',
+};
+
+export const openModalTrans = {
+    REQUEST: 'openModalTrans_REQ',
 };
 
 export const onSaveTrans = {
     REQUEST: 'onSaveTrans_REQ',
     RESPONSE: 'onSaveTrans_RES'
+};
+
+export const searchUser = {
+    REQUEST: 'searchUser_REQ',
+    RESPONSE: 'searchUser_RES'
 };
 
 
