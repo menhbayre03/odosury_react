@@ -314,11 +314,11 @@ class Lesson extends Component {
                                                         </div>
                                                     ) : null
                                                 }
-                                                <div className="tab-menu">
-                                                    <span onClick={() => this.setState({active : 'timeline'})} className={`${this.state.active === 'timeline' ? 'active' : ''}`}>Хөтөлбөр</span>
-                                                    <span onClick={() => this.setState({active : 'overview'})} className={`${this.state.active === 'overview' ? 'active' : ''}`}>Танилцуулга</span>
-                                                    {/*<span onClick={() => this.setState({active : 'review'})} className={`${this.state.active === 'review' ? 'active' : ''}`}>Үнэлгээ</span>*/}
-                                                </div>
+                                                {/*<div className="tab-menu">*/}
+                                                {/*    <span onClick={() => this.setState({active : 'timeline'})} className={`${this.state.active === 'timeline' ? 'active' : ''}`}>Хөтөлбөр</span>*/}
+                                                {/*    <span onClick={() => this.setState({active : 'overview'})} className={`${this.state.active === 'overview' ? 'active' : ''}`}>Танилцуулга</span>*/}
+                                                {/*    /!*<span onClick={() => this.setState({active : 'review'})} className={`${this.state.active === 'review' ? 'active' : ''}`}>Үнэлгээ</span>*!/*/}
+                                                {/*</div>*/}
                                             </div>
                                         </Col>
                                         {
@@ -523,93 +523,6 @@ class Lesson extends Component {
                             <Row>
                                 <Col lg={8} md={12}>
                                     <Tabs activeKey={this.state.active}>
-                                        <Tab eventKey="timeline" title={<span>Хөтөлбөр<ion-icon name="chevron-down"></ion-icon></span>}>
-                                            <div className="timeline-cont">
-                                                <Accordion activeKey={this.state.activeIndex}>
-                                                    {
-                                                        (lesson.levels || []).map((item, index) => (
-                                                            <Card key={index}>
-                                                                <Card.Header>
-                                                                    <Accordion.Toggle onClick={() => this.setState({activeIndex: this.state.activeIndex === index.toString() ? '' : index.toString()})} as={Button} variant="link" eventKey={index.toString()}>
-                                                                        {item.title}
-                                                                        {
-                                                                            this.state.activeIndex == index.toString() ? (
-                                                                                <ion-icon style={{
-                                                                                    float: 'right',
-                                                                                    fontSize: 24,
-                                                                                    position: 'relative',
-                                                                                    top: 2,
-                                                                                }} name="chevron-down"/>
-                                                                            ) : (
-                                                                                <ion-icon style={{
-                                                                                    float: 'right',
-                                                                                    fontSize: 24,
-                                                                                    position: 'relative',
-                                                                                    top: 2,
-                                                                                }} name="chevron-up"/>
-                                                                            )
-                                                                        }
-                                                                    </Accordion.Toggle>
-                                                                </Card.Header>
-                                                                <Accordion.Collapse eventKey={index.toString()}>
-                                                                    <Card.Body>
-                                                                        {
-                                                                            (item.programs || []).map((program, ind) => (
-                                                                                lesson.paid ? (
-                                                                                    <Link style={{textDecoration: 'none'}} to={{pathname: `/lesson/view/${lesson.slug}`, state: {levelIndex: index, programIndex: ind}}}>
-                                                                                        <div className={`program ${(program.passed_users || []).indexOf(((user || {})._id || 'WW@@#').toString()) > -1 ? 'passed' : ''}`} key={ind}>
-                                                                                            {
-                                                                                                (program.timeline || {}).type === 'video' ? (
-                                                                                                    <ion-icon name="videocam"/>
-                                                                                                ) : (
-                                                                                                    (program.timeline || {}).type === 'audio' ? (
-                                                                                                        <ion-icon name="videocam"/>
-                                                                                                    ) : (
-                                                                                                        <ion-icon name="document-text"/>
-                                                                                                    )
-                                                                                                )
-                                                                                            }
-                                                                                            <p>{(program.timeline || {}).title}
-                                                                                                <span>{(program.timeline || {}).description}</span></p>
-                                                                                            {
-                                                                                                program.timeline.minutes > 0 ? (
-                                                                                                    <span>{(program.timeline || {}).minutes} мин</span>
-                                                                                                ) : null
-                                                                                            }
-                                                                                        </div>
-                                                                                    </Link>
-                                                                                ) : (
-                                                                                    <div className={`program ${(program.passed_users || []).indexOf(((user || {})._id || 'WW@@#').toString()) > -1 ? 'passed' : ''}`} key={ind}>
-                                                                                        {
-                                                                                            (program.timeline || {}).type === 'video' ? (
-                                                                                                <ion-icon name="videocam"/>
-                                                                                            ) : (
-                                                                                                (program.timeline || {}).type === 'audio' ? (
-                                                                                                    <ion-icon name="videocam"/>
-                                                                                                ) : (
-                                                                                                    <ion-icon name="document-text"/>
-                                                                                                )
-                                                                                            )
-                                                                                        }
-                                                                                        <p>{(program.timeline || {}).title}
-                                                                                            <span>{(program.timeline || {}).description}</span></p>
-                                                                                        {
-                                                                                            program.timeline.minutes > 0 ? (
-                                                                                                <span>{(program.timeline || {}).minutes} мин</span>
-                                                                                            ) : null
-                                                                                        }
-                                                                                    </div>
-                                                                                )
-                                                                            ))
-                                                                        }
-                                                                    </Card.Body>
-                                                                </Accordion.Collapse>
-                                                            </Card>
-                                                        ))
-                                                    }
-                                                </Accordion>
-                                            </div>
-                                        </Tab>
                                         <Tab eventKey="overview" title={<span>Танилцуулга<ion-icon name="chevron-down"></ion-icon></span>}>
                                             <div className="inner-tab overview">
                                                 <h4>Хичээлийн тухай</h4>
@@ -656,6 +569,92 @@ class Lesson extends Component {
                                                         </React.Fragment>
                                                     ) : null
                                                 }
+                                                <div className="timeline-cont">
+                                                    <h4>Хөтөлбөр</h4>
+                                                    <Accordion activeKey={this.state.activeIndex}>
+                                                        {
+                                                            (lesson.levels || []).map((item, index) => (
+                                                                <Card key={index}>
+                                                                    <Card.Header>
+                                                                        <Accordion.Toggle onClick={() => this.setState({activeIndex: '0'})} as={Button} variant="link" eventKey={'0'}>
+                                                                            {item.title}
+                                                                            {/*{*/}
+                                                                            {/*    this.state.activeIndex == '0' ? (*/}
+                                                                            {/*        <ion-icon style={{*/}
+                                                                            {/*            float: 'right',*/}
+                                                                            {/*            fontSize: 24,*/}
+                                                                            {/*            position: 'relative',*/}
+                                                                            {/*            top: 2,*/}
+                                                                            {/*        }} name="chevron-down"/>*/}
+                                                                            {/*    ) : (*/}
+                                                                            {/*        <ion-icon style={{*/}
+                                                                            {/*            float: 'right',*/}
+                                                                            {/*            fontSize: 24,*/}
+                                                                            {/*            position: 'relative',*/}
+                                                                            {/*            top: 2,*/}
+                                                                            {/*        }} name="chevron-up"/>*/}
+                                                                            {/*    )*/}
+                                                                            {/*}*/}
+                                                                        </Accordion.Toggle>
+                                                                    </Card.Header>
+                                                                    <Accordion.Collapse eventKey={'0'}>
+                                                                        <Card.Body>
+                                                                            {
+                                                                                (item.programs || []).map((program, ind) => (
+                                                                                    lesson.paid ? (
+                                                                                        <Link style={{textDecoration: 'none'}} to={{pathname: `/lesson/view/${lesson.slug}`, state: {levelIndex: index, programIndex: ind}}}>
+                                                                                            <div className={`program ${(program.passed_users || []).indexOf(((user || {})._id || 'WW@@#').toString()) > -1 ? 'passed' : ''}`} key={ind}>
+                                                                                                {
+                                                                                                    (program.timeline || {}).type === 'video' ? (
+                                                                                                        <ion-icon name="videocam"/>
+                                                                                                    ) : (
+                                                                                                        (program.timeline || {}).type === 'audio' ? (
+                                                                                                            <ion-icon name="videocam"/>
+                                                                                                        ) : (
+                                                                                                            <ion-icon name="document-text"/>
+                                                                                                        )
+                                                                                                    )
+                                                                                                }
+                                                                                                <p>{(program.timeline || {}).title}
+                                                                                                    <span>{(program.timeline || {}).description}</span></p>
+                                                                                                {
+                                                                                                    program.timeline.minutes > 0 ? (
+                                                                                                        <span>{(program.timeline || {}).minutes} мин</span>
+                                                                                                    ) : null
+                                                                                                }
+                                                                                            </div>
+                                                                                        </Link>
+                                                                                    ) : (
+                                                                                        <div className={`program ${(program.passed_users || []).indexOf(((user || {})._id || 'WW@@#').toString()) > -1 ? 'passed' : ''}`} key={ind}>
+                                                                                            {
+                                                                                                (program.timeline || {}).type === 'video' ? (
+                                                                                                    <ion-icon name="videocam"/>
+                                                                                                ) : (
+                                                                                                    (program.timeline || {}).type === 'audio' ? (
+                                                                                                        <ion-icon name="videocam"/>
+                                                                                                    ) : (
+                                                                                                        <ion-icon name="document-text"/>
+                                                                                                    )
+                                                                                                )
+                                                                                            }
+                                                                                            <p>{(program.timeline || {}).title}
+                                                                                                <span>{(program.timeline || {}).description}</span></p>
+                                                                                            {
+                                                                                                program.timeline.minutes > 0 ? (
+                                                                                                    <span>{(program.timeline || {}).minutes} мин</span>
+                                                                                                ) : null
+                                                                                            }
+                                                                                        </div>
+                                                                                    )
+                                                                                ))
+                                                                            }
+                                                                        </Card.Body>
+                                                                    </Accordion.Collapse>
+                                                                </Card>
+                                                            ))
+                                                        }
+                                                    </Accordion>
+                                                </div>
                                             </div>
                                         </Tab>
                                         {/*<Tab eventKey="review" title={<span>Үнэлгээ<ion-icon name="chevron-down"></ion-icon></span>}>*/}

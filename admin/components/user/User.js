@@ -182,20 +182,6 @@ class User extends React.Component {
                 ),
             },
             {
-                key: 'last_name',
-                title: 'Овог',
-                render: (text, record) => (
-                    record.last_name ? record.last_name : '-'
-                ),
-            },
-            {
-                key: 'first_name',
-                title: 'Нэр',
-                render: (text, record) => (
-                    record.first_name ? record.first_name : '-'
-                ),
-            },
-            {
                 key: 'email',
                 title: 'Имэйл',
                 render: (text, record) => (

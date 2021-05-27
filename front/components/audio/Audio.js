@@ -155,11 +155,11 @@ class Audio extends Component {
                                                         </div>
                                                     ) : null
                                                 }
-                                                <div className="tab-menu">
-                                                    <span onClick={() => this.setState({active : 'timeline'})} className={`${this.state.active === 'timeline' ? 'active' : ''}`}>Бүлэг</span>
-                                                    <span onClick={() => this.setState({active : 'overview'})} className={`${this.state.active === 'overview' ? 'active' : ''}`}>Танилцуулга</span>
-                                                    {/*<span onClick={() => this.setState({active : 'review'})} className={`${this.state.active === 'review' ? 'active' : ''}`}>Үнэлгээ</span>*/}
-                                                </div>
+                                                {/*<div className="tab-menu">*/}
+                                                {/*    <span onClick={() => this.setState({active : 'timeline'})} className={`${this.state.active === 'timeline' ? 'active' : ''}`}>Бүлэг</span>*/}
+                                                {/*    <span onClick={() => this.setState({active : 'overview'})} className={`${this.state.active === 'overview' ? 'active' : ''}`}>Танилцуулга</span>*/}
+                                                {/*    /!*<span onClick={() => this.setState({active : 'review'})} className={`${this.state.active === 'review' ? 'active' : ''}`}>Үнэлгээ</span>*!/*/}
+                                                {/*</div>*/}
                                             </div>
                                         </Col>
                                         {
@@ -237,48 +237,63 @@ class Audio extends Component {
                             <Row>
                                 <Col lg={8} md={12}>
                                     <Tabs activeKey={this.state.active}>
-                                        <Tab eventKey="timeline" title={<span>Бүлэг<ion-icon name="chevron-down"/></span>}>
-                                            <div className="timeline-cont">
-                                                <Accordion activeKey={this.state.activeIndex}>
-                                                    <Card>
-                                                        <Accordion.Collapse eventKey={'0'}>
-                                                            <Card.Body>
-                                                                {
-                                                                    (lesson.audio || {}).path ? (
-                                                                        <div className={`program intro`} style={{display: 'block'}}>
-                                                                            <ion-icon name="musical-notes" style={{top: 7}}/>
-                                                                            <p>Танилцуулга</p>
-                                                                            <div style={{padding: '0px 20px 10px'}}>
-                                                                                <ReactPlayer
-                                                                                    // playing
-                                                                                    controls
-                                                                                    onError={() => config.get('emitter').emit('warning', 'Хандах эрх хүрэхгүй байна.')}
-                                                                                    playIcon={<ion-icon style={{fontSize: 74, color: '#fff'}} name="play-circle"/>}
-                                                                                    height={60}
-                                                                                    width={"100%"}
-                                                                                    url={mediaUrl}
-                                                                                    config={{
-                                                                                        file: {
-                                                                                            forceAudio: true,
-                                                                                            attributes: {
-                                                                                                controlsList : "nodownload"
+                                        <Tab eventKey="overview" title={<span>Танилцуулга<ion-icon name="chevron-down"/></span>}>
+                                            <div className="inner-tab overview">
+                                                <h4>Номны тухай</h4>
+                                                <p dangerouslySetInnerHTML={{__html : lesson.intro_desc}}/>
+                                                <div className="timeline-cont">
+                                                    <h4>Бүлэг</h4>
+                                                    <Accordion activeKey={this.state.activeIndex}>
+                                                        <Card>
+                                                            <Accordion.Collapse eventKey={'0'}>
+                                                                <Card.Body>
+                                                                    {
+                                                                        (lesson.audio || {}).path ? (
+                                                                            <div className={`program intro`} style={{display: 'block'}}>
+                                                                                <ion-icon name="musical-notes" style={{top: 7}}/>
+                                                                                <p>Танилцуулга</p>
+                                                                                <div style={{padding: '0px 20px 10px'}}>
+                                                                                    <ReactPlayer
+                                                                                        // playing
+                                                                                        controls
+                                                                                        onError={() => config.get('emitter').emit('warning', 'Хандах эрх хүрэхгүй байна.')}
+                                                                                        playIcon={<ion-icon style={{fontSize: 74, color: '#fff'}} name="play-circle"/>}
+                                                                                        height={60}
+                                                                                        width={"100%"}
+                                                                                        url={mediaUrl}
+                                                                                        config={{
+                                                                                            file: {
+                                                                                                forceAudio: true,
+                                                                                                attributes: {
+                                                                                                    controlsList : "nodownload"
+                                                                                                }
                                                                                             }
-                                                                                        }
-                                                                                    }}
-                                                                                    style={{
-                                                                                        border: 'none',
-                                                                                        outline: 'none',
-                                                                                        boxShadow: 'none',
-                                                                                    }}
-                                                                                />
+                                                                                        }}
+                                                                                        style={{
+                                                                                            border: 'none',
+                                                                                            outline: 'none',
+                                                                                            boxShadow: 'none',
+                                                                                        }}
+                                                                                    />
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
-                                                                    ) : null
-                                                                }
-                                                                {
-                                                                    (lesson.programs || []).map((program, ind) => (
-                                                                        lesson.paid ? (
-                                                                            <Link style={{textDecoration: 'none'}} to={{pathname: `/audio/view/${lesson.slug}`, state: {levelIndex: 0, programIndex: ind}}}>
+                                                                        ) : null
+                                                                    }
+                                                                    {
+                                                                        (lesson.programs || []).map((program, ind) => (
+                                                                            lesson.paid ? (
+                                                                                <Link style={{textDecoration: 'none'}} to={{pathname: `/audio/view/${lesson.slug}`, state: {levelIndex: 0, programIndex: ind}}}>
+                                                                                    <div className={`program ${(program.passed_users || []).indexOf(((user || {})._id || 'WW@@#').toString()) > -1 ? 'passed' : ''}`} key={ind}>
+                                                                                        <ion-icon name="musical-notes"/>
+                                                                                        <p>{(program.timeline || {}).title}</p>
+                                                                                        {
+                                                                                            program.timeline.minutes > 0 ? (
+                                                                                                <span>{(program.timeline || {}).minutes} мин</span>
+                                                                                            ) : null
+                                                                                        }
+                                                                                    </div>
+                                                                                </Link>
+                                                                            ) : (
                                                                                 <div className={`program ${(program.passed_users || []).indexOf(((user || {})._id || 'WW@@#').toString()) > -1 ? 'passed' : ''}`} key={ind}>
                                                                                     <ion-icon name="musical-notes"/>
                                                                                     <p>{(program.timeline || {}).title}</p>
@@ -288,30 +303,14 @@ class Audio extends Component {
                                                                                         ) : null
                                                                                     }
                                                                                 </div>
-                                                                            </Link>
-                                                                        ) : (
-                                                                            <div className={`program ${(program.passed_users || []).indexOf(((user || {})._id || 'WW@@#').toString()) > -1 ? 'passed' : ''}`} key={ind}>
-                                                                                <ion-icon name="musical-notes"/>
-                                                                                <p>{(program.timeline || {}).title}</p>
-                                                                                {
-                                                                                    program.timeline.minutes > 0 ? (
-                                                                                        <span>{(program.timeline || {}).minutes} мин</span>
-                                                                                    ) : null
-                                                                                }
-                                                                            </div>
-                                                                        )
-                                                                    ))
-                                                                }
-                                                            </Card.Body>
-                                                        </Accordion.Collapse>
-                                                    </Card>
-                                                </Accordion>
-                                            </div>
-                                        </Tab>
-                                        <Tab eventKey="overview" title={<span>Танилцуулга<ion-icon name="chevron-down"/></span>}>
-                                            <div className="inner-tab overview">
-                                                <h4>Номны тухай</h4>
-                                                <p dangerouslySetInnerHTML={{__html : lesson.intro_desc}}/>
+                                                                            )
+                                                                        ))
+                                                                    }
+                                                                </Card.Body>
+                                                            </Accordion.Collapse>
+                                                        </Card>
+                                                    </Accordion>
+                                                </div>
                                             </div>
                                         </Tab>
                                     </Tabs>

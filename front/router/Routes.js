@@ -19,6 +19,7 @@ import About from '../components/About';
 import Faq from '../components/Faq';
 import Careers from "../components/Careers";
 import Partner from "../components/Partner";
+import Policy from "../components/Policy";
 export default [
     {
         component: Main,
@@ -71,6 +72,11 @@ export default [
             {
                 component: ListAudio,
                 path: '/audios/:slug',
+                exact: true
+            },
+            {
+                component: Policy,
+                path: '/policy',
                 exact: true
             },
             {

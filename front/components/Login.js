@@ -563,7 +563,7 @@ class Home extends Component {
                                                                     fontSize: 22,
                                                                     fontWeight: 600,
                                                                     color: 'rgb(255 0 0)'
-                                                                }}>Баталшаажуулаагүй байна.</h3>
+                                                                }}>Баталгаажуулаагүй байна.</h3>
                                                             ) : (
                                                                 <h3 style={{
                                                                     marginBottom: 5,
