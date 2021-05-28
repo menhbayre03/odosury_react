@@ -13,57 +13,57 @@ class Premium extends Component {
         super(props);
         this.state = { time: {}, seconds: props.main.difference };
         this.timer = 0;
-        this.startTimer = this.startTimer.bind(this);
-        this.countDown = this.countDown.bind(this);
+        // this.startTimer = this.startTimer.bind(this);
+        // this.countDown = this.countDown.bind(this);
     }
 
-    secondsToTime(secs){
-        let days = Math.floor(secs / (60 * 60 * 24));
-
-        let divisor_for_hours = secs % (60 * 60 * 24);
-        let hours = Math.floor(divisor_for_hours / (60 * 60));
-
-        let divisor_for_minutes = secs % (60 * 60);
-        let minutes = Math.floor(divisor_for_minutes / 60);
-
-        let divisor_for_seconds = divisor_for_minutes % 60;
-        let seconds = Math.ceil(divisor_for_seconds);
-
-        let obj = {
-            "d": days,
-            "h": hours,
-            "m": minutes,
-            "s": seconds
-        };
-        return obj;
-    }
+    // secondsToTime(secs){
+    //     let days = Math.floor(secs / (60 * 60 * 24));
+    //
+    //     let divisor_for_hours = secs % (60 * 60 * 24);
+    //     let hours = Math.floor(divisor_for_hours / (60 * 60));
+    //
+    //     let divisor_for_minutes = secs % (60 * 60);
+    //     let minutes = Math.floor(divisor_for_minutes / 60);
+    //
+    //     let divisor_for_seconds = divisor_for_minutes % 60;
+    //     let seconds = Math.ceil(divisor_for_seconds);
+    //
+    //     let obj = {
+    //         "d": days,
+    //         "h": hours,
+    //         "m": minutes,
+    //         "s": seconds
+    //     };
+    //     return obj;
+    // }
     componentDidMount() {
         window.scroll(0, 0);
         config.get('ga').pageview(window.location.pathname);
-        let timeLeftVar = this.secondsToTime(this.state.seconds);
-        this.setState({ time: timeLeftVar }, () => this.startTimer());
+        // let timeLeftVar = this.secondsToTime(this.state.seconds);
+        // this.setState({ time: timeLeftVar }, () => this.startTimer());
     }
 
-    componentWillUnmount() {
-        clearInterval(this.timer)
-    }
+    // componentWillUnmount() {
+    //     clearInterval(this.timer)
+    // }
 
-    startTimer() {
-        if (this.timer === 0 && this.state.seconds > 0) {
-            this.timer = setInterval(this.countDown, 1000);
-        }
-    }
-
-    countDown() {
-        let seconds = this.state.seconds - 1;
-        this.setState({
-            time: this.secondsToTime(seconds),
-            seconds: seconds,
-        });
-        if (seconds === 0) {
-            clearInterval(this.timer);
-        }
-    }
+    // startTimer() {
+    //     if (this.timer === 0 && this.state.seconds > 0) {
+    //         this.timer = setInterval(this.countDown, 1000);
+    //     }
+    // }
+    //
+    // countDown() {
+    //     let seconds = this.state.seconds - 1;
+    //     this.setState({
+    //         time: this.secondsToTime(seconds),
+    //         seconds: seconds,
+    //     });
+    //     if (seconds === 0) {
+    //         clearInterval(this.timer);
+    //     }
+    // }
 
     render() {
         const { main: {premiumPrice, premium}} = this.props;
@@ -73,47 +73,47 @@ class Premium extends Component {
                 <div className="premium-container" style={{minHeight: 'calc(100vh - 185px)'}}>
                     <div className="head-cont-premium">
                         <img src="/images/premium_wh.png" width={'100%'} alt=""/>
-                        <div className="dataa">
-                            <div className="datte">
-                                <h5>Дуусах хугацаа</h5>
-                                <div className="clock">
-                                    <div className="clock-container">
-                                        <div className="clock-col">
-                                            <p className="clock-day clock-timer">
-                                                {this.state.time.d}
-                                            </p>
-                                            <p className="clock-label">
-                                                Өдөр
-                                            </p>
-                                        </div>
-                                        <div className="clock-col">
-                                            <p className="clock-hours clock-timer">
-                                                {this.state.time.h}
-                                            </p>
-                                            <p className="clock-label">
-                                                Цаг
-                                            </p>
-                                        </div>
-                                        <div className="clock-col">
-                                            <p className="clock-minutes clock-timer">
-                                                {this.state.time.m}
-                                            </p>
-                                            <p className="clock-label">
-                                                Минут
-                                            </p>
-                                        </div>
-                                        <div className="clock-col">
-                                            <p className="clock-seconds clock-timer">
-                                                {this.state.time.s}
-                                            </p>
-                                            <p className="clock-label">
-                                                Сэкүнд
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {/*<div className="dataa">*/}
+                        {/*    <div className="datte">*/}
+                        {/*        <h5>Дуусах хугацаа</h5>*/}
+                        {/*        <div className="clock">*/}
+                        {/*            <div className="clock-container">*/}
+                        {/*                <div className="clock-col">*/}
+                        {/*                    <p className="clock-day clock-timer">*/}
+                        {/*                        {this.state.time.d}*/}
+                        {/*                    </p>*/}
+                        {/*                    <p className="clock-label">*/}
+                        {/*                        Өдөр*/}
+                        {/*                    </p>*/}
+                        {/*                </div>*/}
+                        {/*                <div className="clock-col">*/}
+                        {/*                    <p className="clock-hours clock-timer">*/}
+                        {/*                        {this.state.time.h}*/}
+                        {/*                    </p>*/}
+                        {/*                    <p className="clock-label">*/}
+                        {/*                        Цаг*/}
+                        {/*                    </p>*/}
+                        {/*                </div>*/}
+                        {/*                <div className="clock-col">*/}
+                        {/*                    <p className="clock-minutes clock-timer">*/}
+                        {/*                        {this.state.time.m}*/}
+                        {/*                    </p>*/}
+                        {/*                    <p className="clock-label">*/}
+                        {/*                        Минут*/}
+                        {/*                    </p>*/}
+                        {/*                </div>*/}
+                        {/*                <div className="clock-col">*/}
+                        {/*                    <p className="clock-seconds clock-timer">*/}
+                        {/*                        {this.state.time.s}*/}
+                        {/*                    </p>*/}
+                        {/*                    <p className="clock-label">*/}
+                        {/*                        Сэкүнд*/}
+                        {/*                    </p>*/}
+                        {/*                </div>*/}
+                        {/*            </div>*/}
+                        {/*        </div>*/}
+                        {/*    </div>*/}
+                        {/*</div>*/}
                     </div>
                     <div>
                         <div className="main-prem">
@@ -123,13 +123,13 @@ class Premium extends Component {
                                         <Col md={6} className="sec-1">
                                             <p className="desc">ОНЦГОЙ ХЯМДРАЛ</p>
                                             <p className="price"><span>365.000₮</span> {config.formatMoney(premiumPrice)}₮</p>
-                                            <ion-icon name="add"/>
-                                            <p>Нэг жилийн эрхийн үнээр</p>
+                                            {/*<ion-icon name="add"/>*/}
+                                            {/*<p>Нэг жилийн эрхийн үнээр</p>*/}
                                             <p>Зөвхөн эхний <span className="yel">1000</span> хэрэглэгчдэд</p>
-                                            <h4 className='neon1'>
-                                                LIFETIME
-                                            </h4>
-                                            <p className="life">Насан туршын эрх</p>
+                                            {/*<h4 className='neon1'>*/}
+                                            {/*    LIFETIME*/}
+                                            {/*</h4>*/}
+                                            {/*<p className="life">Насан туршын эрх</p>*/}
                                         </Col>
                                         <Col md={6} className="sec-2">
                                             <div className="dar">
