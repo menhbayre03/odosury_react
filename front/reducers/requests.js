@@ -16,14 +16,22 @@ export default (state = initialState, action) => {
 				submittingFeedback: true
 			};
 		case submitFeedback.RESPONSE:
-			return {
-				...state,
-				feedback: action.json.success
-					? state.feedback.concat(action.json.newFeedback)
-					: state.feedback,
-				submittingFeedback: false,
-				successFeedback: true,
-			};
+			if (action.json.success) {
+				return {
+					...state,
+					feedback: action.json.success
+						? state.feedback.concat(action.json.newFeedback)
+						: state.feedback,
+					submittingFeedback: false,
+					successFeedback: true
+				};
+			} else {
+				return {
+					...state,
+					submittingFeedback: false
+				};
+			}
+
 		case submitTeacherRequest.REQUEST:
 			return {
 				...state,
@@ -36,7 +44,7 @@ export default (state = initialState, action) => {
 					? state.teacherRequest.concat(action.json.newTeacherRequest)
 					: state.teacherRequest,
 				submittingTeacherRequest: false,
-				successTeacherRequest: true,
+				successTeacherRequest: true
 			};
 		default:
 			return state;

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import config from '../../config'
 import {
     isMobile
 } from "react-device-detect";
@@ -13,12 +14,14 @@ class Footer extends Component {
         super(props);
         this.state = {            
             feedback: '',
+            feedbackPhone: '',
             name: '',
             phone: '',
             email: '',
             lesson: '',
             experience: '',
             showModal: false,
+            submittingFeedback: false,
         }
     }
 
@@ -26,9 +29,29 @@ class Footer extends Component {
         e.preventDefault();
         this.props.dispatch(submitTeacherRequest({...this.state}));
     };
-    submitFeedback(e){
+    async submitFeedback(e){
         e.preventDefault();
-        this.props.dispatch(submitFeedback({feedback: this.state.feedback}));
+        let data = {
+            feedback: this.state.feedback,
+            feedbackPhone: this.state.feedbackPhone
+        }
+        this.setState({submittingFeedback: true});
+        if (this.state.feedbackPhone == null || this.state.feedbackPhone === "") {
+            config.get('emitter').emit('warning', "Утасны дугаар оруулна уу");
+            this.setState({submittingFeedback: false})
+        } else if (this.state.feedback == null || this.state.feedback === "") {
+            config.get('emitter').emit('warning', "Та хүсэлтээ оруулна уу");
+            this.setState({submittingFeedback: false})
+        } else {
+            const response = await this.props.dispatch(submitFeedback(data));
+            if (response.success === true) {
+                this.setState({submittingFeedback: false});
+            } else {
+                this.setState({submittingFeedback: false});
+                config.get('emitter').emit('warning', response.msg)
+            }
+        }
+        
     };
 
     render() {
@@ -66,15 +89,23 @@ class Footer extends Component {
                             >
                                 
                                 <Form onSubmit={this.submitFeedback.bind(this)}>
-                                    <Row><Col><Container><h3 style={{color: 'white', fontWeight: '200'}}>Хичээлийн санал хүсэлт</h3></Container></Col></Row>
                                     <Row>
-                                        <Col sm={12} md={6} lg={7}>
-                                            <Form.Label column style={{color: 'white'}}>ODOSURY платформд нэмүүлэx хичээлийн санал хүсэлтээ та энд илгээнэ үү.</Form.Label>
+                                        <Col sm={12} md={12} lg={12}>
+                                            <Container>
+                                                <h3 style={{color: 'white', fontWeight: '200'}}>
+                                                    ODOSURY платформд нэмүүлэx хичээлийн санал хүсэлтээ та энд илгээнэ үү.
+                                                </h3>
+                                            </Container>
                                         </Col>
-                                        <Col sm={6} md={3} lg={3}>
+                                        {/* <Col sm={12} md={8} lg={8}>
+                                            <Form.Label column style={{color: 'white'}}>ODOSURY платформд нэмүүлэx хичээлийн санал хүсэлтээ та энд илгээнэ үү.</Form.Label>
+                                        </Col> */}
+                                    </Row>
+                                    <Row >
+                                        <Col sm={12} md={5} lg={5}>
                                             <Form.Control
                                                 column
-                                                placeholder="odosury"
+                                                placeholder="Хүсэлтээ энд бичнэ үү"
                                                 onChange={(e) =>
                                                     this.setState({
                                                         feedback: e.target.value
@@ -84,16 +115,29 @@ class Footer extends Component {
                                                 required
                                             />
                                         </Col>
-                                        <Col sm={6} md={3} lg={2}>
+                                        <Col sm={12} md={5} lg={5} >
+                                            <Form.Control
+                                                column
+                                                placeholder="Таны утасны дугаар"
+                                                onChange={(e) =>
+                                                    this.setState({
+                                                        feedbackPhone: e.target.value
+                                                    })
+                                                }
+                                                value={this.state.feedbackPhone}
+                                                required
+                                            />
+                                        </Col>
+                                        <Col sm={12} md={2} lg={2}>
                                             <Button
                                                 type="submit"
                                                 style={{
                                                     backgroundColor: "#313356",
                                                     border: "none",
-                                                    display: "inline"
+                                                    display: "inline",
                                                 }}
                                             >
-                                                {submittingFeedback ? <Spinner animation="border" role="status"></Spinner> : "Хүсэлт илгээx"}
+                                                {submittingFeedback ? <Spinner animation="border" role="status"></Spinner> : "ИЛГЭЭX"}
                                             </Button>
                                         </Col>
                                     </Row>
