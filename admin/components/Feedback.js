@@ -46,6 +46,11 @@ class Feedback extends React.Component {
 				render: (record) => record.feedback
 			},
 			{
+				title: "Утасны дугаар",
+				key: Math.random(),
+				render: (record) => record.feedbackPhone
+			},
+			{
 				title: "Илгээсэн он, сар",
 				key: Math.random(),
 				render: (record) =>

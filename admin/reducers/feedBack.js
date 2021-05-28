@@ -17,7 +17,7 @@ export default (state = initialState, action) => {
 				return {
 					...state,
 					requests: action.json.requests,
-					gettingRequests: false
+					gettingRequests: false,
 				};
 			} else {
 				return {
