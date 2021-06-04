@@ -43,16 +43,19 @@ class Feedback extends React.Component {
 			{
 				title: "Хүсэлт",
 				key: Math.random(),
+				width: '50%',
 				render: (record) => record.feedback
 			},
 			{
 				title: "Утасны дугаар",
 				key: Math.random(),
+				width: "100px",
 				render: (record) => record.feedbackPhone
 			},
 			{
 				title: "Илгээсэн он, сар",
 				key: Math.random(),
+				width: "200px",
 				render: (record) =>
 					moment(record.created).format("YYYY-MM-DD h:mm:ss a")
 				// render: record => record.created
