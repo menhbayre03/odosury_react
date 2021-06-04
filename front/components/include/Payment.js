@@ -8,6 +8,7 @@ import {
 } from "react-device-detect";
 import { Container, Button } from 'react-bootstrap';
 import * as actions from '../../actions/payment_actions';
+import {Link} from "react-router-dom";
 const reducer = ({ main, payment }) => ({ main, payment });
 
 class Payment extends Component {
@@ -18,15 +19,9 @@ class Payment extends Component {
     }
 
     componentDidMount() {
-        const {main: {user}} = this.props;
         let self = this;
         this.paymentModal = config.get('emitter').addListener('paymentModal', function (data) {
-            if(user) {
-                self.doIT(data)
-            } else {
-                config.get('emitter').emit('warning', 'Нэвтрэх шаардлагатай');
-                config.get('history').push('login')
-            }
+            self.doIT(data)
         });
         this.closedPayment = config.get('emitter').addListener('closedPayment', function () {
             const scrollY = document.getElementsByClassName("main-main")[0].style.top;

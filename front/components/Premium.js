@@ -66,7 +66,7 @@ class Premium extends Component {
     // }
 
     render() {
-        const { main: {premiumPrice, premium}} = this.props;
+        const { main: {premiumPrice, premium, user}} = this.props;
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
@@ -145,7 +145,7 @@ class Premium extends Component {
                                             </div>
                                         </Col>
                                     </Row>
-                                    <button onClick={() => premium ? console.log('gz') : config.get('emitter').emit('paymentModal', {type: 'premium'})}>
+                                    <button onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium'}) : config.get('emitter').emit('openLogin', {type: 'premium'})}>
                                         {
                                             premium ?
                                                 'Premium хэрэглэгч'

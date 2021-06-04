@@ -215,7 +215,7 @@ class Lesson extends Component {
                                                                                 ) : (
                                                                                     <Button
                                                                                         variant="primary"
-                                                                                        onClick={() => config.get('emitter').emit('paymentModal', {type: 'lesson', lesson: lesson})}
+                                                                                        onClick={() => user ? config.get('emitter').emit('paymentModal', {type: 'lesson', lesson: lesson}) : config.get('emitter').emit('openLogin', {type: 'lesson', lesson: lesson})}
                                                                                     >
                                                                                         <ion-icon name={'card-outline'}/> Худалдаж авах
                                                                                     </Button>
@@ -411,7 +411,7 @@ class Lesson extends Component {
                                                                                     ) : (
                                                                                         <Button
                                                                                             variant="primary"
-                                                                                            onClick={() => config.get('emitter').emit('paymentModal', {type: 'lesson', lesson: lesson})}
+                                                                                            onClick={() => user ? config.get('emitter').emit('paymentModal', {type: 'lesson', lesson: lesson}) : config.get('emitter').emit('openLogin', {type: 'lesson', lesson: lesson})}
                                                                                         >
                                                                                             <ion-icon name={'card-outline'}/> Худалдаж авах
                                                                                         </Button>

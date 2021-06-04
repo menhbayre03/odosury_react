@@ -486,6 +486,7 @@
       font-weight: 600;
       font-size: 12px;
       color: #fff;
+      outline: none;
           -webkit-transition: 0.3s;
           -moz-transition: 0.3s;
           -ms-transition: 0.3s;
@@ -506,7 +507,7 @@
             font-weight: 700;
             line-height: 26px;
             position: relative;
-            top: -2px;
+            top: 4px;
       }
       ion-icon {
           -webkit-transition: 0.3s;
@@ -4058,5 +4059,145 @@ span.section-3 {
   }
   .section-app {
     height: 230px;
+  }
+}
+
+.loginModal {
+  .modal-dialog {
+    margin-top: 100px;
+  }
+  .modal-content {
+    border-radius: 0;
+    .modal-header {
+      padding: 5px 20px;
+      background: #D22F9E;
+      border-radius: 0;
+      span {
+        color: #fff;
+        font-weight: 400;
+        font-size: 18px;
+        text-transform: uppercase;
+      }
+      button.close {
+        opacity: 1;
+        span {
+          font-size: 27px;
+          color: #fff;
+        }
+      }
+    }
+    .login-left {
+      img {
+        width: 180px;
+        margin: 20px auto 40px auto;
+        display: block;
+        max-width: 100%;
+      }
+      h4 {
+        text-align: center;
+        font-size: 24px;
+        text-transform: uppercase;
+        margin-bottom: 30px;
+        margin-top: 40px;
+      }
+      form {
+        width: 280px;
+        max-width: 100%;
+        padding: 20px;
+        margin: 0 auto;
+        margin-bottom: 30px;
+        label {
+          font-size: 10px;
+          color: #868686;
+          margin-bottom: 0px;
+          margin-left: 18px;
+        }
+        input.form-control {
+          border-radius: 30px;
+          padding: 20px 30px;
+          border: 1px solid #ffb3e7;
+        }
+        button {
+          position: relative;
+          background: linear-gradient(
+                  90deg
+                  , #00A3FF 0%, #F400B0 100%);
+          border: none;
+          width: 100%;
+          padding: 10px 0px 7px 0px;
+          border-radius: 30px;
+          font-size: 18px;
+          text-transform: uppercase;
+          margin-top: 20px;
+          outline: none;
+          box-shadow: none;
+          img {
+            width: 90px;
+            margin: 7px auto 40px auto;
+            display: block;
+            max-width: 100%;
+          }
+        }
+        span.forgot {
+          text-align: center;
+          display: block;
+          font-size: 12px;
+          margin-top: 10px;
+          color: #676767;
+        }
+      }
+      .login-bottom-button {
+        display: flex;
+        div.facebook-login {
+          position: relative;
+          flex: 1;
+          margin: 0;
+          .fb {
+            cursor: pointer;
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: 400;
+            border-radius: 0;
+          }
+        }
+        button {
+          border-radius: 0;
+          flex: 1;
+          text-transform: uppercase;
+          font-size: 14px;
+          background: #D22F9E;
+          border: none;
+          outline: none;
+          box-shadow: none;
+        }
+      }
+    }
+    .login-right {
+      height: 100%;
+      width: 100%;
+      background-image: url(/images/login_bg.png);
+      background-position: center center;
+      background-size: cover;
+      img {
+        width: 80%;
+        margin: 0 auto;
+        display: block;
+        padding: 50px 0;
+      }
+      div {
+        color: #fff;
+        margin: 0 30px;
+        background: #00000021;
+        border-radius: 30px;
+        padding: 20px 30px;
+        h3 {
+          font-size: 20px;
+          text-transform: uppercase;
+        }
+        p {
+          font-size: 14px;
+        }
+      }
+    }
   }
 }

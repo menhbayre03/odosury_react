@@ -153,9 +153,9 @@ class Header extends Component {
                                                     </div>
                                                 ) : (
                                                     <div className="user-menu">
-                                                        <Link to="/login">
+                                                        <Link to="#" onClick={() => config.get('emitter').emit('openLogin')}>
                                                             <span>
-                                                                <ion-icon name="log-in-outline"/> {isMobile ? 'Нэвтрэх' : 'Нэвтрэх / Бүртгүүлэх'}
+                                                                Нэвтрэх
                                                             </span>
                                                         </Link>
                                                     </div>

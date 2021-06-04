@@ -114,21 +114,6 @@ class Home extends Component {
             }
         }
     }
-    // async responseFacebook() {
-    //     this.setState({fbLoading: true});
-    //     const res = await config.get('fbApi').login();
-    //     if(res && res.status === "connected" && (res.authResponse || {}).accessToken) {
-    //         const response = await Api.login(`/api/fb/login`, {token: res.authResponse.accessToken});
-    //         if (response.success === true) {
-    //             this.setState({fbLoading: false});
-    //             Cookies.set('odosuryCard', JSON.stringify({bundles: [], lessons: []}));
-    //             window.location = "/";
-    //         } else {
-    //             this.setState({fbLoading: false});
-    //             config.get('emitter').emit('warning', response.msg);
-    //         }
-    //     }
-    // }
     async responseFacebook(data) {
         this.setState({fbLoading: true});
         // const res = await config.get('fbApi').login();
@@ -478,18 +463,6 @@ class Home extends Component {
                                                     <ion-icon name="logo-facebook"/>
                                                     <span>Facebook-ээр нэвтрэх</span></div>
                                             </div>
-                                            {/*{*/}
-                                            {/*    this.state.sdkLoaded ? (*/}
-                                            {/*        <div style={{cursor: 'pointer'}} className="fb"*/}
-                                            {/*             onClick={this.responseFacebook.bind(this)}>*/}
-                                            {/*            <ion-icon name="logo-facebook"/>*/}
-                                            {/*            <span>Facebook-ээр нэвтрэх</span></div>*/}
-                                            {/*    ) : (*/}
-                                            {/*        <div style={{cursor: 'pointer'}} className="fb">*/}
-                                            {/*            <ion-icon name="logo-facebook"/>*/}
-                                            {/*            <span>Ачааллаж байна...</span></div>*/}
-                                            {/*    )*/}
-                                            {/*}*/}
                                         </div>
                                     </Col>
                                     <Col xl={{ span: 5, offset: 2 }} lg={{ span: 6, offset: 0 }} md={{ span: 8, offset: 2 }} sm={{ span: 10, offset: 1 }} className="register-login">

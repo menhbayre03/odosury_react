@@ -8,6 +8,10 @@ export const login = {
     REQUEST:'FETCH_LOGIN_REQUEST',
     RESPONSE:'FETCH_LOGIN_RESPONSE'
 };
+export const setUser = {
+    REQUEST:'FETCH_setUser_REQUEST',
+    RESPONSE:'FETCH_setUser_RESPONSE'
+};
 
 //AUTH END
 

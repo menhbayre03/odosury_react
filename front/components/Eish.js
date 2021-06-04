@@ -141,7 +141,7 @@ class Eish extends Component {
                                             <p className="price"><span>149.000₮</span> {config.formatMoney(eishPrice)}₮</p>
                                         </Col>
                                     </Row>
-                                    <button onClick={() => premium ? console.log('gz') : config.get('emitter').emit('paymentModal', {type: 'eish'})}>
+                                    <button onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'eish'}) : config.get('emitter').emit('openLogin', {type: 'eish'})}>
                                         {
                                             premium ?
                                                 'Premium хэрэглэгч'

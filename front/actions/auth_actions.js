@@ -11,3 +11,11 @@ export function login(data){
     let url = `/api/login`;
     return networkActions.requestPost(constants.login, url, data);
 }
+
+export function setUser(data, datPayment) {
+    return {
+        type: constants.setUser.REQUEST,
+        json: data,
+        data: datPayment
+    }
+}

@@ -84,10 +84,11 @@ class Home extends Component {
         };
         const gridWatching = {
             slidesPerView: 1,
-            navigation: {
-                nextEl: "#nextWatching",
-                prevEl: "#prevWatching"
-            },
+            // navigation: {
+            //     nextEl: "#nextWatching",
+            //     prevEl: "#prevWatching"
+            // },
+            disable: true,
             slidesPerGroup: 1,
             spaceBetween: 30,
             containerClass: 'swiper-container gridSlider',
@@ -125,32 +126,32 @@ class Home extends Component {
                                     </div>
                                 </Container>
                             </div>
-                             <div className="mainSlider-inner" >
-                                 <Container>
-                                     <div className="mainSlider-cont">
-                                         <h5><span style={{color: 'gold'}}>ЭЕШ</span> БАГЦ</h5>
-                                         <p>2021 оны шинэ хөтөлбөр дагуу Амжилт кибер сургуулийн мэргэжлийн багш нараар бэлтгэгдсэн ЭЕШ-ийн хичээлүүд 49'000₮</p>
-                                         <Link to="/eishPage" style={{textDecoration: 'none'}}>
-                                             <Button className="banner-button">
-                                                 ЭЕШ багц авах
-                                             </Button>
-                                         </Link>
-                                     </div>
-                                 </Container>
-                             </div>
+                             {/*<div className="mainSlider-inner" >*/}
+                             {/*    <Container>*/}
+                             {/*        <div className="mainSlider-cont">*/}
+                             {/*            <h5><span style={{color: 'gold'}}>ЭЕШ</span> БАГЦ</h5>*/}
+                             {/*            <p>2021 оны шинэ хөтөлбөр дагуу Амжилт кибер сургуулийн мэргэжлийн багш нараар бэлтгэгдсэн ЭЕШ-ийн хичээлүүд 49'000₮</p>*/}
+                             {/*            <Link to="/eishPage" style={{textDecoration: 'none'}}>*/}
+                             {/*                <Button className="banner-button">*/}
+                             {/*                    ЭЕШ багц авах*/}
+                             {/*                </Button>*/}
+                             {/*            </Link>*/}
+                             {/*        </div>*/}
+                             {/*    </Container>*/}
+                             {/*</div>*/}
                         </Swiper>
-                        <div style={{position: 'absolute', top: 0, width: '100%'}}>
-                            <Container>
-                                <div className="mainSlider-cont">
-                                    <div className="grid-next" id="nextMain">
-                                        <ion-icon name="chevron-forward"/>
-                                    </div>
-                                    <div className="grid-prev" id="prevMain">
-                                        <ion-icon name="chevron-back"/>
-                                    </div>
-                                </div>
-                            </Container>
-                        </div>
+                        {/*<div style={{position: 'absolute', top: 0, width: '100%'}}>*/}
+                        {/*    <Container>*/}
+                        {/*        <div className="mainSlider-cont">*/}
+                        {/*            <div className="grid-next" id="nextMain">*/}
+                        {/*                <ion-icon name="chevron-forward"/>*/}
+                        {/*            </div>*/}
+                        {/*            <div className="grid-prev" id="prevMain">*/}
+                        {/*                <ion-icon name="chevron-back"/>*/}
+                        {/*            </div>*/}
+                        {/*        </div>*/}
+                        {/*    </Container>*/}
+                        {/*</div>*/}
                         <div className="hero-pos">
                             <Container>
                                 <div className="hero-div">

@@ -1,10 +1,11 @@
 import {
     addWish, checkBankPayment, checkQpayPayment,
-    setPayment,
+    setPayment,setUser
 } from "../actionTypes";
+import config from "../config";
 
 const initialState = {
-    user: {},
+    user: null,
     premium: false,
     eish: false,
     pendingTransactions: []
@@ -12,6 +13,21 @@ const initialState = {
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case setUser.REQUEST:
+            if(action.json.success) {
+                setTimeout(function () {
+                    config.get('emitter').emit('paymentModal', action.data)
+                }, 200);
+                return {
+                    ...state,
+                    user: action.json.user || null,
+                    premium: action.json.premium || false,
+                    eish: action.json.eish || false,
+                    pendingTransactions: action.json.pendingTransactions || [],
+                };
+            } else {
+                return state
+            }
         case addWish.RESPONSE:
             if(action.json.success) {
                 return {
