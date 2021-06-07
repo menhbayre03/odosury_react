@@ -7,7 +7,7 @@ import ListAudio from "../components/audio/ListAudio";
 import Audio from "../components/audio/Audio";
 import ViewAreaAudio from "../components/audio/ViewAreaAudio";
 import ViewArea from "../components/lesson/ViewArea";
-import Login from "../components/Login";
+// import Login from "../components/Login";
 import NotFound from "../components/NotFound";
 import Eish from "../components/Eish";
 import Premium from "../components/Premium";
@@ -30,10 +30,15 @@ export default [
                 exact: true
             },
             {
-                component: Login,
-                path: '/login',
+                component: Home,
+                path: '/api/reset/password/:token',
                 exact: true
             },
+            // {
+            //     component: Login,
+            //     path: '/login',
+            //     exact: true
+            // },
             {
                 component: Premium,
                 path: '/premium',
@@ -44,11 +49,11 @@ export default [
                 path: '/eishPage',
                 exact: true
             },
-            {
-                component: Login,
-                path: '/verify/:token',
-                exact: true
-            },
+            // {
+            //     component: Login,
+            //     path: '/verify/:token',
+            //     exact: true
+            // },
             {
                 component: Lesson,
                 path: '/lesson/:slug',

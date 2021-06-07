@@ -77,10 +77,16 @@ class Home extends Component {
         config.config({history: this.props.history});
     }
     componentDidMount() {
-        const { main: {userReset}, history} = this.props;
+        const { main: {userReset, token}, history} = this.props;
         let self = this;
         if(userReset) {
-            this.setState({showResetForm: true, active: 'reset', showLogin: true})
+            this.setState({
+                showResetForm: true,
+                active: 'reset',
+                passResetUser: userReset,
+                passResetToken: token,
+                showLogin: true
+            })
         }
         this.openLogin = config.get('emitter').addListener('openLogin', function (data) {
             self.setState({showLogin: true, data: data || null})
@@ -202,6 +208,7 @@ class Home extends Component {
     }
 
     async handleSubmitRegister(e) {
+        const {dispatch} = this.props;
         e.preventDefault();
         const usernameRegex = /^[0-9a-za-z_]*$/;
         this.setState({registerLoading: true});
@@ -257,9 +264,11 @@ class Home extends Component {
             }
         }
         if(!this.state.terms) {
-            errors.terms = true
+            errors.terms = true;
+            config.get('emitter').emit('warning', 'Үйлчилгээний нөгцөл зөвшөөрөөгүй байна');
+
         } else {
-            noErr.terms = false
+            noErr.terms = false;
         }
         if(Object.keys(errors).length === 0 && errors.constructor === Object) {
             this.setState({error : {...this.state.error, ...noErr}});
@@ -272,8 +281,10 @@ class Home extends Component {
             };
             const response = await Api.login(`/api/register`, data);
             if (response.success === true) {
-                config.get('emitter').emit('success', 'Амжилттай бүртгэгдлээ, нэвтэрж орно уу');
-                this.setState({resendLoading: false, registerLoading: false, registerDone: true, username: response.username, active: 'login'});
+                var sss = this.state.data || null;
+                this.setState({resendLoading: false, registerLoading: false, registerDone: true, loading: false, showLogin: false, data : null}, () => dispatch(actions.setUser(response, sss)));
+                config.get('emitter').emit('success', 'Системд нэвтэрлээ');
+                // this.setState({resendLoading: false, registerLoading: false, registerDone: true, username: response.username, active: 'login'});
             } else {
                 this.setState({registerLoading: false});
                 config.get('emitter').emit('warning', response.msg);
@@ -487,7 +498,7 @@ class Home extends Component {
                                             </div>
                                         ) : (
                                             this.state.active === 'reset' ? (
-                                                this.state.showLogin ? (
+                                                this.state.showResetForm ? (
                                                     <div className="login-left">
                                                         <h4>Нууц үг сэргээх</h4>
                                                         <Form onSubmit={this.handleSubmitReset.bind(this)}>
@@ -687,7 +698,16 @@ class Home extends Component {
                                     }
                                 </Col>
                                 <Col md={6}>
-                                    <div className="login-right">
+                                    <div className="login-right" style={{position: 'relative'}}>
+                                        <ion-icon onClick={() => this.setState({showLogin: false})} name="close" style={{
+                                            fontSize: 24,
+                                            color: '#fff',
+                                            padding: 10,
+                                            position: 'absolute',
+                                            right: 0,
+                                            top: 0,
+                                            cursor: 'pointer'
+                                        }} />
                                         <img src="/images/logo.png" alt=""/>
                                         <div>
                                             <h3>ТАСРАЛТГҮЙ СУРАЛЦ</h3>
