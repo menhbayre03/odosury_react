@@ -265,7 +265,7 @@ class Home extends Component {
         }
         if(!this.state.terms) {
             errors.terms = true;
-            config.get('emitter').emit('warning', 'Үйлчилгээний нөгцөл зөвшөөрөөгүй байна');
+            config.get('emitter').emit('warning', 'Үйлчилгээний нөxцөл зөвшөөрөөгүй байна');
 
         } else {
             noErr.terms = false;
@@ -374,6 +374,14 @@ class Home extends Component {
                                     {
                                         this.state.active === 'register' ? (
                                             <div className="login-left">
+                                                <div className="login-secret" style={{position: 'absolute', top: 0, right: 0}}>
+                                                    <ion-icon onClick={() => this.setState({showLogin: false})} name="close" className="login-right-button" style={{
+                                                        fontSize: 24,
+                                                        color: 'gray',
+                                                        padding: 10,
+                                                        cursor: 'pointer'
+                                                    }} />
+                                                </div>
                                                 <h4>Бүртгүүлэх</h4>
                                                 <Form onSubmit={this.handleSubmitRegister.bind(this)}>
                                                     <Form.Group>
@@ -411,7 +419,7 @@ class Home extends Component {
                                                             isInvalid={!!this.state.error.phoneRegister}
                                                         />
                                                         <Form.Control.Feedback type="invalid">
-                                                            Утасны бугаар буруу байна уу.
+                                                            Утасны дугаар буруу байна уу.
                                                         </Form.Control.Feedback>
                                                     </Form.Group>
                                                     <Form.Group>
@@ -454,7 +462,7 @@ class Home extends Component {
                                                         </Form.Control.Feedback>
                                                     </Form.Group>
                                                     <Form.Group className="reg-check">
-                                                        <Form.Check onChange={() => this.setState({terms: !this.state.terms})} type="checkbox" label="Үйлчигээний нөхцөлийг зөвшөөрч байна" isInvalid={!!this.state.error.terms}/>
+                                                        <Form.Check onChange={() => this.setState({terms: !this.state.terms})} type="checkbox" label="Үйлчигээний нөхцөлийг зөвшөөрч байна" isInvalid={!!this.state.error.terms} id="reg-check" htmlFor="reg-check" />
                                                     </Form.Group>
                                                     <div className="text-center">
                                                         <small id="emailHelp" style={{marginBottom: 15}}
@@ -500,6 +508,14 @@ class Home extends Component {
                                             this.state.active === 'reset' ? (
                                                 this.state.showResetForm ? (
                                                     <div className="login-left">
+                                                        <div className="login-secret" style={{position: 'absolute', top: 0, right: 0}}>
+                                                            <ion-icon onClick={() => this.setState({showLogin: false})} name="close" className="login-right-button" style={{
+                                                                fontSize: 24,
+                                                                color: 'gray',
+                                                                padding: 10,
+                                                                cursor: 'pointer'
+                                                            }} />
+                                                        </div>
                                                         <h4>Нууц үг сэргээх</h4>
                                                         <Form onSubmit={this.handleSubmitReset.bind(this)}>
                                                             <Form.Group>
@@ -580,6 +596,14 @@ class Home extends Component {
                                                     </div>
                                                     ) : (
                                                     <div className="login-left">
+                                                        <div className="login-secret" style={{position: 'absolute', top: 0, right: 0}}>
+                                                            <ion-icon onClick={() => this.setState({showLogin: false})} name="close" className="login-right-button" style={{
+                                                                fontSize: 24,
+                                                                color: 'gray',
+                                                                padding: 10,
+                                                                cursor: 'pointer'
+                                                            }} />
+                                                        </div>
                                                         <h4>Нууц үг сэргээх</h4>
                                                         <Form onSubmit={this.ResetSubmit.bind(this)}>
                                                             <Form.Group>
@@ -627,7 +651,15 @@ class Home extends Component {
                                                     </div>
                                                     )
                                             ) : (
-                                                <div className="login-left">
+                                                <div className="login-left" style={{position: 'relative'}}>
+                                                    <div className="login-secret" style={{position: 'absolute', top: 0, right: 0}}>
+                                                        <ion-icon onClick={() => this.setState({showLogin: false})} name="close" className="login-right-button" style={{
+                                                            fontSize: 24,
+                                                            color: 'gray',
+                                                            padding: 10,
+                                                            cursor: 'pointer'
+                                                        }} />
+                                                    </div>
                                                     <h4>Нэвтрэх</h4>
                                                     <Form onSubmit={this.handleSubmit.bind(this)}>
                                                         <Form.Group>
@@ -699,7 +731,7 @@ class Home extends Component {
                                 </Col>
                                 <Col md={6}>
                                     <div className="login-right" style={{position: 'relative'}}>
-                                        <ion-icon onClick={() => this.setState({showLogin: false})} name="close" style={{
+                                        <ion-icon onClick={() => this.setState({showLogin: false})} name="close" className="login-right-button" style={{
                                             fontSize: 24,
                                             color: '#fff',
                                             padding: 10,

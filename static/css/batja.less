@@ -781,3 +781,33 @@ div.abouttext2 > h3 {
 .FBactive {
 	background: rgba(29, 250, 29, 0.193);
 }
+.loginModal .modal-content .login-left form input.form-control::placeholder {
+	opacity: 0.1;
+}
+.reg-check label {
+	font-size: 14px !important;
+}
+.login-left {
+	position: relative;
+}
+@media (max-width: 768px) {
+	.login-right {
+		display: none;
+	}
+	.login-left {
+		padding: 20px;
+	}
+	.login-bottom-button {
+		flex-wrap: wrap;
+	}
+	// .login-secret {
+	// 	display: block;
+	// 	right: 0;
+	// 	top: 0;
+	// }
+}
+@media (min-width: 769px) {
+	.login-secret {
+		display: none !important;
+	}
+}
