@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import {renderRoutes} from 'react-router-config';
 import config from "../config";
-import Pyament from "./include/Payment";
+import Payment from "./include/Payment";
 import Api from "../../admin/actions/api";
 import Cookies from "js-cookie";
 import {Button, Form, Modal, Row, Col} from "react-bootstrap";
@@ -207,6 +207,22 @@ class Home extends Component {
             passwordRepeatRegister: '',});
     }
 
+    closeLogin() {
+        this.setState({
+            showLogin: false,
+            username: '',
+            password: '',
+
+            passValid: false,
+            emailRegister: '',
+            usernameRegister: '',
+            phoneRegister: '',
+            passwordRegister: '',
+            passwordRepeatRegister: '',
+            terms: false,
+        })
+    }
+
     async handleSubmitRegister(e) {
         const {dispatch} = this.props;
         e.preventDefault();
@@ -362,9 +378,9 @@ class Home extends Component {
         return (
             <React.Fragment>
                 <main className="main-main">
-                    <Pyament/>
+                    <Payment/>
                     {renderRoutes(routes)}
-                    <Modal size="lg" className="loginModal" show={this.state.showLogin} onHide={() => this.setState({showLogin: false, email: '', password: ''})} backdrop='static'>
+                    <Modal size="lg" className="loginModal" show={this.state.showLogin} onHide={this.closeLogin.bind(this)}>
                         {/*<Modal.Header closeButton>*/}
                         {/*    <span>Нэвтрэх</span>*/}
                         {/*</Modal.Header>*/}
@@ -375,7 +391,7 @@ class Home extends Component {
                                         this.state.active === 'register' ? (
                                             <div className="login-left">
                                                 <div className="login-secret" style={{position: 'absolute', top: 0, right: 0}}>
-                                                    <ion-icon onClick={() => this.setState({showLogin: false})} name="close" className="login-right-button" style={{
+                                                    <ion-icon onClick={this.closeLogin.bind(this)} name="close" className="login-right-button" style={{
                                                         fontSize: 24,
                                                         color: 'gray',
                                                         padding: 10,
@@ -511,7 +527,7 @@ class Home extends Component {
                                                 this.state.showResetForm ? (
                                                     <div className="login-left">
                                                         <div className="login-secret" style={{position: 'absolute', top: 0, right: 0}}>
-                                                            <ion-icon onClick={() => this.setState({showLogin: false})} name="close" className="login-right-button" style={{
+                                                            <ion-icon onClick={this.closeLogin.bind(this)} name="close" className="login-right-button" style={{
                                                                 fontSize: 24,
                                                                 color: 'gray',
                                                                 padding: 10,
@@ -599,7 +615,7 @@ class Home extends Component {
                                                     ) : (
                                                     <div className="login-left">
                                                         <div className="login-secret" style={{position: 'absolute', top: 0, right: 0}}>
-                                                            <ion-icon onClick={() => this.setState({showLogin: false})} name="close" className="login-right-button" style={{
+                                                            <ion-icon onClick={this.closeLogin.bind(this)} name="close" className="login-right-button" style={{
                                                                 fontSize: 24,
                                                                 color: 'gray',
                                                                 padding: 10,
@@ -655,7 +671,7 @@ class Home extends Component {
                                             ) : (
                                                 <div className="login-left" style={{position: 'relative'}}>
                                                     <div className="login-secret" style={{position: 'absolute', top: 0, right: 0}}>
-                                                        <ion-icon onClick={() => this.setState({showLogin: false})} name="close" className="login-right-button" style={{
+                                                        <ion-icon onClick={this.closeLogin.bind(this)} name="close" className="login-right-button" style={{
                                                             fontSize: 24,
                                                             color: 'gray',
                                                             padding: 10,
@@ -733,7 +749,7 @@ class Home extends Component {
                                 </Col>
                                 <Col md={6}>
                                     <div className="login-right" style={{position: 'relative'}}>
-                                        <ion-icon onClick={() => this.setState({showLogin: false})} name="close" className="login-right-button" style={{
+                                        <ion-icon onClick={this.closeLogin.bind(this)} name="close" className="login-right-button" style={{
                                             fontSize: 24,
                                             color: '#fff',
                                             padding: 10,
