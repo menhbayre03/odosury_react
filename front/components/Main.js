@@ -243,12 +243,12 @@ class Home extends Component {
             errors.passwordRegister = true;
             errors.passwordNoValid = false
         } else {
-            if(this.state.passValid) {
-                noErr.passwordRegister = false;
-                noErr.passwordNoValid = false
-            } else {
+            if(this.state.passwordRegister.length < 6) {
                 errors.passwordRegister = true;
                 errors.passwordNoValid = true
+            } else {
+                noErr.passwordRegister = false;
+                noErr.passwordNoValid = false
             }
         }
         if(this.state.passwordRepeatRegister == null || this.state.passwordRepeatRegister === '') {
@@ -425,24 +425,26 @@ class Home extends Component {
                                                     <Form.Group>
                                                         <Form.Label>Нууц үг *</Form.Label>
                                                         <Form.Control
-                                                            hidden={true}
+                                                            hidden={false}
                                                             type="password"
                                                             placeholder="*************"
                                                             value={this.state.passwordRegister}
                                                             isInvalid={!!this.state.error.passwordRegister}
+                                                            onChange={(e)=> this.setState({passwordRegister: e.target.value})}
                                                         />
-                                                        <ReactPasswordStrength
+                                                        {/* <ReactPasswordStrength
                                                             className="customClass"
                                                             minLength={5}
                                                             minScore={3}
                                                             scoreWords={['хэт богино', 'сул', 'дунд', 'сайн', 'маш сайн']}
                                                             tooShortWord={'боломжгүй'}
+
                                                             changeCallback={this.changePass.bind(this)}
                                                             inputProps={{ isInvalid: this.state.error.passwordRegister, value: this.state.passwordRegister, placeholder: "*************", name: "passwordRegister", autoComplete: "off", className: "form-control" }}
-                                                        />
+                                                        /> */}
                                                         <Form.Control.Feedback type="invalid">
                                                             {
-                                                                this.state.error.passwordNoValid ? 'Нууц үг хангалтгүй байна' : 'Нууц үг оруулна уу.'
+                                                                this.state.error.passwordNoValid ? 'Нууц үг хангалтгүй байна (6-аас дээш урттай байх)' : 'Нууц үг оруулна уу.'
                                                             }
                                                         </Form.Control.Feedback>
                                                     </Form.Group>
