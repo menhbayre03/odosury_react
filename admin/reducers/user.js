@@ -57,6 +57,13 @@ export default(state = initialState, action) => {
                 };
             }
         case deleteUsers.RESPONSE:
+            // return {
+            //     ...state,
+            //     users: action.json.success ?
+            //         state.users.filter(c => c._id !== action.json.id)
+            //     : state.users,
+            //     all: action.json.success ? state.all - 1 : state.all
+            // }
             if(action.json.success){
                 return {
                     ...state,
