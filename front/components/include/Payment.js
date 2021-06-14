@@ -147,21 +147,14 @@ class Payment extends Component {
             const green2 = parseInt(color2.slice(3,5), 16);
             const blue1 = parseInt(color1.slice(5,7), 16);
             const blue2 = parseInt(color2.slice(5,7), 16);
-            let finalRed = 0;
-            let finalGreen = 0;
-            let finalBlue = 0;
             let final = [];
             for (let i = 1; i < stepsNum + 1; i++) {
-                let stepLenActual = stepLen * i
-                finalRed = helperFunc(red1, red2, stepLenActual);
-                finalGreen = helperFunc(green1, green2, stepLenActual);
-                finalBlue = helperFunc(blue1, blue2, stepLenActual);
-                final.push([finalRed, finalGreen, finalBlue]);
+                let stepLenActual = stepLen * i;
+                final.push([helperFunc(red1, red2, stepLenActual), helperFunc(green1, green2, stepLenActual), helperFunc(blue1, blue2, stepLenActual)].join(", "));
             };
             return final
         }
         const colors = colorPicker("#02A1FE", "#F400B0", 4)
-        console.log(colors, "step is ", step)
         return (
             <React.Fragment>
                 <div className="paymentModal" style={{ right: visible ? '0' : isMobile ? '-100%' : '-480px'}}>
@@ -394,13 +387,13 @@ class Payment extends Component {
                     </div>
                     <div className="footer-payment">
                         <div className="step-indicator">
-                            <div className="leStep" style={{backgroundColor: `rgba(${colors[0][0]},${colors[0][1]},${colors[0][2]})`}}></div>
+                            <div className="leStep" style={{backgroundColor: `rgba(${colors[0]})`}}></div>
                             <div className="leDot"></div>
-                            <div className={step === 1 ? "leStepCurrent leStep" : step > 1 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[1][0]},${colors[1][1]},${colors[1][2]})`}}></div>
+                            <div className={step === 1 ? "leStepCurrent leStep" : step > 1 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[1]})`}}></div>
                             <div className="leDot"></div>
-                            <div className={step === 2 ? "leStepCurrent leStep" : step > 2 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[2][0]},${colors[2][1]},${colors[2][2]})`}}></div>
+                            <div className={step === 2 ? "leStepCurrent leStep" : step > 2 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[2]})`}}></div>
                             <div className="leDot"></div>
-                            <div className={step === 3 ? "leStepCurrent leStep" : step > 3 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[3][0]},${colors[3][1]},${colors[3][2]})`}}></div>
+                            <div className={step === 3 ? "leStepCurrent leStep" : step > 3 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[3]})`}}></div>
                         </div>
                         {
                             step === 1 ? (
