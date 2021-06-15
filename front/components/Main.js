@@ -321,12 +321,12 @@ class Home extends Component {
             errors.passReset = true;
             errors.passResetNoValid = false
         } else {
-            if(this.state.passResetValid) {
-                noErr.passReset = false;
-                noErr.passResetNoValid = false
-            } else {
+            if(this.state.passReset.length < 6) {
                 errors.passReset = true;
                 errors.passResetNoValid = true
+            } else {
+                noErr.passReset = false;
+                noErr.passResetNoValid = false
             }
         }
         if(this.state.passResetRepeat == null || this.state.passResetRepeat === '') {
@@ -546,7 +546,15 @@ class Home extends Component {
                                                                         value={this.state.passReset}
                                                                         isInvalid={!!this.state.error.passReset}
                                                                     />
-                                                                    <ReactPasswordStrength
+                                                                    <Form.Control
+                                                                        hidden={false}
+                                                                        type="password"
+                                                                        placeholder="*************"
+                                                                        value={this.state.passReset}
+                                                                        isInvalid={!!this.state.error.passReset}
+                                                                        onChange={(e)=> this.setState({passReset: e.target.value})}
+                                                                    />
+                                                                    {/* <ReactPasswordStrength
                                                                         className="customClass"
                                                                         minLength={5}
                                                                         minScore={3}
@@ -554,10 +562,15 @@ class Home extends Component {
                                                                         tooShortWord={'боломжгүй'}
                                                                         changeCallback={(e) =>  this.setState({passReset: e.password, passResetValid: e.isValid})}
                                                                         inputProps={{ isInvalid: this.state.error.passReset, value: this.state.passReset, placeholder: "*************", name: "passReset", autoComplete: "off", className: "form-control" }}
-                                                                    />
-                                                                    <Form.Control.Feedback type="invalid">
+                                                                    /> */}
+                                                                    {/* <Form.Control.Feedback type="invalid">
                                                                         {
                                                                             this.state.error.passResetNoValid ? 'Нууц үг хангалтгүй байна' : 'Нууц үг оруулна уу.'
+                                                                        }
+                                                                    </Form.Control.Feedback> */}
+                                                                    <Form.Control.Feedback type="invalid">
+                                                                        {
+                                                                            this.state.error.passResetNoValid ? 'Нууц үг хангалтгүй байна (6-аас дээш урттай байх)' : 'Нууц үг оруулна уу.'
                                                                         }
                                                                     </Form.Control.Feedback>
                                                                 </Form.Group>
