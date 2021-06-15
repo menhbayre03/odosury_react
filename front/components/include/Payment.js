@@ -402,7 +402,7 @@ class Payment extends Component {
                                 step === 2 ? (
                                     <div>
                                         <Button className="payment-button2" onClick={() => this.setStep(1)}>Буцах</Button>
-                                        <Button className="payment-button" onClick={() => {this.setPayment(); this.setStep(3)}}>Төлбөр төлөх</Button>
+                                        <Button className="payment-button" onClick={() => {this.setPayment()}}>Төлбөр төлөх</Button>
                                     </div>
                                 ) : (
                                     <div>
