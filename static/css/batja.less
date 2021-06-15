@@ -811,3 +811,50 @@ div.abouttext2 > h3 {
 		display: none !important;
 	}
 }
+// ADMIN END
+// -*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*-
+// PAYMENT MODAL
+.step-indicator {
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 40px;
+	justify-content: center;
+	align-items: center;
+	.leStep {
+		width: 100px;
+		height: 4px;
+	}
+	.leStep:nth-of-type(1) {
+		width: 50px;
+		border-top-left-radius: 2px;
+		border-bottom-left-radius: 2px;
+	}
+	.leStep:last-of-type {
+		width: 100px;
+		// border-top-right-radius: 10px;
+		// border-bottom-right-radius: 10px;
+	}
+	.leStepGray:last-of-type {
+		width: 100px;
+		height: 4px;
+		border-top-right-radius: 2px;
+		border-bottom-right-radius: 2px;
+	}
+	.leStepGray {
+		width: 100px;
+		height: 4px;
+		background-color:  #9a9a9a !important;
+	}
+	.leDot {
+		border-radius: 50%;
+		height: 10px;
+		width: 10px;
+		border: 2px solid green;
+		margin: 0 2px;
+		display: none;
+	}
+	.leStepCurrent {
+		height: 10px;
+		border-radius: 4px;
+	}
+}

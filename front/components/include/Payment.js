@@ -135,6 +135,26 @@ class Payment extends Component {
 
     render() {
         const {main: {premiumPrice, eishPrice}, payment: {visible, type, lesson = {}, step, method, paymentLaoding, transaction}} = this.props;
+        const colorPicker = (color1, color2, stepsNum) => {
+            const helperFunc = (c1, c2, stepLen) => {
+                let c = c1 + stepLen * (c2 - c1);
+                return Math.floor(c)
+            };
+            const stepLen = 1 / (1 + stepsNum);
+            const red1 = parseInt(color1.slice(1,3), 16);
+            const red2 = parseInt(color2.slice(1,3), 16);
+            const green1 = parseInt(color1.slice(3,5), 16);
+            const green2 = parseInt(color2.slice(3,5), 16);
+            const blue1 = parseInt(color1.slice(5,7), 16);
+            const blue2 = parseInt(color2.slice(5,7), 16);
+            let final = [];
+            for (let i = 1; i < stepsNum + 1; i++) {
+                let stepLenActual = stepLen * i;
+                final.push([helperFunc(red1, red2, stepLenActual), helperFunc(green1, green2, stepLenActual), helperFunc(blue1, blue2, stepLenActual)].join(", "));
+            };
+            return final
+        }
+        const colors = colorPicker("#02A1FE", "#F400B0", 4)
         return (
             <React.Fragment>
                 <div className="paymentModal" style={{ right: visible ? '0' : isMobile ? '-100%' : '-480px'}}>
@@ -366,6 +386,15 @@ class Payment extends Component {
                         </div>
                     </div>
                     <div className="footer-payment">
+                        <div className="step-indicator">
+                            <div className="leStep" style={{backgroundColor: `rgba(${colors[0]})`}}></div>
+                            <div className="leDot"></div>
+                            <div className={step === 1 ? "leStepCurrent leStep" : step > 1 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[1]})`}}></div>
+                            <div className="leDot"></div>
+                            <div className={step === 2 ? "leStepCurrent leStep" : step > 2 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[2]})`}}></div>
+                            <div className="leDot"></div>
+                            <div className={step === 3 ? "leStepCurrent leStep" : step > 3 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[3]})`}}></div>
+                        </div>
                         {
                             step === 1 ? (
                                 <Button className="payment-button" onClick={() => this.setStep(2)}>Худалдан авах</Button>
@@ -373,7 +402,7 @@ class Payment extends Component {
                                 step === 2 ? (
                                     <div>
                                         <Button className="payment-button2" onClick={() => this.setStep(1)}>Буцах</Button>
-                                        <Button className="payment-button" onClick={() => this.setPayment()}>Төлбөр төлөх</Button>
+                                        <Button className="payment-button" onClick={() => {this.setPayment()}}>Төлбөр төлөх</Button>
                                     </div>
                                 ) : (
                                     <div>

@@ -197,12 +197,22 @@ class Lesson extends Component {
                                                                         }
                                                                         {
                                                                             lesson.free ? (
+                                                                                !user ? 
                                                                                     <Button
                                                                                         variant="primary"
-                                                                                        onClick={() => config.get('history').push('/login')}
+                                                                                        onClick={() => config.get('emitter').emit('openLogin', {type: 'lesson', lesson: lesson})}
+                                                                                        // onClick={() => config.get('history').push('/login')}
                                                                                     >
                                                                                         <ion-icon name={'card-outline'}/> Нэвтрэх
                                                                                     </Button>
+                                                                                    :
+                                                                                    <div className="inner">
+                                                                                        <Link to={`/lesson/view/${lesson.slug}`}>
+                                                                                            <Button variant="secondary">
+                                                                                                <ion-icon name="play" /> Үзэх
+                                                                                            </Button>
+                                                                                        </Link>
+                                                                                    </div>
                                                                             ) : (
                                                                                 lesson.eish ? (
                                                                                     <Link to="/eishPage" style={{textDecoration: 'none'}}>
@@ -393,12 +403,22 @@ class Lesson extends Component {
 
                                                                             {
                                                                                 lesson.free ? (
-                                                                                    <Button
-                                                                                        variant="primary"
-                                                                                        onClick={() => config.get('history').push('/login')}
-                                                                                    >
-                                                                                        <ion-icon name={'card-outline'}/> Нэвтрэх
-                                                                                    </Button>
+                                                                                    !user ?
+                                                                                        <Button
+                                                                                            variant="primary"
+                                                                                            onClick={() => config.get('emitter').emit('openLogin')}
+                                                                                            // onClick={() => config.get('history').push('/login')}
+                                                                                        >
+                                                                                            <ion-icon name={'card-outline'}/> Нэвтрэх
+                                                                                        </Button>
+                                                                                        :
+                                                                                        <div className="inner">
+                                                                                            <Link to={`/lesson/view/${lesson.slug}`}>
+                                                                                                <Button variant="secondary">
+                                                                                                    <ion-icon name="play" /> Үзэх
+                                                                                                </Button>
+                                                                                            </Link>
+                                                                                        </div>
                                                                                 ) : (
                                                                                     lesson.eish ? (
                                                                                         <Link to="/eishPage" style={{textDecoration: 'none'}}>
