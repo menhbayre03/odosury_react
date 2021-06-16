@@ -6,7 +6,7 @@ import QRCode from "react-qr-code";
 import {
     isMobile
 } from "react-device-detect";
-import { Container, Button } from 'react-bootstrap';
+import { Container, Button, Form, Row, Col, Table } from 'react-bootstrap';
 import * as actions from '../../actions/payment_actions';
 import {Link} from "react-router-dom";
 const reducer = ({ main, payment }) => ({ main, payment });
@@ -385,6 +385,22 @@ class Payment extends Component {
                             </Container>
                         </div>
                     </div>
+                    {
+                        step === 1 
+                            ?
+                                <div className="promo-container">
+                                    <Form className="promo-form">
+                                        <Form.Group controlId="promoForm" size="xs">
+                                            <Form.Label>Промо Код</Form.Label>
+                                            <Form.Control type="text" placeholder="code Leet for 10% off" />
+                                        </Form.Group>
+                                    </Form>
+                                    <Button type="submit">
+                                        ASD
+                                    </Button>
+                                </div>
+                            : null
+                    }
                     <div className="footer-payment">
                         <div className="step-indicator">
                             <div className="leStep" style={{backgroundColor: `rgba(${colors[0]})`}}></div>

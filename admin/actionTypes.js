@@ -450,3 +450,15 @@ export const openJobSubmitDrawer = {
 export const closeJobSubmitDrawer = {
     REQUEST: 'closeJobSubmitDrawer_REQUEST'
 }
+export const getPromoCode = {
+    REQUEST:'getPromoCode_REQUEST',
+    RESPONSE:'getPromoCode_RESPONSE'
+};
+export const submitPromoCode = {
+    REQUEST:'submitPromoCode_REQUEST',
+    RESPONSE:'submitPromoCode_RESPONSE'
+};
+export const deletePromoCode = {
+    REQUEST: 'deletePromoCode_REQUEST',
+    RESPONSE: 'deletePromoCode_RESPONSE'
+};
