@@ -8,7 +8,8 @@ import {
 	Drawer,
 	Select,
 	Popconfirm,
-	Collapse
+	Collapse,
+	Tag
 } from "antd";
 import {
 	DeleteFilled,
@@ -24,31 +25,189 @@ import {
 	deletePromoCode
 } from "../actions/promo_actions";
 
-const reducer = ({ PromoCode }) => ({ PromoCode });
+const reducer = ({ promo }) => ({ promo });
 
 class PromoCode extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			
+			code: "",
+			discount: ""
 		};
 	}
 
 	componentDidMount() {
-		
+		this.props.dispatch(getPromoCode());
 	}
-	
+	submitPromoCode(vals) {
+		this.props.dispatch(submitPromoCode({ ...vals }));
+	}
+	deletePromoCode(data) {
+		this.props.dispatch(deletePromoCode({ data }));
+	}
+
 	render() {
 		const {
-			
+			promo: {
+				promocodes,
+				successPromoCode,
+				submittingPromoCode,
+				loadingPromoCode,
+				deletingPromoCode
+			}
 		} = this.props;
-		
+		const columns = [
+			{
+				title: "№",
+				width: "50px",
+				key: Math.random(),
+				fixed: "left",
+				render: (text, record, idx) => idx + 1
+			},
+			{
+				title: "Промо код",
+				key: Math.random(),
+				width: "100px",
+				render: (record) => record.code
+			},
+			{
+				title: "Хямдарсан хувь",
+				key: Math.random(),
+				width: "100px",
+				render: (record) => record.discount
+			},
+			{
+				title: "Ашигласан тоо",
+				key: Math.random(),
+				width: "100px",
+				render: (record) => record.used.length
+			},
+			{
+				title: "Илгээсэн он, сар",
+				key: Math.random(),
+				width: "200px",
+				render: (record) =>
+					moment(record.created).format("YYYY-MM-DD h:mm:ss a")
+				// render: record => record.created
+			},
+			{
+				title: "Статус",
+				key: Math.random(),
+				fixed: "right",
+				width: "50px",
+				render: (record) => (record.status === 'active' ? <Tag color="#2db7f5">Идэвхитэй</Tag> : <Tag color="#fbfbfb">Идэвхигүй</Tag>)
+			},
+			// {
+			// 	title: "action",
+			// 	key: idx,
+			// 	fixed: "right",
+			// 	render: (record) => (
+			// 		<Fragment>
+			// 			{record.status === "active" ? null : (
+			// 				<Button
+			// 					onClick={this.completedFeedback.bind(
+			// 						this,
+			// 						record
+			// 					)}
+			// 					type="primary"
+			// 					size="small"
+            //                     style={{margin: "5px"}}
+			// 				>
+			// 					Харсан
+			// 				</Button>
+			// 			)}
+			// 			<Popconfirm
+			// 				title={`Та устгах гэж байна!`}
+			// 				onConfirm={this.deleteFeedback.bind(this, record)}
+			// 				okText="Устгах"
+			// 				placement="left"
+			// 				cancelText="Болих"
+			// 			>
+			// 				<Button type={"primary"} danger size={"small"}>
+			// 					<DeleteFilled />
+			// 					Устгаx
+			// 				</Button>
+			// 			</Popconfirm>
+			// 		</Fragment>
+			// 	)
+			// }
+		];
 		return (
 			<Card
 				title={"Promo Code"}
 				bordered={true}
+				loading={loadingPromoCode}
 			>
-				<div>Hi</div>
+				<div className="PCcontainer">
+					{/* {(promocodes || []).map((promo) => {
+						return (
+							<div className="PCsingle">
+								<p>Промо код: {promo.code}</p>
+								<p>Хямдарсан хувь: {promo.discount}</p>
+								<p>Ашигласан тоо: {promo.used.length}</p>
+							</div>
+						);
+					})} */}
+					<Table
+						// rowClassName={(record, index) =>
+						// 	record.status === "active"
+						// 		? "FBactive"
+						// 		: record.status === "pending"
+						// 		? "FBpending"
+						// 		: ""
+						// }
+						columns={columns}
+						dataSource={promocodes}
+						loading={loadingPromoCode}
+						// scroll={{ x: 1300 }}
+					/>
+				</div>
+				<Form
+					onFinish={this.submitPromoCode.bind(this)}
+					className="PCform"
+				>
+					<Form.Item name="code" label="Код">
+						<Input
+							type="text"
+							placeholder="АМЖИЛТ2021, БАТАА1133, г.м."
+							value={this.state.code}
+							onChange={(e) => {
+								this.setState({
+									code: [e.target.value, ...this.state.code]
+								});
+							}}
+							allowClear
+							autoComplete="off"
+							className="PCinput"
+						/>
+					</Form.Item>
+					<Form.Item name="discount" label="Хямдрал %">
+						<Input
+							type="number"
+							placeholder="20%, 15%, 99%, г.м."
+							value={this.state.discount}
+							onChange={(e) => {
+								this.setState({
+									discount: [
+										e.target.value,
+										...this.state.discount
+									]
+								});
+							}}
+							allowClear
+							autoComplete="off"
+							className="PCinput"
+						/>
+					</Form.Item>
+					<Button
+						htmlType="submit"
+						type="primary"
+						className="JPsubmit"
+					>
+						<CheckCircleFilled />
+						Нийтлэx
+					</Button>
+				</Form>
 			</Card>
 		);
 	}

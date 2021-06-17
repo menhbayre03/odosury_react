@@ -6,15 +6,18 @@ import QRCode from "react-qr-code";
 import {
     isMobile
 } from "react-device-detect";
-import { Container, Button, Form, Row, Col, Table } from 'react-bootstrap';
+import { Container, Button, Form, Row, Col, Table, Spinner } from 'react-bootstrap';
 import * as actions from '../../actions/payment_actions';
+import { validatePromoCode } from "../../actions/promo_actions";
 import {Link} from "react-router-dom";
-const reducer = ({ main, payment }) => ({ main, payment });
+import { validate } from "../../../../odosury_api/models/Teacher";
+const reducer = ({ main, payment, requests }) => ({ main, payment, requests });
 
 class Payment extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            code: ''
         }
     }
 
@@ -91,16 +94,24 @@ class Payment extends Component {
     }
 
     setPayment() {
-        const {dispatch, payment: {type, lesson = {}, method}} = this.props;
+        const {dispatch, payment: {type, lesson = {}, method}, requests: {promocode}} = this.props;
         if(method === 'qpay' || method === 'bank') {
             dispatch(actions.setPayment({
                 type: type,
                 method: method,
-                lesson_id: lesson._id
+                lesson_id: lesson._id,
+                promo_id: (promocode ? promocode._id : null)
             }))
         } else {
             config.get('emitter').emit('warning', 'Төлбөрийн нөхцөл сонгоно уу !')
         }
+    }
+    validatePromoCode(e) {
+        e.preventDefault();
+        let data = {
+            code: this.state.code
+        }
+        this.props.dispatch(validatePromoCode(data))
     }
 
     setPaymentOld(trans, data) {
@@ -134,7 +145,7 @@ class Payment extends Component {
     }
 
     render() {
-        const {main: {premiumPrice, eishPrice}, payment: {visible, type, lesson = {}, step, method, paymentLaoding, transaction}} = this.props;
+        const {main: {premiumPrice, eishPrice}, payment: {visible, type, lesson = {}, step, method, paymentLaoding, transaction}, requests: { promoIsValid, promocode, validatingPromoCode, appliedCode, appliedDiscount }} = this.props;
         const colorPicker = (color1, color2, stepsNum) => {
             const helperFunc = (c1, c2, stepLen) => {
                 let c = c1 + stepLen * (c2 - c1);
@@ -213,17 +224,29 @@ class Payment extends Component {
                                         </span>
                                     </p>
                                 </div>
-                                {
-                                    step === 1 ? (
-                                        <h4>Бүтээгдэхүүний тухай</h4>
-                                    ) : (
-                                        step === 2 ? (
-                                            <h4>Төлбөрийн нөхцөл сонгох</h4>
+                                <div className="h4Container">
+                                    <div className="step-indicator">
+                                        <div className="leStep" style={{backgroundColor: `rgba(${colors[0]})`}}></div>
+                                        <div className="leDot"></div>
+                                        <div className={step === 1 ? "leStepCurrent leStep" : step > 1 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[1]})`}}></div>
+                                        <div className="leDot"></div>
+                                        <div className={step === 2 ? "leStepCurrent leStep" : step > 2 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[2]})`}}></div>
+                                        <div className="leDot"></div>
+                                        <div className={step === 3 ? "leStepCurrent leStep" : step > 3 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[3]})`}}></div>
+                                    </div>
+                                    {
+                                        step === 1 ? (
+                                            <h4>Бүтээгдэхүүний тухай</h4>
                                         ) : (
-                                            <h4>Төлбөрийн мэлээлэл</h4>
+                                            step === 2 ? (
+                                                <h4>Төлбөрийн нөхцөл сонгох</h4>
+                                            ) : (
+                                                <h4>Төлбөрийн мэлээлэл</h4>
+                                            )
                                         )
-                                    )
-                                }
+                                    }
+                                </div>
+                                
                                 {
                                     step === 1 ? (
                                         type === 'premium' ? (
@@ -385,32 +408,39 @@ class Payment extends Component {
                             </Container>
                         </div>
                     </div>
-                    {
-                        step === 1 
-                            ?
-                                <div className="promo-container">
-                                    <Form className="promo-form">
-                                        <Form.Group controlId="promoForm" size="xs">
-                                            <Form.Label>Промо Код</Form.Label>
-                                            <Form.Control type="text" placeholder="code Leet for 10% off" />
-                                        </Form.Group>
-                                    </Form>
-                                    <Button type="submit">
-                                        ASD
-                                    </Button>
-                                </div>
-                            : null
-                    }
                     <div className="footer-payment">
-                        <div className="step-indicator">
-                            <div className="leStep" style={{backgroundColor: `rgba(${colors[0]})`}}></div>
-                            <div className="leDot"></div>
-                            <div className={step === 1 ? "leStepCurrent leStep" : step > 1 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[1]})`}}></div>
-                            <div className="leDot"></div>
-                            <div className={step === 2 ? "leStepCurrent leStep" : step > 2 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[2]})`}}></div>
-                            <div className="leDot"></div>
-                            <div className={step === 3 ? "leStepCurrent leStep" : step > 3 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[3]})`}}></div>
-                        </div>
+                        {step === 1 ? (
+                            <div className="promo-container">
+                                <div>
+                                    {promoIsValid ? <React.Fragment>Купон: "{appliedCode}" идэвxжлээ. Хямдрал: {appliedDiscount}%</React.Fragment> : <p>Та Промо Код оруулж хөнгөлөлт эдлэх боломжтой</p>}
+                                </div>
+                                <Form
+                                    className="promo-form"
+                                    onSubmit={this.validatePromoCode.bind(this)}
+                                >
+                                    <Row>
+                                        <Col>
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="code Leet for 10% off"
+                                                onChange={(e) =>
+                                                    this.setState({
+                                                        code: e.target.value
+                                                    })
+                                                }
+                                                value={this.state.code}
+                                            />
+                                        </Col>
+                                        <Col>
+                                            <Button type="submit" className="promo-submit-button">
+                                                <span>Промо Код ашиглах</span>
+                                                {validatingPromoCode ? <Spinner animation="grow" role="status" size="xs" className="promo-submit-spinner" ></Spinner> : null}
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </Form>
+                            </div>
+                        ) : null}
                         {
                             step === 1 ? (
                                 <Button className="payment-button" onClick={() => this.setStep(2)}>Худалдан авах</Button>

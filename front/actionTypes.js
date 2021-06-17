@@ -157,3 +157,8 @@ export const submitFeedback = {
     RESPONSE: 'submitFeedback_RESPONSE',
 }
 //FEEDBACK END
+//PROMOCODES
+export const validatePromoCode = {
+    REQUEST: 'validatePromoCode_REQUEST',
+    RESPONSE: 'validatePromoCode_RESPONSE',
+}

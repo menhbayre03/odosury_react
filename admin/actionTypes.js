@@ -462,3 +462,7 @@ export const deletePromoCode = {
     REQUEST: 'deletePromoCode_REQUEST',
     RESPONSE: 'deletePromoCode_RESPONSE'
 };
+export const restorePromoCode = {
+    REQUEST: 'restorePromoCode_REQUEST',
+    RESPONSE: 'restorePromoCode_RESPONSE'
+};

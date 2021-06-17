@@ -7,9 +7,13 @@ export function submitPromoCode(data) {
 }
 export function getPromoCode() {
     let url = `/admin/api/getPromoCode`
-    return networkActions.requestPost(constants.getPromoCode, url);
+    return networkActions.requestGet(constants.getPromoCode, url);
 }
 export function deletePromoCode(data) {
     let url = `/admin/api/deletePromoCode`
     return networkActions.requestPost(constants.deletePromoCode, url, data);
+}
+export function restorePromoCode(data) {
+    let url = `/admin/api/restorePromoCode`
+    return networkActions.requestPost(constants.restorePromoCode, url, data);
 }

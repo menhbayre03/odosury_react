@@ -1,4 +1,5 @@
-import { submitFeedback, submitTeacherRequest } from "../actionTypes";
+import { bindActionCreators } from "redux";
+import { submitFeedback, submitTeacherRequest, validatePromoCode } from "../actionTypes";
 
 const initialState = {
 	feedback: [],
@@ -6,7 +7,11 @@ const initialState = {
 	submittingFeedback: false,
 	submittingTeacherRequest: false,
 	successFeedback: false,
-	successTeacherRequest: false
+	successTeacherRequest: false,
+	validatingPromoCode: false,
+	promoIsValid: false,
+	appliedCode: '',
+	appliedDiscount: 0
 };
 export default (state = initialState, action) => {
 	switch (action.type) {
@@ -46,6 +51,27 @@ export default (state = initialState, action) => {
 				submittingTeacherRequest: false,
 				successTeacherRequest: true
 			};
+		case validatePromoCode.REQUEST:
+			return {
+				...state,
+				validatingPromoCode: true,
+			}
+		case validatePromoCode.RESPONSE:
+			if (action.json.success) {
+				return {
+					...state,
+					promoIsValid: true,
+					appliedCode: action.json.appliedCode,
+					appliedDiscount: action.json.appliedDiscount,
+					promocode: action.json.promocode,
+					validatingPromoCode: false,
+				}
+			} else {
+				return {
+					...state,
+					validatingPromoCode: false
+				}
+			}
 		default:
 			return state;
 	}

@@ -74,6 +74,7 @@ class JobPost extends Component {
 		const {
 			jobPost: { jobposts, loadingJobPosts, drawerOpen }
 		} = this.props;
+		console.log(jobposts)
 		const children = [];
 		return (
 			<Card
