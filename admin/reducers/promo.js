@@ -1,11 +1,12 @@
-import { getPromoCode, submitPromoCode, deletePromoCode } from "../actionTypes";
+import { getPromoCode, submitPromoCode, deletePromoCode, restorePromoCode } from "../actionTypes";
 import config from "../config";
 const initialState = {
 	promocodes: [],
 	successPromoCode: false,
 	submittingPromoCode: false,
 	loadingPromoCode: false,
-	deletingPromoCode: false
+	deletingPromoCode: false,
+	restoringPromoCode: false,
 };
 export default (state = initialState, action) => {
 	switch (action.type) {
@@ -68,6 +69,31 @@ export default (state = initialState, action) => {
 					...state,
 					promocodes: state.promocodes,
                     deletingPromoCode: false
+				};
+			}
+		case restorePromoCode.REQUEST:
+			return {
+				...state,
+				restoringPromoCode: true
+			};
+		case restorePromoCode.RESPONSE:
+			if (action.json.success) {
+				let a = state.promocodes.filter((c) => {
+					if (c._id === action.json.id) {
+						c.status = "delete";
+					}
+					return c.status !== "delete";
+				});
+				return {
+					...state,
+					promocodes: a,
+                    restoringPromoCode: false
+				};
+			} else {
+				return {
+					...state,
+					promocodes: state.promocodes,
+                    restoringPromoCode: false
 				};
 			}
 		default:

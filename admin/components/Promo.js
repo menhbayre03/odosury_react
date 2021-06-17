@@ -22,7 +22,8 @@ import config from "../config";
 import {
 	submitPromoCode,
 	getPromoCode,
-	deletePromoCode
+	deletePromoCode,
+	restorePromoCode
 } from "../actions/promo_actions";
 
 const reducer = ({ promo }) => ({ promo });
@@ -44,6 +45,9 @@ class PromoCode extends Component {
 	}
 	deletePromoCode(data) {
 		this.props.dispatch(deletePromoCode({ data }));
+	}
+	restorePromoCode(data) {
+		this.props.dispatch(restorePromoCode({ data }));
 	}
 
 	render() {
@@ -97,40 +101,40 @@ class PromoCode extends Component {
 				width: "50px",
 				render: (record) => (record.status === 'active' ? <Tag color="#2db7f5">Идэвхитэй</Tag> : <Tag color="#fbfbfb">Идэвхигүй</Tag>)
 			},
-			// {
-			// 	title: "action",
-			// 	key: idx,
-			// 	fixed: "right",
-			// 	render: (record) => (
-			// 		<Fragment>
-			// 			{record.status === "active" ? null : (
-			// 				<Button
-			// 					onClick={this.completedFeedback.bind(
-			// 						this,
-			// 						record
-			// 					)}
-			// 					type="primary"
-			// 					size="small"
-            //                     style={{margin: "5px"}}
-			// 				>
-			// 					Харсан
-			// 				</Button>
-			// 			)}
-			// 			<Popconfirm
-			// 				title={`Та устгах гэж байна!`}
-			// 				onConfirm={this.deleteFeedback.bind(this, record)}
-			// 				okText="Устгах"
-			// 				placement="left"
-			// 				cancelText="Болих"
-			// 			>
-			// 				<Button type={"primary"} danger size={"small"}>
-			// 					<DeleteFilled />
-			// 					Устгаx
-			// 				</Button>
-			// 			</Popconfirm>
-			// 		</Fragment>
-			// 	)
-			// }
+			{
+				title: "action",
+				key: idx,
+				fixed: "right",
+				render: (record) => (
+					<Fragment>
+						{record.status === "active" ? null : (
+							<Button
+								onClick={this.completedFeedback.bind(
+									this,
+									record
+								)}
+								type="primary"
+								size="small"
+                                style={{margin: "5px"}}
+							>
+								Сэргээx
+							</Button>
+						)}
+						<Popconfirm
+							title={`Та устгах гэж байна!`}
+							onConfirm={this.deletePromoCode.bind(this, record)}
+							okText="Устгах"
+							placement="left"
+							cancelText="Болих"
+						>
+							<Button type={"primary"} danger size={"small"}>
+								<DeleteFilled />
+								Устгаx
+							</Button>
+						</Popconfirm>
+					</Fragment>
+				)
+			}
 		];
 		return (
 			<Card
