@@ -458,7 +458,7 @@ class Payment extends Component {
                                         <Col>
                                             <Form.Control
                                                 type="text"
-                                                placeholder="code Leet for 10% off"
+                                                placeholder="Таны хөнгөлөлт энд"
                                                 onChange={(e) =>
                                                     this.setState({
                                                         code: e.target.value

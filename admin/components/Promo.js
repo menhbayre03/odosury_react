@@ -183,7 +183,7 @@ class PromoCode extends Component {
 					<Form.Item name="code" label="Код">
 						<Input
 							type="text"
-							placeholder="АМЖИЛТ2021, БАТАА1133, г.м."
+							placeholder="АМЖИЛТ2021, БАТЛАГА22, г.м."
 							value={this.state.code}
 							onChange={(e) => {
 								this.setState({
@@ -198,7 +198,7 @@ class PromoCode extends Component {
 					<Form.Item name="discount" label="Хямдрал %">
 						<Input
 							type="number"
-							placeholder="20%, 15%, 99%, г.м."
+							placeholder="0-100 хооронд, % бичихгүй"
 							value={this.state.discount}
 							onChange={(e) => {
 								this.setState({
