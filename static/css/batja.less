@@ -846,7 +846,7 @@ div.abouttext2 > h3 {
 	align-items: center;
 	.leStep {
 		width: 100px;
-		height: 4px;
+		height: 2px;
 	}
 	.leStep:nth-of-type(1) {
 		width: 50px;
@@ -860,13 +860,13 @@ div.abouttext2 > h3 {
 	}
 	.leStepGray:last-of-type {
 		width: 100px;
-		height: 4px;
+		height: 2px;
 		border-top-right-radius: 2px;
 		border-bottom-right-radius: 2px;
 	}
 	.leStepGray {
 		width: 100px;
-		height: 4px;
+		height: 2px;
 		background-color:  #9a9a9a !important;
 	}
 	.leDot {
@@ -878,9 +878,13 @@ div.abouttext2 > h3 {
 		display: none;
 	}
 	.leStepCurrent {
-		height: 10px;
+		height: 5px;
 		border-radius: 4px;
 	}
+}
+.coupon-discounted {
+	color: #00af32 !important;
+	text-shadow: 0px 1px 1px #00af32;
 }
 .promo-container {
 	// border: 1px solid green;
@@ -925,4 +929,21 @@ div.abouttext2 > h3 {
 	// 	-o-transition: 0.3s ease-in-out;
 	// 	transition: 0.3s ease-in-out;
 	// }
+	.coupon-valid {
+		color: #00af32;
+		text-shadow: 0px 1px 1px #00af32;
+		margin-bottom: 10px;
+		text-align: center;
+	}
+}
+.leftT {
+	.coupon-after {
+		position: absolute;
+		left: 90px;
+		top: -1px;
+		padding: 2px 10px;
+		background-color: greenyellow;
+		border-radius: 3px;
+		margin: 0 auto;
+	}
 }

@@ -166,6 +166,10 @@ class Payment extends Component {
             return final
         }
         const colors = colorPicker("#02A1FE", "#F400B0", 4)
+        const useDiscount = (price, discount) => {
+            // return (price - price * discount / 100)
+            return <>{config.formatMoney(price - price * discount / 100)}₮ {/*<div className="coupon-after">{" "}- {config.formatMoney(price * discount / 100)}₮ {appliedCode ? appliedCode : null}</div>*/}</>
+        }
         return (
             <React.Fragment>
                 <div className="paymentModal" style={{ right: visible ? '0' : isMobile ? '-100%' : '-480px'}}>
@@ -185,12 +189,28 @@ class Payment extends Component {
                                             {
                                                 type === 'premium' ? ('Premium багц') : (
                                                     type === 'eish' ? ('ЭЕШ багц') : lesson.title
-                                                )
+                                                ) 
                                             }
                                         </span>
                                     </p>
                                     {
-                                        (type === 'lesson' && !(lesson.sale > 0)) ? null :(
+                                        appliedDiscount > 0
+                                        ?
+                                            (
+                                                <p>
+                                                    <span className="rigthT">Үнэ: </span>
+                                                    <span className="leftT trough">
+                                                    {
+                                                        type === 'premium' ? `365'000₮` : (
+                                                            type === 'eish' ? `149'000₮` : `${config.formatMoney(lesson.price)}₮`
+                                                        )
+                                                    }
+                                                    </span>
+                                                </p>
+                                            )
+                                        :
+                                        (type === 'lesson' && !(lesson.sale > 0)) ? null 
+                                        : (
                                             <p>
                                                 <span className="rigthT">Үнэ: </span>
                                                 <span className="leftT trough">
@@ -203,13 +223,29 @@ class Payment extends Component {
                                             </p>
                                         )
                                     }
+                                    {
+                                        appliedDiscount > 0
+                                        ? (
+                                            <p>
+                                                <span className="rightT">Промо код:{" "}</span>
+                                                <span className="leftT coupon-discounted">-{type === "premium" ? `${config.formatMoney(premiumPrice * appliedDiscount / 100)}₮` : (type === 'eish') ? `${config.formatMoney(eishPrice * appliedDiscount / 100)}₮` : lesson.sale > 0 ? `${config.formatMoney(lesson.sale * appliedDiscount / 100)}₮` : `${config.formatMoney(lesson.price * appliedDiscount / 100)}₮`}</span>
+                                            </p>
+                                        ) : (
+                                            null
+                                        )
+                                    }
                                     <p>
-                                        <span className="rigthT">{(type === 'lesson' && !(lesson.sale > 0)) ? 'Үнэ: ' : 'Хямдарсан үнэ: '}</span>
+                                        <span className="rigthT">{(appliedDiscount > 0) ? 'Хямдарсан үнэ: ' : (type === 'lesson' && !(lesson.sale > 0)) ? 'Үнэ: ' : 'Хямдарсан үнэ: '}</span>
                                         <span className="leftT">
                                             {
-                                                type === 'premium' ? `${config.formatMoney(premiumPrice)}₮` : (
-                                                    type === 'eish' ? `${config.formatMoney(eishPrice)}₮` : lesson.sale > 0 ? `${config.formatMoney(lesson.sale)}₮` : `${config.formatMoney(lesson.price)}₮`
-                                                )
+                                                appliedDiscount > 0 ?
+                                                    (type === 'premium' ? useDiscount(premiumPrice, appliedDiscount) : (
+                                                        type === 'eish' ? useDiscount(eishPrice, appliedDiscount) : lesson.sale > 0 ? useDiscount(lesson.sale, appliedDiscount) : useDiscount(lesson.price, appliedDiscount)
+                                                    ))
+                                                :
+                                                    (type === 'premium' ? `${config.formatMoney(premiumPrice)}₮` : (
+                                                        type === 'eish' ? `${config.formatMoney(eishPrice)}₮` : lesson.sale > 0 ? `${config.formatMoney(lesson.sale)}₮` : `${config.formatMoney(lesson.price)}₮`
+                                                    ))
                                             }
                                         </span>
                                     </p>
@@ -409,10 +445,10 @@ class Payment extends Component {
                         </div>
                     </div>
                     <div className="footer-payment">
-                        {step === 1 ? (
+                        {(step === 1 && type === "premium") ? (
                             <div className="promo-container">
                                 <div>
-                                    {promoIsValid ? <React.Fragment>Купон: "{appliedCode}" идэвxжлээ. Хямдрал: {appliedDiscount}%</React.Fragment> : <p>Та Промо Код оруулж хөнгөлөлт эдлэх боломжтой</p>}
+                                    {promoIsValid ? <div className="coupon-valid">Промо Код <b>{appliedCode}</b> амжилттай идэвxжлээ</div> : <p>Та Промо Код оруулж хөнгөлөлт эдлэх боломжтой</p>}
                                 </div>
                                 <Form
                                     className="promo-form"

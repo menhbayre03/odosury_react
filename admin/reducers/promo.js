@@ -53,15 +53,22 @@ export default (state = initialState, action) => {
 			};
 		case deletePromoCode.RESPONSE:
 			if (action.json.success) {
-				let a = state.promocodes.filter((c) => {
-					if (c._id === action.json.id) {
-						c.status = "delete";
-					}
-					return c.status !== "delete";
-				});
+				// let a = state.promocodes.filter((c) => {
+				// 	if (c._id === action.json.id) {
+				// 		c.status = "delete";
+				// 	}
+				// 	return c.status !== "delete";
+				// });
 				return {
 					...state,
-					promocodes: a,
+					promocodes: state.promocodes.map(c => {
+						if (c._id !== action.json.id) {
+							return c
+						} else {
+							c.status = "delete"
+							return c
+						}
+					}),
                     deletingPromoCode: false
 				};
 			} else {
@@ -78,15 +85,16 @@ export default (state = initialState, action) => {
 			};
 		case restorePromoCode.RESPONSE:
 			if (action.json.success) {
-				let a = state.promocodes.filter((c) => {
-					if (c._id === action.json.id) {
-						c.status = "delete";
-					}
-					return c.status !== "delete";
-				});
 				return {
 					...state,
-					promocodes: a,
+					promocodes: state.promocodes.map(c => {
+						if(c._id !== action.json.id){
+							return c
+						} else {
+							c.status = 'active'
+							return c
+						}
+					}),
                     restoringPromoCode: false
 				};
 			} else {
