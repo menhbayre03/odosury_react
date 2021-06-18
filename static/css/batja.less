@@ -811,18 +811,42 @@ div.abouttext2 > h3 {
 		display: none !important;
 	}
 }
+// .PCcontainer {
+// 	border: 1px solid salmon;
+// 	display: flex;
+// 	flex-direction: row;
+// 	flex-wrap: wrap;
+// 	justify-content: space-around;
+// 	.PCsingle {
+// 		background-color: cyan;
+// 		margin: 5px;
+// 		min-width: 100px;
+// 		min-height: 100px;
+// 	}
+// }
 // ADMIN END
 // -*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*-
 // PAYMENT MODAL
+.paymentModal {
+	.payment-body {
+		.h4Container {
+			border-top: 1px solid #f5f5f5;
+			margin-top: 10px;
+			padding-top: 20px;
+			// margin-bottom: 20px;
+		}
+	}
+}
 .step-indicator {
+	// background-color: pink;
 	display: flex;
 	flex-direction: row;
-	margin-bottom: 40px;
+	// margin-bottom: 40px;
 	justify-content: center;
 	align-items: center;
 	.leStep {
 		width: 100px;
-		height: 4px;
+		height: 2px;
 	}
 	.leStep:nth-of-type(1) {
 		width: 50px;
@@ -836,13 +860,13 @@ div.abouttext2 > h3 {
 	}
 	.leStepGray:last-of-type {
 		width: 100px;
-		height: 4px;
+		height: 2px;
 		border-top-right-radius: 2px;
 		border-bottom-right-radius: 2px;
 	}
 	.leStepGray {
 		width: 100px;
-		height: 4px;
+		height: 2px;
 		background-color:  #9a9a9a !important;
 	}
 	.leDot {
@@ -854,7 +878,78 @@ div.abouttext2 > h3 {
 		display: none;
 	}
 	.leStepCurrent {
-		height: 10px;
+		height: 5px;
 		border-radius: 4px;
 	}
+}
+.coupon-discounted {
+	color: #00af32 !important;
+	text-shadow: 0px 1px 1px #00af32;
+}
+.promo-container {
+	// border: 1px solid green;
+	padding: 0 14px;
+	margin-bottom: 17px;
+	.promo-form {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		.promo-submit-button {
+			width: 100%;
+			justify-content: center;
+			align-items: center;
+		}
+	}
+		.promo-submit-button {
+			min-width: 200px;
+			// padding: auto 40px;
+			justify-content: center;
+			align-items: center;
+			position: relative;
+			.promo-submit-spinner {
+				position: absolute;
+				inset: 3px 1px 2px 170px;
+			}
+		}
+	// .promo-submit-button {
+	// 	height: 40px;
+	// 	font-size: 14px;
+	// 	font-weight: 700;
+	// 	text-transform: uppercase;
+	// 	border-radius: 5px;
+	// 	background: #fff;
+	// 	border: 1px solid #313356;
+	// 	outline: none;
+	// 	box-shadow: none;
+	// 	color: #313356;
+	// 	padding: 0 30px;
+	// 	-webkit-transition: 0.3s ease-in-out;
+	// 	-moz-transition: 0.3s ease-in-out;
+	// 	-ms-transition: 0.3s ease-in-out;
+	// 	-o-transition: 0.3s ease-in-out;
+	// 	transition: 0.3s ease-in-out;
+	// }
+	.coupon-valid {
+		color: #00af32;
+		text-shadow: 0px 1px 1px #00af32;
+		margin-bottom: 10px;
+		text-align: center;
+	}
+}
+.leftT {
+	.coupon-after {
+		position: absolute;
+		left: 90px;
+		top: -1px;
+		padding: 2px 10px;
+		background-color: greenyellow;
+		border-radius: 3px;
+		margin: 0 auto;
+	}
+}
+.paymentModal .payment-body .paymentMethod .method.bank {
+	box-shadow: -1px 1px 3px #595959;
+}
+.paymentModal .payment-body .paymentMethod .method.qpay {
+	box-shadow: -1px 1px 3px #595959;
 }

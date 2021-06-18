@@ -13,6 +13,7 @@ import NotFound from "../components/NotFound";
 import TeacherRequest from "../components/TeacherRequest";
 import Feedback from "../components/Feedback";
 import JobPost from "../components/JobPost";
+import Promo from "../components/Promo";
 export default [
     {
         component: index,
@@ -80,6 +81,11 @@ export default [
             {
                 component: JobPost,
                 path: '/admin/jobpost',
+                exact: true
+            },
+            {
+                component: Promo,
+                path: '/admin/Promo',
                 exact: true
             },
             // {

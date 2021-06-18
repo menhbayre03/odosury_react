@@ -157,3 +157,12 @@ export const submitFeedback = {
     RESPONSE: 'submitFeedback_RESPONSE',
 }
 //FEEDBACK END
+//PROMOCODES
+export const validatePromoCode = {
+    REQUEST: 'validatePromoCode_REQUEST',
+    RESPONSE: 'validatePromoCode_RESPONSE',
+}
+export const clearPromoCode = {
+    REQUEST: 'clearPromoCode_REQUEST',
+    RESPONSE: 'clearPromoCode_RESPONSE',
+}

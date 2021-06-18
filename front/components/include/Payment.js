@@ -6,15 +6,18 @@ import QRCode from "react-qr-code";
 import {
     isMobile
 } from "react-device-detect";
-import { Container, Button } from 'react-bootstrap';
+import { Container, Button, Form, Row, Col, Table, Spinner } from 'react-bootstrap';
 import * as actions from '../../actions/payment_actions';
+import { validatePromoCode, clearPromoCode } from "../../actions/promo_actions";
 import {Link} from "react-router-dom";
-const reducer = ({ main, payment }) => ({ main, payment });
+import { validate } from "../../../../odosury_api/models/Teacher";
+const reducer = ({ main, payment, requests }) => ({ main, payment, requests });
 
 class Payment extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            code: ''
         }
     }
 
@@ -91,16 +94,24 @@ class Payment extends Component {
     }
 
     setPayment() {
-        const {dispatch, payment: {type, lesson = {}, method}} = this.props;
+        const {dispatch, payment: {type, lesson = {}, method}, requests: {promocode}} = this.props;
         if(method === 'qpay' || method === 'bank') {
             dispatch(actions.setPayment({
                 type: type,
                 method: method,
-                lesson_id: lesson._id
+                lesson_id: lesson._id,
+                promo_id: (promocode ? promocode._id : null)
             }))
         } else {
             config.get('emitter').emit('warning', 'Төлбөрийн нөхцөл сонгоно уу !')
         }
+    }
+    validatePromoCode(e) {
+        e.preventDefault();
+        let data = {
+            code: this.state.code
+        }
+        this.props.dispatch(validatePromoCode(data))
     }
 
     setPaymentOld(trans, data) {
@@ -131,10 +142,11 @@ class Payment extends Component {
         document.getElementsByClassName("main-main")[0].style.paddingRight = `unset`;
         window.scrollTo(0, parseInt(scrollY || '0') * -1);
         dispatch(actions.closePayment())
+        dispatch(clearPromoCode())
     }
 
     render() {
-        const {main: {premiumPrice, eishPrice}, payment: {visible, type, lesson = {}, step, method, paymentLaoding, transaction}} = this.props;
+        const {main: {premiumPrice, eishPrice}, payment: {visible, type, lesson = {}, step, method, paymentLaoding, transaction}, requests: { promoIsValid, promocode, validatingPromoCode, appliedCode, appliedDiscount }} = this.props;
         const colorPicker = (color1, color2, stepsNum) => {
             const helperFunc = (c1, c2, stepLen) => {
                 let c = c1 + stepLen * (c2 - c1);
@@ -155,6 +167,10 @@ class Payment extends Component {
             return final
         }
         const colors = colorPicker("#02A1FE", "#F400B0", 4)
+        const useDiscount = (price, discount) => {
+            // return (price - price * discount / 100)
+            return <>{config.formatMoney(price - price * discount / 100)}₮ {/*<div className="coupon-after">{" "}- {config.formatMoney(price * discount / 100)}₮ {appliedCode ? appliedCode : null}</div>*/}</>
+        }
         return (
             <React.Fragment>
                 <div className="paymentModal" style={{ right: visible ? '0' : isMobile ? '-100%' : '-480px'}}>
@@ -174,12 +190,28 @@ class Payment extends Component {
                                             {
                                                 type === 'premium' ? ('Premium багц') : (
                                                     type === 'eish' ? ('ЭЕШ багц') : lesson.title
-                                                )
+                                                ) 
                                             }
                                         </span>
                                     </p>
                                     {
-                                        (type === 'lesson' && !(lesson.sale > 0)) ? null :(
+                                        appliedDiscount > 0
+                                        ?
+                                            (
+                                                <p>
+                                                    <span className="rigthT">Үнэ: </span>
+                                                    <span className="leftT trough">
+                                                    {
+                                                        type === 'premium' ? `365'000₮` : (
+                                                            type === 'eish' ? `149'000₮` : `${config.formatMoney(lesson.price)}₮`
+                                                        )
+                                                    }
+                                                    </span>
+                                                </p>
+                                            )
+                                        :
+                                        (type === 'lesson' && !(lesson.sale > 0)) ? null 
+                                        : (
                                             <p>
                                                 <span className="rigthT">Үнэ: </span>
                                                 <span className="leftT trough">
@@ -192,13 +224,29 @@ class Payment extends Component {
                                             </p>
                                         )
                                     }
+                                    {
+                                        appliedDiscount > 0
+                                        ? (
+                                            <p>
+                                                <span className="rightT coupon-discounted">Промо код:{" "}</span>
+                                                <span className="leftT coupon-discounted">-{type === "premium" ? `${config.formatMoney(premiumPrice * appliedDiscount / 100)}₮ (${appliedDiscount}%)` : (type === 'eish') ? `${config.formatMoney(eishPrice * appliedDiscount / 100)}₮ (${appliedDiscount}%)` : lesson.sale > 0 ? `${config.formatMoney(lesson.sale * appliedDiscount / 100)}₮ (${appliedDiscount}%)` : `${config.formatMoney(lesson.price * appliedDiscount / 100)}₮ (-${appliedDiscount}%)`}</span>
+                                            </p>
+                                        ) : (
+                                            null
+                                        )
+                                    }
                                     <p>
-                                        <span className="rigthT">{(type === 'lesson' && !(lesson.sale > 0)) ? 'Үнэ: ' : 'Хямдарсан үнэ: '}</span>
+                                        <span className="rigthT">{(appliedDiscount > 0) ? 'Хямдарсан үнэ: ' : (type === 'lesson' && !(lesson.sale > 0)) ? 'Үнэ: ' : 'Хямдарсан үнэ: '}</span>
                                         <span className="leftT">
                                             {
-                                                type === 'premium' ? `${config.formatMoney(premiumPrice)}₮` : (
-                                                    type === 'eish' ? `${config.formatMoney(eishPrice)}₮` : lesson.sale > 0 ? `${config.formatMoney(lesson.sale)}₮` : `${config.formatMoney(lesson.price)}₮`
-                                                )
+                                                appliedDiscount > 0 ?
+                                                    (type === 'premium' ? useDiscount(premiumPrice, appliedDiscount) : (
+                                                        type === 'eish' ? useDiscount(eishPrice, appliedDiscount) : lesson.sale > 0 ? useDiscount(lesson.sale, appliedDiscount) : useDiscount(lesson.price, appliedDiscount)
+                                                    ))
+                                                :
+                                                    (type === 'premium' ? `${config.formatMoney(premiumPrice)}₮` : (
+                                                        type === 'eish' ? `${config.formatMoney(eishPrice)}₮` : lesson.sale > 0 ? `${config.formatMoney(lesson.sale)}₮` : `${config.formatMoney(lesson.price)}₮`
+                                                    ))
                                             }
                                         </span>
                                     </p>
@@ -213,17 +261,29 @@ class Payment extends Component {
                                         </span>
                                     </p>
                                 </div>
-                                {
-                                    step === 1 ? (
-                                        <h4>Бүтээгдэхүүний тухай</h4>
-                                    ) : (
-                                        step === 2 ? (
-                                            <h4>Төлбөрийн нөхцөл сонгох</h4>
+                                <div className="h4Container">
+                                    <div className="step-indicator">
+                                        <div className="leStep" style={{backgroundColor: `rgba(${colors[0]})`}}></div>
+                                        <div className="leDot"></div>
+                                        <div className={step === 1 ? "leStepCurrent leStep" : step > 1 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[1]})`}}></div>
+                                        <div className="leDot"></div>
+                                        <div className={step === 2 ? "leStepCurrent leStep" : step > 2 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[2]})`}}></div>
+                                        <div className="leDot"></div>
+                                        <div className={step === 3 ? "leStepCurrent leStep" : step > 3 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[3]})`}}></div>
+                                    </div>
+                                    {
+                                        step === 1 ? (
+                                            <h4>Бүтээгдэхүүний тухай</h4>
                                         ) : (
-                                            <h4>Төлбөрийн мэлээлэл</h4>
+                                            step === 2 ? (
+                                                <h4>Төлбөрийн нөхцөл сонгоно уу</h4>
+                                            ) : (
+                                                <h4>Төлбөрийн мэлээлэл</h4>
+                                            )
                                         )
-                                    )
-                                }
+                                    }
+                                </div>
+                                
                                 {
                                     step === 1 ? (
                                         type === 'premium' ? (
@@ -386,15 +446,40 @@ class Payment extends Component {
                         </div>
                     </div>
                     <div className="footer-payment">
-                        <div className="step-indicator">
-                            <div className="leStep" style={{backgroundColor: `rgba(${colors[0]})`}}></div>
-                            <div className="leDot"></div>
-                            <div className={step === 1 ? "leStepCurrent leStep" : step > 1 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[1]})`}}></div>
-                            <div className="leDot"></div>
-                            <div className={step === 2 ? "leStepCurrent leStep" : step > 2 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[2]})`}}></div>
-                            <div className="leDot"></div>
-                            <div className={step === 3 ? "leStepCurrent leStep" : step > 3 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[3]})`}}></div>
-                        </div>
+                        {
+                            step === 1 ? (
+                                <div className="promo-container">
+                                    <div>
+                                        {promoIsValid ? <div className="coupon-valid">Промо Код <b>{appliedCode}</b> амжилттай идэвxжлээ</div> : <p>Та Промо Код оруулж хөнгөлөлт эдлэх боломжтой</p>}
+                                    </div>
+                                    <Form
+                                        className="promo-form"
+                                        onSubmit={this.validatePromoCode.bind(this)}
+                                    >
+                                        <Row>
+                                            <Col>
+                                                <Form.Control
+                                                    type="text"
+                                                    placeholder="Таны хөнгөлөлт энд"
+                                                    onChange={(e) =>
+                                                        this.setState({
+                                                            code: e.target.value
+                                                        })
+                                                    }
+                                                    value={this.state.code}
+                                                />
+                                            </Col>
+                                            <Col>
+                                                <Button type="submit" className="promo-submit-button">
+                                                    <span>Промо Код ашиглах</span>
+                                                    {validatingPromoCode ? <Spinner animation="grow" role="status" size="xs" className="promo-submit-spinner" ></Spinner> : null}
+                                                </Button>
+                                            </Col>
+                                        </Row>
+                                    </Form>
+                                </div>
+                            ) : null
+                        }
                         {
                             step === 1 ? (
                                 <Button className="payment-button" onClick={() => this.setStep(2)}>Худалдан авах</Button>
