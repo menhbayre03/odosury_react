@@ -1,5 +1,5 @@
 import { bindActionCreators } from "redux";
-import { submitFeedback, submitTeacherRequest, validatePromoCode } from "../actionTypes";
+import { submitFeedback, submitTeacherRequest, validatePromoCode, clearPromoCode } from "../actionTypes";
 
 const initialState = {
 	feedback: [],
@@ -71,6 +71,14 @@ export default (state = initialState, action) => {
 					...state,
 					validatingPromoCode: false
 				}
+			}
+		case clearPromoCode.REQUEST:
+			return {
+				...state,
+				validatingPromoCode: false,
+				promoIsValid: false,
+				appliedCode: '',
+				appliedDiscount: 0,
 			}
 		default:
 			return state;

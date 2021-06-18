@@ -8,7 +8,7 @@ import {
 } from "react-device-detect";
 import { Container, Button, Form, Row, Col, Table, Spinner } from 'react-bootstrap';
 import * as actions from '../../actions/payment_actions';
-import { validatePromoCode } from "../../actions/promo_actions";
+import { validatePromoCode, clearPromoCode } from "../../actions/promo_actions";
 import {Link} from "react-router-dom";
 import { validate } from "../../../../odosury_api/models/Teacher";
 const reducer = ({ main, payment, requests }) => ({ main, payment, requests });
@@ -142,6 +142,7 @@ class Payment extends Component {
         document.getElementsByClassName("main-main")[0].style.paddingRight = `unset`;
         window.scrollTo(0, parseInt(scrollY || '0') * -1);
         dispatch(actions.closePayment())
+        dispatch(clearPromoCode())
     }
 
     render() {
@@ -227,8 +228,8 @@ class Payment extends Component {
                                         appliedDiscount > 0
                                         ? (
                                             <p>
-                                                <span className="rightT">Промо код:{" "}</span>
-                                                <span className="leftT coupon-discounted">-{type === "premium" ? `${config.formatMoney(premiumPrice * appliedDiscount / 100)}₮` : (type === 'eish') ? `${config.formatMoney(eishPrice * appliedDiscount / 100)}₮` : lesson.sale > 0 ? `${config.formatMoney(lesson.sale * appliedDiscount / 100)}₮` : `${config.formatMoney(lesson.price * appliedDiscount / 100)}₮`}</span>
+                                                <span className="rightT coupon-discounted">Промо код:{" "}</span>
+                                                <span className="leftT coupon-discounted">-{type === "premium" ? `${config.formatMoney(premiumPrice * appliedDiscount / 100)}₮ (${appliedDiscount}%)` : (type === 'eish') ? `${config.formatMoney(eishPrice * appliedDiscount / 100)}₮ (${appliedDiscount}%)` : lesson.sale > 0 ? `${config.formatMoney(lesson.sale * appliedDiscount / 100)}₮ (${appliedDiscount}%)` : `${config.formatMoney(lesson.price * appliedDiscount / 100)}₮ (-${appliedDiscount}%)`}</span>
                                             </p>
                                         ) : (
                                             null
@@ -275,7 +276,7 @@ class Payment extends Component {
                                             <h4>Бүтээгдэхүүний тухай</h4>
                                         ) : (
                                             step === 2 ? (
-                                                <h4>Төлбөрийн нөхцөл сонгох</h4>
+                                                <h4>Төлбөрийн нөхцөл сонгоно уу</h4>
                                             ) : (
                                                 <h4>Төлбөрийн мэлээлэл</h4>
                                             )
@@ -445,38 +446,40 @@ class Payment extends Component {
                         </div>
                     </div>
                     <div className="footer-payment">
-                        {(step === 1 && type === "premium") ? (
-                            <div className="promo-container">
-                                <div>
-                                    {promoIsValid ? <div className="coupon-valid">Промо Код <b>{appliedCode}</b> амжилттай идэвxжлээ</div> : <p>Та Промо Код оруулж хөнгөлөлт эдлэх боломжтой</p>}
+                        {
+                            step === 1 ? (
+                                <div className="promo-container">
+                                    <div>
+                                        {promoIsValid ? <div className="coupon-valid">Промо Код <b>{appliedCode}</b> амжилттай идэвxжлээ</div> : <p>Та Промо Код оруулж хөнгөлөлт эдлэх боломжтой</p>}
+                                    </div>
+                                    <Form
+                                        className="promo-form"
+                                        onSubmit={this.validatePromoCode.bind(this)}
+                                    >
+                                        <Row>
+                                            <Col>
+                                                <Form.Control
+                                                    type="text"
+                                                    placeholder="Таны хөнгөлөлт энд"
+                                                    onChange={(e) =>
+                                                        this.setState({
+                                                            code: e.target.value
+                                                        })
+                                                    }
+                                                    value={this.state.code}
+                                                />
+                                            </Col>
+                                            <Col>
+                                                <Button type="submit" className="promo-submit-button">
+                                                    <span>Промо Код ашиглах</span>
+                                                    {validatingPromoCode ? <Spinner animation="grow" role="status" size="xs" className="promo-submit-spinner" ></Spinner> : null}
+                                                </Button>
+                                            </Col>
+                                        </Row>
+                                    </Form>
                                 </div>
-                                <Form
-                                    className="promo-form"
-                                    onSubmit={this.validatePromoCode.bind(this)}
-                                >
-                                    <Row>
-                                        <Col>
-                                            <Form.Control
-                                                type="text"
-                                                placeholder="Таны хөнгөлөлт энд"
-                                                onChange={(e) =>
-                                                    this.setState({
-                                                        code: e.target.value
-                                                    })
-                                                }
-                                                value={this.state.code}
-                                            />
-                                        </Col>
-                                        <Col>
-                                            <Button type="submit" className="promo-submit-button">
-                                                <span>Промо Код ашиглах</span>
-                                                {validatingPromoCode ? <Spinner animation="grow" role="status" size="xs" className="promo-submit-spinner" ></Spinner> : null}
-                                            </Button>
-                                        </Col>
-                                    </Row>
-                                </Form>
-                            </div>
-                        ) : null}
+                            ) : null
+                        }
                         {
                             step === 1 ? (
                                 <Button className="payment-button" onClick={() => this.setStep(2)}>Худалдан авах</Button>
