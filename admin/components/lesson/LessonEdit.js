@@ -145,7 +145,7 @@ class LessonEdit extends React.Component {
             if(!selectedMember || !selectedMember._id){
                 return config.get('emitter').emit('warning', ("Багш сонгоно уу!"));
             }
-            if(!lesson.price || (lesson.price && lesson.price === 0 )){
+            if(!lesson.free && (!lesson.price || (lesson.price && lesson.price === 0 ))){
                 return config.get('emitter').emit('warning', ("Үнэ оруулна уу!"));
             }
             if(lesson.sale && lesson.sale > lesson.price){
@@ -206,8 +206,8 @@ class LessonEdit extends React.Component {
         this.props.dispatch(actions.setFeatured());
     }
     setEish(name, value){
-        console.log(name)
-        console.log(value)
+        // console.log(name)
+        // console.log(value)
         this.props.dispatch(actions.setEish({name, value}));
     }
     render() {
@@ -374,7 +374,7 @@ class LessonEdit extends React.Component {
                                                         }
                                                     </Form.Item>
                                                     <Form.Item
-                                                        label='ЕЭШ'
+                                                        label='ЭЕШ'
                                                     >
                                                         <Switch checked={!!lesson.eish} onChange={this.setEish.bind(this, 'eish')} />
                                                     </Form.Item>

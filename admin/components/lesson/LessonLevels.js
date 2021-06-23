@@ -632,7 +632,7 @@ class LessonLevels extends React.Component {
                                     labelCol={{span: 4}}
                                     fieldKey='name'
                                 >
-                                    <Input autoFocus={true} size="middle" maxLength={60} value={timeline.title? timeline.title : ''} name='title'
+                                    <Input autoFocus={true} size="middle" maxLength={180} value={timeline.title? timeline.title : ''} name='title'
                                            onChange={this.onChangeHandlerLevelTimeline.bind(this)}
                                     />
                                 </Form.Item>

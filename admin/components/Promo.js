@@ -115,12 +115,12 @@ class PromoCode extends Component {
 					<Fragment>
 						{record.status === "active" ? (
 							<Popconfirm
-								title={`Та устгах гэж байна!`}
+								title={`Та зогсоох гэж байна!`}
 								onConfirm={this.deletePromoCode.bind(
 									this,
 									record
 								)}
-								okText="Устгах"
+								okText="Зогсоох"
 								placement="left"
 								cancelText="Болих"
 							>
@@ -148,7 +148,7 @@ class PromoCode extends Component {
 		];
 		return (
 			<Card
-				title={"Promo Code"}
+				title={"Промо Код"}
 				bordered={true}
 				loading={loadingPromoCode}
 			>
@@ -183,7 +183,7 @@ class PromoCode extends Component {
 					<Form.Item name="code" label="Код">
 						<Input
 							type="text"
-							placeholder="АМЖИЛТ2021, BATAA22, г.м."
+							placeholder="ЛАТИН ТОМ ҮСЭГ БОЛОН ТОО АШИГЛАЖ БОЛНО. AMJILT2021, BATAA, г.м."
 							value={this.state.code}
 							onChange={(e) => {
 								this.setState({
