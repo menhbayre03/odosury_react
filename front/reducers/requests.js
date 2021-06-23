@@ -1,5 +1,5 @@
 import { bindActionCreators } from "redux";
-import { submitFeedback, submitTeacherRequest, validatePromoCode, clearPromoCode, buyEishFree } from "../actionTypes";
+import { submitFeedback, submitTeacherRequest, validatePromoCode, clearPromoCode } from "../actionTypes";
 
 const initialState = {
 	feedback: [],
@@ -12,8 +12,6 @@ const initialState = {
 	promoIsValid: false,
 	appliedCode: '',
 	appliedDiscount: 0,
-	buyingEishFree: false,
-	buyEishFreeSuccess: false
 };
 export default (state = initialState, action) => {
 	switch (action.type) {
@@ -81,24 +79,6 @@ export default (state = initialState, action) => {
 				promoIsValid: false,
 				appliedCode: '',
 				appliedDiscount: 0,
-			}
-		case buyEishFree.REQUEST:
-			return {
-				...state,
-				buyingEishFree: true
-			}
-		case buyEishFree.RESPONSE:
-			if (action.json.success) {
-				return {
-					...state,
-					buyEishFreeSuccess: true,
-					buyingEishFree: false
-				}
-			} else {
-				return {
-					...state,
-					buyingEishFree: false
-				}
 			}
 		default:
 			return state;

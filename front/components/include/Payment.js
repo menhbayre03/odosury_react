@@ -153,7 +153,7 @@ class Payment extends Component {
     }
 
     render() {
-        const {main: {premiumPrice, eishPrice}, payment: {visible, type, lesson = {}, step, method, paymentLaoding, transaction}, requests: { promoIsValid, promocode, validatingPromoCode, appliedCode, appliedDiscount, buyingEishFree, buyEishFreeSuccess }} = this.props;
+        const {main: {premiumPrice, eishPrice}, payment: {visible, type, lesson = {}, step, method, paymentLaoding, transaction, buyingEishFree, buyEishFreeSuccess }, requests: { promoIsValid, promocode, validatingPromoCode, appliedCode, appliedDiscount }} = this.props;
         const colorPicker = (color1, color2, stepsNum) => {
             const helperFunc = (c1, c2, stepLen) => {
                 let c = c1 + stepLen * (c2 - c1);
@@ -262,7 +262,7 @@ class Payment extends Component {
                                         <span className="leftT">
                                             {
                                                 type === 'premium' ? ('Анхдагч 1000 хэргэлэгч ХУГАЦААГҮЙ') : (
-                                                    type === 'eish' ? ('1 жил') : '1 жил'
+                                                    type === 'eish' ? ('1 сар') : '1 жил'
                                                 )
                                             }
                                         </span>
