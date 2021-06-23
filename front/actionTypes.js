@@ -166,3 +166,7 @@ export const clearPromoCode = {
     REQUEST: 'clearPromoCode_REQUEST',
     RESPONSE: 'clearPromoCode_RESPONSE',
 }
+export const buyEishFree = {
+    REQUEST: 'buyEishFree_REQUEST',
+    RESPONSE: 'buyEishFree_RESPONSE',
+}

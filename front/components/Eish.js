@@ -13,62 +13,62 @@ const reducer = ({ main, payment}) => ({ main, payment});
 class Eish extends Component {
     constructor(props) {
         super(props);
-        this.state = { time: {}, seconds: props.main.differenceEish };
-        this.timer = 0;
-        this.startTimer = this.startTimer.bind(this);
-        this.countDown = this.countDown.bind(this);
+        // this.state = { time: {}, seconds: props.main.differenceEish };
+        // this.timer = 0;
+        // this.startTimer = this.startTimer.bind(this);
+        // this.countDown = this.countDown.bind(this);
     }
 
-    secondsToTime(secs){
-        let days = Math.floor(secs / (60 * 60 * 24));
+    // secondsToTime(secs){
+    //     let days = Math.floor(secs / (60 * 60 * 24));
 
-        let divisor_for_hours = secs % (60 * 60 * 24);
-        let hours = Math.floor(divisor_for_hours / (60 * 60));
+    //     let divisor_for_hours = secs % (60 * 60 * 24);
+    //     let hours = Math.floor(divisor_for_hours / (60 * 60));
 
-        let divisor_for_minutes = secs % (60 * 60);
-        let minutes = Math.floor(divisor_for_minutes / 60);
+    //     let divisor_for_minutes = secs % (60 * 60);
+    //     let minutes = Math.floor(divisor_for_minutes / 60);
 
-        let divisor_for_seconds = divisor_for_minutes % 60;
-        let seconds = Math.ceil(divisor_for_seconds);
+    //     let divisor_for_seconds = divisor_for_minutes % 60;
+    //     let seconds = Math.ceil(divisor_for_seconds);
 
-        let obj = {
-            "d": days,
-            "h": hours,
-            "m": minutes,
-            "s": seconds
-        };
-        return obj;
-    }
+    //     let obj = {
+    //         "d": days,
+    //         "h": hours,
+    //         "m": minutes,
+    //         "s": seconds
+    //     };
+    //     return obj;
+    // }
     componentDidMount() {
         window.scroll(0, 0);
         config.get('ga').pageview(window.location.pathname);
-        let timeLeftVar = this.secondsToTime(this.state.seconds);
-        this.setState({ time: timeLeftVar }, () => this.startTimer());
+        // let timeLeftVar = this.secondsToTime(this.state.seconds);
+        // this.setState({ time: timeLeftVar }, () => this.startTimer());
     }
 
     componentWillUnmount() {
-        clearInterval(this.timer)
+        // clearInterval(this.timer)
     }
 
-    startTimer() {
-        if (this.timer === 0 && this.state.seconds > 0) {
-            this.timer = setInterval(this.countDown, 1000);
-        }
-    }
+    // startTimer() {
+    //     if (this.timer === 0 && this.state.seconds > 0) {
+    //         this.timer = setInterval(this.countDown, 1000);
+    //     }
+    // }
 
-    countDown() {
-        let seconds = this.state.seconds - 1;
-        this.setState({
-            time: this.secondsToTime(seconds),
-            seconds: seconds,
-        });
-        if (seconds === 0) {
-            clearInterval(this.timer);
-        }
-    }
+    // countDown() {
+    //     let seconds = this.state.seconds - 1;
+    //     this.setState({
+    //         time: this.secondsToTime(seconds),
+    //         seconds: seconds,
+    //     });
+    //     if (seconds === 0) {
+    //         clearInterval(this.timer);
+    //     }
+    // }
 
     render() {
-        const { main: {eishPrice, premium, eish}} = this.props;
+        const { main: {eishPrice, premium, eish, user}} = this.props;
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
@@ -89,7 +89,7 @@ class Eish extends Component {
                                 <h4>ЭЕШ БАГЦ</h4>
                             </div>
                         </Container>
-                        <div className="dataa" style={{bottom: -96}}>
+                        {/* <div className="dataa" style={{bottom: -96}}>
                             <div className="datte">
                                 <h5>Дуусах хугацаа</h5>
                                 <div className="clock">
@@ -129,7 +129,7 @@ class Eish extends Component {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                     <div>
                         <div className="main-prem">
@@ -141,12 +141,12 @@ class Eish extends Component {
                                             <p className="price"><span>149.000₮</span> {config.formatMoney(eishPrice)}₮</p>
                                         </Col>
                                     </Row>
-                                    <button onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'eish'}) : config.get('emitter').emit('openLogin', {type: 'eish'})}>
+                                    <button onClick={() => premium ? console.log('gz') : eish ? console.log('hello') : user ? config.get('emitter').emit('paymentModal', {type: 'eish'}) : config.get('emitter').emit('openLogin', {type: 'eish'})}>
                                         {
                                             premium ?
                                                 'Premium хэрэглэгч'
                                                 : eish ?
-                                                'ЭЕШ хэрэглэгч'
+                                                'Та ЭЕШ багцыг идэвхжүүлсэн байна'
                                                 :   'ЭЕШ багц авах'
                                         }
                                         <ion-icon name="arrow-redo-circle"/>

@@ -8,7 +8,7 @@ import {
 } from "react-device-detect";
 import { Container, Button, Form, Row, Col, Table, Spinner } from 'react-bootstrap';
 import * as actions from '../../actions/payment_actions';
-import { validatePromoCode, clearPromoCode } from "../../actions/promo_actions";
+import { validatePromoCode, clearPromoCode, buyEishFree } from "../../actions/promo_actions";
 import {Link} from "react-router-dom";
 import { validate } from "../../../../odosury_api/models/Teacher";
 const reducer = ({ main, payment, requests }) => ({ main, payment, requests });
@@ -113,6 +113,10 @@ class Payment extends Component {
         }
         this.props.dispatch(validatePromoCode(data))
     }
+    buyEishFree() {
+        const { main: { user }} = this.props;
+        this.props.dispatch(buyEishFree())
+    }
 
     setPaymentOld(trans, data) {
         const {dispatch} = this.props;
@@ -149,7 +153,7 @@ class Payment extends Component {
     }
 
     render() {
-        const {main: {premiumPrice, eishPrice}, payment: {visible, type, lesson = {}, step, method, paymentLaoding, transaction}, requests: { promoIsValid, promocode, validatingPromoCode, appliedCode, appliedDiscount }} = this.props;
+        const {main: {premiumPrice, eishPrice}, payment: {visible, type, lesson = {}, step, method, paymentLaoding, transaction}, requests: { promoIsValid, promocode, validatingPromoCode, appliedCode, appliedDiscount, buyingEishFree, buyEishFreeSuccess }} = this.props;
         const colorPicker = (color1, color2, stepsNum) => {
             const helperFunc = (c1, c2, stepLen) => {
                 let c = c1 + stepLen * (c2 - c1);
@@ -265,15 +269,22 @@ class Payment extends Component {
                                     </p>
                                 </div>
                                 <div className="h4Container">
-                                    <div className="step-indicator">
-                                        <div className="leStep" style={{backgroundColor: `rgba(${colors[0]})`}}></div>
-                                        <div className="leDot"></div>
-                                        <div className={step === 1 ? "leStepCurrent leStep" : step > 1 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[1]})`}}></div>
-                                        <div className="leDot"></div>
-                                        <div className={step === 2 ? "leStepCurrent leStep" : step > 2 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[2]})`}}></div>
-                                        <div className="leDot"></div>
-                                        <div className={step === 3 ? "leStepCurrent leStep" : step > 3 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[3]})`}}></div>
-                                    </div>
+                                    {
+                                        type !== 'eish'
+                                        ?
+                                        (
+                                            <div className="step-indicator">
+                                                <div className="leStep" style={{backgroundColor: `rgba(${colors[0]})`}}></div>
+                                                <div className="leDot"></div>
+                                                <div className={step === 1 ? "leStepCurrent leStep" : step > 1 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[1]})`}}></div>
+                                                <div className="leDot"></div>
+                                                <div className={step === 2 ? "leStepCurrent leStep" : step > 2 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[2]})`}}></div>
+                                                <div className="leDot"></div>
+                                                <div className={step === 3 ? "leStepCurrent leStep" : step > 3 ? "leStep" : "leStepGray"} style={{backgroundColor: `rgba(${colors[3]})`}}></div>
+                                            </div>
+                                        )
+                                        : null
+                                    }
                                     {
                                         step === 1 ? (
                                             <h4>Бүтээгдэхүүний тухай</h4>
@@ -450,7 +461,7 @@ class Payment extends Component {
                     </div>
                     <div className="footer-payment">
                         {
-                            step === 1 ? (
+                            (step === 1 && type !== 'eish') ? (
                                 <div className="promo-container">
                                     <div>
                                         {promoIsValid ? <div className="coupon-valid">Промо Код <b>{appliedCode}</b> амжилттай идэвxжлээ</div> : <p>Та Промо Код оруулж хөнгөлөлт эдлэх боломжтой</p>}
@@ -484,6 +495,26 @@ class Payment extends Component {
                             ) : null
                         }
                         {
+                            type === 'eish' && !buyEishFreeSuccess
+                            ?
+                            <Button className="payment-button" onClick={() => this.buyEishFree()}>
+                                {buyingEishFree ? <Spinner animation="grow" role="status" size="xs" className="promo-submit-spinner" ></Spinner> : "Үнэгүй авах"}
+                            </Button>
+                            :
+                            buyEishFreeSuccess
+                            ? 
+                            <div className="teacher-request-checkmark">
+                                <div class="success-checkmark">
+                                    <div class="check-icon">
+                                        <span class="icon-line line-tip"></span>
+                                        <span class="icon-line line-long"></span>
+                                        <div class="icon-circle"></div>
+                                        <div class="icon-fix"></div>
+                                    </div>
+                                </div>
+                                <div className="teacher-request-text"><p>ЭЕШ багц амжилттай идэвжлээ</p></div>
+                            </div>
+                            :
                             step === 1 ? (
                                 <Button className="payment-button" onClick={() => this.setStep(2)}>Худалдан авах</Button>
                             ) : (
