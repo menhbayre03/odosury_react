@@ -68,7 +68,7 @@ class Eish extends Component {
     // }
 
     render() {
-        const { main: {eishPrice, premium, eish, user}} = this.props;
+        const { main: {eishPrice, premium, eish, user}, payment: {buyEishFreeSuccess}} = this.props;
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
@@ -145,11 +145,12 @@ class Eish extends Component {
                                         {
                                             premium ?
                                                 'Premium хэрэглэгч'
-                                                : eish ?
+                                                : eish || buyEishFreeSuccess ?
                                                 'Та ЭЕШ багцыг идэвхжүүлсэн байна'
                                                 :   'ЭЕШ багц авах'
                                         }
-                                        <ion-icon name="arrow-redo-circle"/>
+                                        {premium || eish || buyEishFreeSuccess ? null : <ion-icon name="arrow-redo-circle"/>}
+                                        
                                     </button>
                                 </div>
                             </Container>

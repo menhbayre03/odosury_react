@@ -156,7 +156,7 @@ export default(state = initialState, action) => {
                     ...state,
                     buyEishFreeSuccess: true,
                     buyingEishFree: false,
-                    visible: false
+                    // visible: false
                 }
             } else {
                 return {
