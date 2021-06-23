@@ -143,6 +143,9 @@ class Payment extends Component {
         window.scrollTo(0, parseInt(scrollY || '0') * -1);
         dispatch(actions.closePayment())
         dispatch(clearPromoCode())
+        this.setState({
+            code: ''
+        })
     }
 
     render() {
