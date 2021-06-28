@@ -118,6 +118,7 @@ class Home extends Component {
         }
     }
     async responseFacebook(data) {
+        const {dispatch} = this.props;
         this.setState({fbLoading: true});
         // const res = await config.get('fbApi').login();
         // if(res && res.status === "connected" && (res.authResponse || {}).accessToken) {
@@ -503,7 +504,7 @@ class Home extends Component {
                                                 <div className="login-bottom-button">
                                                     <div className="facebook-login">
                                                         <FacebookLogin
-                                                            appId="1025498560826970"
+                                                            appId="355927522529735"
                                                             autoLoad={false}
                                                             isMobile={false}
                                                             callback={(response)=>this.responseFacebook(response)}
@@ -606,7 +607,7 @@ class Home extends Component {
                                                         <div className="login-bottom-button">
                                                             <div className="facebook-login">
                                                                 <FacebookLogin
-                                                                    appId="1025498560826970"
+                                                                    appId="355927522529735"
                                                                     autoLoad={false}
                                                                     isMobile={false}
                                                                     callback={(response)=>this.responseFacebook(response)}
@@ -661,7 +662,7 @@ class Home extends Component {
                                                         <div className="login-bottom-button">
                                                             <div className="facebook-login">
                                                                 <FacebookLogin
-                                                                    appId="1025498560826970"
+                                                                    appId="355927522529735"
                                                                     autoLoad={false}
                                                                     isMobile={false}
                                                                     callback={(response)=>this.responseFacebook(response)}
@@ -737,7 +738,7 @@ class Home extends Component {
                                                     <div className="login-bottom-button">
                                                         <div className="facebook-login">
                                                             <FacebookLogin
-                                                                appId="1025498560826970"
+                                                                appId="355927522529735"
                                                                 autoLoad={false}
                                                                 isMobile={false}
                                                                 callback={(response)=>this.responseFacebook(response)}

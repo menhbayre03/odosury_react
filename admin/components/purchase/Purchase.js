@@ -240,11 +240,26 @@ class Purchase extends React.Component {
                     columns={columns}
                     pagination={pagination}
                     expandable={{
-                        rowExpandable: record => !!record.lesson,
+                        rowExpandable: record => !!record.lesson || record.custom,
                         expandedRowRender: record =>
                             <Row gutter={[8, 8]}>
                                 {
-                                    record.lesson ?
+                                    record.custom ?
+                                        <Col span={24}>
+                                            <Card
+                                                title={'Тайлбар: '}
+                                                size={'small'}
+                                            >
+                                                <List.Item>
+                                                    <Text
+                                                        ellipsis
+                                                    >
+                                                        {record.description}
+                                                    </Text>
+                                                </List.Item>
+                                            </Card>
+                                        </Col>
+                                    : record.lesson ?
                                         <Col span={24}>
                                             <Card
                                                 title={'Хичээл: '}
