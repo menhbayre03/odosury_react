@@ -261,7 +261,7 @@ class Payment extends Component {
                                         <span className="rigthT">Хугацаа: </span>
                                         <span className="leftT">
                                             {
-                                                type === 'premium' ? ('Анхдагч 1000 хэргэлэгч ХУГАЦААГҮЙ') : (
+                                                type === 'premium' ? ('1 жил') : (
                                                     type === 'eish' ? ('1 сар') : '1 жил'
                                                 )
                                             }

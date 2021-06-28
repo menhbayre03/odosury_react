@@ -117,7 +117,7 @@ class Home extends Component {
                                 <Container>
                                     <div className="mainSlider-cont">
                                         <h5>АНХДАГЧ 1000 <span style={{color: 'gold'}}>PREMIUM</span> ХЭРЭГЛЭГЧ</h5>
-                                        <p>99'000₮ төлөөд насан туршдаа сурч хөгжих боломжийг тултал ашигла та бусдаас түрүүлж алх хэзээ ч юунаас ч хоцрохгүй тогтвортой хөгжиж мэдлэгээ хязгааргүй тэл.</p>
+                                        <p>99'000₮ төлөөд сурч хөгжих боломжийг тултал ашигла та бусдаас түрүүлж алх хэзээ ч юунаас ч хоцрохгүй тогтвортой хөгжиж мэдлэгээ хязгааргүй тэл.</p>
                                         <Link to="/premium" style={{textDecoration: 'none'}}>
                                             <Button className="banner-button">
                                                 Premium эрх
