@@ -118,41 +118,74 @@ class Premium extends Component {
                     <div>
                         <div className="main-prem">
                             <Container>
-                                <div className="lifetime">
-                                    <Row>
-                                        <Col md={6} className="sec-1">
-                                            <p className="desc">ОНЦГОЙ ХЯМДРАЛ</p>
-                                            <p className="price"><span>365.000₮</span> {config.formatMoney(premiumPrice)}₮</p>
-                                            {/*<ion-icon name="add"/>*/}
-                                            {/*<p>Нэг жилийн эрхийн үнээр</p>*/}
-                                            <p>Зөвхөн эхний <span className="yel">1000</span> хэрэглэгчдэд</p>
-                                            {/*<h4 className='neon1'>*/}
-                                            {/*    LIFETIME*/}
-                                            {/*</h4>*/}
-                                            {/*<p className="life">Насан туршын эрх</p>*/}
+                                <div className="lapremium">
+                                    <div className="optionContainer">
+                                        <div className="optionCard">1</div>
+                                        <div className="optionCard">2</div>
+                                        <div className="optionCard">3</div>
+                                    </div>
+                                    <div className="benefits"></div>
+                                    {/* <Row>
+                                        <Col>
+                                            <div className="dar">
+                                                <p>PREMIUM эрх авснаар танд:</p>
+                                                <ul>
+                                                    <li>ODOSURY дээрх бүх хичээлүүд</li>
+                                                    <li>ODOSURY дээрх бүх аудио номууд</li>
+                                                    <li>Үүгээр зогсохгүй ирээдүйд тасралтгүй нэмэгдэх хичээлүүд болон номнууд бүгд Premium хэрэглэгч танд</li>
+                                                </ul>
+                                            </div>
                                         </Col>
-                                        <Col md={6} className="sec-2">
+                                        <Col md={6}>
                                             <div className="dar">
                                                 <ul>
-                                                    <li>Өдөр болгон тархиа цэнэглэж мэдлэгээ тэлэх</li>
-                                                    <li>Тогтвортой өсөлт хөгжил</li>
-                                                    <li>Хөрвөн ажиллах чадвар</li>
-                                                    <li>Мэргэжлээ дээшлүүлэх</li>
-                                                    <li>Ур чадвараа хөгжүүлэх</li>
+                                                    <li>Бүх насныханд зориулагдсан</li>
+                                                    <li>Мэргэжлийн чадварлаг багш нарын контентууд</li>
+                                                    <li>Хүссэн хичээлээ санал болгох</li>
                                                     <li>Олон талын мэдлэгтэй болох</li>
-                                                    <li>Цаг болон мөнгөө хэмнэх</li>
+                                                    <li>24/7 онлайн үйлчилгээ</li>
                                                 </ul>
                                             </div>
                                         </Col>
                                     </Row>
-                                    <button onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium'}) : config.get('emitter').emit('openLogin', {type: 'premium'})}>
-                                        {
-                                            premium ?
-                                                'Premium хэрэглэгч'
-                                                :   'Premium эрх авах'
-                                        }
-                                        <ion-icon name="arrow-redo-circle"/>
-                                    </button>
+                                    <Row>
+                                        <Col md={4} className="sec-1">
+                                            <p className="desc">NOW</p>
+                                            <p className="price">3 САР</p>
+                                            <button onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium', duration: 3}) : config.get('emitter').emit('openLogin', {type: 'premium', duration: 3})}>
+                                                {
+                                                    premium ?
+                                                        'Premium хэрэглэгч'
+                                                        :   `${config.formatMoney(premiumPrice[3])}₮`
+                                                }
+                                                <ion-icon name="arrow-redo-circle"/>
+                                            </button>
+                                        </Col>
+                                        <Col md={4} className="sec-2">
+                                            <p className="desc">BREAKPOINT</p>
+                                            <p className="price">6 САР</p>
+                                            <button onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium', duration: 6}) : config.get('emitter').emit('openLogin', {type: 'premium'})}>
+                                                {
+                                                    premium ?
+                                                        'Premium хэрэглэгч'
+                                                        :   `${config.formatMoney(premiumPrice[6])}₮`
+                                                }
+                                                <ion-icon name="arrow-redo-circle"/>
+                                            </button>
+                                        </Col>
+                                        <Col md={4} className="sec-2">
+                                            <p className="desc">NON-STOP</p>
+                                            <p className="price">12 САР</p>
+                                            <button onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium', duration: 12}) : config.get('emitter').emit('openLogin', {type: 'premium'})}>
+                                                {
+                                                    premium ?
+                                                        'Premium хэрэглэгч'
+                                                        :   `${config.formatMoney(premiumPrice[12])}₮`
+                                                }
+                                                <ion-icon name="arrow-redo-circle"/>
+                                            </button>
+                                        </Col>
+                                    </Row> */}
                                 </div>
                             </Container>
                         </div>
@@ -164,7 +197,8 @@ class Premium extends Component {
                                         <Col md={4}>
                                             <img src="/images/mortarboard.png" alt=""/>
                                             <p>
-                                                ODOSURY платформд байршсан 10 чиглэлийн  мэргэжлийн, ур чадварын бүхий л хичээлийн контентууд болон сонсдог ном, ЭЕШ хичээлүүдийг 1 төлөлтөөр 1 жилийн турш интернеттэй орчноос гар утас болон компьютер болон бусад төхөөрөмжөөс хязгааргүй үзэх боломжтой.
+                                                ODOSURY платформд байршсан 10 чиглэлийн  мэргэжлийн, ур чадварын бүхий л хичээлийн контентууд болон сонсдог ном, ЭЕШ хичээлүүдийг 1 төлөлтөөр интернеттэй орчноос гар утас болон компьютер болон бусад төхөөрөмжөөс хязгааргүй үзэх боломжтой.
+                                                {/* ODOSURY платформд байршсан 10 чиглэлийн  мэргэжлийн, ур чадварын бүхий л хичээлийн контентууд болон сонсдог ном, ЭЕШ хичээлүүдийг 1 төлөлтөөр 1 жилийн турш интернеттэй орчноос гар утас болон компьютер болон бусад төхөөрөмжөөс хязгааргүй үзэх боломжтой. */}
                                             </p>
                                         </Col>
                                         <Col md={4}>
@@ -188,7 +222,8 @@ class Premium extends Component {
                                 <div className="bolomjq">
                                     <h4>ODOSURY – ийн PREMIUM хэрэглэгчид дараах боломжууд нээлттэй</h4>
                                     <ul>
-                                        <li><span className="fir">1</span><span>1 жилийн хязгааргүй хэрэглээ</span></li>
+                                        <li><span className="fir">1</span><span>Хязгааргүй хэрэглээ</span></li>
+                                        {/* <li><span className="fir">1</span><span>1 жилийн хязгааргүй хэрэглээ</span></li> */}
                                         <li><span className="fir">2</span><span>Олон төрлийн мэргэжлийн болоод ур чадварын хэрэгцээтэй сургалтуудыг нэг дор авах</span></li>
                                         <li><span className="fir">3</span><span>Платформ дээр байрлах бүх багцыг үнэгүй үзэх</span></li>
                                         <li><span className="fir">4</span><span>Зөвхөн 1 сургалтанд 1 удаа сурах төлбөрөөр бүх төрлийн хичээлийг үзэх эрх</span></li>

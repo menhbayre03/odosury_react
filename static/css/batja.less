@@ -826,7 +826,7 @@ div.abouttext2 > h3 {
 // }
 .view-area .sidebar .timeline-cont .accordion .card .card-body {
 	.program.passed p {
-		overflow: hidden; 
+		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		// display: -webkit-box;
@@ -844,7 +844,7 @@ div.abouttext2 > h3 {
 			color: #171717;
 			width: calc(100% - 90px);
 			margin-bottom: 0;
-			overflow: visible; 
+			overflow: visible;
 			white-space: normal;
 			span {
 				display: block;
@@ -855,7 +855,6 @@ div.abouttext2 > h3 {
 				font-size: 12px;
 			}
 		}
-		
 	}
 }
 // ADMIN END
@@ -987,3 +986,86 @@ div.abouttext2 > h3 {
 .paymentModal .payment-body .paymentMethod .method.qpay {
 	box-shadow: -1px 1px 3px #595959;
 }
+// PAYMENT MODAL END
+// -*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*-
+// PREMIUM START
+.dar ul {
+	text-align: left;
+	li {
+		color: #4e4e4e;
+		font-size: 14px;
+		padding: 5px 0;
+		font-weight: 600;
+	}
+	li:before {
+		content: " ";
+		height: 4px;
+		width: 15px;
+		background: #790038;
+		display: inline-block;
+		position: relative;
+		top: -2px;
+		left: -10px;
+		border-radius: 3px;
+	}
+}
+.lapremium {
+	display: flex;
+	width: 100%;
+	border-radius: 3px solid green;
+	background-color: pink;
+}
+.optionContainer {
+	display: flex;
+	flex-direction: row-reverse;
+	border: 1px solid red;
+	width: 70%;
+	flex-wrap: wrap;
+	position: relative;
+}
+.optionCard {
+	background-color: teal;
+	border-radius: 10px;
+	border: 1px solid black;
+	text-align: center;
+	font-size: 2em;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+}
+.optionCard:nth-of-type(1) {
+	inset: 0 0 50% 60%;
+}
+.optionCard:nth-of-type(1):active {
+	inset: 0 0 0 40%;
+}
+.optionCard:nth-of-type(1):active + .optionCard:nth-of-type(2) {
+	inset: 0 60% 50% 0
+}
+.optionCard:nth-of-type(1):active + .optionCard:nth-of-type(2) + .optionCard:nth-of-type(3) {
+	inset: 50% 60% 0 0
+}
+.optionCard:nth-of-type(2) {
+	inset: 0% 40% 0% 0%;
+}
+.optionCard:nth-of-type(3) {
+	inset: 50% 0 0 60%;
+}
+.optionCard:nth-of-type(3):active {
+	inset: 0 0 0 40%;
+}
+.optionCard:nth-of-type(3):active + .optionCard:nth-of-type(4) {
+	display: flex;
+	inset: 50% 60% 0 0;
+}
+.optionCard:nth-of-type(3):active + .optionCard:nth-of-type(4) + .optionCard:nth-of-type(5) {
+	display: flex;
+	inset: 0 60% 50% 0;
+}
+.benefits {
+	height: 500px;
+	width: 300px;
+	border: 3px solid blue;
+}
+

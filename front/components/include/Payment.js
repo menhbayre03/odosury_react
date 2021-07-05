@@ -72,7 +72,7 @@ class Payment extends Component {
         document.getElementsByClassName("main-main")[0].style.paddingRight = `8px`;
         document.getElementsByClassName("main-main")[0].style.position = 'fixed';
         document.getElementsByClassName("main-main")[0].style.width = '100%';
-        dispatch(actions.openPayment({type: data.type, lesson: data.lesson || {}}))
+        dispatch(actions.openPayment({type: data.type, lesson: data.lesson || {}, duration: data.duration}));
     }
 
     setStep(step) {
@@ -94,11 +94,12 @@ class Payment extends Component {
     }
 
     setPayment() {
-        const {dispatch, payment: {type, lesson = {}, method}, requests: {promocode}} = this.props;
+        const {dispatch, payment: {type, lesson = {}, method, duration}, requests: {promocode}} = this.props;
         if(method === 'qpay' || method === 'bank') {
             dispatch(actions.setPayment({
                 type: type,
                 method: method,
+                duration: duration,
                 lesson_id: lesson._id,
                 promo_id: (promocode ? promocode._id : null)
             }))
@@ -153,7 +154,9 @@ class Payment extends Component {
     }
 
     render() {
-        const {main: {premiumPrice, eishPrice}, payment: {visible, type, lesson = {}, step, method, paymentLaoding, transaction, buyingEishFree, buyEishFreeSuccess }, requests: { promoIsValid, promocode, validatingPromoCode, appliedCode, appliedDiscount }} = this.props;
+        const {main: {eishPrice}, payment: {visible, type, lesson = {}, duration, step, method, paymentLaoding, transaction, buyingEishFree, buyEishFreeSuccess }, requests: { promoIsValid, promocode, validatingPromoCode, appliedCode, appliedDiscount }} = this.props;
+        let {main: {premiumPrice}} = this.props;
+        premiumPrice = duration ? premiumPrice[duration] : premiumPrice
         const colorPicker = (color1, color2, stepsNum) => {
             const helperFunc = (c1, c2, stepLen) => {
                 let c = c1 + stepLen * (c2 - c1);
@@ -202,34 +205,16 @@ class Payment extends Component {
                                         </span>
                                     </p>
                                     {
-                                        appliedDiscount > 0
-                                        ?
-                                            (
-                                                <p>
+                                        (appliedDiscount || (type === "lesson" && lesson.sale > 0)) ? (
+                                            <p>
                                                     <span className="rigthT">Үнэ: </span>
                                                     <span className="leftT trough">
                                                     {
-                                                        type === 'premium' ? `365'000₮` : (
-                                                            type === 'eish' ? `149'000₮` : `${config.formatMoney(lesson.price)}₮`
-                                                        )
+                                                        type === "premium" ? `${config.formatMoney(premiumPrice)}₮` : type === 'eish' ? `149'000₮` : `${config.formatMoney(lesson.price)}₮`
                                                     }
                                                     </span>
                                                 </p>
-                                            )
-                                        :
-                                        (type === 'lesson' && !(lesson.sale > 0)) ? null 
-                                        : (
-                                            <p>
-                                                <span className="rigthT">Үнэ: </span>
-                                                <span className="leftT trough">
-                                                {
-                                                    type === 'premium' ? `365'000₮` : (
-                                                        type === 'eish' ? `149'000₮` : `${config.formatMoney(lesson.price)}₮`
-                                                    )
-                                                }
-                                                </span>
-                                            </p>
-                                        )
+                                        ) : null
                                     }
                                     {
                                         appliedDiscount > 0
@@ -243,7 +228,7 @@ class Payment extends Component {
                                         )
                                     }
                                     <p>
-                                        <span className="rigthT">{(appliedDiscount > 0) ? 'Хямдарсан үнэ: ' : (type === 'lesson' && !(lesson.sale > 0)) ? 'Үнэ: ' : 'Хямдарсан үнэ: '}</span>
+                                        <span className="rigthT">{(appliedDiscount || (type === "lesson" & lesson.sale > 0)) ? 'Хямдарсан үнэ: ' : 'Үнэ: '}</span>
                                         <span className="leftT">
                                             {
                                                 appliedDiscount > 0 ?
@@ -261,7 +246,7 @@ class Payment extends Component {
                                         <span className="rigthT">Хугацаа: </span>
                                         <span className="leftT">
                                             {
-                                                type === 'premium' ? ('1 жил') : (
+                                                type === 'premium' ? (duration ? `${duration} сар` : '1 жил') : (
                                                     type === 'eish' ? ('1 сар') : '1 жил'
                                                 )
                                             }
@@ -320,7 +305,7 @@ class Payment extends Component {
                                                         <span>Эх хэл дээрх тусламж</span></p>
                                                     <p>
                                                         <ion-icon name="heart"/>
-                                                        <span>Супер хямд <span className="sl"><span className="sale">365k</span> - {config.formatMoney(premiumPrice)}₮</span></span>
+                                                        <span>Супер хямд <span className="sl">{config.formatMoney(premiumPrice)}₮</span></span>
                                                     </p>
                                                 </div>
                                             </div>
