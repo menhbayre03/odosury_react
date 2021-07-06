@@ -120,11 +120,54 @@ class Premium extends Component {
                             <Container>
                                 <div className="lapremium">
                                     <div className="optionContainer">
-                                        <div className="optionCard">1</div>
-                                        <div className="optionCard">2</div>
-                                        <div className="optionCard">3</div>
+                                        <div className="optionCard specialCard">
+                                            <p className="desc">BREAKPOINT</p>
+                                            <p className="price">6 САР</p>
+                                            <button onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium', duration: 6}) : config.get('emitter').emit('openLogin', {type: 'premium'})}>
+                                                {
+                                                    premium ?
+                                                        'Premium хэрэглэгч'
+                                                        :   `${config.formatMoney(premiumPrice[6])}₮`
+                                                }
+                                                <ion-icon name="arrow-redo-circle"/>
+                                            </button>
+                                        </div>
+                                        <div className="optionCard">
+                                            <div className="specialcard" style={{display: "none"}}></div>
+                                            <p className="desc">NON-STOP</p>
+                                            <p className="price">12 САР</p>
+                                            <button onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium', duration: 12}) : config.get('emitter').emit('openLogin', {type: 'premium'})}>
+                                                {
+                                                    premium ?
+                                                        'Premium хэрэглэгч'
+                                                        :   `${config.formatMoney(premiumPrice[12])}₮`
+                                                }
+                                                <ion-icon name="arrow-redo-circle"/>
+                                            </button>
+                                        </div>
+                                        <div className="optionCard">
+                                            <p className="desc">NOW</p>
+                                            <p className="price">3 САР</p>
+                                            <button onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium', duration: 3}) : config.get('emitter').emit('openLogin', {type: 'premium', duration: 3})}>
+                                                {
+                                                    premium ?
+                                                        'Premium хэрэглэгч'
+                                                        :   `${config.formatMoney(premiumPrice[3])}₮`
+                                                }
+                                                <ion-icon name="arrow-redo-circle"/>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div className="benefits"></div>
+                                    <div className="benefits">
+                                        <div className="dar">
+                                            <p>PREMIUM эрх авснаар танд:</p>
+                                            <ul>
+                                                <li>ODOSURY дээрх бүх хичээлүүд</li>
+                                                <li>ODOSURY дээрх бүх аудио номууд</li>
+                                                <li>Үүгээр зогсохгүй ирээдүйд тасралтгүй нэмэгдэх хичээлүүд болон номнууд бүгд Premium хэрэглэгч танд</li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                     {/* <Row>
                                         <Col>
                                             <div className="dar">
