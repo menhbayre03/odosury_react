@@ -458,6 +458,7 @@ class Payment extends Component {
                                         <Row>
                                             <Col>
                                                 <Form.Control
+                                                    size="sm"
                                                     type="text"
                                                     placeholder="Таны хөнгөлөлт энд"
                                                     onChange={(e) =>
@@ -469,7 +470,7 @@ class Payment extends Component {
                                                 />
                                             </Col>
                                             <Col>
-                                                <Button type="submit" className="promo-submit-button">
+                                                <Button size="sm" type="submit" className="promo-submit-button">
                                                     <span>Промо Код ашиглах</span>
                                                     {validatingPromoCode ? <Spinner animation="grow" role="status" size="xs" className="promo-submit-spinner" ></Spinner> : null}
                                                 </Button>

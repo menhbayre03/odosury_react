@@ -120,10 +120,10 @@ class Premium extends Component {
                             <Container>
                                 <div className="lapremium">
                                     <div className="optionContainer">
-                                        <div className="optionCard">
+                                        <div className="optionCard" onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium', duration: 6}) : config.get('emitter').emit('openLogin', {type: 'premium'})}>
                                             <p className="desc">BREAKPOINT</p>
-                                            <p className="price">6 САР - {config.formatMoney(premiumPrice[6])}</p>
-                                            <button onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium', duration: 6}) : config.get('emitter').emit('openLogin', {type: 'premium'})}>
+                                            <p className="price">6 САР</p>
+                                            <button>
                                                 {
                                                     premium ?
                                                         'Premium хэрэглэгч'
@@ -132,10 +132,10 @@ class Premium extends Component {
                                                 {/* <ion-icon name="arrow-redo-circle"/> */}
                                             </button>
                                         </div>
-                                        <div className="optionCard">
+                                        <div className="optionCard" onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium', duration: 12}) : config.get('emitter').emit('openLogin', {type: 'premium'})}>
                                             <p className="desc">NON-STOP</p>
                                             <p className="price">12 САР</p>
-                                            <button onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium', duration: 12}) : config.get('emitter').emit('openLogin', {type: 'premium'})}>
+                                            <button>
                                                 {
                                                     premium ?
                                                         'Premium хэрэглэгч'
@@ -144,10 +144,10 @@ class Premium extends Component {
                                                 {/* <ion-icon name="arrow-redo-circle"/> */}
                                             </button>
                                         </div>
-                                        <div className="optionCard">
+                                        <div className="optionCard" onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium', duration: 3}) : config.get('emitter').emit('openLogin', {type: 'premium', duration: 3})}>
                                             <p className="desc">NOW</p>
                                             <p className="price">3 САР</p>
-                                            <button onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium', duration: 3}) : config.get('emitter').emit('openLogin', {type: 'premium', duration: 3})}>
+                                            <button>
                                                 {
                                                     premium ?
                                                         'Premium хэрэглэгч'
@@ -158,15 +158,16 @@ class Premium extends Component {
                                         </div>
                                     </div>
                                     <div className="benefits">
-                                        <div className="dar">
-                                            <p>PREMIUM эрх авснаар танд:</p>
+                                        <p>PREMIUM эрх авснаар танд:</p>
+                                        <div className="benefit">
                                             <ul>
                                                 <li>ODOSURY дээрх бүх хичээлүүд</li>
                                                 <li>ODOSURY дээрх бүх аудио номууд</li>
-                                                <li>Үүгээр зогсохгүй ирээдүйд тасралтгүй нэмэгдэх хичээлүүд болон номнууд бүгд Premium хэрэглэгч танд</li>
+                                                <li>Ирээдүйд тасралтгүй нэмэгдэх хичээлүүд болон номнууд</li>
                                             </ul>
                                         </div>
-                                        <div className="dar">
+                                        <p>Давуу талууд:</p>
+                                        <div className="benefit">
                                             <ul>
                                                 <li>Бүх насныханд зориулагдсан</li>
                                                 <li>Мэргэжлийн чадварлаг багш нарын контентууд</li>
@@ -261,7 +262,7 @@ class Premium extends Component {
                                         <Col md={4}>
                                             <img src="/images/online-learnin.png" alt=""/>
                                             <p>
-                                                Харилцагчтайгаа банйга эргэх холбоотой байдаг учраас та цаашид ямар төрлийн сургалт авах сонирхолтой байгаагаа илэрхийлэхэд бид таны хүсэлтийг хүлээн авч тухайг чиглэлийн хичээлийг оруулдгаараа онцлогтой.
+                                                Харилцагчтайгаа байнга эргэх холбоотой байдаг учраас та цаашид ямар төрлийн сургалт авах сонирхолтой байгаагаа илэрхийлэхэд бид таны хүсэлтийг хүлээн авч тухайг чиглэлийн хичээлийг оруулдгаараа онцлогтой.
                                             </p>
                                         </Col>
                                     </Row>
