@@ -120,20 +120,19 @@ class Premium extends Component {
                             <Container>
                                 <div className="lapremium">
                                     <div className="optionContainer">
-                                        <div className="optionCard specialCard">
+                                        <div className="optionCard">
                                             <p className="desc">BREAKPOINT</p>
-                                            <p className="price">6 САР</p>
+                                            <p className="price">6 САР - {config.formatMoney(premiumPrice[6])}</p>
                                             <button onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium', duration: 6}) : config.get('emitter').emit('openLogin', {type: 'premium'})}>
                                                 {
                                                     premium ?
                                                         'Premium хэрэглэгч'
                                                         :   `${config.formatMoney(premiumPrice[6])}₮`
                                                 }
-                                                <ion-icon name="arrow-redo-circle"/>
+                                                {/* <ion-icon name="arrow-redo-circle"/> */}
                                             </button>
                                         </div>
                                         <div className="optionCard">
-                                            <div className="specialcard" style={{display: "none"}}></div>
                                             <p className="desc">NON-STOP</p>
                                             <p className="price">12 САР</p>
                                             <button onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium', duration: 12}) : config.get('emitter').emit('openLogin', {type: 'premium'})}>
@@ -142,7 +141,7 @@ class Premium extends Component {
                                                         'Premium хэрэглэгч'
                                                         :   `${config.formatMoney(premiumPrice[12])}₮`
                                                 }
-                                                <ion-icon name="arrow-redo-circle"/>
+                                                {/* <ion-icon name="arrow-redo-circle"/> */}
                                             </button>
                                         </div>
                                         <div className="optionCard">
@@ -154,7 +153,7 @@ class Premium extends Component {
                                                         'Premium хэрэглэгч'
                                                         :   `${config.formatMoney(premiumPrice[3])}₮`
                                                 }
-                                                <ion-icon name="arrow-redo-circle"/>
+                                                {/* <ion-icon name="arrow-redo-circle"/> */}
                                             </button>
                                         </div>
                                     </div>
@@ -165,6 +164,15 @@ class Premium extends Component {
                                                 <li>ODOSURY дээрх бүх хичээлүүд</li>
                                                 <li>ODOSURY дээрх бүх аудио номууд</li>
                                                 <li>Үүгээр зогсохгүй ирээдүйд тасралтгүй нэмэгдэх хичээлүүд болон номнууд бүгд Premium хэрэглэгч танд</li>
+                                            </ul>
+                                        </div>
+                                        <div className="dar">
+                                            <ul>
+                                                <li>Бүх насныханд зориулагдсан</li>
+                                                <li>Мэргэжлийн чадварлаг багш нарын контентууд</li>
+                                                <li>Хүссэн хичээлээ санал болгох</li>
+                                                <li>Олон талын мэдлэгтэй болох</li>
+                                                <li>24/7 онлайн үйлчилгээ</li>
                                             </ul>
                                         </div>
                                     </div>
