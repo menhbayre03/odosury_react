@@ -126,7 +126,7 @@ class Premium extends Component {
                                             <button>
                                                 {
                                                     premium ?
-                                                        'Premium хэрэглэгч'
+                                                        'Premium'
                                                         :   `${config.formatMoney(premiumPrice[6])}₮`
                                                 }
                                                 {/* <ion-icon name="arrow-redo-circle"/> */}
@@ -138,7 +138,7 @@ class Premium extends Component {
                                             <button>
                                                 {
                                                     premium ?
-                                                        'Premium хэрэглэгч'
+                                                        'Premium'
                                                         :   `${config.formatMoney(premiumPrice[12])}₮`
                                                 }
                                                 {/* <ion-icon name="arrow-redo-circle"/> */}
@@ -150,7 +150,7 @@ class Premium extends Component {
                                             <button>
                                                 {
                                                     premium ?
-                                                        'Premium хэрэглэгч'
+                                                        'Premium'
                                                         :   `${config.formatMoney(premiumPrice[3])}₮`
                                                 }
                                                 {/* <ion-icon name="arrow-redo-circle"/> */}
@@ -158,16 +158,16 @@ class Premium extends Component {
                                         </div>
                                     </div>
                                     <div className="benefits">
-                                        <p>PREMIUM эрх авснаар танд:</p>
                                         <div className="benefit">
+                                        <p>PREMIUM эрх авснаар танд:</p>
                                             <ul>
                                                 <li>ODOSURY дээрх бүх хичээлүүд</li>
                                                 <li>ODOSURY дээрх бүх аудио номууд</li>
                                                 <li>Ирээдүйд тасралтгүй нэмэгдэх хичээлүүд болон номнууд</li>
                                             </ul>
                                         </div>
-                                        <p>Давуу талууд:</p>
                                         <div className="benefit">
+                                        <p>Давуу талууд:</p>
                                             <ul>
                                                 <li>Бүх насныханд зориулагдсан</li>
                                                 <li>Мэргэжлийн чадварлаг багш нарын контентууд</li>
