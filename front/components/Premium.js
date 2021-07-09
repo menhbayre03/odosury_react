@@ -159,11 +159,11 @@ class Premium extends Component {
                                     </div>
                                     <div className="benefits">
                                         <div className="benefit">
-                                        <p>PREMIUM эрх авснаар танд:</p>
+                                        <p>PREMIUM эрх авснаар:</p>
                                             <ul>
                                                 <li>ODOSURY дээрх бүх хичээлүүд</li>
                                                 <li>ODOSURY дээрх бүх аудио номууд</li>
-                                                <li>Ирээдүйд тасралтгүй нэмэгдэх хичээлүүд болон номнууд</li>
+                                                <li>Ирээдүйд тасралтгүй нэмэгдэх хичээлүүд болон номууд</li>
                                             </ul>
                                         </div>
                                         <div className="benefit">
