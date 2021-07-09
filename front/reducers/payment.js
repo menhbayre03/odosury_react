@@ -29,7 +29,8 @@ export default(state = initialState, action) => {
                 ...state,
                 visible:true,
                 type: action.json.type,
-                lesson: action.json.lesson || {}
+                lesson: action.json.lesson || {},
+                duration: action.json.duration,
             };
         case closePayment.REQUEST:
             return {
