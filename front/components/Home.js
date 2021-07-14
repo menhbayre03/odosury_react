@@ -116,11 +116,11 @@ class Home extends Component {
                             <div className="mainSlider-inner">
                                 <Container>
                                     <div className="mainSlider-cont">
-                                        <h5>АНХДАГЧ 1000 <span style={{color: 'gold'}}>PREMIUM</span> ХЭРЭГЛЭГЧ</h5>
-                                        <p>99'000₮ төлөөд сурч хөгжих боломжийг тултал ашигла та бусдаас түрүүлж алх хэзээ ч юунаас ч хоцрохгүй тогтвортой хөгжиж мэдлэгээ хязгааргүй тэл.</p>
+                                        <h5><span style={{color: 'gold'}}>PREMIUM</span> эрх гэж юу вэ?</h5>
+                                        <p>Бүх насныханд зориулагдсан ODOSURY онлайн сургалтын платформын хичээлүүдийг та нэг төлөлтөөр бүгдийг нь хүлээн авч үзэх боломжтой</p>
                                         <Link to="/premium" style={{textDecoration: 'none'}}>
                                             <Button className="banner-button">
-                                                Premium эрх
+                                                дэлгэрэнгүй...
                                             </Button>
                                         </Link>
                                     </div>

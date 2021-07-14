@@ -475,7 +475,7 @@ class Lesson extends Component {
                                                                                                 background: '#313356',
                                                                                                 padding: '0 10px',
                                                                                                 borderRadius: 5,
-                                                                                            }}>{config.formatMoney( premiumPrice - (lesson.eish ? eishPrice : (lesson.sale > 0 ? lesson.sale : lesson.price)))+'₮'}</span> нэмж төлөөд манай аппликейшнд байгаа бүх хичээлийг үзэх боломжтой</p>
+                                                                                            }}>{config.formatMoney( premiumPrice[3] - (lesson.eish ? eishPrice : (lesson.sale > 0 ? lesson.sale : lesson.price)))+'₮'}</span> нэмж төлөөд манай аппликейшнд байгаа бүх хичээлийг үзэх боломжтой</p>
 
                                                                                             <Link to="/premium" style={{textDecoration: 'none'}}>
                                                                                                 <Button
