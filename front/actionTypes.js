@@ -55,6 +55,10 @@ export const setProgress = {
     REQUEST:'FETCH_GET_setProgress_REQUEST',
     RESPONSE:'FETCH_GET_setProgress_RESPONSE'
 };
+export const verifyDevice ={
+    REQUEST: 'verifyDevice_REQ',
+    RESPONSE: 'verifyDevice_RES'
+};
 
 //LESSON END
 

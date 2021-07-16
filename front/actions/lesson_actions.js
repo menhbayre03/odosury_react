@@ -26,3 +26,8 @@ export function clearLesson() {
         type: constants.clearLesson.REQUEST
     }
 }
+export function verifyDevice(data) {
+    console.log("action")
+    let url = `/api/lesson/verifyDevice`;
+    return networkActions.requestGet(constants.verifyDevice, url, data)
+}

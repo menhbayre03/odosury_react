@@ -21,7 +21,9 @@ class Bundle extends Component {
             active: '',
             program: {},
             activeIndex: '0',
-            collapse: !isMobile
+            collapse: !isMobile,
+            playCounter: 0,
+            name: "",
         };
     }
 
@@ -30,7 +32,7 @@ class Bundle extends Component {
         document.body.classList.add('hide-mess');
         window.scroll(0, 0);
         let self = this;
-        const {dispatch,location,  match, main: {user}} = this.props;
+        const {dispatch, location, match, main: {user}} = this.props;
         dispatch(actions.getViewArea(match.params.slug));
         this.setProgram = config.get('emitter').addListener('setProgram', function (lessonView) {
             let aa = 0;
@@ -82,8 +84,31 @@ class Bundle extends Component {
         this.setState({program: program.timeline}, () => dispatch(actions.setProgress(lessonView._id, program)))
     }
 
+    verifyDevice(payload, initial) {
+        if (initial) {
+            let data = {
+                lePayload: payload,
+                init: true
+            }
+            this.props.dispatch(actions.verifyDevice(data))
+            console.log('sent yo ass')
+        } else {
+            let data = {
+                lePayload: payload
+            }
+            this.props.dispatch(actions.verifyDevice(data))
+            console.log('sent yo ass')
+        }
+        
+    }
+
     render() {
         const {lesson: {loadingView}} = this.props;
+        if (this.state.playCounter === 0) {
+            this.verifyDevice(this.state.name, true)
+        } else if (this.state.playCounter % 5 === 0) {
+            this.verifyDevice(this.state.name)
+        }
         return (
             <React.Fragment>
                 {
@@ -159,6 +184,8 @@ class Bundle extends Component {
                 <div className="view-header" style={{
                     width: isMobile ? '100%' : this.state.collapse ? 'calc(100% - 380px)' : '100%'
                 }}>
+                    <Button onClick={() => this.setState({name: "Jess"})}>Jess</Button>
+                    <Button onClick={() => this.setState({name: "Jeff"})}>Jeff</Button>
                     {
                         this.state.collapse ? (
                             <ion-icon name="chevron-back-outline" onClick={() => this.setState({collapse: false})}/>
@@ -205,6 +232,10 @@ class Bundle extends Component {
                                             playIcon={<ion-icon style={{fontSize: 74, color: '#fff'}} name="play-circle"/>}
                                             width={"100%"}
                                             url={mediaUrl}
+                                            onProgress={() => {
+                                                console.log(this.state.playCounter);
+                                                this.setState({playCounter: this.state.playCounter + 1})
+                                            }}
                                             config={{
                                                 file: {
                                                     attributes: {
