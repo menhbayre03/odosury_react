@@ -21,7 +21,8 @@ class Bundle extends Component {
             active: '',
             program: {},
             activeIndex: '0',
-            collapse: !isMobile
+            collapse: !isMobile,
+            playCounter: 0,
         };
     }
 
@@ -30,7 +31,7 @@ class Bundle extends Component {
         document.body.classList.add('hide-mess');
         window.scroll(0, 0);
         let self = this;
-        const {dispatch,location,  match, main: {user}} = this.props;
+        const {dispatch, location, match, main: {user}} = this.props;
         dispatch(actions.getViewArea(match.params.slug));
         this.setProgram = config.get('emitter').addListener('setProgram', function (lessonView) {
             let aa = 0;
@@ -82,8 +83,26 @@ class Bundle extends Component {
         this.setState({program: program.timeline}, () => dispatch(actions.setProgress(lessonView._id, program)))
     }
 
+    verifyDevice(watching) {
+        if (watching) {
+            let data = {
+                watching: true
+            }
+            this.props.dispatch(actions.verifyDevice(data))
+        } else {
+            this.props.dispatch(actions.verifyDevice())
+        }
+    }
+
     render() {
         const {lesson: {loadingView}} = this.props;
+        if (this.state.playCounter > 12) {
+            if (this.state.playCounter === 13) {
+                this.verifyDevice()
+            } else if (this.state.playCounter % 15 === 0) {
+                this.verifyDevice(true)
+            }
+        }
         return (
             <React.Fragment>
                 {
@@ -205,6 +224,9 @@ class Bundle extends Component {
                                             playIcon={<ion-icon style={{fontSize: 74, color: '#fff'}} name="play-circle"/>}
                                             width={"100%"}
                                             url={mediaUrl}
+                                            onProgress={() => {
+                                                this.setState({playCounter: this.state.playCounter + 1})
+                                            }}
                                             config={{
                                                 file: {
                                                     attributes: {

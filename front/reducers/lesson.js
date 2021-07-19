@@ -6,7 +6,8 @@ import {
     addWish,
     clearLesson,
     checkBankPayment,
-    checkQpayPayment
+    checkQpayPayment,
+    verifyDevice
 } from "../actionTypes";
 import config from "../config";
 const initialState = {
@@ -202,6 +203,11 @@ export default(state = initialState, action) => {
                     ...state,
                 };
             }
+        case verifyDevice.RESPONSE: {
+            if (action.json.success && action.json.verificationFail) {
+                window.location.assign("/warning")
+            }
+        }
         default:
             return state;
     }
