@@ -84,20 +84,18 @@ class Bundle extends Component {
         this.setState({program: program.timeline}, () => dispatch(actions.setProgress(lessonView._id, program)))
     }
 
-    verifyDevice(payload, initial) {
-        if (initial) {
+    verifyDevice(payload, watching) {
+        if (watching) {
             let data = {
                 lePayload: payload,
                 init: true
             }
             this.props.dispatch(actions.verifyDevice(data))
-            console.log('sent yo ass')
         } else {
             let data = {
                 lePayload: payload
             }
             this.props.dispatch(actions.verifyDevice(data))
-            console.log('sent yo ass')
         }
         
     }
@@ -233,7 +231,6 @@ class Bundle extends Component {
                                             width={"100%"}
                                             url={mediaUrl}
                                             onProgress={() => {
-                                                console.log(this.state.playCounter);
                                                 this.setState({playCounter: this.state.playCounter + 1})
                                             }}
                                             config={{
