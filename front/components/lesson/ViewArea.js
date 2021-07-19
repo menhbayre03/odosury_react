@@ -23,7 +23,6 @@ class Bundle extends Component {
             activeIndex: '0',
             collapse: !isMobile,
             playCounter: 0,
-            name: "",
         };
     }
 
@@ -84,28 +83,25 @@ class Bundle extends Component {
         this.setState({program: program.timeline}, () => dispatch(actions.setProgress(lessonView._id, program)))
     }
 
-    verifyDevice(payload, watching) {
+    verifyDevice(watching) {
         if (watching) {
             let data = {
-                lePayload: payload,
-                init: true
+                watching: true
             }
             this.props.dispatch(actions.verifyDevice(data))
         } else {
-            let data = {
-                lePayload: payload
-            }
-            this.props.dispatch(actions.verifyDevice(data))
+            this.props.dispatch(actions.verifyDevice())
         }
-        
     }
 
     render() {
         const {lesson: {loadingView}} = this.props;
-        if (this.state.playCounter === 0) {
-            this.verifyDevice(this.state.name, true)
-        } else if (this.state.playCounter % 5 === 0) {
-            this.verifyDevice(this.state.name)
+        if (this.state.playCounter > 12) {
+            if (this.state.playCounter === 13) {
+                this.verifyDevice()
+            } else if (this.state.playCounter % 15 === 0) {
+                this.verifyDevice(true)
+            }
         }
         return (
             <React.Fragment>
@@ -182,8 +178,6 @@ class Bundle extends Component {
                 <div className="view-header" style={{
                     width: isMobile ? '100%' : this.state.collapse ? 'calc(100% - 380px)' : '100%'
                 }}>
-                    <Button onClick={() => this.setState({name: "Jess"})}>Jess</Button>
-                    <Button onClick={() => this.setState({name: "Jeff"})}>Jeff</Button>
                     {
                         this.state.collapse ? (
                             <ion-icon name="chevron-back-outline" onClick={() => this.setState({collapse: false})}/>

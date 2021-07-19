@@ -1015,6 +1015,9 @@ div.abouttext2 > h3 {
 	background-color: whitesmoke;
 	box-shadow: 2px 4px 11px 4px #c1c1c1;
 	padding: 4px;
+	button:focus {
+		outline: none;
+	}
 	.optionContainer {
 		display: flex;
 		background: linear-gradient(-45deg, #cd2e9a, #e73c7e, #23a6d5, #008eed);
@@ -1301,5 +1304,42 @@ div.abouttext2 > h3 {
 			justify-content: flex-start;
 			align-items: flex-start;
 		}
+	}
+}
+
+// PREMIUM END
+// -*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*-
+// DOUBLE LOGIN START
+
+.doubleLogin {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 0px 20px;
+	.doubleLoginSad {
+		font-size: 10em;
+	}
+	.doubleloginTitle {
+		text-align: center;
+	}
+	.doubleLoginLink {
+		text-decoration: underline;
+		font-weight: 700;
+	}
+	.doubleLoginLink:hover {
+		cursor: pointer;
+	}
+	.doubleLoginPhone {
+		font-size: 3em;
+		padding: 5px;
+	}
+	.doubleLoginPhone:hover {
+		cursor: pointer;
+		background-color: #bfbfbf;
+	}
+	.doubleLoginPhone:active {
+		background-color: #d2d2d2;
 	}
 }

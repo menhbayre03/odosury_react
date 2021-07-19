@@ -89,7 +89,11 @@ class Home extends Component {
             })
         }
         this.openLogin = config.get('emitter').addListener('openLogin', function (data) {
-            self.setState({showLogin: true, data: data || null})
+            if ((data || {}).type === 'reset') {
+                self.setState({showLogin: true, data: data || null, active: 'reset'})
+            } else {
+                self.setState({showLogin: true, data: data || null})
+            }
         })
     }
     componentWillUnmount() {
@@ -213,6 +217,7 @@ class Home extends Component {
             showLogin: false,
             username: '',
             password: '',
+            active: 'login',
 
             passValid: false,
             emailRegister: '',

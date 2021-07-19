@@ -3,6 +3,7 @@ import Home from "../components/Home";
 import Lesson from "../components/lesson/Lesson";
 import ListEish from "../components/lesson/ListEish";
 import List from "../components/lesson/List";
+import DoubleLogin from "../components/lesson/DoubleLogin";
 import ListAudio from "../components/audio/ListAudio";
 import Audio from "../components/audio/Audio";
 import ViewAreaAudio from "../components/audio/ViewAreaAudio";
@@ -132,6 +133,11 @@ export default [
             {
                 component: Partner,
                 path: '/partner',
+                exact: true
+            },
+            {
+                component: DoubleLogin,
+                path: '/warning',
                 exact: true
             },
             {
