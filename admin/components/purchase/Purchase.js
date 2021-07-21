@@ -167,6 +167,13 @@ class Purchase extends React.Component {
                 render: (text, record) => <NumberFormat value={record.amount || 0} displayType={'text'} thousandSeparator={true} renderText={value => <span>{value}₮</span>}/>
             },
             {
+                key: "promo code",
+                title: "Хямдрал",
+                render: (record) => {
+                    return (record.promocode ? <p>промо код ашигласан</p> : null)
+                }
+            },
+            {
                 key: 'actions',
                 title: 'Төлөв',
                 align: 'right',
