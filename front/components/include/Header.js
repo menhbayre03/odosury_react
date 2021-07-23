@@ -139,6 +139,11 @@ class Header extends Component {
                                                  }}>New</Badge>
                                              </Link>
                                          </li>
+                                        {/*<li>*/}
+                                        {/*    <Link to={`/test`}>*/}
+                                        {/*        Тест*/}
+                                        {/*    </Link>*/}
+                                        {/*</li>*/}
                                     </ul>
                                 </div>
                             </div>

@@ -8,6 +8,8 @@ import ListAudio from "../components/audio/ListAudio";
 import Audio from "../components/audio/Audio";
 import ViewAreaAudio from "../components/audio/ViewAreaAudio";
 import ViewArea from "../components/lesson/ViewArea";
+import Test from "../components/test/Test";
+import TestLaunch from "../components/test/TestLaunch";
 // import Login from "../components/Login";
 import NotFound from "../components/NotFound";
 import Eish from "../components/Eish";
@@ -28,6 +30,16 @@ export default [
             {
                 component: Home,
                 path: '/',
+                exact: true
+            },
+            {
+                component: Test,
+                path: '/test',
+                exact: true
+            },
+            {
+                component: TestLaunch,
+                path: '/test/launch/:slug',
                 exact: true
             },
             {

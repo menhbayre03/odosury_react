@@ -9,6 +9,8 @@ import audio from "./audio";
 import payment from "./payment";
 import jobPost from "./jobPost";
 import requests from "./requests";
+import test from "./test";
+import testLaunch from "./testLaunch";
 export default combineReducers({
     main: main,
     auth: auth,
@@ -19,5 +21,7 @@ export default combineReducers({
     audio: audio,
     payment: payment,
     jobPost: jobPost,
-    requests: requests
+    requests: requests,
+    test,
+    testLaunch,
 });

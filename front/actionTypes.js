@@ -61,6 +61,19 @@ export const verifyDevice ={
 };
 
 //LESSON END
+//TestLaunch START
+export const getTest = {
+    REQUEST:'getTest_REQUEST',
+    RESPONSE:'getTest_RESPONSE'
+};
+//TestLaunch END
+
+//Test START
+export const getTests = {
+    REQUEST:'getTests_REQUEST',
+    RESPONSE:'getTests_RESPONSE'
+};
+//Test END
 
 
 //PROFILE
