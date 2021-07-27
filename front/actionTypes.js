@@ -73,6 +73,14 @@ export const getTests = {
     REQUEST:'getTests_REQUEST',
     RESPONSE:'getTests_RESPONSE'
 };
+export const declineOpenTest = {
+    REQUEST:'declineOpenTest_REQUEST',
+    RESPONSE:'declineOpenTest_RESPONSE'
+};
+export const componentWillUnmountTest = {
+    REQUEST:'componentWillUnmountTest_REQUEST',
+    RESPONSE:'componentWillUnmountTest_RESPONSE'
+};
 //Test END
 
 
