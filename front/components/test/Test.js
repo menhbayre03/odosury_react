@@ -55,6 +55,30 @@ class Test extends Component {
     }
     render() {
         const {test:{tests, loading, all, openTest}} = this.props;
+        const demoTest = [];
+        for (let i = 0; i < 10; i++) {
+            demoTest.push({
+                _id:i,
+                slug:`test_${i+1}`,
+                title: `test ${i+1}`,
+                isTimeLimit: true,
+                price: 20000,
+                secret: true,
+                oneTime: true,
+                hasCertificate: true,
+                // *** ed nariig avchrahgu, orond n questionQuantity avchirna ***
+                // easyQuestion:[
+                //     {quantity:1, type:'selectOne'},
+                //     {quantity:1, type:'selectMany'},
+                // ],
+                // mediumQuestion:[
+                //     {quantity:1, type:'selectOne'},
+                //     {quantity:1, type:'selectMany'},
+                // ],
+                questionQuantity: 4,
+                duration: 20,
+            });
+        }
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
