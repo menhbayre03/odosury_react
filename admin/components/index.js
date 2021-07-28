@@ -13,7 +13,13 @@ import {
     LayoutFilled,
     DollarCircleFilled,
     DatabaseFilled,
-    FileTextFilled
+    FileTextFilled,
+    CreditCardOutlined,
+    DiffOutlined,
+    BookOutlined,
+    ContainerOutlined,
+    AuditOutlined,
+    CarryOutOutlined
 } from '@ant-design/icons';
 import {Layout, Menu, Tooltip, Button } from 'antd';
 import * as actions from "../actions";
@@ -93,7 +99,7 @@ class index extends React.Component {
                                     <span>Худалдан авалт</span>
                                 </Link>
                             </Menu.Item>
-                            <Menu.Item key="promoCodes" icon={<DollarCircleFilled />}>
+                            <Menu.Item key="promoCodes" icon={<CreditCardOutlined />}>
                                 <Link to="/admin/Promo">
                                     <span>Промо Код</span>
                                 </Link>
@@ -120,7 +126,7 @@ class index extends React.Component {
                                     </Link>
                                 </Menu.Item>
                             </Menu.SubMenu>
-                            <Menu.SubMenu key="audio" icon={<FileTextFilled />} title="Сонсдог ном">
+                            <Menu.SubMenu key="audio" icon={<BookOutlined />} title="Сонсдог ном">
                                 <Menu.Item key="audios" icon={<FileTextFilled />}>
                                     <Link to="/admin/audios">
                                         <span>Номнууд</span>
@@ -132,19 +138,24 @@ class index extends React.Component {
                                     </Link>
                                 </Menu.Item>
                             </Menu.SubMenu>
-                            <Menu.Item key="teacherRequest" icon={<FileTextFilled />}>
+                            <Menu.Item key="teacherRequest" icon={<AuditOutlined />}>
                                 <Link to="/admin/teacherRequest">
                                     <span>Багш хүсэлт</span>
                                 </Link>
                             </Menu.Item>
-                            <Menu.Item key="feedBack" icon={<FileTextFilled />}>
+                            <Menu.Item key="feedBack" icon={<ContainerOutlined />}>
                                 <Link to="/admin/feedBack">
                                     <span>Санал хүсэлт</span>
                                 </Link>
                             </Menu.Item>
-                            <Menu.Item key="jobPost" icon={<FileTextFilled />}>
+                            <Menu.Item key="jobPost" icon={<CarryOutOutlined />}>
                                 <Link to="/admin/jobpost">
                                     <span>Ажлын зар</span>
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item key="test" icon={<DiffOutlined />}>
+                                <Link to="/admin/test">
+                                    <span>Шалгалт</span>
                                 </Link>
                             </Menu.Item>
                             {/*<Menu.Item key="bundles" icon={<LayoutFilled />}>*/}

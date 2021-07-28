@@ -466,3 +466,29 @@ export const restorePromoCode = {
     REQUEST: 'restorePromoCode_REQUEST',
     RESPONSE: 'restorePromoCode_RESPONSE'
 };
+
+export const getTest = {
+    REQUEST: 'getTest_REQUEST',
+    RESPONSE: 'getTest_RESPONSE'
+};
+export const createTest = {
+    REQUEST: 'createTest_REQUEST',
+    RESPONSE: 'createTest_RESPONSE'
+}
+export const deleteTest = {
+    REQUEST: 'deleteTest_REQUEST',
+    RESPONSE: 'deleteTest_RESPONSE'
+}
+
+export const getQuestion = {
+    REQUEST: 'getQuestion_REQUEST',
+    RESPONSE: 'getQuestion_RESPONSE'
+}
+export const createQuestion = {
+    REQUEST: 'createQuestion_REQUEST',
+    RESPONSE: 'createQuestion_RESPONSE'
+}
+export const deleteQuestion = {
+    REQUEST: 'deleteQuestion_REQUEST',
+    RESPONSE: 'deleteQuestion_RESPONSE'
+}

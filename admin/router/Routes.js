@@ -14,6 +14,8 @@ import TeacherRequest from "../components/TeacherRequest";
 import Feedback from "../components/Feedback";
 import JobPost from "../components/JobPost";
 import Promo from "../components/Promo";
+import Test from "../components/test/Test";
+import TestSingle from "../components/test/TestSingle";
 export default [
     {
         component: index,
@@ -86,6 +88,16 @@ export default [
             {
                 component: Promo,
                 path: '/admin/Promo',
+                exact: true
+            },
+            {
+                component: Test,
+                path: '/admin/test',
+                exact: true
+            },
+            {
+                component: TestSingle,
+                path: '/admin/test/single/:test',
                 exact: true
             },
             // {

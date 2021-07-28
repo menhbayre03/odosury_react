@@ -15,6 +15,7 @@ import teacherRequest from './teacherRequest';
 import feedBack from './feedBack';
 import jobPost from './jobPost';
 import promo from './promo';
+import test from './test';
 export default combineReducers({
     main: main,
     lesson: lesson,
@@ -32,4 +33,5 @@ export default combineReducers({
     feedBack: feedBack,
     jobPost: jobPost,
     promo: promo,
+    test: test,
 });
