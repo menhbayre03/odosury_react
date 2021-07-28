@@ -61,7 +61,6 @@ class Test extends Component {
                 _id:i,
                 slug:`test_${i+1}`,
                 title: `test ${i+1}`,
-                isTimeLimit: true,
                 price: 20000,
                 secret: true,
                 oneTime: true,
@@ -109,7 +108,7 @@ class Test extends Component {
                                 <div>Та <span>{this.state.confirmModalData.title}</span> тест өгөх гэж байна.</div>
                                 <div>Үнэ: {(this.state.confirmModalData.price || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}₮</div>
                                 <div>Нийт: {(this.state.confirmModalData.questionQuantity || 0)} асуулттай</div>
-                                <div>Үргэлжлэх хугацаа: {this.state.confirmModalData.isTimeLimit && this.state.confirmModalData.duration ? this.state.confirmModalData.duration : 'хугацаагүй'}</div>
+                                <div>Үргэлжлэх хугацаа: {this.state.confirmModalData.duration ? this.state.confirmModalData.duration : 'хугацаагүй'}</div>
                                 <div>Давтамж: {this.state.confirmModalData.oneTime? 'нэг удаа өгнө' : 'хэд өгсөн ч болно'}</div>
                                 <div>Сертификат: {this.state.confirmModalData.hasCertificate? 'өгнө' : 'өгөхгүй'}</div>
                             </div>

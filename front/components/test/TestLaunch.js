@@ -37,7 +37,6 @@ class TestLaunch extends Component {
             demoTest.push({
                 _id:i,
                 title: `test ${i+1}`,
-                isTimeLimit: true,
                 price: 20000,
                 secret: true,
                 oneTime: true,
@@ -57,7 +56,7 @@ class TestLaunch extends Component {
         }
         return (
             <React.Fragment>
-                <Header location={this.props.location}/>
+                {/*<Header location={this.props.location}/>*/}
                 <div className="list-container" style={{minHeight: 'calc(100vh - 185px)'}}>
                     <Container>
                         <Loader status={false}>
@@ -65,7 +64,7 @@ class TestLaunch extends Component {
                         </Loader>
                     </Container>
                 </div>
-                <Footer/>
+                {/*<Footer/>*/}
             </React.Fragment>
         );
     }
