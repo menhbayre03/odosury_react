@@ -140,31 +140,31 @@ class Test extends Component {
     render() {
         const {test:{tests, loading, all, openTest}} = this.props;
         const demoTest = [];
-        for (let i = 0; i < 10; i++) {
-            demoTest.push({
-                _id:i,
-                slug:`test_${i+1}`,
-                title: `test ${i+1}`,
-                title: `Хичээлийн тест ${i+1}`,
-                isTimeLimit: true,
-                price: 20000,
-                secret: true,
-                oneTime: true,
-                hasCertificate: false,
-                backgroundImg: null,
-                // *** ed nariig avchrahgu, orond n questionQuantity avchirna ***
-                // easyQuestion:[
-                //     {quantity:1, type:'selectOne'},
-                //     {quantity:1, type:'selectMany'},
-                // ],
-                // mediumQuestion:[
-                //     {quantity:1, type:'selectOne'},
-                //     {quantity:1, type:'selectMany'},
-                // ],
-                questionQuantity: 20,
-                duration: 60,
-            });
-        }
+        // for (let i = 0; i < 10; i++) {
+        //     demoTest.push({
+        //         _id:i,
+        //         slug:`test_${i+1}`,
+        //         title: `test ${i+1}`,
+        //         title: `Хичээлийн тест ${i+1}`,
+        //         isTimeLimit: true,
+        //         price: 20000,
+        //         secret: true,
+        //         oneTime: true,
+        //         hasCertificate: false,
+        //         backgroundImg: null,
+        //         // *** ed nariig avchrahgu, orond n questionQuantity avchirna ***
+        //         // easyQuestion:[
+        //         //     {quantity:1, type:'selectOne'},
+        //         //     {quantity:1, type:'selectMany'},
+        //         // ],
+        //         // mediumQuestion:[
+        //         //     {quantity:1, type:'selectOne'},
+        //         //     {quantity:1, type:'selectMany'},
+        //         // ],
+        //         questionQuantity: 20,
+        //         duration: 60,
+        //     });
+        // }
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
@@ -180,7 +180,7 @@ class Test extends Component {
                                     <Loader status={loading}>
                                         <Row>
                                         {
-                                            (demoTest || []).map((item, index) => (
+                                            (tests || []).map((item, index) => (
                                                 <Col lg={4} md={6} sm={6} style={{marginBottom: 30}}>
                                                     <div key={index} className="testCard"
                                                     onClick={this.openConfirmModal.bind(this, item)}
@@ -191,7 +191,7 @@ class Test extends Component {
                                                          Хугацаа: {item.duration} мин
                                                          <br/>
                                                         <span style={{color: '#ffc107', fontSize: 14}}> Үнэ: {item.price}₮</span>
-                                                        <div className="certifyTagTest" style={item.hasCertificate? {} : {backgroundColor: '#dc3545', border: 'none'}}> 
+                                                        <div className="certifyTagTest" style={item.hasCertificate? {} : {backgroundColor: '#dc3545', border: 'none', color: '#fff'}}> 
                                                         {item.hasCertificate ? 'СЕРТИФИКАТТАЙ' : 'СЕРТИФИКАТГҮЙ'} </div>
                                                         </div>
                                                     </div>
@@ -216,7 +216,7 @@ class Test extends Component {
                         >
                         <div className="testModal">
                         <Modal.Body>
-                            <div style={ this.state.confirmModalData.backgroundImg ? {} : {background: 'url("/images/defaultTest1.jpg")', height: '320px',backgroundSize:'600px 320px'}}  className="modalMain">
+                            <div style={ this.state.confirmModalData.backgroundImg ? {} : {background: 'url("/images/defaultTest2.jpg")', height: '320px',backgroundSize:'600px 320px',}}  className="modalMain">
                                 <h4>Та <span>{this.state.confirmModalData.title}</span> тест өгөх гэж байна.</h4>
                                 <div style={{marginLeft: 25, marginTop: 30}}>
                                     <div className="certifyTagTest" style={this.state.confirmModalData.hasCertificate? {} : {backgroundColor: '#dc3545', border: 'none'}}>

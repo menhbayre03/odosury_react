@@ -24,7 +24,7 @@ class TestLaunch extends Component {
         const {match, dispatch} = this.props;
         let cc = {
         };
-        dispatch(actions.getTest(cc, match.params.slug));
+       // dispatch(actions.getTest(cc, match.params.slug));
     }
     componentWillUnmount() {
     }
@@ -32,27 +32,27 @@ class TestLaunch extends Component {
     render() {
         const {test:{}} = this.props;
         const demoTest = [];
-        for (let i = 0; i < 10; i++) {
-            demoTest.push({
-                _id:i,
-                title: `test ${i+1}`,
-                price: 20000,
-                secret: true,
-                oneTime: true,
-                hasCertificate: false,
-                // *** ed nariig avchrahgu, orond n questionQuantity, questionDuration avchirna ***
-                // easyQuestion:[
-                //     {quantity:1, type:'selectOne'},
-                //     {quantity:1, type:'selectMany'},
-                // ],
-                // mediumQuestion:[
-                //     {quantity:1, type:'selectOne'},
-                //     {quantity:1, type:'selectMany'},
-                // ],
-                questionQuantity: 20,
-                questionDuration: 60,
-            });
-        }
+        // for (let i = 0; i < 10; i++) {
+        //     demoTest.push({
+        //         _id:i,
+        //         title: `test ${i+1}`,
+        //         price: 20000,
+        //         secret: true,
+        //         oneTime: true,
+        //         hasCertificate: false,
+        //         // *** ed nariig avchrahgu, orond n questionQuantity, questionDuration avchirna ***
+        //         // easyQuestion:[
+        //         //     {quantity:1, type:'selectOne'},
+        //         //     {quantity:1, type:'selectMany'},
+        //         // ],
+        //         // mediumQuestion:[
+        //         //     {quantity:1, type:'selectOne'},
+        //         //     {quantity:1, type:'selectMany'},
+        //         // ],
+        //         questionQuantity: 20,
+        //         questionDuration: 60,
+        //     });
+        // }
         return (
             <React.Fragment>
                 <div style={{
@@ -62,7 +62,7 @@ class TestLaunch extends Component {
                     backgroundColor: '#151314'
                 }}>
                         <div className="logo" style={{display: 'inline-block'}}>
-                            <Link to={'/'}><img src="/images/odosuryo.png" alt=""/></Link>
+                            <img src="/images/odosuryo.png" alt=""/>
                         </div>
                 </div>
                 <div className="list-container" style={{minHeight: 'calc(100vh - 185px)'}}>
