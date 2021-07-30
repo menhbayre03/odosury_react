@@ -1,26 +1,31 @@
 import React from "react";
 import { connect } from 'react-redux';
 import config from '../../config';
-import {getTest, createTest, deleteTest, createQuestion, deleteQuestion, getQuestion} from '../../actions/test_actions'
+import {getTest, createTest, deleteTest, createQuestion, deleteQuestion } from '../../actions/test_actions'
 const reducer = ({ main, test }) => ({ main, test });
 import {
     Card, Empty, Popover,
     Table, Row, Col,
     Button, Popconfirm,
-    Input, Drawer,
-    Select, Form,
+    Input, Drawer, Collapse,
+    Select, Form, Tooltip,
     Switch, InputNumber
 } from 'antd';
 import {
     PlusOutlined, EnterOutlined, EditOutlined, DeleteOutlined, CloseCircleOutlined, CheckOutlined
 } from '@ant-design/icons';
+import TestSingleQuestion from "./TestSingleQuestion";
+import TestSingleQuestions from "./TestSingleQuestions";
 
 class Test extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
 
+            loadingTest: false,
+
             //FOR TEST
+            _id: '',
             title: '',
             secret: true,
             oneTime: true,
@@ -47,14 +52,15 @@ class Test extends React.Component {
                 pro: {quantity: 0, type: '', adding: false},
             },
 
+            questions: [],
 
             //FOR EDITING LIST ITEM
             editing: '',
             editingContent: '',
 
-
             // FOR QUESTION
             visible: false,
+            question_id: '',
             questionType: '',
             questionDifficulty: '',
             questionTitle: '',
@@ -63,15 +69,59 @@ class Test extends React.Component {
             questionCorrectAnswer:  '',
             questionTemp: '',
         };
+        this.questionHandler = this.questionHandler.bind(this);
     }
     componentDidMount() {
+        let self = this;
+        this.getTest = config.get('emitter').addListener('testSingleGetTest', function(data) {
+            if (data.success) {
+                self.setState({
+                    loadingTest: false,
+                    _id: (data.test || {})._id,
+                    title: (data.test || {}).title,
+                    secret: (data.test || {}).secret,
+                    oneTime: (data.test || {}).oneTime,
+                    hasCertificate: (data.test || {}).hasCertificate,
+                    price: (data.test || {}).price,
+                    duration: (data.test || {}).duration,
+                    easyQuestion: ((data.test || {}).easyQuestion || []),
+                    mediumQuestion: ((data.test || {}).mediumQuestion || []),
+                    hardQuestion: ((data.test || {}).hardQuestion || []),
+                    proQuestion: ((data.test || {}).proQuestion || []),
+                    questions: (data.questions || [])
+                });
+            }else{
+                self.setState({loadingTest: false});
+            }
+        });
         if(((this.props.match || {}).params || {}).test !== 'new'){
-            this.props.dispatch(getQuestion({test: ((this.props.match || {}).params || {}).test}));
-            this.props.dispatch(getTest({_id: ((this.props.match || {}).params || {}).test}));
+            this.setState({
+                loadingTest: true
+            }, () => {
+                this.props.dispatch(getTest({slug: ((this.props.match || {}).params || {}).test}));
+            });
         }
     }
     componentWillUnmount() {
-
+        this.getTest.remove();
+    }
+    questionHandler(obj, action){
+        if(obj){
+            if(action === 'delete'){
+                this.props.dispatch(deleteQuestion({...obj})).then(c => {
+                    if(c.json?.success){
+                        let updatedQuestions = (this.state.questions || []).filter(question => (c.json?._id || 'as').toString() !== (question._id || '').toString());
+                        this.setState({
+                            questions: updatedQuestions
+                        })
+                    }
+                });
+            }else if(action === 'edit'){
+                this.setState({
+                    ...obj
+                })
+            }
+        }
     }
     getDifficulty(e){
         switch (e) {
@@ -94,26 +144,28 @@ class Test extends React.Component {
         }
     }
     submit(e){
-        console.log(this.state)
-        console.log(e)
-        if(!this.state.title || this.state.title !== ''){
+        if(!this.state.title || this.state.title === ''){
             config.get('emitter').emit('warning', 'Шалгалтын нэрийг оруулна уу.');
-        }else if(!this.state.title || this.state.title !== ''){
-            config.get('emitter').emit('warning', 'Шалгалтын нэрийг оруулна уу.');
+        }else if(((this.state.easyQuestion || []).length + (this.state.mediumQuestion || []).length +
+            (this.state.hardQuestion || []).length + (this.state.proQuestion || []).length) === 0){
+            config.get('emitter').emit('warning', 'Шалгалтын асуултуудын тоог оруулна уу.');
+        }else{
+            this.props.dispatch(createTest({
+                _id: this.state._id,
+                title: this.state.title,
+                duration: this.state.duration,
+                price: this.state.price,
+                secret: this.state.secret,
+                oneTime: this.state.oneTime,
+                hasCertificate: this.state.hasCertificate,
+                easyQuestion: this.state.easyQuestion,
+                mediumQuestion: this.state.mediumQuestion,
+                hardQuestion: this.state.hardQuestion,
+                proQuestion: this.state.proQuestion,
+            }));
         }
-        // {name: 'title', value: this.state.title},
-        // {name: 'duration', value: this.state.duration},
-        // {name: 'price', value: this.state.price},
-        // {name: 'secret', value: this.state.secret},
-        // {name: 'oneTime', value: this.state.oneTime},
-        // {name: 'hasCertificate', value: this.state.hasCertificate},
-        // {name: 'easyQuestion', value: this.state.easyQuestion},
-        // {name: 'mediumQuestion', value: this.state.mediumQuestion},
-        // {name: 'hardQuestion', value: this.state.hardQuestion},
-        // {name: 'proQuestion', value: this.state.proQuestion},
     }
     submitQuestion(){
-        console.log(this.state)
         if(!this.state.questionType || this.state.questionType === ''){
             config.get('emitter').emit('warning', 'Асуултын төрлийг оруулна уу.');
         }else if(!this.state.questionDifficulty || this.state.questionDifficulty === ''){
@@ -126,13 +178,41 @@ class Test extends React.Component {
             config.get('emitter').emit('warning', 'Зөв хариултыг оруулна уу.');
         }else{
             this.props.dispatch(createQuestion({
+                _id: this.state._id,
+                question_id: this.state.question_id,
                 type: this.state.questionType,
                 difficulty: this.state.questionDifficulty,
                 title: this.state.questionTitle,
                 points: this.state.questionPoint,
                 answers: this.state.questionAnswers,
                 correct: this.state.questionCorrectAnswer,
-            }))
+            })).then(c => {
+                if((c.json || {}).success){
+                    let questions;
+                    if((c.json || {}).question_id && (c.json || {}).question_id !== ''){
+                        questions = (this.state.questions || []).map(question => {
+                            if((question._id || 'as').toString() !== ((c.json || {}).question || {})._id){
+                                return question;
+                            }
+                            return {...((c.json || {}).question || {})}
+                        });
+                    }else{
+                        questions = [...(this.state.questions || []), (c.json || {}).question]
+                    }
+                    this.setState({
+                        visible: false,
+                        question_id: '',
+                        questionType: '',
+                        questionDifficulty: '',
+                        questionTitle: '',
+                        questionPoint: 0,
+                        questionAnswers: [],
+                        questionCorrectAnswer:  '',
+                        questionTemp: '',
+                        questions: questions,
+                    })
+                }
+            })
         }
     }
     getKey(key){
@@ -170,7 +250,7 @@ class Test extends React.Component {
                             title={'Нэр'}
                             content={item[property]}
                         >
-                            <div key={`${parent}-${child}-div-${item._id}`} style={{display: 'flex', flexDirection: 'row'}}>
+                            <div key={`${parent}-${child}-div-${item._id}`} style={{display: 'inline-flex', flexDirection: 'row', width: '98%'}}>
                                 <div
                                     style={{width: '90%', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', wordBreak: 'break-all'}}
                                     key={`${parent}-${child}-content-${item._id}`}
@@ -228,30 +308,24 @@ class Test extends React.Component {
         return (
             <React.Fragment>
                 <Card
+                    style={{marginBottom: 20}}
                     title="Шалгалт"
                     bordered={true}
-                    loading={false}
+                    loading={this.state.loadingTest}
                     extra={
                         <>
-                            {/*{*/}
-                            {/*    ((this.props.match || {}).params || {}).test !== 'new' ?*/}
-                            {/*        <Button*/}
-                            {/*            type={'primary'}*/}
-                            {/*            icon={<PlusOutlined />}*/}
-                            {/*            onClick={() => this.setState({visible: true})}*/}
-                            {/*        >*/}
-                            {/*            Асуулт нэмэх*/}
-                            {/*        </Button>*/}
-                            {/*        :*/}
-                            {/*        null*/}
-                            {/*}*/}
-                            <Button
-                                type={'primary'}
-                                icon={<PlusOutlined />}
-                                onClick={() => this.setState({visible: true})}
-                            >
-                                Асуулт нэмэх
-                            </Button>
+                            {
+                                ((this.props.match || {}).params || {}).test !== 'new' ?
+                                    <Button
+                                        type={'primary'}
+                                        icon={<PlusOutlined />}
+                                        onClick={() => this.setState({visible: true})}
+                                    >
+                                        Асуулт нэмэх
+                                    </Button>
+                                    :
+                                    null
+                            }
                         </>
                     }
                 >
@@ -306,6 +380,7 @@ class Test extends React.Component {
                                 ]}
                             >
                                 <InputNumber
+                                    min={0}
                                     value={this.state.duration}
                                     onChange={(e) => this.setState({duration: e})}
                                 />
@@ -321,6 +396,7 @@ class Test extends React.Component {
                                 ]}
                             >
                                 <InputNumber
+                                    min={0}
                                     value={this.state.price}
                                     onChange={(e) => this.setState({price: e})}
                                     formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -362,9 +438,9 @@ class Test extends React.Component {
                             <Row gutter={20}>
                                 {
                                     (this.state.difficulties || []).map(diff =>
-                                        <Col span={6}>
-                                            <div>
-                                                <div style={{textAlign: 'center'}}>
+                                        <Col span={6} key={diff}>
+                                            <div key={`div-${diff}`}>
+                                                <div style={{textAlign: 'center'}} key={`div-${diff}-${diff}`}>
                                                     {this.getDifficulty(diff)} асуултууд
                                                     <Button
                                                         size={'small'}
@@ -381,7 +457,7 @@ class Test extends React.Component {
                                                         })}
                                                     />
                                                 </div>
-                                                <div>
+                                                <div key={`div-${diff}-${diff}-${diff}`}>
                                                     {
                                                         ((this.state || [])[`${diff}Question`] || []).length > 0 ?
                                                             <ul>
@@ -479,6 +555,12 @@ class Test extends React.Component {
                         </div>
                     </Form>
                 </Card>
+                {
+                    this.state.questions?.length > 0 ?
+                        <TestSingleQuestions questions={[...this.state.questions]} handler={this.questionHandler} />
+                        :
+                        null
+                }
                 <Drawer
                     visible={this.state.visible}
                     maskClosable={false}
@@ -504,7 +586,7 @@ class Test extends React.Component {
                                 type={'primary'}
                                 onClick={() => this.submitQuestion()}
                             >
-                                {this.state._id ? 'Шинэчлэх' : 'Нэмэх'}
+                                {this.state.question_id ? 'Шинэчлэх' : 'Нэмэх'}
                             </Button>
                         </div>
                     }
@@ -532,9 +614,12 @@ class Test extends React.Component {
                             value={this.state.questionType}
                             onSelect={(e) => this.setState({questionType: e})}
                         >
-                            <Select.Option
-                                value={'selectOne'} key={'selectOne'}
-                            >Сонгох тест</Select.Option>
+                            {/*<Select.Option*/}
+                            {/*    value={'selectOne'} key={'selectOne'}*/}
+                            {/*>Сонгох тест</Select.Option>*/}
+                            {
+                                (this.state.types || []).map(type => <Select.Option value={type} key={type}>{this.getType(type)}</Select.Option>)
+                            }
                         </Select>
                         <span>Асуултын ангилал:</span>
                         <Select
@@ -544,7 +629,7 @@ class Test extends React.Component {
                         >
                             {
                                 (this.state.difficulties || []).map(diff =>
-                                    <Select.Option value={diff} key={diff}>{this.getDifficulty()} асуулт</Select.Option>
+                                    <Select.Option value={diff} key={diff}>{this.getDifficulty(diff)} асуулт</Select.Option>
                                 )
                             }
                         </Select>
@@ -559,16 +644,16 @@ class Test extends React.Component {
                     {
                         this.state.questionType === 'selectOne' ?
                             <React.Fragment>
-                                <div style={{marginBottom: 10}}>
+                                <div style={{marginBottom: 10}} key={`div-question-type`}>
                                     <span>Асуулт: </span>
                                     <Input.TextArea
                                         value={this.state.questionTitle}
                                         onChange={(e) => this.setState({questionTitle: e.target.value})}
                                     />
                                 </div>
-                                <div style={{marginBottom: 10}}>
+                                <div style={{marginBottom: 10}} key={`div-question-answers`}>
                                     <span>Хариултууд:</span>
-                                    <div style={{marginLeft: 30}}>
+                                    <div style={{marginLeft: 30}}  key={`div-question-type-div`}>
                                         {
                                             (this.state.questionAnswers || []).length > 0 ?
                                                 <ol type={'A'}>

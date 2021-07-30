@@ -1,10 +1,11 @@
 import React from "react";
 import { connect } from 'react-redux';
 
-import {getTest, createTest, deleteTest} from '../../actions/test_actions'
+import {getTests, createTest, deleteTest} from '../../actions/test_actions'
 const reducer = ({ main, test }) => ({ main, test });
+import {DeleteOutlined} from '@ant-design/icons';
 import {
-    Card,
+    Card, Popconfirm,
     Table,
     Button,
 } from 'antd';
@@ -22,7 +23,7 @@ class Test extends React.Component {
         };
     }
     componentDidMount() {
-        this.props.dispatch(getTest({ pageNum: this.state.pageNum, pageSize: this.state.pageSize }));
+        this.props.dispatch(getTests({ pageNum: this.state.pageNum, pageSize: this.state.pageSize }));
     }
     componentWillUnmount() {
     }
@@ -46,7 +47,21 @@ class Test extends React.Component {
                     dataSource={tests}
                     columns={[
                         { title: '№', key: '№', render: (record) => (tests || []).indexOf(record)+(this.state.pageNum*this.state.pageSize)+1, width: 100 },
-                        { title: 'Нэр', key: 'title', dataIndex: 'title' },
+                        { title: 'Нэр', key: 'title', render: (record) => <Link to={`/admin/test/single/${record.slug}`}>{record.title}</Link> },
+                        { title: 'Үйлдлүүд', key: 'action', width: 150,
+                            render: (record) =>
+                                <Popconfirm
+                                    title={'Устгах уу?'}
+                                    okText={'Тийм'} cancelText={'Үгүй'}
+                                    onConfirm={() => this.props.dispatch(deleteTest({_id: record._id}))}
+                                >
+                                    <Button
+                                        icon={<DeleteOutlined />}
+                                        danger
+                                        type={'primary'}
+                                    />
+                                </Popconfirm>
+                        }
                     ]}
                     locale={{emptyText: 'Хоосон байна'}}
                 />

@@ -1,12 +1,16 @@
+import config from '../config';
 import {
     createTest,
     deleteTest,
-    getTest
+    getTest,
+    getTests,
+    createQuestion,
+    deleteQuestion,
 } from "../actionTypes";
 const initialState = {
+    questions: [],
     tests: [],
     gettingTest: false,
-
 };
 
 export default(state = initialState, action) => {
@@ -14,49 +18,27 @@ export default(state = initialState, action) => {
         case getTest.REQUEST:
             return {
                 ...state,
-                gettingTest: true
             }
         case getTest.RESPONSE:
+            config.get('emitter').emit('testSingleGetTest',
+                {
+                    test: ((action.json || {}).test),
+                    questions: ((action.json || {}).questions),
+                    success: (action.json || {}).success,
+                });
+            return {
+                ...state,
+            }
+        case getTests.REQUEST:
             return {
                 ...state,
                 gettingTest: false,
-                tests: ((action.json || {}).tests)
             }
-        case createTest.REQUEST:
+        case getTests.RESPONSE:
             return {
                 ...state,
-                gettingTest: true,
-            }
-        case createTest.RESPONSE:
-            if((action.json || {}).success){
-                return {
-                    ...state,
-                    gettingTest: false,
-                    tests: [((action.json || {}).tests), ...state.tests]
-                }
-            }else{
-                return {
-                    ...state,
-                    gettingTest: false
-                }
-            }
-        case deleteTest.REQUEST:
-            return {
-                ...state,
-                gettingTest: true,
-            }
-        case deleteTest.RESPONSE:
-            if((action.json || {}).success){
-                return {
-                    ...state,
-                    gettingTest: false,
-                    tests: (state.tests || []).filter(test => (test._id || 'as').toString() !== ((action.json || {})._id || '').toString())
-                }
-            }else{
-                return {
-                    ...state,
-                    gettingTest: false
-                }
+                gettingTest: false,
+                tests: ((action.json || {}).tests || [])
             }
         default:
             return state;

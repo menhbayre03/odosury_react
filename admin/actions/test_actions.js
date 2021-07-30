@@ -19,6 +19,9 @@ import * as networkActions from './networkActions';
 export function getTest(data = {}){
     let url = `/admin/api/get/test`;
     return networkActions.requestPost(constants.getTest, url, data);
+}export function getTests(data = {}){
+    let url = `/admin/api/get/tests`;
+    return networkActions.requestPost(constants.getTests, url, data);
 }
 export function createTest(data = {}){
     let url = `/admin/api/create/test`;
@@ -27,10 +30,6 @@ export function createTest(data = {}){
 export function deleteTest(data = {}){
     let url = `/admin/api/delete/test`;
     return networkActions.requestPost(constants.deleteTest, url, data);
-}
-export function getQuestion(data = {}){
-    let url = `/admin/api/get/question`;
-    return networkActions.requestGet(constants.getQuestion, url, data);
 }
 export function createQuestion(data = {}){
     let url = `/admin/api/create/question`;

@@ -467,6 +467,10 @@ export const restorePromoCode = {
     RESPONSE: 'restorePromoCode_RESPONSE'
 };
 
+export const getTests = {
+    REQUEST: 'getTests_REQUEST',
+    RESPONSE: 'getTests_RESPONSE'
+};
 export const getTest = {
     REQUEST: 'getTest_REQUEST',
     RESPONSE: 'getTest_RESPONSE'

@@ -549,3 +549,26 @@ tr.ant-table-row.finished {
     //margin-bottom: 10px;
   }
 }
+
+.collapse-test-question{
+  .ant-collapse-item .ant-collapse-header{
+    border-bottom: 1px solid rgba(235, 235, 235, 0.7);
+  }
+  .ant-collapse-item .ant-collapse-header, .ant-collapse-item .ant-collapse-content{
+    background-color: white;
+  }
+  .ant-collapse-item{
+    margin-bottom: 20px;
+  }
+  .question-header{
+    word-break: break-all;
+    transition: 3s
+  }
+  .question-header.ellipsis{
+    width: 90%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;
+  }
+}

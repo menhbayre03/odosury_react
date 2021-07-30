@@ -156,7 +156,7 @@ class Payment extends Component {
     render() {
         const {main: {eishPrice}, payment: {visible, type, lesson = {}, duration, step, method, paymentLaoding, transaction, buyingEishFree, buyEishFreeSuccess }, requests: { promoIsValid, promocode, validatingPromoCode, appliedCode, appliedDiscount }} = this.props;
         let {main: {premiumPrice}} = this.props;
-        premiumPrice = duration ? premiumPrice[duration] : premiumPrice[3]
+        premiumPrice = duration ? premiumPrice[duration] : (premiumPrice || [])[3]
         const colorPicker = (color1, color2, stepsNum) => {
             const helperFunc = (c1, c2, stepLen) => {
                 let c = c1 + stepLen * (c2 - c1);
