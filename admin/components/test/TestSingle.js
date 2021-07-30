@@ -68,8 +68,13 @@ class Test extends React.Component {
             questionAnswers: [],
             questionCorrectAnswer:  '',
             questionTemp: '',
+
+            // LOADERS
+            questionSubmitLoading: false,
+            testSubmitLoading: false
         };
         this.questionHandler = this.questionHandler.bind(this);
+        this.clear = this.clear.bind(this);
     }
     componentDidMount() {
         let self = this;
@@ -103,7 +108,32 @@ class Test extends React.Component {
         }
     }
     componentWillUnmount() {
+        this.setState({testSubmitLoading: false})
         this.getTest.remove();
+    }
+    clear() {
+        this.setState({
+            loadingTest: false,
+            temp: {
+                easy: {quantity: 0, type: '', adding: false},
+                medium: {quantity: 0, type: '', adding: false},
+                hard: {quantity: 0, type: '', adding: false},
+                pro: {quantity: 0, type: '', adding: false},
+            },
+            editing: '',
+            editingContent: '',
+            visible: false,
+            question_id: '',
+            questionType: '',
+            questionDifficulty: '',
+            questionTitle: '',
+            questionPoint: 0,
+            questionAnswers: [],
+            questionCorrectAnswer:  '',
+            questionTemp: '',
+            questionSubmitLoading: false,
+            testSubmitLoading: false
+        })
     }
     questionHandler(obj, action){
         if(obj){
@@ -150,19 +180,21 @@ class Test extends React.Component {
             (this.state.hardQuestion || []).length + (this.state.proQuestion || []).length) === 0){
             config.get('emitter').emit('warning', 'Шалгалтын асуултуудын тоог оруулна уу.');
         }else{
-            this.props.dispatch(createTest({
-                _id: this.state._id,
-                title: this.state.title,
-                duration: this.state.duration,
-                price: this.state.price,
-                secret: this.state.secret,
-                oneTime: this.state.oneTime,
-                hasCertificate: this.state.hasCertificate,
-                easyQuestion: this.state.easyQuestion,
-                mediumQuestion: this.state.mediumQuestion,
-                hardQuestion: this.state.hardQuestion,
-                proQuestion: this.state.proQuestion,
-            }));
+            this.setState({testSubmitLoading: true}, () => {
+                this.props.dispatch(createTest({
+                    _id: this.state._id,
+                    title: this.state.title,
+                    duration: this.state.duration,
+                    price: this.state.price,
+                    secret: this.state.secret,
+                    oneTime: this.state.oneTime,
+                    hasCertificate: this.state.hasCertificate,
+                    easyQuestion: this.state.easyQuestion,
+                    mediumQuestion: this.state.mediumQuestion,
+                    hardQuestion: this.state.hardQuestion,
+                    proQuestion: this.state.proQuestion,
+                }));
+            });
         }
     }
     submitQuestion(){
@@ -177,41 +209,48 @@ class Test extends React.Component {
         }else if(!this.state.questionCorrectAnswer || this.state.questionCorrectAnswer === ''){
             config.get('emitter').emit('warning', 'Зөв хариултыг оруулна уу.');
         }else{
-            this.props.dispatch(createQuestion({
-                _id: this.state._id,
-                question_id: this.state.question_id,
-                type: this.state.questionType,
-                difficulty: this.state.questionDifficulty,
-                title: this.state.questionTitle,
-                points: this.state.questionPoint,
-                answers: this.state.questionAnswers,
-                correct: this.state.questionCorrectAnswer,
-            })).then(c => {
-                if((c.json || {}).success){
-                    let questions;
-                    if((c.json || {}).question_id && (c.json || {}).question_id !== ''){
-                        questions = (this.state.questions || []).map(question => {
-                            if((question._id || 'as').toString() !== ((c.json || {}).question || {})._id){
-                                return question;
-                            }
-                            return {...((c.json || {}).question || {})}
+            this.setState({
+                questionSubmitLoading: true
+            }, () => {
+                this.props.dispatch(createQuestion({
+                    _id: this.state._id,
+                    question_id: this.state.question_id,
+                    type: this.state.questionType,
+                    difficulty: this.state.questionDifficulty,
+                    title: this.state.questionTitle,
+                    points: this.state.questionPoint,
+                    answers: this.state.questionAnswers,
+                    correct: this.state.questionCorrectAnswer,
+                })).then(c => {
+                    if((c.json || {}).success){
+                        let questions;
+                        if((c.json || {}).question_id && (c.json || {}).question_id !== ''){
+                            questions = (this.state.questions || []).map(question => {
+                                if((question._id || 'as').toString() !== ((c.json || {}).question || {})._id){
+                                    return question;
+                                }
+                                return {...((c.json || {}).question || {})}
+                            });
+                        }else{
+                            questions = [...(this.state.questions || []), (c.json || {}).question]
+                        }
+                        this.setState({
+                            visible: false,
+                            question_id: '',
+                            questionType: '',
+                            questionDifficulty: '',
+                            questionTitle: '',
+                            questionPoint: 0,
+                            questionAnswers: [],
+                            questionCorrectAnswer:  '',
+                            questionTemp: '',
+                            questions: questions,
+                            questionSubmitLoading: false
                         });
                     }else{
-                        questions = [...(this.state.questions || []), (c.json || {}).question]
+                        this.setState({questionSubmitLoading: false});
                     }
-                    this.setState({
-                        visible: false,
-                        question_id: '',
-                        questionType: '',
-                        questionDifficulty: '',
-                        questionTitle: '',
-                        questionPoint: 0,
-                        questionAnswers: [],
-                        questionCorrectAnswer:  '',
-                        questionTemp: '',
-                        questions: questions,
-                    })
-                }
+                })
             })
         }
     }
@@ -549,6 +588,7 @@ class Test extends React.Component {
                                 type={'primary'}
                                 htmlType={'submit'}
                                 form={'test-single'}
+                                loading={this.state.testSubmitLoading}
                             >
                                 Хадгалах
                             </Button>
@@ -572,9 +612,7 @@ class Test extends React.Component {
                             <Popconfirm
                                 okText={'Тийм'} cancelText={'Үгүй'}
                                 title={'Болих уу?'}
-                                onConfirm={() => this.setState({
-                                    visible: false
-                                })}
+                                onConfirm={() => this.clear() }
                             >
                                 <Button danger size={'small'}>
                                     Болих
@@ -585,28 +623,13 @@ class Test extends React.Component {
                                 size={'small'}
                                 type={'primary'}
                                 onClick={() => this.submitQuestion()}
+                                loading={this.state.questionSubmitLoading}
                             >
                                 {this.state.question_id ? 'Шинэчлэх' : 'Нэмэх'}
                             </Button>
                         </div>
                     }
                 >
-                    {/*<Row gutter={10}>*/}
-                    {/*    <Col span={8} style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>*/}
-                    {/*        <span>Тестийн төрөл:</span>*/}
-                    {/*    </Col>*/}
-                    {/*    <Col span={16}>*/}
-                    {/*        <Select*/}
-                    {/*            style={{width: 200}}*/}
-                    {/*            value={this.state.type}*/}
-                    {/*            onSelect={(e) => this.setState({type: e})}*/}
-                    {/*        >*/}
-                    {/*            <Select.Option*/}
-                    {/*                value={'selectOne'} key={'selectOne'}*/}
-                    {/*            >Сонгох тест</Select.Option>*/}
-                    {/*        </Select>*/}
-                    {/*    </Col>*/}
-                    {/*</Row>*/}
                     <div key={'test-drawer-types'} style={{marginBottom: 20}}>
                         <span>Асуултын төрөл:</span>
                         <Select
