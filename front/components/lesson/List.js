@@ -55,6 +55,7 @@ class List extends Component {
 
     renderSidebar() {
         const {main: {categories}} = this.props;
+        console.log(categories)
         let slug = this.props.match.params.slug;
         return (
             <Col xl={3} lg={4} md={5} sm={12} style={{marginBottom: 30}}>
@@ -166,6 +167,7 @@ class List extends Component {
                                                         <Col lg={4} md={6} sm={6} style={{marginBottom: 30}}>
                                                             <div key={index}>
                                                                 <GridItem item={item}/>
+                                                                
                                                             </div>
                                                         </Col>
                                                     ))

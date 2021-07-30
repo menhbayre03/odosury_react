@@ -9,6 +9,10 @@ export function declineOpenTest(data, slug) {
     let url = `/api/declineOpenTest`;
     return networkActions.requestPost(constants.declineOpenTest, url, data);
 }
+export function getTest(slug) {
+    let url = `/api/test/single/${slug}`;
+    return networkActions.requestGet(constants.getTest, url)
+}
 export function componentWillUnmount() {
     return {
         type: constants.componentWillUnmountTest.REQUEST

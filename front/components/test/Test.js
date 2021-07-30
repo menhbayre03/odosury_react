@@ -18,9 +18,12 @@ const reducer = ({ main, test }) => ({ main, test });
 class Test extends Component {
     constructor(props) {
         super(props);
+        let search = ((props.location || {}).state || {}).search || '';
         this.state = {
             confirmModalShow:false,
-            confirmModalData:{}
+            confirmModalData:{},
+            sort: {value: 'newest', name: 'Шинэ'},
+            search: search
         };
     }
 
@@ -34,6 +37,16 @@ class Test extends Component {
     componentWillUnmount() {
         this.closeConfirmModal();
         this.props.dispatch(actions.componentWillUnmount());
+    }
+    onSearch(e) {
+        if(e) {
+            e.preventDefault();
+        }
+        const {dispatch, match} = this.props;
+        dispatch(actions.getTests(match.params.slug, {sort: this.state.sort.value, search: this.state.search}));
+    }
+    onChange(e) {
+        this.setState({search: e.target.value})
     }
     openConfirmModal(item){
         const {main:{user}} = this.props;
@@ -53,6 +66,77 @@ class Test extends Component {
         };
         dispatch(actions.declineOpenTest(cc));
     }
+    renderSidebar() {
+        const {main: {categories}} = this.props;
+        console.log(categories)
+        let slug = this.props.match.params.slug;
+        return (
+            <Col xl={3} lg={4} md={5} sm={12} style={{marginBottom: 30}}>
+                <div className="list-sidebar">
+                    <div className="list-sidebar-items">
+                        <div className="side-item" style={{marginBottom: 10}}>
+                            <div className="side-search">
+                                <form style={{position: 'relative'}} onSubmit={(e) => this.onSearch(e)}>
+                                    <input
+                                        onChange={this.onChange.bind(this)}
+                                        placeholder="Хичээл хайх ..."
+                                        value={this.state.search}
+                                    />
+                                    <ion-icon  onClick={() => this.onSearch()} name="search-outline"/>
+                                </form>
+                            </div>
+                        </div>
+                        <div className="side-item">
+                            <p>Ангилал</p>
+                            <ul className="cate">
+                                <li className={'cate-item'}>
+                                    <Link to={`#`}>
+                                        {'all' === slug ? <ion-icon name="checkmark"/> : null}
+                                        <span>Бүгд </span>
+                                    </Link>
+                                </li>
+                                {
+                                    categories.map((item, ida) => (
+                                        item.slug === slug || item.child?.some(chd => chd.slug === slug) ? (
+                                            <li key={ida} className={item.slug === slug ? 'cate-item active' : 'cate-item'}>
+                                                <Link to={`#`}>
+                                                    {item.slug === slug ? <ion-icon name="checkmark"/> : null}
+                                                    <span>{item.title} </span>
+                                                </Link>
+                                                {
+                                                    item.child && item.child.length > 0 ? (
+                                                        <ul className="cate-child">
+                                                            {
+                                                                item.child.map((child, ind) => (
+                                                                    <li key={ind} className={child.slug === slug ? 'cate-item active' : 'cate-item'}>
+                                                                        <Link to={`#`}>
+                                                                            {child.slug === slug ? <ion-icon name="checkmark"/> : null}
+                                                                            <span>{child.title} ({child.count})</span>
+                                                                        </Link>
+                                                                    </li>
+                                                                ))
+                                                            }
+                                                        </ul>
+                                                    ) : null
+                                                }
+                                            </li>
+                                        ) : (
+                                            <li key={ida} className={'cate-item'}>
+                                                <Link to={`#`}>
+                                                    {item.slug === slug ? <ion-icon name="checkmark"/> : null}
+                                                    <span>{item.title} </span>
+                                                </Link>
+                                            </li>
+                                        )
+                                    ))
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </Col>
+        )
+    }
     render() {
         const {test:{tests, loading, all, openTest}} = this.props;
         const demoTest = [];
@@ -61,10 +145,13 @@ class Test extends Component {
                 _id:i,
                 slug:`test_${i+1}`,
                 title: `test ${i+1}`,
+                title: `Хичээлийн тест ${i+1}`,
+                isTimeLimit: true,
                 price: 20000,
                 secret: true,
                 oneTime: true,
-                hasCertificate: true,
+                hasCertificate: false,
+                backgroundImg: null,
                 // *** ed nariig avchrahgu, orond n questionQuantity avchirna ***
                 // easyQuestion:[
                 //     {quantity:1, type:'selectOne'},
@@ -74,8 +161,8 @@ class Test extends Component {
                 //     {quantity:1, type:'selectOne'},
                 //     {quantity:1, type:'selectMany'},
                 // ],
-                questionQuantity: 4,
-                duration: 20,
+                questionQuantity: 20,
+                duration: 60,
             });
         }
         return (
@@ -83,48 +170,96 @@ class Test extends Component {
                 <Header location={this.props.location}/>
                 <div className="list-container" style={{minHeight: 'calc(100vh - 185px)'}}>
                     <Container>
-                        <Loader status={loading}>
-                            {
-                                (tests || []).map((item, index) => (
-                                    <div key={index}>
-                                        {index+1}. {item.title}
-                                        {openTest ? null :
-                                            <Button variant="primary" onClick={this.openConfirmModal.bind(this, item)} >
-                                                <ion-icon name="play" /> Тест өгөх
-                                            </Button>
-                                        }
+                        <Row>
+                            <Col xl={9} lg={8} md={7} sm={12}>
+                                <div className="list-content">
+                                    <div className="list-header">
+                                        <h3>Тестүүд</h3>
                                     </div>
-                                ))
-                            }
-                        </Loader>
+                                    <div className="list-items">
+                                    <Loader status={loading}>
+                                        <Row>
+                                        {
+                                            (demoTest || []).map((item, index) => (
+                                                <Col lg={4} md={6} sm={6} style={{marginBottom: 30}}>
+                                                    <div key={index} className="testCard"
+                                                    onClick={this.openConfirmModal.bind(this, item)}
+                                                    style={this.state.confirmModalData.backgroundImg ? {} : {background: 'url("/images/defaultTestCard1.png")', backgroundSize:'200px 110px'}}>
+                                                        <div className="cardContent">
+                                                         {item.title}
+                                                         <br/>
+                                                         Хугацаа: {item.duration} мин
+                                                         <br/>
+                                                        <span style={{color: '#ffc107', fontSize: 14}}> Үнэ: {item.price}₮</span>
+                                                        <div className="certifyTagTest" style={item.hasCertificate? {} : {backgroundColor: '#dc3545', border: 'none'}}> 
+                                                        {item.hasCertificate ? 'СЕРТИФИКАТТАЙ' : 'СЕРТИФИКАТГҮЙ'} </div>
+                                                        </div>
+                                                    </div>
+                                                </Col>
+                                            ))
+                                        }
+                                        </Row>
+                                    </Loader>
+                                    </div>
+                                </div>
+                            </Col>
+                            
+                            {(this.renderSidebar())}
+                            
+                        </Row>
+                        
                     </Container>
-
-                    <Modal show={this.state.confirmModalShow} onHide={() => this.closeConfirmModal()}>
-                        {/*<Modal.Header closeButton>*/}
-                        {/*    <Modal.Title style={{fontSize: 18, fontWeight: 600}}>Тест</Modal.Title>*/}
-                        {/*</Modal.Header>*/}
+                    
+                    <Modal show={this.state.confirmModalShow}
+                        dialogClassName="modalContent"
+                        onHide={() => this.closeConfirmModal()}
+                        >
+                        <div className="testModal">
                         <Modal.Body>
-                            <div>
-                                <div>Та <span>{this.state.confirmModalData.title}</span> тест өгөх гэж байна.</div>
-                                <div>Үнэ: {(this.state.confirmModalData.price || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}₮</div>
-                                <div>Нийт: {(this.state.confirmModalData.questionQuantity || 0)} асуулттай</div>
-                                <div>Үргэлжлэх хугацаа: {this.state.confirmModalData.duration ? this.state.confirmModalData.duration : 'хугацаагүй'}</div>
-                                <div>Давтамж: {this.state.confirmModalData.oneTime? 'нэг удаа өгнө' : 'хэд өгсөн ч болно'}</div>
-                                <div>Сертификат: {this.state.confirmModalData.hasCertificate? 'өгнө' : 'өгөхгүй'}</div>
+                            <div style={ this.state.confirmModalData.backgroundImg ? {} : {background: 'url("/images/defaultTest1.jpg")', height: '320px',backgroundSize:'600px 320px'}}  className="modalMain">
+                                <h4>Та <span>{this.state.confirmModalData.title}</span> тест өгөх гэж байна.</h4>
+                                <div style={{marginLeft: 25, marginTop: 30}}>
+                                    <div className="certifyTagTest" style={this.state.confirmModalData.hasCertificate? {} : {backgroundColor: '#dc3545', border: 'none'}}>
+                                        {this.state.confirmModalData.hasCertificate? 'СЕРТИФИКАТТАЙ' : 'СЕРТИФИКАТГҮЙ'}
+                                    </div>
+                                    <div>
+                                        Нийт: {(this.state.confirmModalData.questionQuantity || 0)} асуулттай
+                                    </div>
+                                    <div>
+                                        Үргэлжлэх хугацаа: {this.state.confirmModalData.isTimeLimit && this.state.confirmModalData.duration ? this.state.confirmModalData.duration  : 'хугацаагүй'}
+                                    </div>
+                                    <div>Давтамж: {this.state.confirmModalData.oneTime? 'Нэг удаа өгнө' : 'Хэд өгсөн ч болно'}</div>
+                                    <div>Үнэ: {this.state.confirmModalData.price}₮ </div>
+                                </div>
+                            <div style={{position: 'absolute',
+                                        marginTop: '60px',
+                                        marginLeft: '200px'}}>
+                                <button className="testSecondary" onClick={this.closeConfirmModal.bind(this)}>
+                                    БОЛИХ
+                                </button>
+                                <Link to={`/test/launch/${this.state.confirmModalData.slug}`}>
+                                    <button className="testPrimary" style={{marginLeft: '30px'}}
+                                            // onClick={this.openTestCheck.bind(this)}
+                                    >
+                                        ӨГӨХ
+                                    </button>
+                                </Link>
+                            </div>
                             </div>
                         </Modal.Body>
-                        <Modal.Footer>
-                            <Button variant="default" onClick={this.closeConfirmModal.bind(this)}>
-                                Болих
-                            </Button>
+                        </div>
+                        {/* <Modal.Footer>
+                            <button className="testSecondary" onClick={this.closeConfirmModal.bind(this)}>
+                                БОЛИХ
+                            </button>
                             <Link to={`/test/launch/${this.state.confirmModalData.slug}`}>
-                                <Button variant="primary"
+                                <button className="testPrimary"
                                         // onClick={this.openTestCheck.bind(this)}
                                 >
-                                    Өгөх
-                                </Button>
+                                    ӨГӨХ
+                                </button>
                             </Link>
-                        </Modal.Footer>
+                        </Modal.Footer> */}
                     </Modal>
                     {openTest && openTest.test?
 

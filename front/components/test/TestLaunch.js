@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import Header from "../include/Header";
 import Footer from "../include/Footer";
 import GridItem from "../include/GridItem";
 import {Container, Row, Col, Button, Modal} from "react-bootstrap";
@@ -40,7 +39,7 @@ class TestLaunch extends Component {
                 price: 20000,
                 secret: true,
                 oneTime: true,
-                hasCertificate: true,
+                hasCertificate: false,
                 // *** ed nariig avchrahgu, orond n questionQuantity, questionDuration avchirna ***
                 // easyQuestion:[
                 //     {quantity:1, type:'selectOne'},
@@ -50,16 +49,28 @@ class TestLaunch extends Component {
                 //     {quantity:1, type:'selectOne'},
                 //     {quantity:1, type:'selectMany'},
                 // ],
-                questionQuantity: 4,
-                questionDuration: 20,
+                questionQuantity: 20,
+                questionDuration: 60,
             });
         }
         return (
             <React.Fragment>
-                {/*<Header location={this.props.location}/>*/}
+                <div style={{
+                    height: 40,
+                    width: '100vw',
+                    position: 'absolute',
+                    backgroundColor: '#151314'
+                }}>
+                        <div className="logo" style={{display: 'inline-block'}}>
+                            <Link to={'/'}><img src="/images/odosuryo.png" alt=""/></Link>
+                        </div>
+                </div>
                 <div className="list-container" style={{minHeight: 'calc(100vh - 185px)'}}>
+                        
                     <Container>
+                        
                         <Loader status={false}>
+                        
                             ok
                         </Loader>
                     </Container>
