@@ -12,7 +12,8 @@ import {
 } from "react-device-detect";
 import config from "../../config";
 import moment from "moment";
-const reducer = ({ main, test }) => ({ main, test });
+import testLaunch from "../../reducers/testLaunch";
+const reducer = ({ main, testLaunch }) => ({ main, testLaunch });
 
 class TestLaunch extends Component {
     constructor(props) {
@@ -24,16 +25,15 @@ class TestLaunch extends Component {
         const {match, dispatch} = this.props;
         let cc = {
         };
-        dispatch(actions.getTest(cc, match.params.slug));
+       dispatch(actions.getTest(cc, match.params.slug));
     }
     componentWillUnmount() {
     }
 
     render() {
-        
-        const {test:{test}} = this.props;
+        const {testLaunch:{openTest}} = this.props;
         const demoTest = [];
-        console.log(test)
+        console.log('openTest', openTest);
         // for (let i = 0; i < 10; i++) {
         //     demoTest.push({
         //         _id:i,
@@ -57,9 +57,14 @@ class TestLaunch extends Component {
         // }
         return (
             <React.Fragment>
-                <div className="testHeader1">
+                <div style={{
+                    height: 40,
+                    width: '100vw',
+                    position: 'absolute',
+                    backgroundColor: '#151314'
+                }}>
                         <div className="logo" style={{display: 'inline-block'}}>
-                            <img src="/images/odosuryo.png" alt="" style={{width: 175}} />
+                            <img src="/images/odosuryo.png" alt=""/>
                         </div>
                 </div>
                 <div className="list-container" style={{minHeight: 'calc(100vh - 185px)'}}>
