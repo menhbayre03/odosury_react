@@ -40,6 +40,11 @@ class Premium extends Component {
     componentDidMount() {
         window.scroll(0, 0);
         config.get('ga').pageview(window.location.pathname);
+        if(this.props.route?.extraProps === 'register'){
+            setTimeout(function(){
+                config.get('emitter').emit('openLogin', {type: 'register'})
+            }, 1000);
+        }
         // let timeLeftVar = this.secondsToTime(this.state.seconds);
         // this.setState({ time: timeLeftVar }, () => this.startTimer());
     }
