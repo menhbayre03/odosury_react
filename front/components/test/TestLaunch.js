@@ -33,11 +33,7 @@ class TestLaunch extends Component {
         
         const {test:{test}} = this.props;
         const demoTest = [];
-<<<<<<< Updated upstream
         console.log(test)
-=======
-        console.log(this.props.test)
->>>>>>> Stashed changes
         // for (let i = 0; i < 10; i++) {
         //     demoTest.push({
         //         _id:i,

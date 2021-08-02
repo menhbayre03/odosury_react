@@ -68,6 +68,7 @@ class Test extends Component {
     }
     renderSidebar() {
         const {main: {categories}} = this.props;
+        console.log(categories)
         let slug = this.props.match.params.slug;
         return (
             <Col xl={3} lg={4} md={5} sm={12} style={{marginBottom: 30}}>
