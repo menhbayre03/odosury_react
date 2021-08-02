@@ -91,6 +91,8 @@ class Home extends Component {
         this.openLogin = config.get('emitter').addListener('openLogin', function (data) {
             if ((data || {}).type === 'reset') {
                 self.setState({showLogin: true, data: data || null, active: 'reset'})
+            } else if ((data || {}).type === 'register') {
+                self.setState({showLogin: true, data: data || null, active: 'register'})
             } else {
                 self.setState({showLogin: true, data: data || null})
             }
