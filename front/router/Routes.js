@@ -62,6 +62,12 @@ export default [
                 path: '/eishPage',
                 exact: true
             },
+            {
+                component: Premium,
+                path: '/register',
+                exact: true,
+                extraProps: 'register'
+            },
             // {
             //     component: Login,
             //     path: '/verify/:token',
