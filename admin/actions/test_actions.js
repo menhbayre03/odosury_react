@@ -39,3 +39,7 @@ export function deleteQuestion(data = {}){
     let url = `/admin/api/delete/question`;
     return networkActions.requestPost(constants.deleteQuestion, url, data);
 }
+export function publishTest(data = {}){
+    let url = `/admin/api/publish/test`;
+    return networkActions.requestPost(constants.publishTest, url, data);
+}

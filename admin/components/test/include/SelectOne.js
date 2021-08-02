@@ -18,26 +18,7 @@ class SelectOne extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            question_id: this.props.question_id,
-            questionTitle: this.props.questionTitle,
-            questionAnswers: this.props.questionAnswers,
-            questionCorrectAnswer: this.props.questionCorrectAnswer,
-            questionTemp: this.props.questionTemp,
-            propertyHandler: this.props.propertyHandler,
-            listItemHandler: this.props.listItemHandler
-        };
-    }
-    getSnapshotBeforeUpdate(prevProps, prevState) {
-        if (!conf.objectsEqual(prevProps, this.props)) {
-            return this.props;
-        }
-        return null;
-    }
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (snapshot !== null) {
-            this.setState({
-                ...snapshot
-            })
+            questionTemp: ''
         }
     }
     render() {
@@ -46,21 +27,21 @@ class SelectOne extends React.Component {
                 <div style={{marginBottom: 10}} key={`div-question-type`}>
                     <span>Асуулт: </span>
                     <Input.TextArea
-                        value={this.state.questionTitle}
-                        onChange={(e) => this.state.propertyHandler?.('selectOne', 'question', 'Title', 'edit', '', e.target.value, 'str')}
+                        value={this.props.questionTitle}
+                        onChange={(e) => this.props.propertyHandler?.('selectOne', 'question', 'Title', 'edit', '', e.target.value, 'str')}
                     />
                 </div>
                 <div style={{marginBottom: 10}} key={`div-question-answers`}>
                     <span>Хариултууд:</span>
                     <div style={{marginLeft: 30}} key={`div-question-type-div`}>
                         {
-                            (this.state.questionAnswers || []).length > 0 ?
+                            (this.props.questionAnswers || []).length > 0 ?
                                 <ol type={'A'}>
                                     {
-                                        (this.state.questionAnswers || []).map((ans, ind) =>
+                                        (this.props.questionAnswers || []).map((ans, ind) =>
                                             <div
                                                 style={
-                                                    ind === ((this.state.questionCorrectAnswer || 'x').charCodeAt(0)-65) ?
+                                                    ind === ((this.props.questionCorrectAnswer || 'x').charCodeAt(0)-65) ?
                                                         {backgroundColor: 'green', padding: 5, color: '#fff', fontSize: 16, listStylePosition: 'inside'}
                                                         :
                                                         {padding: 5, fontSize: 16}
@@ -73,7 +54,7 @@ class SelectOne extends React.Component {
                                                     item={ans}
                                                     type={'answer'}
                                                     property={'content'}
-                                                    handler={this.state.listItemHandler}
+                                                    handler={this.props.listItemHandler}
                                                 />
                                             </div>)
                                     }
@@ -90,7 +71,7 @@ class SelectOne extends React.Component {
                 <div style={{marginBottom: 10}} key={`div-question-insert-div`}>
                     <Row>
                         <Col span={3} style={{display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: 20, fontWeight: 600}}>
-                            {String.fromCharCode((this.state.questionAnswers || []).length+65)}
+                            {String.fromCharCode((this.props.questionAnswers || []).length+65)}
                         </Col>
                         <Col span={18}>
                             <Input.TextArea
@@ -98,13 +79,15 @@ class SelectOne extends React.Component {
                                 onChange={(e) => this.setState({questionTemp: e.target.value})}
                                 onPressEnter={(e) =>{
                                     e.preventDefault();
+                                    let temp = this.state.questionTemp;
                                     this.state.questionTemp !== '' ?
                                         this.setState({
-                                            questionAnswers: [...(this.state.questionAnswers || []), {
-                                                _id: conf.getKey('selectOne'),
-                                                content: this.state.questionTemp,
-                                            }],
                                             questionTemp: ''
+                                        }, () => {
+                                            this.props.listItemHandler?.('selectOne', 'question', 'Answers', 'insert', '', {
+                                                _id: conf.getKey('selectOne'),
+                                                content: temp,
+                                            })
                                         })
                                         :
                                         null
@@ -119,7 +102,7 @@ class SelectOne extends React.Component {
                                         this.setState({
                                             questionTemp: ''
                                         }, () => {
-                                            this.state.listItemHandler?.('selectOne', 'question', 'Answers', '', {
+                                            this.props.listItemHandler?.('selectOne', 'question', 'Answers', 'insert', '', {
                                                 _id: conf.getKey('selectOne'),
                                                 content: temp,
                                             })
@@ -135,12 +118,12 @@ class SelectOne extends React.Component {
                 <span>Зөв хариулт:</span>
                 <Select
                     style={{width: 200, marginLeft: 10}}
-                    value={this.state.questionCorrectAnswer}
+                    value={this.props.questionCorrectAnswer}
                     onSelect={(e) => this.props.propertyHandler?.('selectOne', 'question', 'CorrectAnswer', 'edit', '', e, 'str')}
                     notFoundContent={<Empty description={<span style={{color: '#495057', userSelect: 'none'}}>Хариулт байхгүй байна.</span>} />}
                 >
                     {
-                        (this.state.questionAnswers || []).map((ans, ind) =>
+                        (this.props.questionAnswers || []).map((ans, ind) =>
                             <Select.Option value={String.fromCharCode(ind+65)} key={`${ind}-answer-correct`}>
                                 {String.fromCharCode(ind+65)}
                             </Select.Option>

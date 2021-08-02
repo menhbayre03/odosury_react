@@ -496,3 +496,7 @@ export const deleteQuestion = {
     REQUEST: 'deleteQuestion_REQUEST',
     RESPONSE: 'deleteQuestion_RESPONSE'
 }
+export const publishTest = {
+    REQUEST: 'publishTest_REQUEST',
+    RESPONSE: 'publishTest_RESPONSE'
+}

@@ -119,18 +119,4 @@ conf.objectsEqual = (prev, updated) =>
 //     )
 // }
 
-// getSnapshotBeforeUpdate(prevProps, prevState) {
-//     if (!conf.objectsEqual(prevProps.item, this.props.item)) {
-//         return this.props.item;
-//     }
-//     return null;
-// }
-// componentDidUpdate(prevProps, prevState, snapshot) {
-//     if (snapshot !== null) {
-//         this.setState({
-//             item: snapshot
-//         })
-//     }
-// }
-
 export default conf

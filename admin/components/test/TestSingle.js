@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from 'react-redux';
 import config from '../../config';
-import {getTest, createTest, deleteTest, createQuestion, deleteQuestion } from '../../actions/test_actions'
+import {getTest, createTest, deleteTest, createQuestion, deleteQuestion, publishTest } from '../../actions/test_actions'
 const reducer = ({ main, test }) => ({ main, test });
 import {
     Card, Empty, Popover,
@@ -38,6 +38,7 @@ class Test extends React.Component {
             mediumQuestion: [],
             hardQuestion: [],
             proQuestion: [],
+            needUpdate: false,
 
             // types: [
             //     'selectOne', 'selectMulti',
@@ -77,7 +78,8 @@ class Test extends React.Component {
 
             // LOADERS
             questionSubmitLoading: false,
-            testSubmitLoading: false
+            testSubmitLoading: false,
+            publishLoading: false,
         };
         this.questionHandler = this.questionHandler.bind(this);
         this.propertyHandler = this.propertyHandler.bind(this);
@@ -116,7 +118,7 @@ class Test extends React.Component {
         }
     }
     componentWillUnmount() {
-        this.setState({testSubmitLoading: false})
+        this.setState({testSubmitLoading: false, questionSubmitLoading: false})
         this.getTest.remove();
     }
     clear() {
@@ -183,7 +185,7 @@ class Test extends React.Component {
             if(type === 'selectOne' && updated.questionAnswers?.length === 0){
                 updated.questionCorrectAnswer = '';
             }
-            this.setState({[string]: updated});
+            this.setState({...updated});
         }
     }
     propertyHandler(type, parent, child, action, _id, data, elementType){
@@ -293,7 +295,7 @@ class Test extends React.Component {
                     title={'Нэр'}
                     content={conf.getType(item[property])}
                 >
-                    <div key={`${parent}-${child}-div-${item._id}`} style={{display: 'inline-flex', flexDirection: 'row', width: '98%'}}>
+                    <div key={`${parent}-${child}-div-${item._id}`} style={{display: 'inline-flex', flexDirection: 'row', width: '95%'}}>
                         <div
                             style={{width: '90%', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', wordBreak: 'break-all'}}
                             key={`${parent}-${child}-content-${item._id}`}
@@ -353,6 +355,7 @@ class Test extends React.Component {
                             {name: 'oneTime', value: this.state.oneTime},
                             {name: 'hasCertificate', value: this.state.hasCertificate},
                         ]}
+                        onValuesChange={() => this.setState({needUpdate: true})}
                     >
                         <Form.Item
                             label='Шалгалтын нэр'
@@ -550,13 +553,31 @@ class Test extends React.Component {
                             style={{textAlign: 'right'}}
                         >
                             <Button
-                                type={'primary'}
                                 htmlType={'submit'}
                                 form={'test-single'}
+                                disabled={!this.state.needUpdate}
                                 loading={this.state.testSubmitLoading}
                             >
                                 Хадгалах
                             </Button>
+                            <Popconfirm
+                                title={'Шалгалтыг нийтлэх үү?'}
+                                okText={'Тийм'} cancelText={'Үгүй'}
+                                onConfirm={() => this.setState({
+                                    publishLoading: true
+                                }, () => {
+                                    this.props.dispatch(publishTest({slug: ((this.props.match || {}).params || {}).test}));
+                                })}
+                            >
+                                <Button
+                                    style={{marginLeft: 20}}
+                                    type={'primary'}
+                                    // disabled={!this.state}
+                                    loading={this.state.publishLoading}
+                                >
+                                    Нийтлэх
+                                </Button>
+                            </Popconfirm>
                         </div>
                     </Form>
                 </Card>
@@ -640,7 +661,6 @@ class Test extends React.Component {
                             :
                             null
                     }
-                    <Button onClick={() => console.log(this.state)}>sadsd</Button>
                 </Drawer>
             </React.Fragment>
         );

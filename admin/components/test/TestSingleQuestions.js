@@ -38,24 +38,24 @@ class TestSingleQuestions extends React.Component {
     //         });
     //     }
     // }
-    getSnapshotBeforeUpdate(prevProps, prevState) {
-        if (
-            !((prevProps.questions || []).length === (this.props.questions || []).length &&
-            ((prevProps || {}).questions || []).every((o, idx) => conf.objectsEqual(o, (this.props.questions || [])[idx])))
-        ) {
-            return (
-                this.props.questions
-            );
-        }
-        return null;
-    }
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (snapshot !== null) {
-            this.setState({
-                questions: snapshot
-            })
-        }
-    }
+    // getSnapshotBeforeUpdate(prevProps, prevState) {
+    //     if (
+    //         !((prevProps.questions || []).length === (this.props.questions || []).length &&
+    //         ((prevProps || {}).questions || []).every((o, idx) => conf.objectsEqual(o, (this.props.questions || [])[idx])))
+    //     ) {
+    //         return (
+    //             this.props.questions
+    //         );
+    //     }
+    //     return null;
+    // }
+    // componentDidUpdate(prevProps, prevState, snapshot) {
+    //     if (snapshot !== null) {
+    //         this.setState({
+    //             questions: snapshot
+    //         })
+    //     }
+    // }
     render() {
         return (
             <Collapse
@@ -65,7 +65,7 @@ class TestSingleQuestions extends React.Component {
                 onChange={(e) => this.setState({activeKey: e})}
             >
                 {
-                    (this.state.questions || []).map(question =>
+                    (this.props.questions || []).map(question =>
                         <Collapse.Panel
                             key={question._id}
                             style={{fontSize: 15}}
