@@ -12,7 +12,8 @@ import {
 } from "react-device-detect";
 import config from "../../config";
 import moment from "moment";
-const reducer = ({ main, test }) => ({ main, test });
+import testLaunch from "../../reducers/testLaunch";
+const reducer = ({ main, testLaunch }) => ({ main, testLaunch });
 
 class TestLaunch extends Component {
     constructor(props) {
@@ -24,14 +25,15 @@ class TestLaunch extends Component {
         const {match, dispatch} = this.props;
         let cc = {
         };
-       // dispatch(actions.getTest(cc, match.params.slug));
+       dispatch(actions.getTest(cc, match.params.slug));
     }
     componentWillUnmount() {
     }
 
     render() {
-        const {test:{}} = this.props;
+        const {testLaunch:{openTest}} = this.props;
         const demoTest = [];
+        console.log('openTest', openTest);
         // for (let i = 0; i < 10; i++) {
         //     demoTest.push({
         //         _id:i,

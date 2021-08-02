@@ -18,7 +18,7 @@ export default(state = initialState, action) => {
                 return {
                     ...state,
                     loading: 0,
-                    test: (action.json.test || {}),
+                    openTest: (action.json.openTest || {}),
                 };
             } else {
                 window.location.assign('/test');
