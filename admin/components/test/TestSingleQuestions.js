@@ -13,6 +13,7 @@ import {
 import {
     PlusOutlined, EnterOutlined, EditOutlined, DeleteOutlined, CloseCircleOutlined, CheckOutlined
 } from '@ant-design/icons';
+import conf from "./include/conf";
 const {Panel} = Collapse;
 
 class TestSingleQuestions extends React.Component {
@@ -38,14 +39,9 @@ class TestSingleQuestions extends React.Component {
     //     }
     // }
     getSnapshotBeforeUpdate(prevProps, prevState) {
-        const objectsEqual = (prev, updated) =>
-            typeof prev === 'object' && Object.keys(prev).length > 0
-                ? Object.keys(prev).length === Object.keys(updated).length
-                && Object.keys(prev).every(p => objectsEqual(prev[p], updated[p]))
-                : prev === updated;
         if (
             !((prevProps.questions || []).length === (this.props.questions || []).length &&
-            ((prevProps || {}).questions || []).every((o, idx) => objectsEqual(o, (this.props.questions || [])[idx])))
+            ((prevProps || {}).questions || []).every((o, idx) => conf.objectsEqual(o, (this.props.questions || [])[idx])))
         ) {
             return (
                 this.props.questions

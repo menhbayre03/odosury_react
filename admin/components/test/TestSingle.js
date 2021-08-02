@@ -16,6 +16,8 @@ import {
 } from '@ant-design/icons';
 import TestSingleQuestion from "./TestSingleQuestion";
 import TestSingleQuestions from "./TestSingleQuestions";
+import conf from "./include/conf";
+import SelectOne from "./include/SelectOne";
 
 class Test extends React.Component {
     constructor(props) {
@@ -37,10 +39,13 @@ class Test extends React.Component {
             hardQuestion: [],
             proQuestion: [],
 
+            // types: [
+            //     'selectOne', 'selectMulti',
+            //     'connectOne', 'connectMulti',
+            //     'inputOne', 'inputMulti',
+            // ],
             types: [
-                'selectOne', 'selectMulti',
-                'connectOne', 'connectMulti',
-                'inputOne', 'inputMulti',
+                'selectOne',
             ],
             difficulties: [
                 'easy', 'medium', 'hard', 'pro'
@@ -60,11 +65,12 @@ class Test extends React.Component {
 
             // FOR QUESTION
             visible: false,
-            question_id: '',
             questionType: '',
             questionDifficulty: '',
-            questionTitle: '',
             questionPoint: 0,
+
+            question_id: '',
+            questionTitle: '',
             questionAnswers: [],
             questionCorrectAnswer:  '',
             questionTemp: '',
@@ -74,6 +80,8 @@ class Test extends React.Component {
             testSubmitLoading: false
         };
         this.questionHandler = this.questionHandler.bind(this);
+        this.propertyHandler = this.propertyHandler.bind(this);
+        this.listItemHandler = this.listItemHandler.bind(this);
         this.clear = this.clear.bind(this);
     }
     componentDidMount() {
@@ -153,25 +161,40 @@ class Test extends React.Component {
             }
         }
     }
-    getDifficulty(e){
-        switch (e) {
-            case 'easy': return 'Хялбар';
-            case 'medium': return 'Энгийн';
-            case 'hard': return 'Хүндэвтэр';
-            case 'pro': return 'Хүнд';
-            default: return '';
+    listItemHandler(type, parent, child, action, _id, data){
+        let string = `${parent}${child}`;
+        let initial = ((this.state || [])[string] || [])
+        if(action === 'insert'){
+            let updated = [...(initial || []), data];
+            this.setState({[string]: updated});
+        }else if(action === 'edit'){
+            let updated = (initial || []).map(answer => {
+                if((answer._id || 'as').toString() !== (_id || '').toString()){
+                    return answer;
+                }
+                return {
+                    ...answer,
+                    ...data
+                }
+            });
+            this.setState({[string]: updated});
+        }else{
+            let updated = {[string]: (initial || []).filter(answer => (answer._id || 'as').toString() !== (_id || '').toString())}
+            if(type === 'selectOne' && updated.questionAnswers?.length === 0){
+                updated.questionCorrectAnswer = '';
+            }
+            this.setState({[string]: updated});
         }
     }
-    getType(e){
-        switch (e) {
-            case 'selectOne': return 'Сонгох асуулт';
-            case 'selectMulti': return 'Олон сонголттой асуулт';
-            case 'connectOne': return 'Холбох асуулт';
-            case 'connectMulti': return 'Олон холболттой асуулт';
-            case 'inputOne': return 'Бөглөх асуулт';
-            case 'inputMulti': return 'Олон бөглөх хэсэгтэй асуулт';
-            default: return '';
-        }
+    propertyHandler(type, parent, child, action, _id, data, elementType){
+        let string = `${parent}${child}`;
+        let initial = (
+            (this.state || [])[string] || (
+                elementType === 'obj' ? {} :
+                elementType === 'str' ? '' :
+                elementType === 'num' ? '' :
+                elementType === 'arr' ? [] : null));
+        this.setState({[string]: data});
     }
     submit(e){
         if(!this.state.title || this.state.title === ''){
@@ -197,7 +220,7 @@ class Test extends React.Component {
             });
         }
     }
-    submitQuestion(){
+    submitQuestion(obj){
         if(!this.state.questionType || this.state.questionType === ''){
             config.get('emitter').emit('warning', 'Асуултын төрлийг оруулна уу.');
         }else if(!this.state.questionDifficulty || this.state.questionDifficulty === ''){
@@ -254,92 +277,41 @@ class Test extends React.Component {
             })
         }
     }
-    getKey(key){
-        return `${key}-${Math.random()}`;
-    }
-    changeArray(parent, child, key, property, action){
+    deleteFromArray(parent, child, key){
         let string = `${parent}${child}`;
         let initial = (this.state || [])[string];
-        if(action === 'edit'){
-            initial = (initial || []).map(ini => {
-                if((ini._id || 'as').toString() !== (key || '').toString()){
-                    return ini;
-                }
-                return {
-                    ...ini,
-                    [property]: this.state.editingContent
-                }
-            });
-            this.setState({[string]: initial, editingContent: '', editing: ''});
-        }else if(action === 'delete'){
-            initial = (initial || []).filter(ini => (ini._id || 'as').toString() !== (key || '').toString());
-            this.setState({[string]: initial});
-        }
+        initial = (initial || []).filter(ini => (ini._id || 'as').toString() !== (key || '').toString());
+        this.setState({[string]: initial});
     }
-    getListItem(parent, child, item, type, property){
+    getDifficultyListItem(parent, child, item, property){
         return (
             <li
                 key={`${parent}-${child}-child-${item._id}`}
-                onDoubleClick={() => type !== 'difficulty' ? this.setState({editing: item._id, editingContent: (item || [])[property]}) : null}
             >
-                {
-                    this.state.editing !== item._id ?
-                        <Popover
-                            key={`${parent}-${child}-popover-${item._id}`}
-                            title={'Нэр'}
-                            content={item[property]}
+                <Popover
+                    key={`${parent}-${child}-popover-${item._id}`}
+                    title={'Нэр'}
+                    content={conf.getType(item[property])}
+                >
+                    <div key={`${parent}-${child}-div-${item._id}`} style={{display: 'inline-flex', flexDirection: 'row', width: '98%'}}>
+                        <div
+                            style={{width: '90%', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', wordBreak: 'break-all'}}
+                            key={`${parent}-${child}-content-${item._id}`}
                         >
-                            <div key={`${parent}-${child}-div-${item._id}`} style={{display: 'inline-flex', flexDirection: 'row', width: '98%'}}>
-                                <div
-                                    style={{width: '90%', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', wordBreak: 'break-all'}}
-                                    key={`${parent}-${child}-content-${item._id}`}
-                                >
-                                    {
-                                        type === 'difficulty' ?
-                                            <div style={{display: 'inline-flex', justifyContent: 'space-between', width: '100%', height: '100%', alignItems: 'center'}}>
-                                                <span>{this.getType(item[property])}</span>
-                                                <span>{item.quantity}</span>
-                                            </div>
-                                            :
-                                            item[property]
-                                    }
-
-                                </div>
-                                <div style={{width: '10%'}} key={`${parent}-${child}-actions-${item._id}`}>
-                                    {
-                                        type !== 'difficulty' ?
-                                            <Button
-                                                icon={<EditOutlined />}
-                                                key={`${parent}-${child}-edit-${item._id}`}
-                                                onClick={() => this.setState({editing: item._id, editingContent: (item || [])[property]})}
-                                                style={{color: '#4e53a0', border: 'none', boxShadow: 'none', backgroundColor: 'transparent'}}
-                                            />
-                                            :
-                                            null
-                                    }
-                                    <Button
-                                        key={`${parent}-${child}-delete-${item._id}`} icon={<DeleteOutlined />}
-                                        danger style={{border: 'none', boxShadow: 'none', backgroundColor: 'transparent'}}
-                                        onClick={() => this.changeArray(parent, child, item._id, property, 'delete')}
-                                    />
-                                </div>
+                            <div style={{display: 'inline-flex', justifyContent: 'space-between', width: '100%', height: '100%', alignItems: 'center'}}>
+                                <span>{conf.getType(item[property])}</span>
+                                <span>{item.quantity}</span>
                             </div>
-                        </Popover>
-                        :
-                        <Input.Group>
-                            <Input.TextArea value={this.state.editingContent} onChange={(e) => this.setState({editingContent: e.target.value})} />
+                        </div>
+                        <div style={{width: '10%'}} key={`${parent}-${child}-actions-${item._id}`}>
                             <Button
-                                style={{color: '#4e53a0', border: 'none', boxShadow: 'none', width: 50, backgroundColor: 'transparent'}}
-                                icon={<CheckOutlined/>}
-                                onClick={() => this.changeArray(parent, child, item._id, property, 'edit')}
-                            />
-                            <Button
-                                icon={<CloseCircleOutlined />}
-                                onClick={() => this.setState({editing: '', editingContent: '', width: 50, backgroundColor: 'transparent'})}
+                                key={`${parent}-${child}-delete-${item._id}`} icon={<DeleteOutlined />}
                                 danger style={{border: 'none', boxShadow: 'none', backgroundColor: 'transparent'}}
+                                onClick={() => this.deleteFromArray(parent, child, item._id)}
                             />
-                        </Input.Group>
-                }
+                        </div>
+                    </div>
+                </Popover>
             </li>
         )
     }
@@ -382,13 +354,6 @@ class Test extends React.Component {
                             {name: 'hasCertificate', value: this.state.hasCertificate},
                         ]}
                     >
-                        {/*labelCol={{*/}
-                        {/*    span: 6,*/}
-                        {/*}}*/}
-                        {/*wrapperCol={{*/}
-                        {/*    span: 14,*/}
-                        {/*}}*/}
-
                         <Form.Item
                             label='Шалгалтын нэр'
                             name='title'
@@ -480,7 +445,7 @@ class Test extends React.Component {
                                         <Col span={6} key={diff}>
                                             <div key={`div-${diff}`}>
                                                 <div style={{textAlign: 'center'}} key={`div-${diff}-${diff}`}>
-                                                    {this.getDifficulty(diff)} асуултууд
+                                                    {conf.getDifficulty(diff)} асуултууд
                                                     <Button
                                                         size={'small'}
                                                         style={{border: 'none', boxShadow: 'none', outline: 'none'}}
@@ -501,7 +466,7 @@ class Test extends React.Component {
                                                         ((this.state || [])[`${diff}Question`] || []).length > 0 ?
                                                             <ul>
                                                                 {((this.state || [])[`${diff}Question`] || []).map(question =>
-                                                                    this.getListItem(diff, 'Question', question, 'difficulty', 'type')
+                                                                    this.getDifficultyListItem(diff, 'Question', question, 'type')
                                                                 )}
                                                             </ul>
                                                             :
@@ -532,7 +497,7 @@ class Test extends React.Component {
                                                                         key={type}
                                                                         disabled={((this.state || [])[`${diff}Question`] || []).some(quest => quest.type === type)}
                                                                     >
-                                                                        {this.getType(type)}
+                                                                        {conf.getType(type)}
                                                                     </Select.Option>
                                                                 )
                                                             }
@@ -558,7 +523,7 @@ class Test extends React.Component {
                                                                         [`${diff}Question`]: [
                                                                             ...((this.state || [])[`${diff}Question`] || []),
                                                                             {
-                                                                                _id: this.getKey(diff),
+                                                                                _id: conf.getKey(diff),
                                                                                 quantity: ((this.state.temp || [])[diff] || {}).quantity,
                                                                                 type: ((this.state.temp || [])[diff] || {}).type,
                                                                             }
@@ -637,11 +602,8 @@ class Test extends React.Component {
                             value={this.state.questionType}
                             onSelect={(e) => this.setState({questionType: e})}
                         >
-                            {/*<Select.Option*/}
-                            {/*    value={'selectOne'} key={'selectOne'}*/}
-                            {/*>Сонгох тест</Select.Option>*/}
                             {
-                                (this.state.types || []).map(type => <Select.Option value={type} key={type}>{this.getType(type)}</Select.Option>)
+                                (this.state.types || []).map(type => <Select.Option value={type} key={type}>{conf.getType(type)}</Select.Option>)
                             }
                         </Select>
                         <span>Асуултын ангилал:</span>
@@ -652,7 +614,7 @@ class Test extends React.Component {
                         >
                             {
                                 (this.state.difficulties || []).map(diff =>
-                                    <Select.Option value={diff} key={diff}>{this.getDifficulty(diff)} асуулт</Select.Option>
+                                    <Select.Option value={diff} key={diff}>{conf.getDifficulty(diff)} асуулт</Select.Option>
                                 )
                             }
                         </Select>
@@ -666,106 +628,19 @@ class Test extends React.Component {
                     </div>
                     {
                         this.state.questionType === 'selectOne' ?
-                            <React.Fragment>
-                                <div style={{marginBottom: 10}} key={`div-question-type`}>
-                                    <span>Асуулт: </span>
-                                    <Input.TextArea
-                                        value={this.state.questionTitle}
-                                        onChange={(e) => this.setState({questionTitle: e.target.value})}
-                                    />
-                                </div>
-                                <div style={{marginBottom: 10}} key={`div-question-answers`}>
-                                    <span>Хариултууд:</span>
-                                    <div style={{marginLeft: 30}}  key={`div-question-type-div`}>
-                                        {
-                                            (this.state.questionAnswers || []).length > 0 ?
-                                                <ol type={'A'}>
-                                                    {
-                                                        (this.state.questionAnswers || []).map((ans, ind) =>
-                                                            <div
-                                                                style={
-                                                                    ind === ((this.state.questionCorrectAnswer || 'x').charCodeAt(0)-65) ?
-                                                                        {backgroundColor: 'green', padding: 5, color: '#fff', fontSize: 16, listStylePosition: 'inside'}
-                                                                        :
-                                                                        {padding: 5, fontSize: 16}
-                                                                }
-                                                                key={ans.key}
-                                                            >
-                                                                {this.getListItem('question', 'Answers', ans, 'answer', 'content')}
-                                                            </div>)
-                                                    }
-                                                </ol>
-                                                :
-                                                <div style={{
-                                                    fontSize: 20, fontWeight: 700, color: '#dedede', display: 'flex', justifyContent: 'center', alignItems: 'center', height: 100
-                                                }}>
-                                                    Хоосон байна
-                                                </div>
-                                        }
-                                    </div>
-                                </div>
-                                <div style={{marginBottom: 10}}>
-                                    <Row>
-                                        <Col span={3} style={{display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: 20, fontWeight: 600}}>
-                                            {String.fromCharCode((this.state.questionAnswers || []).length+65)}
-                                        </Col>
-                                        <Col span={18}>
-                                            <Input.TextArea
-                                                value={this.state.questionTemp}
-                                                onChange={(e) => this.setState({questionTemp: e.target.value})}
-                                                onPressEnter={(e) =>{
-                                                    e.preventDefault();
-                                                    this.state.questionTemp !== '' ?
-                                                        this.setState({
-                                                            questionAnswers: [...(this.state.questionAnswers || []), {
-                                                                _id: this.getKey('selectOne'),
-                                                                content: this.state.questionTemp,
-                                                            }],
-                                                            questionTemp: ''
-                                                        })
-                                                        :
-                                                        null
-                                                }}
-                                            />
-                                        </Col>
-                                        <Col span={3} style={{display: 'flex', justifyContent: 'center'}}>
-                                            <Button
-                                                onClick={() =>
-                                                    this.state.questionTemp !== '' ?
-                                                        this.setState({
-                                                            questionAnswers: [...(this.state.questionAnswers || []), {
-                                                                _id: this.getKey('selectOne'),
-                                                                content: this.state.questionTemp,
-                                                            }],
-                                                            questionTemp: ''
-                                                        })
-                                                        :
-                                                        null
-                                                }
-                                                icon={<EnterOutlined />} style={{color: '#4e53a0', backgroundColor: 'white', border: 'none', boxShadow: 'none'}}
-                                            />
-                                        </Col>
-                                    </Row>
-                                </div>
-                                <span>Зөв хариулт:</span>
-                                <Select
-                                    style={{width: 200, marginLeft: 10}}
-                                    value={this.state.questionCorrectAnswer}
-                                    onSelect={(e) => this.setState({questionCorrectAnswer: e})}
-                                    notFoundContent={<Empty description={<span style={{color: '#495057', userSelect: 'none'}}>Хариулт байхгүй байна.</span>} />}
-                                >
-                                    {
-                                        (this.state.questionAnswers || []).map((ans, ind) =>
-                                            <Select.Option value={String.fromCharCode(ind+65)} key={`${ind}-answer-correct`}>
-                                                {String.fromCharCode(ind+65)}
-                                            </Select.Option>
-                                        )
-                                    }
-                                </Select>
-                            </React.Fragment>
+                            <SelectOne
+                                question_id={this.state.question_id}
+                                questionTitle={this.state.questionTitle}
+                                questionAnswers={this.state.questionAnswers}
+                                questionCorrectAnswer={this.state.questionCorrectAnswer}
+                                questionTemp={this.state.questionTemp}
+                                propertyHandler={this.propertyHandler}
+                                listItemHandler={this.listItemHandler}
+                            />
                             :
                             null
                     }
+                    <Button onClick={() => console.log(this.state)}>sadsd</Button>
                 </Drawer>
             </React.Fragment>
         );
