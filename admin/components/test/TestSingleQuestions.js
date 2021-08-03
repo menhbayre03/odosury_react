@@ -25,37 +25,6 @@ class TestSingleQuestions extends React.Component {
             activeKey: []
         };
     }
-    // UNSAFE_componentWillReceiveProps(nextProps, nextContext) {
-    //     this.setState({
-    //         questions: (nextProps || {}).questions,
-    //         changeParentState: (nextProps || {}).handler
-    //     })
-    // // }
-    // componentWillReceiveProps(nextProps, nextContext) {
-    //     if (this.props.questions !== nextProps.questions) {
-    //         this.setState({
-    //             questions: nextProps.questions,
-    //         });
-    //     }
-    // }
-    // getSnapshotBeforeUpdate(prevProps, prevState) {
-    //     if (
-    //         !((prevProps.questions || []).length === (this.props.questions || []).length &&
-    //         ((prevProps || {}).questions || []).every((o, idx) => conf.objectsEqual(o, (this.props.questions || [])[idx])))
-    //     ) {
-    //         return (
-    //             this.props.questions
-    //         );
-    //     }
-    //     return null;
-    // }
-    // componentDidUpdate(prevProps, prevState, snapshot) {
-    //     if (snapshot !== null) {
-    //         this.setState({
-    //             questions: snapshot
-    //         })
-    //     }
-    // }
     render() {
         return (
             <Collapse
@@ -70,9 +39,17 @@ class TestSingleQuestions extends React.Component {
                             key={question._id}
                             style={{fontSize: 15}}
                             header={
-                                <div className={`question-header${(this.state.activeKey || []).includes(question._id) ? '' : ' ellipsis'}`}>
-                                    {(question.selectOne_question || {}).text}
-                                </div>
+                                <React.Fragment>
+                                    <div className={`question-header${(this.state.activeKey || []).includes(question._id) ? '' : ' ellipsis'}`}>
+                                        {(question.selectOne_question || {}).text}
+                                    </div>
+                                    <hr style={{border: 'none', height: 1, backgroundColor: 'rgba(0,0,0,0.1)'}} />
+                                    <div style={{display: 'flex', flexDirection: 'row'}}>
+                                        <span className={'info'}>Түвшин: {conf.getDifficulty(question.difficulty)}</span>
+                                        <span className={'info'}>Төрөл: {conf.getType(question.type)}</span>
+                                        <span className={'info'}>Оноо: {question.point}</span>
+                                    </div>
+                                </React.Fragment>
                             }
                             extra={
                                 <React.Fragment>
@@ -101,7 +78,7 @@ class TestSingleQuestions extends React.Component {
                                                     questionAnswers: answers,
                                                     questionCorrectAnswer: correct,
                                                     questionTemp: '',
-                                                }, 'edit');
+                                                }, false, 'edit');
                                             }
                                         }}
                                     />
@@ -109,10 +86,11 @@ class TestSingleQuestions extends React.Component {
                                         title={'Энэ асуултыг устгах уу?'}
                                         okText={'Тийм'} cancelText={'Үгүй'}
                                         onConfirm={() => this.state.changeParentState?.({
-                                            _id: question._id
-                                        }, 'delete')}
+                                            _id: question._id,
+                                        }, {loader: question._id, difficulty: question.difficulty, type: question.type}, 'delete')}
                                     >
                                         <Button
+                                            loading={this.props.deleteLoading === question._id}
                                             style={{border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent'}}
                                             danger key={`${question._id}-delete`} size={'small'}
                                             icon={<DeleteOutlined />}

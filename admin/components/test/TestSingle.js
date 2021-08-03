@@ -39,7 +39,7 @@ class Test extends React.Component {
             hardQuestion: [],
             proQuestion: [],
             needUpdate: false,
-
+            status: '',
             // types: [
             //     'selectOne', 'selectMulti',
             //     'connectOne', 'connectMulti',
@@ -80,6 +80,7 @@ class Test extends React.Component {
             questionSubmitLoading: false,
             testSubmitLoading: false,
             publishLoading: false,
+            deleteLoading: ''
         };
         this.questionHandler = this.questionHandler.bind(this);
         this.propertyHandler = this.propertyHandler.bind(this);
@@ -103,7 +104,8 @@ class Test extends React.Component {
                     mediumQuestion: ((data.test || {}).mediumQuestion || []),
                     hardQuestion: ((data.test || {}).hardQuestion || []),
                     proQuestion: ((data.test || {}).proQuestion || []),
-                    questions: (data.questions || [])
+                    questions: (data.questions || []),
+                    status: (data?.test?.status || 'idle')
                 });
             }else{
                 self.setState({loadingTest: false});
@@ -145,17 +147,33 @@ class Test extends React.Component {
             testSubmitLoading: false
         })
     }
-    questionHandler(obj, action){
+    questionHandler(obj, actionObj, action){
         if(obj){
             if(action === 'delete'){
-                this.props.dispatch(deleteQuestion({...obj})).then(c => {
-                    if(c.json?.success){
-                        let updatedQuestions = (this.state.questions || []).filter(question => (c.json?._id || 'as').toString() !== (question._id || '').toString());
+                if(actionObj.loader && Object.keys(actionObj.loader).length > 0){
+                    if(!this.readyToPublish(actionObj.difficulty, actionObj.type)){
                         this.setState({
-                            questions: updatedQuestions
+                            deleteLoading: actionObj.loader
+                        }, () => {
+                            this.props.dispatch(deleteQuestion({...obj})).then(c => {
+                                if(c.json?.success){
+                                    let updatedQuestions = (this.state.questions || []).filter(question =>
+                                        (c.json?._id || 'as').toString() !== (question._id || '').toString());
+                                    this.setState({
+                                        questions: updatedQuestions,
+                                        deleteLoading: ''
+                                    })
+                                }else{
+                                    this.setState({
+                                        deleteLoading: ''
+                                    })
+                                }
+                            });
                         })
+                    }else{
+                        config.get('emitter').emit('warning', 'Энэ асуултыг устгавал асуулт бүрдэхгүй тул боломжгүй');
                     }
-                });
+                }
             }else if(action === 'edit'){
                 this.setState({
                     ...obj
@@ -226,7 +244,7 @@ class Test extends React.Component {
         if(!this.state.questionType || this.state.questionType === ''){
             config.get('emitter').emit('warning', 'Асуултын төрлийг оруулна уу.');
         }else if(!this.state.questionDifficulty || this.state.questionDifficulty === ''){
-            config.get('emitter').emit('warning', 'Асуултын ангилалыг оруулна уу.');
+            config.get('emitter').emit('warning', 'Асуултын түвшинг оруулна уу.');
         }else if(!this.state.questionTitle || this.state.questionTitle === ''){
             config.get('emitter').emit('warning', 'Асуултыг оруулна уу.');
         }else if(!this.state.questionAnswers || (this.state.questionAnswers || []).length <= 1 || (this.state.questionAnswers || []).length > 20){
@@ -283,9 +301,37 @@ class Test extends React.Component {
         let string = `${parent}${child}`;
         let initial = (this.state || [])[string];
         initial = (initial || []).filter(ini => (ini._id || 'as').toString() !== (key || '').toString());
-        this.setState({[string]: initial});
+        this.setState({[string]: initial, needUpdate: true});
+    }
+    readyToPublish(difficulty, type){
+        let requiredQuestions = {};
+        (this.state.difficulties || []).map(difficulty => {
+            (requiredQuestions || [])[difficulty] = {};
+            (this.state.types || []).map(type => {
+                (requiredQuestions || [])[difficulty][type] = 0;
+            });
+            ((this.state || [])[`${difficulty}Question`] || []).map(question => {
+                (requiredQuestions || [])[difficulty][question.type] = (question.quantity || 0);
+            });
+        });
+        (this.state.questions || []).map(question => {
+            (requiredQuestions || [])[(question.difficulty || 'easy')][(question.type || 'selectOne')]--;
+        });
+        if(difficulty && difficulty !== '' && type && type !== ''){
+            (requiredQuestions || [])[difficulty][type]++;
+        }
+        let ready = (this.state.difficulties || []).some(difficulty => {
+            return (this.state.types || []).some(type => {
+                return (requiredQuestions || [])[difficulty][type] > 0
+            });
+        });
+        return ready;
     }
     getDifficultyListItem(parent, child, item, property){
+        let questionCount = 0;
+        (this.state.questions || []).map(question => {
+            question.difficulty === parent && question.type === item[property] ? questionCount++ : null;
+        });
         return (
             <li
                 key={`${parent}-${child}-child-${item._id}`}
@@ -300,9 +346,19 @@ class Test extends React.Component {
                             style={{width: '90%', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', wordBreak: 'break-all'}}
                             key={`${parent}-${child}-content-${item._id}`}
                         >
-                            <div style={{display: 'inline-flex', justifyContent: 'space-between', width: '100%', height: '100%', alignItems: 'center'}}>
+                            <div style={
+                                questionCount === item.quantity ?
+                                    {display: 'inline-flex', justifyContent: 'space-between', width: '100%', height: '100%', alignItems: 'center'}
+                                    :
+                                    questionCount > item.quantity ?
+                                        {display: 'inline-flex', justifyContent: 'space-between', width: '100%', height: '100%', alignItems: 'center', color: 'green'}
+                                        :
+                                        {display: 'inline-flex', justifyContent: 'space-between', width: '100%', height: '100%', alignItems: 'center', color: 'red'}
+                            }>
                                 <span>{conf.getType(item[property])}</span>
-                                <span>{item.quantity}</span>
+                                <span>
+                                    {questionCount}/{item.quantity}
+                                </span>
                             </div>
                         </div>
                         <div style={{width: '10%'}} key={`${parent}-${child}-actions-${item._id}`}>
@@ -523,6 +579,7 @@ class Test extends React.Component {
                                                                 if(((this.state.temp || [])[diff] || {}).type && ((this.state.temp || [])[diff] || {}).type !== '' &&
                                                                     ((this.state.temp || [])[diff] || {}).quantity && ((this.state.temp || [])[diff] || {}).quantity !== 0){
                                                                     this.setState({
+                                                                        needUpdate: true,
                                                                         [`${diff}Question`]: [
                                                                             ...((this.state || [])[`${diff}Question`] || []),
                                                                             {
@@ -566,13 +623,20 @@ class Test extends React.Component {
                                 onConfirm={() => this.setState({
                                     publishLoading: true
                                 }, () => {
-                                    this.props.dispatch(publishTest({slug: ((this.props.match || {}).params || {}).test}));
+                                    this.props.dispatch(publishTest({slug: ((this.props.match || {}).params || {}).test})).then(c => {
+                                        if(c.json?.success){
+                                            this.setState({publishLoading: false, status: 'active'});
+                                        }else{
+                                            this.setState({publishLoading: false});
+                                        }
+                                    });
                                 })}
+                                disabled={this.readyToPublish() || this.state.needUpdate}
                             >
                                 <Button
                                     style={{marginLeft: 20}}
                                     type={'primary'}
-                                    // disabled={!this.state}
+                                    disabled={this.readyToPublish() || this.state.needUpdate}
                                     loading={this.state.publishLoading}
                                 >
                                     Нийтлэх
@@ -583,7 +647,7 @@ class Test extends React.Component {
                 </Card>
                 {
                     this.state.questions?.length > 0 ?
-                        <TestSingleQuestions questions={[...this.state.questions]} handler={this.questionHandler} />
+                        <TestSingleQuestions questions={[...this.state.questions]} handler={this.questionHandler} deleteLoading={this.state.deleteLoading} />
                         :
                         null
                 }
@@ -619,6 +683,7 @@ class Test extends React.Component {
                     <div key={'test-drawer-types'} style={{marginBottom: 20}}>
                         <span>Асуултын төрөл:</span>
                         <Select
+                            disabled={this.state.question_id !== ''}
                             style={{width: 200, marginLeft: 10, marginRight: 20}}
                             value={this.state.questionType}
                             onSelect={(e) => this.setState({questionType: e})}
@@ -627,7 +692,7 @@ class Test extends React.Component {
                                 (this.state.types || []).map(type => <Select.Option value={type} key={type}>{conf.getType(type)}</Select.Option>)
                             }
                         </Select>
-                        <span>Асуултын ангилал:</span>
+                        <span>Асуултын түвшин:</span>
                         <Select
                             style={{width: 200, marginLeft: 10, marginRight: 20}}
                             value={this.state.questionDifficulty}
