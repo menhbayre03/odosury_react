@@ -1,4 +1,4 @@
-import {Button, Input, Popover} from "antd";
+import {Button, Input, Popover, Tag} from "antd";
 import React from "react";
 
 let conf = {};
@@ -20,6 +20,15 @@ conf.getDifficulty = function(e){
         case 'medium': return 'Энгийн';
         case 'hard': return 'Хүндэвтэр';
         case 'pro': return 'Хүнд';
+        default: return '';
+    }
+}
+conf.getStatus = function(e){
+    switch (e) {
+        case 'active': return <Tag color={'green'}>Нийтлэгдсэн</Tag>;
+        case 'idle': return <Tag>Идэвхгүй</Tag> ;
+        case 'delete': return <Tag color={'red'}>Устгагдсан</Tag>;
+        case 'pause': return <Tag color={'geekblue'}>Нийтлэгдээгүй</Tag> ;
         default: return '';
     }
 }

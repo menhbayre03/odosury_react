@@ -1,11 +1,11 @@
 import React from "react";
 import { connect } from 'react-redux';
 import config from '../../config';
-import {getTest, createTest, deleteTest, createQuestion, deleteQuestion, publishTest } from '../../actions/test_actions'
+import {getTest, createTest, deleteTest, createQuestion, deleteQuestion, publishTest, publishQuestion, unpublishQuestion } from '../../actions/test_actions'
 const reducer = ({ main, test }) => ({ main, test });
 import {
     Card, Empty, Popover,
-    Table, Row, Col,
+    Table, Row, Col, Tag,
     Button, Popconfirm,
     Input, Drawer, Collapse,
     Select, Form, Tooltip,
@@ -80,7 +80,9 @@ class Test extends React.Component {
             questionSubmitLoading: false,
             testSubmitLoading: false,
             publishLoading: false,
-            deleteLoading: ''
+            deleteQuestionLoading: '',
+            publishQuestionLoading: '',
+            unpublishQuestionLoading: '',
         };
         this.questionHandler = this.questionHandler.bind(this);
         this.propertyHandler = this.propertyHandler.bind(this);
@@ -149,11 +151,75 @@ class Test extends React.Component {
     }
     questionHandler(obj, actionObj, action){
         if(obj){
-            if(action === 'delete'){
+            if(action === 'publish') {
+                if(this.state.status === 'active'){
+                    if(actionObj.loader && Object.keys(actionObj.loader).length > 0){
+                        this.setState({
+                            publishQuestionLoading: actionObj.loader
+                        }, () => {
+                            this.props.dispatch(publishQuestion({...obj})).then(c => {
+                                if(c.json?.success){
+                                    let updatedQuestions = (this.state.questions || []).map(question => {
+                                        if((c.json?._id || 'as').toString() !== (question._id || '').toString()){
+                                            return question;
+                                        }
+                                        return {
+                                            ...question,
+                                            status: 'active'
+                                        }
+                                    });
+                                    this.setState({
+                                        questions: updatedQuestions,
+                                        publishQuestionLoading: ''
+                                    })
+                                }else{
+                                    this.setState({
+                                        publishQuestionLoading: ''
+                                    })
+                                }
+                            });
+                        })
+                    }
+                }else{
+                    config.get('emitter').emit('warning', 'Энэ асуултыг нийтлэх боломжгүй байна. Шалгалтыг нийтэлсэн байх ёстойг анхаарна уу!');
+                }
+            }else if(action === 'unpublish'){
                 if(actionObj.loader && Object.keys(actionObj.loader).length > 0){
                     if(!this.readyToPublish(actionObj.difficulty, actionObj.type)){
                         this.setState({
-                            deleteLoading: actionObj.loader
+                            unpublishQuestionLoading: actionObj.loader
+                        }, () => {
+                            this.props.dispatch(unpublishQuestion({...obj})).then(c => {
+                                if(c.json?.success){
+                                    let updatedQuestions = (this.state.questions || []).map(question => {
+                                        if((c.json?._id || 'as').toString() !== (question._id || '').toString()){
+                                            return question;
+                                        }
+                                        return {
+                                            ...question,
+                                            status: 'pause'
+                                        }
+                                    });
+                                    this.setState({
+                                        questions: updatedQuestions,
+                                        unpublishQuestionLoading: ''
+                                    })
+                                }else{
+                                    this.setState({
+                                        unpublishQuestionLoading: ''
+                                    })
+                                }
+                            });
+                        })
+                    }else{
+                        config.get('emitter').emit('warning', 'Энэ асуултыг устгавал асуулт бүрдэхгүй тул боломжгүй');
+                    }
+                }
+            }else if(action === 'delete'){
+                if(actionObj.loader && Object.keys(actionObj.loader).length > 0){
+                    if(!this.readyToPublish(actionObj.difficulty, actionObj.type)){
+                        this.setState({
+                            deleteQuestionLoading: actionObj.loader
                         }, () => {
                             this.props.dispatch(deleteQuestion({...obj})).then(c => {
                                 if(c.json?.success){
@@ -161,11 +227,11 @@ class Test extends React.Component {
                                         (c.json?._id || 'as').toString() !== (question._id || '').toString());
                                     this.setState({
                                         questions: updatedQuestions,
-                                        deleteLoading: ''
+                                        deleteQuestionLoading: ''
                                     })
                                 }else{
                                     this.setState({
-                                        deleteLoading: ''
+                                        deleteQuestionLoading: ''
                                     })
                                 }
                             });
@@ -383,6 +449,10 @@ class Test extends React.Component {
                     loading={this.state.loadingTest}
                     extra={
                         <>
+                            Статус:&nbsp;
+                            {
+                                conf.getStatus(this.state.status)
+                            }
                             {
                                 ((this.props.match || {}).params || {}).test !== 'new' ?
                                     <Button
@@ -617,31 +687,36 @@ class Test extends React.Component {
                             >
                                 Хадгалах
                             </Button>
-                            <Popconfirm
-                                title={'Шалгалтыг нийтлэх үү?'}
-                                okText={'Тийм'} cancelText={'Үгүй'}
-                                onConfirm={() => this.setState({
-                                    publishLoading: true
-                                }, () => {
-                                    this.props.dispatch(publishTest({slug: ((this.props.match || {}).params || {}).test})).then(c => {
-                                        if(c.json?.success){
-                                            this.setState({publishLoading: false, status: 'active'});
-                                        }else{
-                                            this.setState({publishLoading: false});
-                                        }
-                                    });
-                                })}
-                                disabled={this.readyToPublish() || this.state.needUpdate}
-                            >
-                                <Button
-                                    style={{marginLeft: 20}}
-                                    type={'primary'}
-                                    disabled={this.readyToPublish() || this.state.needUpdate}
-                                    loading={this.state.publishLoading}
-                                >
-                                    Нийтлэх
-                                </Button>
-                            </Popconfirm>
+                            {
+                                this.state.status !== 'active' ?
+                                    <Popconfirm
+                                        title={'Шалгалтыг нийтлэх үү?'}
+                                        okText={'Тийм'} cancelText={'Үгүй'}
+                                        onConfirm={() => this.setState({
+                                            publishLoading: true
+                                        }, () => {
+                                            this.props.dispatch(publishTest({slug: ((this.props.match || {}).params || {}).test})).then(c => {
+                                                if(c.json?.success){
+                                                    this.setState({publishLoading: false, status: 'active'});
+                                                }else{
+                                                    this.setState({publishLoading: false});
+                                                }
+                                            });
+                                        })}
+                                        disabled={this.readyToPublish() || this.state.needUpdate}
+                                    >
+                                        <Button
+                                            style={{marginLeft: 20}}
+                                            type={'primary'}
+                                            disabled={this.readyToPublish() || this.state.needUpdate}
+                                            loading={this.state.publishLoading}
+                                        >
+                                            Нийтлэх
+                                        </Button>
+                                    </Popconfirm>
+                                    :
+                                    null
+                            }
                         </div>
                     </Form>
                 </Card>

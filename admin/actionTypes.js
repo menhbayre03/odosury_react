@@ -500,3 +500,11 @@ export const publishTest = {
     REQUEST: 'publishTest_REQUEST',
     RESPONSE: 'publishTest_RESPONSE'
 }
+export const publishQuestion = {
+    REQUEST: 'publishQuestion_REQUEST',
+    RESPONSE: 'publishQuestion_RESPONSE'
+}
+export const unpublishQuestion = {
+    REQUEST: 'unpublishQuestion_REQUEST',
+    RESPONSE: 'unpublishQuestion_RESPONSE'
+}

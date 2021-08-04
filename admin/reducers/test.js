@@ -6,6 +6,8 @@ import {
     getTests,
     createQuestion,
     deleteQuestion,
+    publishQuestion,
+    unpublishQuestion
 } from "../actionTypes";
 const initialState = {
     questions: [],

@@ -6,12 +6,12 @@ import {
     Card, Empty, Popover,
     Table, Row, Col,
     Button, Popconfirm, Collapse,
-    Input, Drawer,
+    Input, Drawer, Tag,
     Select, Form,
     Switch, InputNumber, Tooltip
 } from 'antd';
 import {
-    PlusOutlined, EnterOutlined, EditOutlined, DeleteOutlined, CloseCircleOutlined, CheckOutlined
+    PlusOutlined, EnterOutlined, EditOutlined, DeleteOutlined, CloseCircleOutlined, CheckOutlined, CloudUploadOutlined, CloudDownloadOutlined,
 } from '@ant-design/icons';
 import conf from "./include/conf";
 const {Panel} = Collapse;
@@ -40,48 +40,119 @@ class TestSingleQuestions extends React.Component {
                             style={{fontSize: 15}}
                             header={
                                 <React.Fragment>
-                                    <div className={`question-header${(this.state.activeKey || []).includes(question._id) ? '' : ' ellipsis'}`}>
-                                        {(question.selectOne_question || {}).text}
-                                    </div>
-                                    <hr style={{border: 'none', height: 1, backgroundColor: 'rgba(0,0,0,0.1)'}} />
-                                    <div style={{display: 'flex', flexDirection: 'row'}}>
-                                        <span className={'info'}>Түвшин: {conf.getDifficulty(question.difficulty)}</span>
-                                        <span className={'info'}>Төрөл: {conf.getType(question.type)}</span>
-                                        <span className={'info'}>Оноо: {question.point}</span>
-                                    </div>
+                                    {
+                                        (this.state.activeKey || []).includes(question._id) ?
+                                            <>
+                                                <div className={`question-header`}>
+                                                    {(question.selectOne_question || {}).text}
+                                                </div>
+                                                <hr style={{border: 'none', height: 1, backgroundColor: 'rgba(0,0,0,0.1)'}} />
+                                                <div style={{display: 'flex', flexDirection: 'row'}}>
+                                                    <span className={'info'}>Түвшин: {conf.getDifficulty(question.difficulty)}</span>
+                                                    <span className={'info'}>Төрөл: {conf.getType(question.type)}</span>
+                                                    <span className={'info'}>Оноо: {question.point}</span>
+                                                    {
+                                                        conf.getStatus(question.status)
+                                                    }
+                                                </div>
+                                            </>
+                                            :
+                                            <>
+                                                <div style={{display: 'flex', flexDirection: 'row'}}>
+                                                    <div style={{width: '100%'}}>
+                                                        <div className={`question-header ellipsis`}>
+                                                            {(question.selectOne_question || {}).text}
+                                                        </div>
+                                                        <hr style={{border: 'none', height: 1, backgroundColor: 'rgba(0,0,0,0.1)'}} />
+                                                    </div>
+                                                    {
+                                                        conf.getStatus(question.status)
+                                                    }
+                                                </div>
+                                                <div style={{display: 'flex', flexDirection: 'row'}}>
+                                                    <span className={'info'}>Түвшин: {conf.getDifficulty(question.difficulty)}</span>
+                                                    <span className={'info'}>Төрөл: {conf.getType(question.type)}</span>
+                                                    <span className={'info'}>Оноо: {question.point}</span>
+                                                </div>
+                                            </>
+                                    }
                                 </React.Fragment>
                             }
                             extra={
                                 <React.Fragment>
-                                    <Button
-                                        style={{border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent'}}
-                                        key={`${question._id}-edit`} size={'small'}
-                                        icon={<EditOutlined />}
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            if(question.type === 'selectOne'){
-                                                let correct = '';
-                                                let answers = (question.selectOne_answer || []).map((answer, ind) => {
-                                                    if(answer.isCorrect) correct = String.fromCharCode(ind+65);
-                                                    return {
-                                                        _id: (answer._id || []).toString(),
-                                                        content: answer.text,
-                                                    };
-                                                });
-                                                this.state.changeParentState?.({
-                                                    visible: true,
-                                                    question_id: question._id,
-                                                    questionType: question.type,
-                                                    questionDifficulty: question.difficulty,
-                                                    questionTitle: (question.selectOne_question || {}).text,
-                                                    questionPoint: question.point,
-                                                    questionAnswers: answers,
-                                                    questionCorrectAnswer: correct,
-                                                    questionTemp: '',
-                                                }, false, 'edit');
-                                            }
-                                        }}
-                                    />
+                                    {
+                                        question.status !== 'active' ?
+                                            <Tooltip
+                                                title={'Нийтлэх'}
+                                            >
+                                                <Button
+                                                    icon={<CloudUploadOutlined />}
+                                                    style={{border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent'}}
+                                                    key={`${question._id}-publish`} size={'small'}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        this.state.changeParentState?.({
+                                                            _id: question._id,
+                                                        }, {loader: question._id, difficulty: question.difficulty, type: question.type}, 'publish')
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                            :
+                                            null
+                                    }
+                                    {
+                                        question.status === 'active' ?
+                                            <Tooltip
+                                                title={'Идэвхгүй болгох'}
+                                            >
+                                                <Button
+                                                    icon={<CloudDownloadOutlined />}
+                                                    style={{border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent'}}
+                                                    key={`${question._id}-unpublish`} size={'small'}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        this.state.changeParentState?.({
+                                                            _id: question._id,
+                                                        }, {loader: question._id, difficulty: question.difficulty, type: question.type}, 'unpublish')
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                            :
+                                            null
+                                    }
+                                    <Tooltip
+                                        title={'Засах'}
+                                    >
+                                        <Button
+                                            style={{border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent'}}
+                                            key={`${question._id}-edit`} size={'small'}
+                                            icon={<EditOutlined />}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                if(question.type === 'selectOne'){
+                                                    let correct = '';
+                                                    let answers = (question.selectOne_answer || []).map((answer, ind) => {
+                                                        if(answer.isCorrect) correct = String.fromCharCode(ind+65);
+                                                        return {
+                                                            _id: (answer._id || []).toString(),
+                                                            content: answer.text,
+                                                        };
+                                                    });
+                                                    this.state.changeParentState?.({
+                                                        visible: true,
+                                                        question_id: question._id,
+                                                        questionType: question.type,
+                                                        questionDifficulty: question.difficulty,
+                                                        questionTitle: (question.selectOne_question || {}).text,
+                                                        questionPoint: question.point,
+                                                        questionAnswers: answers,
+                                                        questionCorrectAnswer: correct,
+                                                        questionTemp: '',
+                                                    }, false, 'edit');
+                                                }
+                                            }}
+                                        />
+                                    </Tooltip>
                                     <Popconfirm
                                         title={'Энэ асуултыг устгах уу?'}
                                         okText={'Тийм'} cancelText={'Үгүй'}

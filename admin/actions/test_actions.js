@@ -43,3 +43,11 @@ export function publishTest(data = {}){
     let url = `/admin/api/publish/test`;
     return networkActions.requestPost(constants.publishTest, url, data);
 }
+export function publishQuestion(data = {}){
+    let url = `/admin/api/publish/question`;
+    return networkActions.requestPost(constants.publishQuestion, url, data);
+}
+export function unpublishQuestion(data = {}){
+    let url = `/admin/api/unpublish/question`;
+    return networkActions.requestPost(constants.unpublishQuestion, url, data);
+}
