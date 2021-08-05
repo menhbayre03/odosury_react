@@ -1015,9 +1015,7 @@ div.abouttext2 > h3 {
 	background-color: whitesmoke;
 	box-shadow: 2px 4px 11px 4px #c1c1c1;
 	padding: 4px;
-	button:focus {
-		outline: none;
-	}
+	
 	.optionContainer {
 		display: flex;
 		background: linear-gradient(-45deg, #cd2e9a, #e73c7e, #23a6d5, #008eed);
@@ -1055,11 +1053,26 @@ div.abouttext2 > h3 {
 				border-radius: 5px;
 				color: white;
 				padding: 10px;
+				position: relative;
 			}
-			.desc {
+			.mainButton::before {
+				content: attr(secret-data);
+				text-decoration: line-through;
+				position: absolute;
+				top: -38px;
+				right: -110px;
+				background-color: rgb(234 234 234);
+				font-size: 0.7em;
+				padding: 5px 10px;
+				border-radius: 15px;
+				color: #7b7b7b;
+				text-decoration-thickness: 0.12em;
+				transform: rotate(352deg);
+				border-bottom-left-radius: 0;
+			}
+			.price {
 				font-style: italic;
 				font-weight: 800;
-				display: none;
 			}
 		}
 	}
@@ -1189,85 +1202,85 @@ div.abouttext2 > h3 {
 				border-top: none;
 				border-left: none;
 			}
-			.optionCard:nth-of-type(1):hover {
-				inset: 0 0 0 40%;
-				.desc {
-					display: block;
-					animation: 0.3s slide-right forwards;
-					transform: translateX(100%);
-					@keyframes slide-right {
-						to {
-							transform: translateX(0);
-						}
-					}
-				}
-				transition: all 1.2s;
-				border-bottom: none;
-				border-left: 1px solid white;
-			}
-			.optionCard:nth-of-type(1):hover ~ .optionCard:nth-of-type(2) {
-				inset: 50% 60% 0 0;
-				transition: all 1.2s;
-				z-index: 1;
-				border: none;
-			}
-			.optionCard:nth-of-type(1):hover ~ .optionCard:nth-of-type(3) {
-				inset: 0 60% 50% 0;
-				.desc {
-					display: none;
-				}
-				transition: all 1.2s;
-				z-index: 0;
-				border-right: none;
-				border-bottom: 1px solid white;
-				button::after {
-					content: "";
-					opacity: 0;
-				}
-			}
-			.optionCard:nth-of-type(2):hover {
-				inset: 50% 0 0 0;
-				.desc {
-					display: block;
-					animation: 0.3s slide-right forwards;
-					transform: translateX(-100%);
-					@keyframes slide-right {
-						to {
-							transform: translateX(0);
-						}
-					}
-				}
-				transition: all 1.2s;
-				margin-top: -1px;
-				border-left: none;
-				border-top: 1px solid white;
-			}
-			.optionCard:nth-of-type(2):hover ~ .optionCard:nth-of-type(3) {
-				inset: 0 40% 50% 0;
-				.desc {
-					display: none;
-				}
-				transition: all 1.2s;
-				animation-name: borderTrans23;
-				animation-iteration-count: 1;
-				animation-timing-function: ease-in;
-				animation-duration: 1.2s;
-				@keyframes borderTrans23 {
-					0% {
-						border-bottom: none;
-					}
-					99% {
-						border-bottom: none;
-					}
-					100% {
-						border-bottom: 1px solid white;
-					}
-				}
-				button::after {
-					content: "";
-					opacity: 0;
-				}
-			}
+			// .optionCard:nth-of-type(1):hover {
+			// 	inset: 0 0 0 40%;
+			// 	.desc {
+			// 		display: block;
+			// 		animation: 0.3s slide-right forwards;
+			// 		transform: translateX(100%);
+			// 		@keyframes slide-right {
+			// 			to {
+			// 				transform: translateX(0);
+			// 			}
+			// 		}
+			// 	}
+			// 	transition: all 1.2s;
+			// 	border-bottom: none;
+			// 	border-left: 1px solid white;
+			// }
+			// .optionCard:nth-of-type(1):hover ~ .optionCard:nth-of-type(2) {
+			// 	inset: 50% 60% 0 0;
+			// 	transition: all 1.2s;
+			// 	z-index: 1;
+			// 	border: none;
+			// }
+			// .optionCard:nth-of-type(1):hover ~ .optionCard:nth-of-type(3) {
+			// 	inset: 0 60% 50% 0;
+			// 	.desc {
+			// 		display: none;
+			// 	}
+			// 	transition: all 1.2s;
+			// 	z-index: 0;
+			// 	border-right: none;
+			// 	border-bottom: 1px solid white;
+			// 	button::after {
+			// 		content: "";
+			// 		opacity: 0;
+			// 	}
+			// }
+			// .optionCard:nth-of-type(2):hover {
+			// 	inset: 50% 0 0 0;
+			// 	.desc {
+			// 		display: block;
+			// 		animation: 0.3s slide-right forwards;
+			// 		transform: translateX(-100%);
+			// 		@keyframes slide-right {
+			// 			to {
+			// 				transform: translateX(0);
+			// 			}
+			// 		}
+			// 	}
+			// 	transition: all 1.2s;
+			// 	margin-top: -1px;
+			// 	border-left: none;
+			// 	border-top: 1px solid white;
+			// }
+			// .optionCard:nth-of-type(2):hover ~ .optionCard:nth-of-type(3) {
+			// 	inset: 0 40% 50% 0;
+			// 	.desc {
+			// 		display: none;
+			// 	}
+			// 	transition: all 1.2s;
+			// 	animation-name: borderTrans23;
+			// 	animation-iteration-count: 1;
+			// 	animation-timing-function: ease-in;
+			// 	animation-duration: 1.2s;
+			// 	@keyframes borderTrans23 {
+			// 		0% {
+			// 			border-bottom: none;
+			// 		}
+			// 		99% {
+			// 			border-bottom: none;
+			// 		}
+			// 		100% {
+			// 			border-bottom: 1px solid white;
+			// 		}
+			// 	}
+			// 	button::after {
+			// 		content: "";
+			// 		opacity: 0;
+			// 	}
+			// }
 		}
 		.benefits {
 		}
@@ -1285,7 +1298,12 @@ div.abouttext2 > h3 {
 				width: 100%;
 				height: 200px;
 				button {
-					font-size: 12px;
+					font-size: 16px;
+				}
+				.mainButton:before {
+					top: -27px;
+					right: -65px;
+					font-size: 0.8em;
 				}
 			}
 			.optionCard:nth-of-type(1) {

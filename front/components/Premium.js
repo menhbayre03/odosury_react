@@ -125,20 +125,18 @@ class Premium extends Component {
                             <Container>
                                 <div className="lapremium">
                                     <div className="optionContainer">
-                                        <div className="optionCard" onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium', duration: 6}) : config.get('emitter').emit('openLogin', {type: 'premium'})}>
-                                            <p className="desc">BREAKPOINT</p>
-                                            <p className="price">6 САР</p>
+                                        <div className="optionCard" onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium', duration: 3}) : config.get('emitter').emit('openLogin', {type: 'premium', duration: 3})}>
+                                            <p className="price">3 САР</p>
                                             <button>
                                                 {
                                                     premium ?
                                                         'Premium'
-                                                        :   `${config.formatMoney(premiumPrice[6])}₮`
+                                                        :   `${config.formatMoney(premiumPrice[3])}₮`
                                                 }
                                                 {/* <ion-icon name="arrow-redo-circle"/> */}
                                             </button>
                                         </div>
-                                        <div className="optionCard" onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium', duration: 12}) : config.get('emitter').emit('openLogin', {type: 'premium'})}>
-                                            <p className="desc">NON-STOP</p>
+                                        <div className="optionCard" onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium', duration: 12}) : config.get('emitter').emit('openLogin', {type: 'premium', duration: 12})}>
                                             <p className="price">12 САР</p>
                                             <button>
                                                 {
@@ -149,17 +147,19 @@ class Premium extends Component {
                                                 {/* <ion-icon name="arrow-redo-circle"/> */}
                                             </button>
                                         </div>
-                                        <div className="optionCard" onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium', duration: 3}) : config.get('emitter').emit('openLogin', {type: 'premium', duration: 3})}>
-                                            <p className="desc">NOW</p>
-                                            <p className="price">3 САР</p>
-                                            <button>
-                                                {
-                                                    premium ?
-                                                        'Premium'
-                                                        :   `${config.formatMoney(premiumPrice[3])}₮`
-                                                }
-                                                {/* <ion-icon name="arrow-redo-circle"/> */}
-                                            </button>
+                                        <div className="optionCard" onClick={() => premium ? console.log('gz') : user ? config.get('emitter').emit('paymentModal', {type: 'premium', duration: 6}) : config.get('emitter').emit('openLogin', {type: 'premium', duration: 6})}>
+                                            <p className="price">6 САР</p>
+                                            {premium ? (
+                                                <button >
+                                                    Premium
+                                                </button>
+                                            ) : (
+                                                <button className="mainButton" secret-data={`${config.formatMoney(180000)}₮`} >
+                                                    {
+                                                        `${config.formatMoney(premiumPrice[6])}₮`
+                                                    }
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                     <div className="benefits">
