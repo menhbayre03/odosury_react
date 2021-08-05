@@ -152,36 +152,32 @@ class Test extends React.Component {
     questionHandler(obj, actionObj, action){
         if(obj){
             if(action === 'publish') {
-                if(this.state.status === 'active'){
-                    if(actionObj.loader && Object.keys(actionObj.loader).length > 0){
-                        this.setState({
-                            publishQuestionLoading: actionObj.loader
-                        }, () => {
-                            this.props.dispatch(publishQuestion({...obj})).then(c => {
-                                if(c.json?.success){
-                                    let updatedQuestions = (this.state.questions || []).map(question => {
-                                        if((c.json?._id || 'as').toString() !== (question._id || '').toString()){
-                                            return question;
-                                        }
-                                        return {
-                                            ...question,
-                                            status: 'active'
-                                        }
-                                    });
-                                    this.setState({
-                                        questions: updatedQuestions,
-                                        publishQuestionLoading: ''
-                                    })
-                                }else{
-                                    this.setState({
-                                        publishQuestionLoading: ''
-                                    })
-                                }
-                            });
-                        })
-                    }
-                }else{
-                    config.get('emitter').emit('warning', 'Энэ асуултыг нийтлэх боломжгүй байна. Шалгалтыг нийтэлсэн байх ёстойг анхаарна уу!');
+                if(actionObj.loader && Object.keys(actionObj.loader).length > 0){
+                    this.setState({
+                        publishQuestionLoading: actionObj.loader
+                    }, () => {
+                        this.props.dispatch(publishQuestion({...obj})).then(c => {
+                            if(c.json?.success){
+                                let updatedQuestions = (this.state.questions || []).map(question => {
+                                    if((c.json?._id || 'as').toString() !== (question._id || '').toString()){
+                                        return question;
+                                    }
+                                    return {
+                                        ...question,
+                                        status: 'active'
+                                    }
+                                });
+                                this.setState({
+                                    questions: updatedQuestions,
+                                    publishQuestionLoading: ''
+                                })
+                            }else{
+                                this.setState({
+                                    publishQuestionLoading: ''
+                                })
+                            }
+                        });
+                    })
                 }
             }else if(action === 'unpublish'){
                 if(actionObj.loader && Object.keys(actionObj.loader).length > 0){
@@ -289,6 +285,9 @@ class Test extends React.Component {
             (this.state.hardQuestion || []).length + (this.state.proQuestion || []).length) === 0){
             config.get('emitter').emit('warning', 'Шалгалтын асуултуудын тоог оруулна уу.');
         }else{
+            if(this.state.active){
+                
+            }
             this.setState({testSubmitLoading: true}, () => {
                 this.props.dispatch(createTest({
                     _id: this.state._id,
@@ -302,7 +301,9 @@ class Test extends React.Component {
                     mediumQuestion: this.state.mediumQuestion,
                     hardQuestion: this.state.hardQuestion,
                     proQuestion: this.state.proQuestion,
-                }));
+                })).then(c => {
+                    this.setState({testSubmitLoading: false})
+                });
             });
         }
     }
@@ -386,17 +387,16 @@ class Test extends React.Component {
         if(difficulty && difficulty !== '' && type && type !== ''){
             (requiredQuestions || [])[difficulty][type]++;
         }
-        let ready = (this.state.difficulties || []).some(difficulty => {
+        return (this.state.difficulties || []).some(difficulty => {
             return (this.state.types || []).some(type => {
                 return (requiredQuestions || [])[difficulty][type] > 0
             });
         });
-        return ready;
     }
     getDifficultyListItem(parent, child, item, property){
         let questionCount = 0;
         (this.state.questions || []).map(question => {
-            question.difficulty === parent && question.type === item[property] ? questionCount++ : null;
+            question.difficulty === parent && question.type === item[property] && question.status === 'active' ? questionCount++ : null;
         });
         return (
             <li
@@ -697,7 +697,16 @@ class Test extends React.Component {
                                         }, () => {
                                             this.props.dispatch(publishTest({slug: ((this.props.match || {}).params || {}).test})).then(c => {
                                                 if(c.json?.success){
-                                                    this.setState({publishLoading: false, status: 'active'});
+                                                    this.setState({
+                                                        publishLoading: false,
+                                                        status: 'active',
+                                                        questions: this.state.questions.map(question => {
+                                                            return {
+                                                                ...question,
+                                                                status: 'active'
+                                                            }
+                                                        })
+                                                    });
                                                 }else{
                                                     this.setState({publishLoading: false});
                                                 }
