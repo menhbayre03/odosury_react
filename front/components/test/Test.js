@@ -68,7 +68,6 @@ class Test extends Component {
     }
     renderSidebar() {
         const {main: {categories}} = this.props;
-        console.log(categories)
         let slug = this.props.match.params.slug;
         return (
             <Col xl={3} lg={4} md={5} sm={12} style={{marginBottom: 30}}>
@@ -179,7 +178,7 @@ class Test extends Component {
                                     <div className="list-items">
                                     <Loader status={loading}>
                                         <Row>
-                                        {
+                                        {   
                                             (tests || []).map((item, index) => (
                                                 <Col lg={4} md={6} sm={6} style={{marginBottom: 30}}>
                                                     <div key={index} className="testCard"
@@ -218,7 +217,7 @@ class Test extends Component {
                         <Modal.Body>
                             <div style={ this.state.confirmModalData.backgroundImg ? {} : {background: 'url("/images/defaultTest2.jpg")', height: '320px',backgroundSize:'600px 320px',}}  className="modalMain">
                                 <h4>Та <span>{this.state.confirmModalData.title}</span> тест өгөх гэж байна.</h4>
-                                <div style={{marginLeft: 25, marginTop: 30}}>
+                                <div style={{marginLeft: 25, position: 'absolute', top: '105px'}}>
                                     <div className="certifyTagTest" style={this.state.confirmModalData.hasCertificate? {} : {backgroundColor: '#dc3545', border: 'none'}}>
                                         {this.state.confirmModalData.hasCertificate? 'СЕРТИФИКАТТАЙ' : 'СЕРТИФИКАТГҮЙ'}
                                     </div>
@@ -232,7 +231,7 @@ class Test extends Component {
                                     <div>Үнэ: {this.state.confirmModalData.price}₮ </div>
                                 </div>
                             <div style={{position: 'absolute',
-                                        marginTop: '60px',
+                                        bottom: 20,
                                         marginLeft: '200px'}}>
                                 <button className="testSecondary" onClick={this.closeConfirmModal.bind(this)}>
                                     БОЛИХ

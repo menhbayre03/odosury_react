@@ -66,6 +66,14 @@ export const getTest = {
     REQUEST:'getTest_REQUEST',
     RESPONSE:'getTest_RESPONSE'
 };
+export const postAnswers = {
+    REQUEST:'postAnswers_REQUEST',
+    RESPONSE:'postAnswers_RESPONSE'
+};
+export const selectedAnswer = {
+    REQUEST:'selectedAnswer_REQUEST',
+};
+
 //TestLaunch END
 
 //Test START
