@@ -17,7 +17,8 @@ class MediaLib extends React.Component {
             year: 'Он',
             month: [],
             name: '',
-            selectedMonth: 'Сар'
+            selectedMonth: 'Сар',
+            lesson: ''
         }
         this.dropzone = null
     }
@@ -34,12 +35,16 @@ class MediaLib extends React.Component {
     getMedia(nums = -1 , search = false){
         let type = this.props.type;
         const {media: {medias}, data = [], forWhat} = this.props;
+        console.log(forWhat)
         type = type.replace('s', '');
         let dta = {type, forWhat:forWhat};
-        const {name, year, selectedMonth} = this.state;
+        const {name, year, selectedMonth, lesson} = this.state;
         if(this.state.search){
             if(name && name != ''){
                 dta.name = name
+            }
+            if(lesson && lesson != ''){
+                dta.lesson = lesson
             }
             if(year && year != '' && year != 'Он'){
                 dta.year = year
@@ -270,6 +275,19 @@ class MediaLib extends React.Component {
                                 onChange={this.changeState.bind(this)}
                                 // style={{marginRight: 10}}
                             />
+                            {
+                                type && type === 'video' ?
+                                    <Input
+                                        placeholder={`Хичээлийн нэр`}
+                                        type={"text"}
+                                        ref={"textInputLesson"}
+                                        name={"lesson"}
+                                        value={this.state.lesson}
+                                        onChange={this.changeState.bind(this)}
+                                    />
+                                    :
+                                    null
+                            }
                         </Col>
                         <Col span={16}>
                                     {mediaYears && mediaYears.length>0?
