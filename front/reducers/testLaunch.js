@@ -18,6 +18,11 @@ export default(state = initialState, action) => {
             };
         case getTest.RESPONSE:
             if(action.json.success) {
+                config.get('emitter').emit('testSingleGetSeconds',
+                {
+                    success: true,
+                    timer: (((action.json || {}).openTest || {}).leftSeconds)
+                });
                 return {
                     ...state,
                     loading: 0,

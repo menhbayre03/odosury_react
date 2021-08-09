@@ -23,17 +23,35 @@ class TestLaunch extends Component {
         super(props);
         this.state = {
             questionMainNum: 0,
+            timer: 0
         };
+       
         this.changingPage = this.changingPage.bind(this);
         this.selectingAnswer = this.selectingAnswer.bind(this);
     }
     componentDidMount() {
-        const {match, dispatch} = this.props;
+        const {match, dispatch, testLaunch:{openTest, loading}} = this.props;
         let cc = {
         };
-       dispatch(actions.getTest(cc, match.params.slug));
+        dispatch(actions.getTest(cc, match.params.slug));
+        let self = this;
+        this.getTestSeconds = config.get('emitter').addListener('testSingleGetSeconds', function(data) {
+            if (data.success) {
+                self.setState({
+                    timer: data?.timer
+                }, () => {
+                    let interval = setInterval(() => {
+                        self.setState({
+                            timer: (self.state.timer - 1)
+                        })
+                        if(self.state.timer === 0)  {clearInterval(interval)}
+                     }, 1000)
+                });
+            }
+        });
     }
     componentWillUnmount() {
+        this.getTestSeconds.remove();
     }
     selectingAnswer(e, question_id, answer_id) {
         const {testLaunch:{openTest, loading}} = this.props;
@@ -52,7 +70,9 @@ class TestLaunch extends Component {
         const {test: {tests}} = this.props;
         const {testLaunch:{openTest, loading}} = this.props;
         const demoTest = [];
-        console.log(openTest)
+        let minutes = Math.floor(this.state.timer / 60);
+        let seconds = this.state.timer - minutes*60;
+        console.log(openTest.leftSeconds)
         // for (let i = 0; i < 10; i++) {
         //     demoTest.push({
         //         _id:i,
@@ -97,7 +117,7 @@ class TestLaunch extends Component {
                                             <Row>
                                                 <div className="headerTestLaunch">
                                                     <div className="timer" >
-                                                    Хугацаа: {openTest.leftSeconds}
+                                                    Хугацаа: {minutes}: {seconds}
                                                     </div>
                                                     <div className="titleHeader">
                                                         {openTest?.test?.title}
