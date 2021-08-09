@@ -32,16 +32,16 @@ export default [
                 path: '/',
                 exact: true
             },
-            {
-                component: Test,
-                path: '/test',
-                exact: true
-            },
-            {
-                component: TestLaunch,
-                path: '/test/launch/:slug',
-                exact: true
-            },
+            // {
+            //     component: Test,
+            //     path: '/test',
+            //     exact: true
+            // },
+            // {
+            //     component: TestLaunch,
+            //     path: '/test/launch/:slug',
+            //     exact: true
+            // },
             {
                 component: Home,
                 path: '/api/reset/password/:token',
