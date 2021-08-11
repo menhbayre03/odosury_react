@@ -117,7 +117,7 @@ class TestLaunch extends Component {
                                             <Row>
                                                 <div className="headerTestLaunch">
                                                     <div className="timer" >
-                                                    Хугацаа: {minutes}: {seconds}
+                                                    Хугацаа: {minutes} : {seconds}
                                                     </div>
                                                     <div className="titleHeader">
                                                         {openTest?.test?.title}
