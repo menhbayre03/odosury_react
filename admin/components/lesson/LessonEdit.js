@@ -591,7 +591,7 @@ class LessonEdit extends React.Component {
                                                         className='upload-m'
                                                     >
                                                         <div>
-                                                            <Button onClick={this.openMediaLib.bind(this, 'video')} style={{marginBottom: 10}}>
+                                                            <Button onClick={this.openMediaLib.bind(this, 'video', '')} style={{marginBottom: 10}}>
                                                                 <UploadOutlined /> {lessonVideo && lessonVideo._id? 'Солих' : 'Бичлэг'}
                                                             </Button>
                                                             {lessonVideo && lessonVideo._id ?

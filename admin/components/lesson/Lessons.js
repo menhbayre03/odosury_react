@@ -7,8 +7,8 @@ import LessonEdit from "./LessonEdit";
 import { Link } from 'react-router-dom';
 
 const reducer = ({ main, lesson }) => ({ main, lesson });
-import { Card, Button, Table, Popconfirm } from 'antd';
-import { DeleteFilled, PlusOutlined, UnorderedListOutlined, EditFilled, CloseOutlined } from '@ant-design/icons'
+import { Card, Button, Table, Popconfirm, Input } from 'antd';
+import { DeleteFilled, PlusOutlined, UnorderedListOutlined, EditFilled, CloseOutlined, SearchOutlined } from '@ant-design/icons'
 
 class Lessons extends Component {
     constructor(props) {
@@ -16,6 +16,7 @@ class Lessons extends Component {
         this.state = {
             pageNum: 0,
             pageSize:50,
+            search: ''
         };
     }
     componentDidMount() {
@@ -54,6 +55,13 @@ class Lessons extends Component {
         } else {
             this.setState({ [e.target.name]: e.target.value});
         }
+    }
+    getLessons(){
+        this.setState({
+            pageNum: 0,
+        }, () => {
+            this.props.dispatch(actions.getLesson({pageNum: this.state.pageNum, pageSize: this.state.pageSize, search: this.state.search}));
+        });
     }
     render() {
         let {  lesson:{status, openModal, lesson, lessons, all, openLevelSingle} } = this.props;
@@ -147,6 +155,19 @@ class Lessons extends Component {
                     <LessonEdit />
                     :
                         <React.Fragment>
+                            <div style={{display: 'flex', flexDirection: 'row'}}>
+                                <Input
+                                    style={{width: 500}}
+                                    placeholder={'Хичээлийн нэрээр хайх'}
+                                    value={this.state.search}
+                                    onChange={(e) => this.setState({search: e.target.value})}
+                                />
+                                <Button
+                                    type={'primary'}
+                                    icon={<SearchOutlined />}
+                                    onClick={() => this.getLessons()}
+                                />
+                            </div>
                             <Table size="small" dataSource={lessons} columns={columns} onChange={this.tableOnChange.bind(this)} pagination={pagination} />
                         </React.Fragment>
                 }
