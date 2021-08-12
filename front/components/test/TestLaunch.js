@@ -102,7 +102,7 @@ class TestLaunch extends Component {
                             <img src="/images/odosuryo.png" alt="" style={{width: 175}} />
                         </div>
                 </div>
-                <div className="list-container" style={{minHeight: 'calc(100vh - 185px)'}}>
+                <div className="list-container" style={{minHeight: 'calc(100vh - 40px)', backgroundColor:'#f2e8e9'}}>
                         
                     <Container>
                             <div className="container">
@@ -138,7 +138,6 @@ class TestLaunch extends Component {
                             </div>
                     </Container>
                 </div>
-                {/*<Footer/>*/}
             </React.Fragment>
         );
     }

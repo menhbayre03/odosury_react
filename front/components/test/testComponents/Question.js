@@ -42,7 +42,9 @@ class Question extends Component {
                                             }
                                             
                                         </div>
-                                        <div>{item?.text}</div>
+                                        <div style={{
+                                            paddingLeft: '45px'
+                                        }}>{item?.text}</div>
                                     </div>
                                     </li>
                             ))
