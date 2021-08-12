@@ -9,6 +9,10 @@ export function postAnswers(data) {
     let url = `/api/postAnswers`;
     return networkActions.requestPost(constants.postAnswers, url, data);
 }
+export function endTest(data) {
+    let url = `/api/endTest`;
+    return networkActions.requestPost(constants.endTest, url, data);
+}
 export function selectedAnswer(data) {
     return {
         type: constants.selectedAnswer.REQUEST,
