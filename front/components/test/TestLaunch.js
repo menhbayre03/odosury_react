@@ -44,18 +44,30 @@ class TestLaunch extends Component {
                         self.setState({
                             timer: (self.state.timer - 1)
                         })
-                        if(self.state.timer === 0)  {clearInterval(interval)}
+                        if(self.state.timer === 0)  {
+                            clearInterval(interval)
+                            self.endTest();
+                        }
                      }, 1000)
                 });
             }
         });
     }
     componentWillUnmount() {
+        const {testLaunch:{openTest}, dispatch} = this.props;
+        const {questionMainNum} = this.state;
         this.getTestSeconds.remove();
+        if(openTest && openTest.questions && openTest.questions.length>0){
+            let cc = {
+                _id: openTest._id,
+                question_id: openTest.questions[questionMainNum]._id,
+                answer_id: openTest.questions[questionMainNum].answer
+            };
+            dispatch(actions.postAnswers(cc));
+        }
     }
     selectingAnswer(e, question_id, answer_id) {
         const {testLaunch:{openTest, loading}} = this.props;
-        console.log(openTest)
         this.props.dispatch(actions.selectedAnswer({_id: openTest._id, question_id, answer_id}))
     }
     changingPage(e, question_id, answer_id) {
@@ -66,13 +78,21 @@ class TestLaunch extends Component {
             }
         });
     }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+
+    }
+
+    endTest(){
+        const {testLaunch:{openTest, loading}} = this.props;
+        this.props.dispatch(actions.endTest({openTest:openTest}))
+    }
     render() {
         const {test: {tests}} = this.props;
         const {testLaunch:{openTest, loading}} = this.props;
         const demoTest = [];
         let minutes = Math.floor(this.state.timer / 60);
         let seconds = this.state.timer - minutes*60;
-        console.log(openTest.leftSeconds)
         // for (let i = 0; i < 10; i++) {
         //     demoTest.push({
         //         _id:i,
@@ -117,7 +137,7 @@ class TestLaunch extends Component {
                                             <Row>
                                                 <div className="headerTestLaunch">
                                                     <div className="timer" >
-                                                    Хугацаа: {minutes}: {seconds}
+                                                    Хугацаа: {minutes} : {seconds}
                                                     </div>
                                                     <div className="titleHeader">
                                                         {openTest?.test?.title}
@@ -129,7 +149,7 @@ class TestLaunch extends Component {
                                                 <Question answerSelect={this.selectingAnswer} answer={this.state.selectedAnswer} question={(openTest.questions || [])[this.state.questionMainNum]} pageNum={this.state.questionMainNum} changeNum={this.changingPage}/>
                                             </Row>
                                             <Row>
-                                                <Pagination  answerSelect={this.selectingAnswer} answer={this.state.selectedAnswer} question={(openTest.questions || [])[this.state.questionMainNum]} pageNum={this.state.questionMainNum} changeNum={this.changingPage}/>
+                                                <Pagination endTest={this.endTest}  answerSelect={this.selectingAnswer} answer={this.state.selectedAnswer} question={(openTest.questions || [])[this.state.questionMainNum]} pageNum={this.state.questionMainNum} changeNum={this.changingPage}/>
                                             </Row>
                                         </div>
                                     </Col>

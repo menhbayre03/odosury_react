@@ -22,16 +22,16 @@ class Pagination extends Component {
                                     backgroundColor: '#d12e9d',
                                     color: '#fff',
                                     transition: '0.5s'} : {}}>
-                                    
+
                                         {index+1}
                                     </a>
                                 </li>
                             ))
                         }
-                        
+
                     </ul>
                     <div style={{width: '25%'}}>
-                        <button className="submitTest"> ДУУСГАХ</button>
+                        <button className="submitTest" onClick={this.props.endTest.bind(this)}> ДУУСГАХ</button>
                     </div>
                 </div>
                 

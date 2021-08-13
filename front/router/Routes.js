@@ -23,6 +23,9 @@ import Faq from '../components/Faq';
 import Careers from "../components/Careers";
 import Partner from "../components/Partner";
 import Policy from "../components/Policy";
+import Results from "../components/test/Results";
+import ResultSingle from "../components/test/ResultSingle";
+
 export default [
     {
         component: Main,
@@ -40,6 +43,16 @@ export default [
             // {
             //     component: TestLaunch,
             //     path: '/test/launch/:slug',
+            //     exact: true
+            // },
+            // {
+            //     component: Results,
+            //     path: '/test/results',
+            //     exact: true
+            // },
+            // {
+            //     component: ResultSingle,
+            //     path: '/test/result/:id',
             //     exact: true
             // },
             {

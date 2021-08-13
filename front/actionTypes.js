@@ -70,6 +70,10 @@ export const postAnswers = {
     REQUEST:'postAnswers_REQUEST',
     RESPONSE:'postAnswers_RESPONSE'
 };
+export const endTest = {
+    REQUEST:'endTest_REQUEST',
+    RESPONSE:'endTest_RESPONSE'
+};
 export const selectedAnswer = {
     REQUEST:'selectedAnswer_REQUEST',
 };

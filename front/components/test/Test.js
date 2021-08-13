@@ -173,7 +173,16 @@ class Test extends Component {
                             <Col xl={9} lg={8} md={7} sm={12}>
                                 <div className="list-content">
                                     <div className="list-header">
-                                        <h3>Тестүүд</h3>
+                                        <div>
+                                            <h3>Тестүүд</h3>
+                                        </div>
+                                        <div className="testResults">
+                                            <Link to={'/test/results'}>
+                                                <button >ӨГСӨН ТЕСТҮҮД</button>
+                                            </Link>
+                                            
+                                        </div>
+                                        
                                     </div>
                                     <div className="list-items">
                                     <Loader status={loading}>
