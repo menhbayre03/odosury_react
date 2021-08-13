@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from 'react-redux';
 import config from '../../config';
-import {getTest, createTest, deleteTest, createQuestion, deleteQuestion, publishTest, publishQuestion, unpublishQuestion } from '../../actions/test_actions'
+import {getTest, createTest, deleteTest, createQuestion, deleteQuestion, publishTest, publishQuestion, unpublishQuestion, unpublishTest } from '../../actions/test_actions'
 const reducer = ({ main, test }) => ({ main, test });
 import {
     Card, Empty, Popover,
@@ -79,6 +79,7 @@ class Test extends React.Component {
             // LOADERS
             questionSubmitLoading: false,
             testSubmitLoading: false,
+            testUnpublishLoading: false,
             publishLoading: false,
             deleteQuestionLoading: '',
             publishQuestionLoading: '',
@@ -181,7 +182,37 @@ class Test extends React.Component {
                 }
             }else if(action === 'unpublish'){
                 if(actionObj.loader && Object.keys(actionObj.loader).length > 0){
-                    if(!this.readyToPublish(actionObj.difficulty, actionObj.type)){
+                    if(this.state.status === 'active'){
+                        if(!this.readyToPublish(actionObj.difficulty, actionObj.type)){
+                            this.setState({
+                                unpublishQuestionLoading: actionObj.loader
+                            }, () => {
+                                this.props.dispatch(unpublishQuestion({...obj})).then(c => {
+                                    if(c.json?.success){
+                                        let updatedQuestions = (this.state.questions || []).map(question => {
+                                            if((c.json?._id || 'as').toString() !== (question._id || '').toString()){
+                                                return question;
+                                            }
+                                            return {
+                                                ...question,
+                                                status: 'pause'
+                                            }
+                                        });
+                                        this.setState({
+                                            questions: updatedQuestions,
+                                            unpublishQuestionLoading: ''
+                                        })
+                                    }else{
+                                        this.setState({
+                                            unpublishQuestionLoading: ''
+                                        })
+                                    }
+                                });
+                            })
+                        }else{
+                            config.get('emitter').emit('warning', 'Энэ асуултыг устгавал асуулт бүрдэхгүй тул боломжгүй');
+                        }
+                    }else{
                         this.setState({
                             unpublishQuestionLoading: actionObj.loader
                         }, () => {
@@ -207,13 +238,34 @@ class Test extends React.Component {
                                 }
                             });
                         })
-                    }else{
-                        config.get('emitter').emit('warning', 'Энэ асуултыг устгавал асуулт бүрдэхгүй тул боломжгүй');
                     }
                 }
             }else if(action === 'delete'){
                 if(actionObj.loader && Object.keys(actionObj.loader).length > 0){
-                    if(!this.readyToPublish(actionObj.difficulty, actionObj.type)){
+                    if(this.state.status === 'active'){
+                        if(!this.readyToPublish(actionObj.difficulty, actionObj.type)){
+                            this.setState({
+                                deleteQuestionLoading: actionObj.loader
+                            }, () => {
+                                this.props.dispatch(deleteQuestion({...obj})).then(c => {
+                                    if(c.json?.success){
+                                        let updatedQuestions = (this.state.questions || []).filter(question =>
+                                            (c.json?._id || 'as').toString() !== (question._id || '').toString());
+                                        this.setState({
+                                            questions: updatedQuestions,
+                                            deleteQuestionLoading: ''
+                                        })
+                                    }else{
+                                        this.setState({
+                                            deleteQuestionLoading: ''
+                                        })
+                                    }
+                                });
+                            })
+                        }else{
+                            config.get('emitter').emit('warning', 'Энэ асуултыг устгавал асуулт бүрдэхгүй тул боломжгүй');
+                        }
+                    }else{
                         this.setState({
                             deleteQuestionLoading: actionObj.loader
                         }, () => {
@@ -232,8 +284,6 @@ class Test extends React.Component {
                                 }
                             });
                         })
-                    }else{
-                        config.get('emitter').emit('warning', 'Энэ асуултыг устгавал асуулт бүрдэхгүй тул боломжгүй');
                     }
                 }
             }else if(action === 'edit'){
@@ -285,26 +335,47 @@ class Test extends React.Component {
             (this.state.hardQuestion || []).length + (this.state.proQuestion || []).length) === 0){
             config.get('emitter').emit('warning', 'Шалгалтын асуултуудын тоог оруулна уу.');
         }else{
-            if(this.state.active){
-                
-            }
-            this.setState({testSubmitLoading: true}, () => {
-                this.props.dispatch(createTest({
-                    _id: this.state._id,
-                    title: this.state.title,
-                    duration: this.state.duration,
-                    price: this.state.price,
-                    secret: this.state.secret,
-                    oneTime: this.state.oneTime,
-                    hasCertificate: this.state.hasCertificate,
-                    easyQuestion: this.state.easyQuestion,
-                    mediumQuestion: this.state.mediumQuestion,
-                    hardQuestion: this.state.hardQuestion,
-                    proQuestion: this.state.proQuestion,
-                })).then(c => {
-                    this.setState({testSubmitLoading: false})
+            if(this.state.status === 'active'){
+                if(!this.readyToPublish()){
+                    this.setState({testSubmitLoading: true}, () => {
+                        this.props.dispatch(createTest({
+                            _id: this.state._id,
+                            title: this.state.title,
+                            duration: this.state.duration,
+                            price: this.state.price,
+                            secret: this.state.secret,
+                            oneTime: this.state.oneTime,
+                            hasCertificate: this.state.hasCertificate,
+                            easyQuestion: this.state.easyQuestion,
+                            mediumQuestion: this.state.mediumQuestion,
+                            hardQuestion: this.state.hardQuestion,
+                            proQuestion: this.state.proQuestion,
+                        })).then(c => {
+                            this.setState({testSubmitLoading: false})
+                        });
+                    });
+                }else{
+                    config.get('emitter').emit('warning', 'Шалгалтын асуултуудын тоо хүрэлцэхгүй байна.');
+                }
+            }else{
+                this.setState({testSubmitLoading: true}, () => {
+                    this.props.dispatch(createTest({
+                        _id: this.state._id,
+                        title: this.state.title,
+                        duration: this.state.duration,
+                        price: this.state.price,
+                        secret: this.state.secret,
+                        oneTime: this.state.oneTime,
+                        hasCertificate: this.state.hasCertificate,
+                        easyQuestion: this.state.easyQuestion,
+                        mediumQuestion: this.state.mediumQuestion,
+                        hardQuestion: this.state.hardQuestion,
+                        proQuestion: this.state.proQuestion,
+                    })).then(c => {
+                        this.setState({testSubmitLoading: false})
+                    });
                 });
-            });
+            }
         }
     }
     submitQuestion(obj){
@@ -724,7 +795,26 @@ class Test extends React.Component {
                                         </Button>
                                     </Popconfirm>
                                     :
-                                    null
+                                    <Popconfirm
+                                        title={'Шалгалтын нийтлэлтийг болиулах уу?'}
+                                        onConfirm={() => this.setState({testUnpublishLoading: true} , () => {
+                                            this.props.dispatch(unpublishTest({slug: ((this.props.match || {}).params || {}).test})).then(c => {
+                                                if(c.json?.success){
+                                                    this.setState({testUnpublishLoading: false, status: 'pause'});
+                                                }else{
+                                                    this.setState({testUnpublishLoading: false});
+                                                }
+                                            })
+                                        })}
+                                        disabled={this.state.testUnpublishLoading}
+                                    >
+                                        <Button
+                                            style={{marginLeft: 20}} type={'primary'}
+                                            danger loading={this.state.testUnpublishLoading}
+                                        >
+                                            Нийтлэлийг зогсоох
+                                        </Button>
+                                    </Popconfirm>
                             }
                         </div>
                     </Form>

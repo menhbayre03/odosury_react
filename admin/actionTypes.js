@@ -483,6 +483,10 @@ export const deleteTest = {
     REQUEST: 'deleteTest_REQUEST',
     RESPONSE: 'deleteTest_RESPONSE'
 }
+export const unpublishTest = {
+    REQUEST: 'unpublishTest_REQUEST',
+    RESPONSE: 'unpublishTest_RESPONSE'
+}
 
 export const getQuestion = {
     REQUEST: 'getQuestion_REQUEST',
