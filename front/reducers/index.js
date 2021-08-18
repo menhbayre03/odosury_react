@@ -12,6 +12,8 @@ import requests from "./requests";
 import test from "./test";
 import testLaunch from "./testLaunch";
 import Results from '../components/test/Results';
+import testResultSingle from './testResultSingle';
+import results from './results';
 export default combineReducers({
     main: main,
     auth: auth,
@@ -25,5 +27,7 @@ export default combineReducers({
     requests: requests,
     test,
     testLaunch,
+    testResultSingle,
+    results,
     Results: Results,
 });

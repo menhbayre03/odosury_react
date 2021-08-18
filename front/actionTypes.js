@@ -95,6 +95,19 @@ export const componentWillUnmountTest = {
 };
 //Test END
 
+//ResultSingle start
+export const getTestSingle = {
+    REQUEST:'getTestSingle_REQUEST',
+    RESPONSE:'getTestSingle_RESPONSE'
+};
+//ResultSingle end
+//ResultSingle start
+export const getResults = {
+    REQUEST:'getResults_REQUEST',
+    RESPONSE:'getResults_RESPONSE'
+};
+//ResultSingle end
+
 
 //PROFILE
 

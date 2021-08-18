@@ -4,7 +4,7 @@ import Header from "../include/Header";
 import Footer from "../include/Footer";
 import GridItem from "../include/GridItem";
 import {Container, Row, Col, Button, Modal} from "react-bootstrap";
-import * as actions from '../../actions/test_actions';
+import * as actions from '../../actions/testResultSingle_actions';
 import {Link} from "react-router-dom";
 import Select from "react-dropdown-select";
 import Loader from "../include/Loader";
@@ -13,7 +13,7 @@ import {
 } from "react-device-detect";
 import config from "../../config";
 import moment from "moment";
-const reducer = ({ main, test }) => ({ main, test });
+const reducer = ({ main, testResultSingle }) => ({ main, testResultSingle });
 
 class ResultSingle extends Component {
     constructor(props) {
@@ -22,8 +22,14 @@ class ResultSingle extends Component {
 
         }
     }
+    componentDidMount() {
+        const {match, dispatch} = this.props;
+        let cc = {
+        };
+        dispatch(actions.getTestSingle(cc, match.params.id));
+    }
     render() {
-        const {test:{tests, loading, all, openTest}} = this.props;
+        const {testResultSingle:{test, loading}} = this.props;
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
