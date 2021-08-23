@@ -512,3 +512,7 @@ export const unpublishQuestion = {
     REQUEST: 'unpublishQuestion_REQUEST',
     RESPONSE: 'unpublishQuestion_RESPONSE'
 }
+export const chooseTestMedia = {
+    REQUEST: 'chooseTestMedia_REQUEST',
+    RESPONSE: 'chooseTestMedia_RESPONSE'
+}

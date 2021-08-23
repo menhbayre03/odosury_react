@@ -55,3 +55,9 @@ export function unpublishQuestion(data = {}){
     let url = `/admin/api/unpublish/question`;
     return networkActions.requestPost(constants.unpublishQuestion, url, data);
 }
+export function chooseMedia(data){
+    return {
+        type: constants.chooseTestMedia.REQUEST,
+        json: data
+    }
+}
