@@ -225,7 +225,8 @@ class Test extends Component {
                         <div className="testModal">
                         <Modal.Body>
                             <div style={ this.state.confirmModalData.backgroundImg ? {} : {background: 'url("/images/defaultTest2.jpg")', height: '320px',backgroundSize:'600px 320px',}}  className="modalMain">
-                                <h4>Та <span>{this.state.confirmModalData.title}</span> тест өгөх гэж байна.</h4>
+                                {/*<h4>Та <span>{this.state.confirmModalData.title}</span> тест өгөх гэж байна.</h4>*/}
+                                <h4><span>{this.state.confirmModalData.title}</span> </h4>
                                 <div style={{marginLeft: 25, position: 'absolute', top: '105px'}}>
                                     <div className="certifyTagTest" style={this.state.confirmModalData.hasCertificate? {} : {backgroundColor: '#dc3545', border: 'none'}}>
                                         {this.state.confirmModalData.hasCertificate? 'СЕРТИФИКАТТАЙ' : 'СЕРТИФИКАТГҮЙ'}
