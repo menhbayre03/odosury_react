@@ -216,7 +216,7 @@ class Test extends Component {
                                                          <br/>
                                                          Хугацаа: {item.duration} мин
                                                          <br/>
-                                                        <span style={{color: '#ffc107', fontSize: 14}}> Үнэ: {item.price}₮</span>
+                                                        <span style={{color: '#ffc107', fontSize: 14}}>{item.price && item.price>0 ? `Үнэ: ${item.price}₮` : 'Үнэгүй'}</span>
                                                         <div className="certifyTagTest" style={item.hasCertificate? {} : {backgroundColor: '#dc3545', border: 'none', color: '#fff'}}> 
                                                         {item.hasCertificate ? 'СЕРТИФИКАТТАЙ' : 'СЕРТИФИКАТГҮЙ'} </div>
                                                         </div>
@@ -264,7 +264,7 @@ class Test extends Component {
                                 <button className="testSecondary" onClick={this.closeConfirmModal.bind(this)}>
                                     ХААХ
                                 </button>
-                                {!this.state.price || this.state.price === 0 || (this.state.trans && this.state.trans._id)?
+                                {!this.state.confirmModalData.price || this.state.confirmModalData.price === 0 || (this.state.trans && this.state.trans._id)?
                                     <Link to={`/test/launch/${this.state.confirmModalData.slug}`}>
                                         <button className="testPrimary" style={{marginLeft: '30px'}}
                                         >
