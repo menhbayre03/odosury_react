@@ -89,6 +89,10 @@ export const declineOpenTest = {
     REQUEST:'declineOpenTest_REQUEST',
     RESPONSE:'declineOpenTest_RESPONSE'
 };
+export const checkTransaction = {
+    REQUEST:'checkTransaction_REQUEST',
+    RESPONSE:'checkTransaction_RESPONSE'
+};
 export const componentWillUnmountTest = {
     REQUEST:'componentWillUnmountTest_REQUEST',
     RESPONSE:'componentWillUnmountTest_RESPONSE'

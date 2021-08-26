@@ -9,6 +9,10 @@ export function declineOpenTest(data, slug) {
     let url = `/api/declineOpenTest`;
     return networkActions.requestPost(constants.declineOpenTest, url, data);
 }
+export function checkTransaction(data, slug) {
+    let url = `/api/checkTransaction`;
+    return networkActions.requestGet(constants.checkTransaction, url, data);
+}
 export function getTest(slug) {
     let url = `/api/test/single/${slug}`;
     return networkActions.requestGet(constants.getTest, url)

@@ -22,6 +22,7 @@ class Test extends Component {
         this.state = {
             confirmModalShow:false,
             confirmModalData:{},
+            trans:null,
             sort: {value: 'newest', name: 'Шинэ'},
             search: search
         };
@@ -48,16 +49,28 @@ class Test extends Component {
     onChange(e) {
         this.setState({search: e.target.value})
     }
-    openConfirmModal(item){
-        const {main:{user}} = this.props;
+    closeConfirmModal(){
+        this.setState({confirmModalShow:false, confirmModalData:{}, trans:null});
+    }
+    checkTransaction(item){
+        const {main:{user}, dispatch, test:{test, checkTransactionLoader, trans}} = this.props;
         if(user && user._id){
-            this.setState({confirmModalShow:true, confirmModalData:item});
+            if(!checkTransactionLoader){
+                let cc = {
+                    item:item,
+                    _id:item._id
+                };
+                dispatch(actions.checkTransaction(cc)).then((action) =>{
+                    if(action && action.json){
+                        if(action.json.success){
+                            this.setState({confirmModalShow:true, confirmModalData: item, trans:(action.json.trans || null)});
+                        }
+                    }
+                });
+            }
         } else {
             config.get('emitter').emit('warning', 'Та нэвтэрч орно уу');
         }
-    }
-    closeConfirmModal(){
-        this.setState({confirmModalShow:false, confirmModalData:{}});
     }
     declineOpenTest(){
         const {match, dispatch, test:{openTest}} = this.props;
@@ -191,7 +204,8 @@ class Test extends Component {
                                             (tests || []).map((item, index) => (
                                                 <Col lg={4} md={6} sm={6} style={{marginBottom: 30}}>
                                                     <div key={index} className="testCard"
-                                                    onClick={this.openConfirmModal.bind(this, item)}
+                                                    // onClick={this.openConfirmModal.bind(this, item)}
+                                                    onClick={() => this.checkTransaction(item)}
                                                     style={this.state.confirmModalData.backgroundImg ? {} : {background: 'url("/images/defaultTestCard1.png")', backgroundSize:'200px 110px'}}>
                                                         <div className="cardContent">
                                                          {item.title}
@@ -244,31 +258,25 @@ class Test extends Component {
                                         bottom: 20,
                                         marginLeft: '200px'}}>
                                 <button className="testSecondary" onClick={this.closeConfirmModal.bind(this)}>
-                                    БОЛИХ
+                                    ХААХ
                                 </button>
-                                <Link to={`/test/launch/${this.state.confirmModalData.slug}`}>
+                                {this.state.trans && this.state.trans._id?
+                                    <Link to={`/test/launch/${this.state.confirmModalData.slug}`}>
+                                        <button className="testPrimary" style={{marginLeft: '30px'}}
+                                        >
+                                            ТЕСТ ӨГӨХ
+                                        </button>
+                                    </Link>
+                                    :
                                     <button className="testPrimary" style={{marginLeft: '30px'}}
-                                            // onClick={this.openTestCheck.bind(this)}
                                     >
-                                        ӨГӨХ
+                                        Худалдаж авах
                                     </button>
-                                </Link>
+                                }
                             </div>
                             </div>
                         </Modal.Body>
                         </div>
-                        {/* <Modal.Footer>
-                            <button className="testSecondary" onClick={this.closeConfirmModal.bind(this)}>
-                                БОЛИХ
-                            </button>
-                            <Link to={`/test/launch/${this.state.confirmModalData.slug}`}>
-                                <button className="testPrimary"
-                                        // onClick={this.openTestCheck.bind(this)}
-                                >
-                                    ӨГӨХ
-                                </button>
-                            </Link>
-                        </Modal.Footer> */}
                     </Modal>
                     {openTest && openTest.test?
 
@@ -287,9 +295,7 @@ class Test extends Component {
                                     Болих
                                 </Button>
                                 <Link to={`/test/launch/${(openTest.test || {}).slug}`}>
-                                    <Button variant="primary"
-                                        // onClick={this.openTestCheck.bind(this)}
-                                    >
+                                    <Button variant="primary">
                                         Үргэлжлүүлэх
                                     </Button>
                                 </Link>
