@@ -56,17 +56,21 @@ class Test extends Component {
         const {main:{user}, dispatch, test:{test, checkTransactionLoader, trans}} = this.props;
         if(user && user._id){
             if(!checkTransactionLoader){
-                let cc = {
-                    item:item,
-                    _id:item._id
-                };
-                dispatch(actions.checkTransaction(cc)).then((action) =>{
-                    if(action && action.json){
-                        if(action.json.success){
-                            this.setState({confirmModalShow:true, confirmModalData: item, trans:(action.json.trans || null)});
+                if(!item.price || item.price === 0){
+                    this.setState({confirmModalShow:true, confirmModalData: item, trans:{}});
+                } else {
+                    let cc = {
+                        item:item,
+                        _id:item._id
+                    };
+                    dispatch(actions.checkTransaction(cc)).then((action) =>{
+                        if(action && action.json){
+                            if(action.json.success){
+                                this.setState({confirmModalShow:true, confirmModalData: item, trans:(action.json.trans || null)});
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         } else {
             config.get('emitter').emit('warning', 'Та нэвтэрч орно уу');
@@ -260,7 +264,7 @@ class Test extends Component {
                                 <button className="testSecondary" onClick={this.closeConfirmModal.bind(this)}>
                                     ХААХ
                                 </button>
-                                {this.state.trans && this.state.trans._id?
+                                {!this.state.price || this.state.price === 0 || (this.state.trans && this.state.trans._id)?
                                     <Link to={`/test/launch/${this.state.confirmModalData.slug}`}>
                                         <button className="testPrimary" style={{marginLeft: '30px'}}
                                         >
