@@ -105,6 +105,7 @@ class Purchase extends React.Component {
             dispatch,
             purchase:{ status, transactions, all = 0, pageNum = 1, submitTransLoader, openModal, searchLoader, searchResult, item }
         } = this.props;
+        console.log('admin transactionsss', transactions);
         let pagination = {
             total : all,
             current: pageNum,
@@ -142,6 +143,8 @@ class Purchase extends React.Component {
                         <Tag color={record.custom ? 'gray' : '#108ee9'}>Premium</Tag>
                     ) : text === 'eish' ? (
                         <Tag color={record.custom ? 'gray' : '#2db7f5'}>ЭЕШ</Tag>
+                    ) : text === "test" ? (
+                        <Tag color={record.custom ? 'gray' : '#000080'}>Тест</Tag>
                     ) : (
                         <Tag color={record.custom ? 'gray' : '#87d068'}>Хичээл</Tag>
                     )
@@ -247,9 +250,11 @@ class Purchase extends React.Component {
                     columns={columns}
                     pagination={pagination}
                     expandable={{
-                        rowExpandable: record => !!record.lesson || record.custom,
-                        expandedRowRender: record =>
-                            <Row gutter={[8, 8]}>
+                        rowExpandable: record => !!record.lesson || record.custom || !!record.test,
+                        expandedRowRender: (record, index) =>
+                            {
+                                console.log('record is admin', record.test);
+                                return <Row key={index} gutter={[8, 8]}>
                                 {
                                     record.custom ?
                                         <Col span={24}>
@@ -262,6 +267,26 @@ class Purchase extends React.Component {
                                                         ellipsis
                                                     >
                                                         {record.description}
+                                                    </Text>
+                                                </List.Item>
+                                            </Card>
+                                        </Col>
+                                    : record.test ? 
+                                        <Col span={24}>
+                                            <Card
+                                                title={'Тест: '}
+                                                size={'small'}
+                                            >
+                                                <List.Item
+                                                    actions={[
+                                                        <NumberFormat value={record.amount || 0} displayType={'text'} thousandSeparator={true} renderText={value => <Text>{value}₮</Text>}/>
+                                                    ]}
+                                                >
+                                                    <Text
+                                                        copyable
+                                                        ellipsis
+                                                    >
+                                                        <a target="_blank" href={`/lesson/${(record.test || {}).slug}`}>{(record.test || {}).title || ''}</a>
                                                     </Text>
                                                 </List.Item>
                                             </Card>
@@ -288,7 +313,7 @@ class Purchase extends React.Component {
                                         </Col>
                                     : null
                                 }
-                            </Row>
+                            </Row>}
                     }}
                     onChange={(e) => this.onPaginate(e.current)}
                 />

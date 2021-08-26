@@ -272,7 +272,20 @@ class Test extends Component {
                                         </button>
                                     </Link>
                                     :
-                                    <button className="testPrimary" style={{marginLeft: '30px'}}
+                                    <button 
+                                        onClick={(e) => {
+                                            console.log('testonclick', this.state.confirmModalData);
+                                                e.preventDefault();
+                                                config
+                                                    .get("emitter")
+                                                    .emit("paymentModal", {
+                                                        type: "test",
+                                                        test: this.state.confirmModalData
+                                                    })
+                                                this.closeConfirmModal()
+                                                
+                                            }} 
+                                        className="testPrimary" style={{marginLeft: '30px'}}
                                     >
                                         Худалдаж авах
                                     </button>
