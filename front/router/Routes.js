@@ -35,26 +35,26 @@ export default [
                 path: '/',
                 exact: true
             },
-            // {
-            //     component: Test,
-            //     path: '/test',
-            //     exact: true
-            // },
-            // {
-            //     component: TestLaunch,
-            //     path: '/test/launch/:slug',
-            //     exact: true
-            // },
-            // {
-            //     component: Results,
-            //     path: '/test/results',
-            //     exact: true
-            // },
-            // {
-            //     component: ResultSingle,
-            //     path: '/test/result/:id',
-            //     exact: true
-            // },
+            {
+                component: Test,
+                path: '/test',
+                exact: true
+            },
+            {
+                component: TestLaunch,
+                path: '/test/launch/:slug',
+                exact: true
+            },
+            {
+                component: Results,
+                path: '/test/results',
+                exact: true
+            },
+            {
+                component: ResultSingle,
+                path: '/test/result/:id',
+                exact: true
+            },
             {
                 component: Home,
                 path: '/api/reset/password/:token',
