@@ -31,6 +31,10 @@ export function deleteTest(data = {}){
     let url = `/admin/api/delete/test`;
     return networkActions.requestPost(constants.deleteTest, url, data);
 }
+export function unpublishTest(data = {}){
+    let url = `/admin/api/unpublish/test`;
+    return networkActions.requestPost(constants.unpublishTest, url, data);
+}
 export function createQuestion(data = {}){
     let url = `/admin/api/create/question`;
     return networkActions.requestPost(constants.createQuestion, url, data);
@@ -50,4 +54,10 @@ export function publishQuestion(data = {}){
 export function unpublishQuestion(data = {}){
     let url = `/admin/api/unpublish/question`;
     return networkActions.requestPost(constants.unpublishQuestion, url, data);
+}
+export function chooseMedia(data){
+    return {
+        type: constants.chooseTestMedia.REQUEST,
+        json: data
+    }
 }

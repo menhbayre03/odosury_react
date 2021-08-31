@@ -2,6 +2,7 @@ import {
     getTests,
     declineOpenTest,
     componentWillUnmountTest,
+    checkTransaction,
 } from "../actionTypes";
 import config from "../config";
 const initialState = {
@@ -11,11 +12,31 @@ const initialState = {
     openTestCheck: false,
 
     openTest: null,
-    declineOpenTestLoader:false
+    declineOpenTestLoader:false,
+
+    checkTransactionLoader: false,
 };
 
 export default(state = initialState, action) => {
     switch (action.type) {
+        case checkTransaction.REQUEST:
+            return {
+                ...state,
+                checkTransactionLoader:true,
+            };
+        case checkTransaction.RESPONSE:
+            if(action.json.success) {
+                return {
+                    ...state,
+                    checkTransactionLoader:false,
+                };
+            } else {
+                return {
+                    ...state,
+                    checkTransactionLoader:false
+
+                };
+            }
         case componentWillUnmountTest.REQUEST:
             return {
                 ...state,

@@ -1,18 +1,23 @@
 import React from "react";
 import { connect } from 'react-redux';
 import config from '../../config';
-import {getTest, createTest, deleteTest, createQuestion, deleteQuestion, publishTest, publishQuestion, unpublishQuestion } from '../../actions/test_actions'
-const reducer = ({ main, test }) => ({ main, test });
+import {
+    getTest, createTest, deleteTest,
+    createQuestion, deleteQuestion, publishTest, publishQuestion,
+    unpublishQuestion, unpublishTest, chooseMedia
+} from '../../actions/test_actions'
+const reducer = ({ main, test, media }) => ({ main, test, media });
+import MediaLib from "../media/MediaLib";
 import {
     Card, Empty, Popover,
     Table, Row, Col, Tag,
-    Button, Popconfirm,
+    Button, Popconfirm, Modal,
     Input, Drawer, Collapse,
     Select, Form, Tooltip,
     Switch, InputNumber
 } from 'antd';
 import {
-    PlusOutlined, EnterOutlined, EditOutlined, DeleteOutlined, CloseCircleOutlined, CheckOutlined
+    PlusOutlined, EyeOutlined, EditOutlined, DeleteOutlined, CloseCircleOutlined, CheckOutlined, UploadOutlined
 } from '@ant-design/icons';
 import TestSingleQuestion from "./TestSingleQuestion";
 import TestSingleQuestions from "./TestSingleQuestions";
@@ -79,10 +84,20 @@ class Test extends React.Component {
             // LOADERS
             questionSubmitLoading: false,
             testSubmitLoading: false,
+            testUnpublishLoading: false,
             publishLoading: false,
             deleteQuestionLoading: '',
             publishQuestionLoading: '',
             unpublishQuestionLoading: '',
+
+            // MEDIA
+            mediaType: '',
+            forWhat: '',
+            modalImage: {},
+            cardImage: {},
+
+            //MODAL
+            modalVisible: false
         };
         this.questionHandler = this.questionHandler.bind(this);
         this.propertyHandler = this.propertyHandler.bind(this);
@@ -107,6 +122,8 @@ class Test extends React.Component {
                     hardQuestion: ((data.test || {}).hardQuestion || []),
                     proQuestion: ((data.test || {}).proQuestion || []),
                     questions: (data.questions || []),
+                    modalImage: ((data.test || {}).modalImage || {}),
+                    cardImage: ((data.test || {}).cardImage || {}),
                     status: (data?.test?.status || 'idle')
                 });
             }else{
@@ -125,6 +142,19 @@ class Test extends React.Component {
         this.setState({testSubmitLoading: false, questionSubmitLoading: false})
         this.getTest.remove();
     }
+    // MEDIA METHOD
+    openMediaLib(mediaType, forWhat){
+        this.setState({mediaType, forWhat})
+    }
+    chooseMedia(data, type){
+        if(this.state.forWhat === 'testModalImage'){
+            this.setState({modalImage: data[0]});
+        }else{
+            this.setState({cardImage: data[0]});
+        }
+        // this.props.dispatch(chooseMedia({data: data, medType:type, forWhat:this.state.forWhat}));
+    }
+    // CLEAR
     clear() {
         this.setState({
             loadingTest: false,
@@ -149,6 +179,7 @@ class Test extends React.Component {
             testSubmitLoading: false
         })
     }
+    // METHOD WHICH LETS US CHANGE PARENT'S STATE
     questionHandler(obj, actionObj, action){
         if(obj){
             if(action === 'publish') {
@@ -181,7 +212,37 @@ class Test extends React.Component {
                 }
             }else if(action === 'unpublish'){
                 if(actionObj.loader && Object.keys(actionObj.loader).length > 0){
-                    if(!this.readyToPublish(actionObj.difficulty, actionObj.type)){
+                    if(this.state.status === 'active'){
+                        if(!this.readyToPublish(actionObj.difficulty, actionObj.type)){
+                            this.setState({
+                                unpublishQuestionLoading: actionObj.loader
+                            }, () => {
+                                this.props.dispatch(unpublishQuestion({...obj})).then(c => {
+                                    if(c.json?.success){
+                                        let updatedQuestions = (this.state.questions || []).map(question => {
+                                            if((c.json?._id || 'as').toString() !== (question._id || '').toString()){
+                                                return question;
+                                            }
+                                            return {
+                                                ...question,
+                                                status: 'pause'
+                                            }
+                                        });
+                                        this.setState({
+                                            questions: updatedQuestions,
+                                            unpublishQuestionLoading: ''
+                                        })
+                                    }else{
+                                        this.setState({
+                                            unpublishQuestionLoading: ''
+                                        })
+                                    }
+                                });
+                            })
+                        }else{
+                            config.get('emitter').emit('warning', 'Энэ асуултыг устгавал асуулт бүрдэхгүй тул боломжгүй');
+                        }
+                    }else{
                         this.setState({
                             unpublishQuestionLoading: actionObj.loader
                         }, () => {
@@ -207,13 +268,34 @@ class Test extends React.Component {
                                 }
                             });
                         })
-                    }else{
-                        config.get('emitter').emit('warning', 'Энэ асуултыг устгавал асуулт бүрдэхгүй тул боломжгүй');
                     }
                 }
             }else if(action === 'delete'){
                 if(actionObj.loader && Object.keys(actionObj.loader).length > 0){
-                    if(!this.readyToPublish(actionObj.difficulty, actionObj.type)){
+                    if(this.state.status === 'active'){
+                        if(!this.readyToPublish(actionObj.difficulty, actionObj.type)){
+                            this.setState({
+                                deleteQuestionLoading: actionObj.loader
+                            }, () => {
+                                this.props.dispatch(deleteQuestion({...obj})).then(c => {
+                                    if(c.json?.success){
+                                        let updatedQuestions = (this.state.questions || []).filter(question =>
+                                            (c.json?._id || 'as').toString() !== (question._id || '').toString());
+                                        this.setState({
+                                            questions: updatedQuestions,
+                                            deleteQuestionLoading: ''
+                                        })
+                                    }else{
+                                        this.setState({
+                                            deleteQuestionLoading: ''
+                                        })
+                                    }
+                                });
+                            })
+                        }else{
+                            config.get('emitter').emit('warning', 'Энэ асуултыг устгавал асуулт бүрдэхгүй тул боломжгүй');
+                        }
+                    }else{
                         this.setState({
                             deleteQuestionLoading: actionObj.loader
                         }, () => {
@@ -232,8 +314,6 @@ class Test extends React.Component {
                                 }
                             });
                         })
-                    }else{
-                        config.get('emitter').emit('warning', 'Энэ асуултыг устгавал асуулт бүрдэхгүй тул боломжгүй');
                     }
                 }
             }else if(action === 'edit'){
@@ -243,6 +323,7 @@ class Test extends React.Component {
             }
         }
     }
+    // HANDLING LIST ITEM
     listItemHandler(type, parent, child, action, _id, data){
         let string = `${parent}${child}`;
         let initial = ((this.state || [])[string] || [])
@@ -285,26 +366,40 @@ class Test extends React.Component {
             (this.state.hardQuestion || []).length + (this.state.proQuestion || []).length) === 0){
             config.get('emitter').emit('warning', 'Шалгалтын асуултуудын тоог оруулна уу.');
         }else{
-            if(this.state.active){
-                
-            }
-            this.setState({testSubmitLoading: true}, () => {
-                this.props.dispatch(createTest({
-                    _id: this.state._id,
-                    title: this.state.title,
-                    duration: this.state.duration,
-                    price: this.state.price,
-                    secret: this.state.secret,
-                    oneTime: this.state.oneTime,
-                    hasCertificate: this.state.hasCertificate,
-                    easyQuestion: this.state.easyQuestion,
-                    mediumQuestion: this.state.mediumQuestion,
-                    hardQuestion: this.state.hardQuestion,
-                    proQuestion: this.state.proQuestion,
-                })).then(c => {
-                    this.setState({testSubmitLoading: false})
+            let test = {
+                _id: this.state._id,
+                title: this.state.title,
+                duration: this.state.duration,
+                price: this.state.price,
+                secret: this.state.secret,
+                oneTime: this.state.oneTime,
+                hasCertificate: this.state.hasCertificate,
+                easyQuestion: this.state.easyQuestion,
+                mediumQuestion: this.state.mediumQuestion,
+                hardQuestion: this.state.hardQuestion,
+                proQuestion: this.state.proQuestion,
+            };
+            if(this.state.modalImage && (Object.keys(this.state.modalImage) || []).length > 0
+                && (this.state.modalImage || {})._id !== '') test.modalImage = (this.state.modalImage || {})._id;
+            if(this.state.cardImage && (Object.keys(this.state.cardImage) || []).length > 0
+                && (this.state.cardImage || {})._id !== '') test.cardImage = (this.state.cardImage || {})._id;
+            if(this.state.status === 'active'){
+                if(!this.readyToPublish()){
+                    this.setState({testSubmitLoading: true}, () => {
+                        this.props.dispatch(createTest(test)).then(c => {
+                            this.setState({testSubmitLoading: false})
+                        });
+                    });
+                }else{
+                    config.get('emitter').emit('warning', 'Шалгалтын асуултуудын тоо хүрэлцэхгүй байна.');
+                }
+            }else{
+                this.setState({testSubmitLoading: true}, () => {
+                    this.props.dispatch(createTest(test)).then(c => {
+                        this.setState({testSubmitLoading: false})
+                    });
                 });
-            });
+            }
         }
     }
     submitQuestion(obj){
@@ -413,17 +508,30 @@ class Test extends React.Component {
                             key={`${parent}-${child}-content-${item._id}`}
                         >
                             <div style={
-                                questionCount === item.quantity ?
-                                    {display: 'inline-flex', justifyContent: 'space-between', width: '100%', height: '100%', alignItems: 'center'}
-                                    :
-                                    questionCount > item.quantity ?
-                                        {display: 'inline-flex', justifyContent: 'space-between', width: '100%', height: '100%', alignItems: 'center', color: 'green'}
+                                ((this.props.match || {}).params || {}).test !== 'new' ?
+                                    questionCount === item.quantity ?
+                                        {display: 'inline-flex', justifyContent: 'space-between', width: '100%', height: '100%', alignItems: 'center'}
                                         :
-                                        {display: 'inline-flex', justifyContent: 'space-between', width: '100%', height: '100%', alignItems: 'center', color: 'red'}
+                                        questionCount > item.quantity ?
+                                            {
+                                                display: 'inline-flex', justifyContent: 'space-between',
+                                                width: '100%', height: '100%', alignItems: 'center', color: 'green'
+                                            }
+                                            :
+                                            {display: 'inline-flex', justifyContent: 'space-between', width: '100%', height: '100%', alignItems: 'center', color: 'red'}
+                                    :
+                                    {display: 'inline-flex', justifyContent: 'space-between', width: '100%', height: '100%', alignItems: 'center'}
                             }>
                                 <span>{conf.getType(item[property])}</span>
+
                                 <span>
-                                    {questionCount}/{item.quantity}
+                                    {
+                                        ((this.props.match || {}).params || {}).test !== 'new' ?
+                                            `${questionCount}/`
+                                            :
+                                            null
+                                    }
+                                    {item.quantity}
                                 </span>
                             </div>
                         </div>
@@ -442,19 +550,22 @@ class Test extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <Card
-                    style={{marginBottom: 20}}
-                    title="Шалгалт"
-                    bordered={true}
-                    loading={this.state.loadingTest}
-                    extra={
-                        <>
-                            Статус:&nbsp;
-                            {
-                                conf.getStatus(this.state.status)
-                            }
-                            {
-                                ((this.props.match || {}).params || {}).test !== 'new' ?
+                <div>
+                    <Card
+                        style={{marginBottom: 20}}
+                        title={'Шалгалт'}
+                        bordered={true}
+                        loading={this.state.loadingTest}
+                        extra={
+                            ((this.props.match || {}).params || {}).test !== 'new' ?
+                                <>
+                                    <Button icon={<EyeOutlined />} shape={'circle'} type={'primary'} onClick={() => this.setState({
+                                        modalVisible: true
+                                    })} />&nbsp;
+                                    Статус:&nbsp;
+                                    {
+                                        conf.getStatus(this.state.status)
+                                    }
                                     <Button
                                         type={'primary'}
                                         icon={<PlusOutlined />}
@@ -462,273 +573,304 @@ class Test extends React.Component {
                                     >
                                         Асуулт нэмэх
                                     </Button>
-                                    :
-                                    null
-                            }
-                        </>
-                    }
-                >
-                    <Form
-                        onFinish={this.submit.bind(this)}
-                        // layout={'inline'}
-                        id={'test-single'}
-                        scrollToFirstError={true}
-                        fields={[
-                            {name: 'title', value: this.state.title},
-                            {name: 'duration', value: this.state.duration},
-                            {name: 'price', value: this.state.price},
-                            {name: 'secret', value: this.state.secret},
-                            {name: 'oneTime', value: this.state.oneTime},
-                            {name: 'hasCertificate', value: this.state.hasCertificate},
-                        ]}
-                        onValuesChange={() => this.setState({needUpdate: true})}
+                                </>
+                                :
+                                null
+                        }
                     >
-                        <Form.Item
-                            label='Шалгалтын нэр'
-                            name='title'
-                            rules={[
-                                {
-                                    required: this.state.title === '',
-                                    message: 'Шалгалтын нэр оруулна уу'
-                                }
+                        <Form
+                            onFinish={this.submit.bind(this)}
+                            // layout={'inline'}
+                            id={'test-single'}
+                            scrollToFirstError={true}
+                            fields={[
+                                {name: 'title', value: this.state.title},
+                                {name: 'duration', value: this.state.duration},
+                                {name: 'price', value: this.state.price},
+                                {name: 'secret', value: this.state.secret},
+                                {name: 'oneTime', value: this.state.oneTime},
+                                {name: 'hasCertificate', value: this.state.hasCertificate},
                             ]}
-                        >
-                            <Input
-                                value={this.state.title}
-                                onChange={(e) => this.setState({title: e.target.value})}
-                            />
-                        </Form.Item>
-                        <div
-                            className={'test'}
-                            key={'test-from-info'}
+                            onValuesChange={() => this.setState({needUpdate: true})}
                         >
                             <Form.Item
-                                label='Хугацаа'
-                                name='duration'
+                                label='Шалгалтын нэр'
+                                name='title'
                                 rules={[
                                     {
-                                        required: true,
-                                        message: 'Шалгалтын хугацааг оруулна уу'
+                                        required: this.state.title === '',
+                                        message: 'Шалгалтын нэр оруулна уу'
                                     }
                                 ]}
                             >
-                                <InputNumber
-                                    min={0}
-                                    value={this.state.duration}
-                                    onChange={(e) => this.setState({duration: e})}
+                                <Input
+                                    value={this.state.title}
+                                    onChange={(e) => this.setState({title: e.target.value})}
                                 />
                             </Form.Item>
-                            <Form.Item
-                                label='Үнэ'
-                                name='price'
-                                rules={[
+                            <div
+                                className={'test'}
+                                key={'test-from-info'}
+                            >
+                                <Form.Item
+                                    label='Хугацаа'
+                                    name='duration'
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Шалгалтын хугацааг оруулна уу'
+                                        }
+                                    ]}
+                                >
+                                    <InputNumber
+                                        min={0}
+                                        value={this.state.duration}
+                                        onChange={(e) => this.setState({duration: e})}
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    label='Үнэ'
+                                    name='price'
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Шалгалтын үнийг оруулна уу'
+                                        }
+                                    ]}
+                                >
+                                    <InputNumber
+                                        min={0}
+                                        value={this.state.price}
+                                        onChange={(e) => this.setState({price: e})}
+                                        formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    label='Хариуг нууцлах'
+                                    name='secret'
+                                >
+                                    <Switch
+                                        checked={this.state.secret}
+                                        onChange={(e) => this.setState({secret: e})}
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    label='Ганц удаа өгөх'
+                                    name='oneTime'
+                                >
+                                    <Switch
+                                        checked={this.state.oneTime}
+                                        onChange={(e) => this.setState({oneTime: e})}
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    label='Гэрчилгээтэй'
+                                    name='hasCertificate'
+                                >
+                                    <Switch
+                                        checked={this.state.hasCertificate}
+                                        onChange={(e) => this.setState({hasCertificate: e})}
+                                    />
+                                </Form.Item>
+                            </div>
+                            <div
+                                style={{marginRight: 20, marginLeft: 20}}
+                                className={'test'}
+                                key={'test-from-questions'}
+                            >
+                                <Row gutter={20}>
                                     {
-                                        required: true,
-                                        message: 'Шалгалтын үнийг оруулна уу'
-                                    }
-                                ]}
-                            >
-                                <InputNumber
-                                    min={0}
-                                    value={this.state.price}
-                                    onChange={(e) => this.setState({price: e})}
-                                    formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                />
-                            </Form.Item>
-                            <Form.Item
-                                label='Хариуг нууцлах'
-                                name='secret'
-                            >
-                                <Switch
-                                    checked={this.state.secret}
-                                    onChange={(e) => this.setState({secret: e})}
-                                />
-                            </Form.Item>
-                            <Form.Item
-                                label='Ганц удаа өгөх'
-                                name='oneTime'
-                            >
-                                <Switch
-                                    checked={this.state.oneTime}
-                                    onChange={(e) => this.setState({oneTime: e})}
-                                />
-                            </Form.Item>
-                            <Form.Item
-                                label='Гэрчилгээтэй'
-                                name='hasCertificate'
-                            >
-                                <Switch
-                                    checked={this.state.hasCertificate}
-                                    onChange={(e) => this.setState({hasCertificate: e})}
-                                />
-                            </Form.Item>
-                        </div>
-                        <div
-                            style={{marginRight: 20, marginLeft: 20}}
-                            className={'test'}
-                            key={'test-from-questions'}
-                        >
-                            <Row gutter={20}>
-                                {
-                                    (this.state.difficulties || []).map(diff =>
-                                        <Col span={6} key={diff}>
-                                            <div key={`div-${diff}`}>
-                                                <div style={{textAlign: 'center'}} key={`div-${diff}-${diff}`}>
-                                                    {conf.getDifficulty(diff)} асуултууд
-                                                    <Button
-                                                        size={'small'}
-                                                        style={{border: 'none', boxShadow: 'none', outline: 'none'}}
-                                                        icon={<PlusOutlined />}
-                                                        onClick={() => this.setState({
-                                                            temp: {
-                                                                ...(this.state.temp || []),
-                                                                [diff]: {
-                                                                    ...((this.state.temp || [])[diff] || []),
-                                                                    adding: true
-                                                                }
-                                                            }
-                                                        })}
-                                                    />
-                                                </div>
-                                                <div key={`div-${diff}-${diff}-${diff}`}>
-                                                    {
-                                                        ((this.state || [])[`${diff}Question`] || []).length > 0 ?
-                                                            <ul>
-                                                                {((this.state || [])[`${diff}Question`] || []).map(question =>
-                                                                    this.getDifficultyListItem(diff, 'Question', question, 'type')
-                                                                )}
-                                                            </ul>
-                                                            :
-                                                            null
-                                                    }
-                                                </div>
-                                            </div>
-                                            {
-                                                ((this.state.temp || [])[diff] || {}).adding ?
-                                                    <Input.Group compact key={`test-${diff}`}>
-                                                        <Select
-                                                            style={{width: 200}}
-                                                            value={((this.state.temp || [])[diff] || {}).type}
-                                                            onSelect={(e) => this.setState({
-                                                                temp: {
-                                                                    ...(this.state.temp || []),
-                                                                    [diff]: {
-                                                                        ...((this.state.temp || [])[diff] || []),
-                                                                        type: e
-                                                                    }
-                                                                }
-                                                            })}
-                                                        >
-                                                            {
-                                                                (this.state.types || []).map(type =>
-                                                                    <Select.Option
-                                                                        value={type}
-                                                                        key={type}
-                                                                        disabled={((this.state || [])[`${diff}Question`] || []).some(quest => quest.type === type)}
-                                                                    >
-                                                                        {conf.getType(type)}
-                                                                    </Select.Option>
-                                                                )
-                                                            }
-                                                        </Select>
-                                                        <InputNumber
-                                                            value={((this.state.temp || [])[diff] || {}).quantity}
-                                                            onChange={(e) => this.setState({
-                                                                temp: {
-                                                                    ...(this.state.temp || []),
-                                                                    [diff]: {
-                                                                        ...((this.state.temp || [])[diff] || []),
-                                                                        quantity: e
-                                                                    }
-                                                                }
-                                                            })}
-                                                            min={0}
-                                                        />
+                                        (this.state.difficulties || []).map(diff =>
+                                            <Col span={6} key={diff}>
+                                                <div key={`div-${diff}`}>
+                                                    <div style={{textAlign: 'center'}} key={`div-${diff}-${diff}`}>
+                                                        {conf.getDifficulty(diff)} асуултууд
                                                         <Button
-                                                            onClick={() => {
-                                                                if(((this.state.temp || [])[diff] || {}).type && ((this.state.temp || [])[diff] || {}).type !== '' &&
-                                                                    ((this.state.temp || [])[diff] || {}).quantity && ((this.state.temp || [])[diff] || {}).quantity !== 0){
-                                                                    this.setState({
-                                                                        needUpdate: true,
-                                                                        [`${diff}Question`]: [
-                                                                            ...((this.state || [])[`${diff}Question`] || []),
-                                                                            {
-                                                                                _id: conf.getKey(diff),
-                                                                                quantity: ((this.state.temp || [])[diff] || {}).quantity,
-                                                                                type: ((this.state.temp || [])[diff] || {}).type,
-                                                                            }
-                                                                        ],
-                                                                        temp: {
-                                                                            ...(this.state.temp || []),
-                                                                            [diff]: {quantity: 0, type: '', adding: false}
-                                                                        }
-                                                                    });
+                                                            size={'small'}
+                                                            style={{border: 'none', boxShadow: 'none', outline: 'none'}}
+                                                            icon={<PlusOutlined />}
+                                                            onClick={() => this.setState({
+                                                                temp: {
+                                                                    ...(this.state.temp || []),
+                                                                    [diff]: {
+                                                                        ...((this.state.temp || [])[diff] || []),
+                                                                        adding: true
+                                                                    }
                                                                 }
-                                                            }}
-                                                        >Нэмэх</Button>
-                                                    </Input.Group>
-                                                    :
-                                                    null
-                                            }
-                                        </Col>
-                                    )
-                                }
-                            </Row>
-                        </div>
-                        <div
-                            key={'test-from-finish'}
-                            style={{textAlign: 'right'}}
-                        >
-                            <Button
-                                htmlType={'submit'}
-                                form={'test-single'}
-                                disabled={!this.state.needUpdate}
-                                loading={this.state.testSubmitLoading}
-                            >
-                                Хадгалах
-                            </Button>
-                            {
-                                this.state.status !== 'active' ?
-                                    <Popconfirm
-                                        title={'Шалгалтыг нийтлэх үү?'}
-                                        okText={'Тийм'} cancelText={'Үгүй'}
-                                        onConfirm={() => this.setState({
-                                            publishLoading: true
-                                        }, () => {
-                                            this.props.dispatch(publishTest({slug: ((this.props.match || {}).params || {}).test})).then(c => {
-                                                if(c.json?.success){
-                                                    this.setState({
-                                                        publishLoading: false,
-                                                        status: 'active',
-                                                        questions: this.state.questions.map(question => {
-                                                            return {
-                                                                ...question,
-                                                                status: 'active'
-                                                            }
-                                                        })
-                                                    });
-                                                }else{
-                                                    this.setState({publishLoading: false});
+                                                            })}
+                                                        />
+                                                    </div>
+                                                    <div key={`div-${diff}-${diff}-${diff}`}>
+                                                        {
+                                                            ((this.state || [])[`${diff}Question`] || []).length > 0 ?
+                                                                <ul>
+                                                                    {((this.state || [])[`${diff}Question`] || []).map(question =>
+                                                                        this.getDifficultyListItem(diff, 'Question', question, 'type')
+                                                                    )}
+                                                                </ul>
+                                                                :
+                                                                null
+                                                        }
+                                                    </div>
+                                                </div>
+                                                {
+                                                    ((this.state.temp || [])[diff] || {}).adding ?
+                                                        <Input.Group compact key={`test-${diff}`}>
+                                                            <Select
+                                                                style={{width: 200}}
+                                                                value={((this.state.temp || [])[diff] || {}).type}
+                                                                onSelect={(e) => this.setState({
+                                                                    temp: {
+                                                                        ...(this.state.temp || []),
+                                                                        [diff]: {
+                                                                            ...((this.state.temp || [])[diff] || []),
+                                                                            type: e
+                                                                        }
+                                                                    }
+                                                                })}
+                                                            >
+                                                                {
+                                                                    (this.state.types || []).map(type =>
+                                                                        <Select.Option
+                                                                            value={type}
+                                                                            key={type}
+                                                                            disabled={((this.state || [])[`${diff}Question`] || []).some(quest => quest.type === type)}
+                                                                        >
+                                                                            {conf.getType(type)}
+                                                                        </Select.Option>
+                                                                    )
+                                                                }
+                                                            </Select>
+                                                            <InputNumber
+                                                                value={((this.state.temp || [])[diff] || {}).quantity}
+                                                                onChange={(e) => this.setState({
+                                                                    temp: {
+                                                                        ...(this.state.temp || []),
+                                                                        [diff]: {
+                                                                            ...((this.state.temp || [])[diff] || []),
+                                                                            quantity: e
+                                                                        }
+                                                                    }
+                                                                })}
+                                                                min={0}
+                                                            />
+                                                            <Button
+                                                                onClick={() => {
+                                                                    if(((this.state.temp || [])[diff] || {}).type && ((this.state.temp || [])[diff] || {}).type !== '' &&
+                                                                        ((this.state.temp || [])[diff] || {}).quantity
+                                                                        && ((this.state.temp || [])[diff] || {}).quantity !== 0){
+                                                                        this.setState({
+                                                                            needUpdate: true,
+                                                                            [`${diff}Question`]: [
+                                                                                ...((this.state || [])[`${diff}Question`] || []),
+                                                                                {
+                                                                                    _id: conf.getKey(diff),
+                                                                                    quantity: ((this.state.temp || [])[diff] || {}).quantity,
+                                                                                    type: ((this.state.temp || [])[diff] || {}).type,
+                                                                                }
+                                                                            ],
+                                                                            temp: {
+                                                                                ...(this.state.temp || []),
+                                                                                [diff]: {quantity: 0, type: '', adding: false}
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                }}
+                                                            >Нэмэх</Button>
+                                                        </Input.Group>
+                                                        :
+                                                        null
                                                 }
-                                            });
-                                        })}
-                                        disabled={this.readyToPublish() || this.state.needUpdate}
-                                    >
-                                        <Button
-                                            style={{marginLeft: 20}}
-                                            type={'primary'}
+                                            </Col>
+                                        )
+                                    }
+                                </Row>
+                            </div>
+                            <div
+                                key={'test-from-finish'}
+                                style={{textAlign: 'right'}}
+                            >
+                                <Button onClick={() => {this.setState({needUpdate: true}, () => {
+                                    this.openMediaLib('image', 'testCardImage')
+                                })}} >
+                                    <UploadOutlined /> {this.state.cardImage && (this.state.cardImage || {})._id ? 'Картны зураг солих' : 'Картны зураг'}
+                                </Button>
+                                <Button onClick={() => {this.setState({needUpdate: true}, () => {
+                                    this.openMediaLib('image', 'testModalImage')
+                                })}} style={{marginLeft: 20}}>
+                                    <UploadOutlined /> {this.state.modalImage && (this.state.modalImage || {})._id ? 'Модалын зураг солих' : 'Модалын зураг'}
+                                </Button>
+                                <Button
+                                    style={{marginLeft: 20}}
+                                    htmlType={'submit'}
+                                    form={'test-single'}
+                                    disabled={!this.state.needUpdate}
+                                    loading={this.state.testSubmitLoading}
+                                >
+                                    Хадгалах
+                                </Button>
+                                {
+                                    this.state.status !== 'active' ?
+                                        <Popconfirm
+                                            title={'Шалгалтыг нийтлэх үү?'}
+                                            okText={'Тийм'} cancelText={'Үгүй'}
+                                            onConfirm={() => this.setState({
+                                                publishLoading: true
+                                            }, () => {
+                                                this.props.dispatch(publishTest({slug: ((this.props.match || {}).params || {}).test})).then(c => {
+                                                    if(c.json?.success){
+                                                        this.setState({
+                                                            publishLoading: false,
+                                                            status: 'active',
+                                                            questions: this.state.questions.map(question => {
+                                                                return {
+                                                                    ...question,
+                                                                    status: 'active'
+                                                                }
+                                                            })
+                                                        });
+                                                    }else{
+                                                        this.setState({publishLoading: false});
+                                                    }
+                                                });
+                                            })}
                                             disabled={this.readyToPublish() || this.state.needUpdate}
-                                            loading={this.state.publishLoading}
                                         >
-                                            Нийтлэх
-                                        </Button>
-                                    </Popconfirm>
-                                    :
-                                    null
-                            }
-                        </div>
-                    </Form>
-                </Card>
+                                            <Button
+                                                style={{marginLeft: 20}}
+                                                type={'primary'}
+                                                disabled={this.readyToPublish() || this.state.needUpdate}
+                                                loading={this.state.publishLoading}
+                                            >
+                                                Нийтлэх
+                                            </Button>
+                                        </Popconfirm>
+                                        :
+                                        <Popconfirm
+                                            title={'Шалгалтын нийтлэлтийг болиулах уу?'}
+                                            onConfirm={() => this.setState({testUnpublishLoading: true} , () => {
+                                                this.props.dispatch(unpublishTest({slug: ((this.props.match || {}).params || {}).test})).then(c => {
+                                                    if(c.json?.success){
+                                                        this.setState({testUnpublishLoading: false, status: 'pause'});
+                                                    }else{
+                                                        this.setState({testUnpublishLoading: false});
+                                                    }
+                                                })
+                                            })}
+                                            disabled={this.state.testUnpublishLoading}
+                                        >
+                                            <Button
+                                                style={{marginLeft: 20}} type={'primary'}
+                                                danger loading={this.state.testUnpublishLoading}
+                                            >
+                                                Нийтлэлийг зогсоох
+                                            </Button>
+                                        </Popconfirm>
+                                }
+                            </div>
+                        </Form>
+                    </Card>
+                </div>
                 {
                     this.state.questions?.length > 0 ?
                         <TestSingleQuestions questions={[...this.state.questions]} handler={this.questionHandler} deleteLoading={this.state.deleteLoading} />
@@ -811,6 +953,78 @@ class Test extends React.Component {
                             null
                     }
                 </Drawer>
+                {this.state.mediaType !== ''?
+                    <MediaLib
+                        visible={this.state.mediaType != ''}
+                        multi={false}
+                        onOk={this.chooseMedia.bind(this)}
+                        type={this.state.mediaType}
+                        dimension={{width:1200, height: 450}}
+                        forWhat={this.state.forWhat}
+                        onHide={() => this.setState({mediaType: ''})}
+                    />
+                    :
+                    null
+                }
+                <Modal
+                    visible={this.state.modalVisible}
+                    footer={false}
+                    onCancel={() => this.setState({modalVisible: false})}
+                >
+                    Тест хуудсанд:
+                    <div
+                        className="testCard"
+                        style={this.state.cardImage && (this.state.cardImage || {}).path ?
+                            {background: `url(${config.get('hostMedia')}${this.state.cardImage.path})`,
+                                backgroundSize:'cover', backgroundPosition: 'center', margin: '0 0 20px 20px'} :
+                            {background: 'url("/images/defaultTestCard1.png")', backgroundSize:'200px 110px', margin: '0 0 20px 20px'}
+                        }
+                    >
+                        <div className="cardContent" style={{marginBottom: 20}}>
+                            <p style={{
+                                whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block', width: 160, margin: 0
+                            }}>{this.state.title}</p>
+                            <br/>
+                            Хугацаа: {this.state.duration} мин
+                            <br/>
+                            <span style={{
+                                color: '#ffc107', fontSize: 14
+                            }}> Үнэ: {`${this.state.price}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}₮</span>
+                            <div
+                                className="certifyTagTest" style={this.state.hasCertificate? {} : {backgroundColor: '#dc3545', border: 'none', color: '#fff'}}
+                            >
+                                {this.state.hasCertificate ? 'СЕРТИФИКАТТАЙ' : 'СЕРТИФИКАТГҮЙ'}
+                            </div>
+                        </div>
+                    </div>
+                    Тест модалд:
+                    <div className={'testModal'}>
+                        <div
+                            style={
+                                this.state.modalImage && (this.state.modalImage || {}).path ?
+                                    {background: `url(${config.get('hostMedia')}${this.state.modalImage.path})`,
+                                        backgroundSize:'cover', backgroundPosition: 'center', margin: '0 0 20px 20px', height: 320} :
+                                    {background: 'url("/images/defaultTest2.jpg")',backgroundSize:'600px 320px', margin: '0 0 0 20px', height: 320}
+                            }
+                            className="modalMain"
+                        >
+                            <h4 style={{color: 'white'}}>Та <span>{this.state.title}</span> тест өгөх гэж байна.</h4>
+                            <div style={{marginLeft: 25, position: 'absolute', top: '105px'}}>
+                                <div>
+                                    Нийт: {
+                                    (this.state.easyQuestion ||[]).length + (this.state.mediumQuestion ||[]).length +
+                                    (this.state.hardQuestion ||[]).length + (this.state.proQuestion ||[]).length
+                                } асуулттай
+                                </div>
+                                <div>
+                                    Үргэлжлэх хугацаа: {this.state.duration !== 0 ? `${this.state.duration} минут` : 'Хугацаагүй'}
+                                </div>
+                                <div>Давтамж: {this.state.oneTime? 'Нэг удаа өгнө' : 'Хэд өгсөн ч болно'}</div>
+                                <div>Үнэ: {this.state.price}₮ </div>
+                            </div>
+                        </div>
+                    </div>
+                </Modal>
             </React.Fragment>
         );
     }

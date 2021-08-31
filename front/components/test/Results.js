@@ -4,27 +4,36 @@ import Header from "../include/Header";
 import Footer from "../include/Footer";
 import GridItem from "../include/GridItem";
 import {Container, Row, Col, Button, Modal} from "react-bootstrap";
-import * as actions from '../../actions/test_actions';
+import * as actions from '../../actions/results_actions';
 import {Link} from "react-router-dom";
 import Select from "react-dropdown-select";
 import Loader from "../include/Loader";
 import {
     isMobile
 } from "react-device-detect";
-import config from "../../config";
 import moment from "moment";
-const reducer = ({ main, test }) => ({ main, test });
+import config, {resultToLetter} from "../../config";
+import {getResults} from "../../actionTypes";
+const reducer = ({ main, results }) => ({ main, results });
 
 class Results extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            pageNum: 0,
+            pageSize: 5,
         }
     }
+    componentDidMount() {
+        const {match, dispatch} = this.props;
+        let cc = {
+            pageNum: this.state.pageNum,
+            pageSize: this.state.pageSize
+        };
+        dispatch(actions.getResults(cc));
+    }
     render() {
-        const {test:{tests, loading, all, openTest}} = this.props;
-        let fakeData = [{_id:'aa'},{_id:'aa'}];
+        const {results:{results, loading, all}} = this.props;
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
@@ -44,15 +53,15 @@ class Results extends Component {
                                 <Col lg={10} md={10} sm={10} style={{marginBottom: 30}}>
                                     
                                     <div className="resultList">
-                                        {fakeData?.map( (r) =>
+                                        {results?.map( (r) =>
                                             
                                                 <div className="resultItem">
                                                     <Link to={`/test/result/${r._id}`}>
                                                     <h6 style={{fontWeight: 600, fontSize: 18}}>
-                                                        ExampleJS-ийн шалгалт
+                                                        {r.test && r.test.title? r.test.title : 'Тест'}
                                                     </h6>
                                                     <div className="body">
-                                                        <b>ШАЛГАЛТ ӨГСӨН ОГНОО:</b> 08/09/2021 18:21
+                                                        <b>ШАЛГАЛТ ӨГСӨН ОГНОО:</b> {moment(r.created).format('DD/MM/YYYY H:mm')}
                                                         <div>
                                                             <b>СЕРТИФИКАТ: </b> 
                                                             <span style={{color: '#28a745'}}>  ОЛГОСОН</span>
@@ -66,7 +75,14 @@ class Results extends Component {
                                                                 }}
                                                         className="textRotate"
                                                     >
-                                                        94% A
+                                                        {/*{typeof r.result === 'number'?*/}
+                                                        {/*    <React.Fragment>*/}
+                                                        {/*        {r.result || 0}% {resultToLetter(r.result || 0)}*/}
+                                                        {/*    </React.Fragment>*/}
+                                                        {/*    :*/}
+                                                        {/*    null*/}
+                                                        {/*}*/}
+                                                        {r.result || 0}% {resultToLetter(r.result || 0)}
                                                     </div>
                                                     </Link>
                                                 </div>

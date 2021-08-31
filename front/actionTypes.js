@@ -89,11 +89,28 @@ export const declineOpenTest = {
     REQUEST:'declineOpenTest_REQUEST',
     RESPONSE:'declineOpenTest_RESPONSE'
 };
+export const checkTransaction = {
+    REQUEST:'checkTransaction_REQUEST',
+    RESPONSE:'checkTransaction_RESPONSE'
+};
 export const componentWillUnmountTest = {
     REQUEST:'componentWillUnmountTest_REQUEST',
     RESPONSE:'componentWillUnmountTest_RESPONSE'
 };
 //Test END
+
+//ResultSingle start
+export const getTestSingle = {
+    REQUEST:'getTestSingle_REQUEST',
+    RESPONSE:'getTestSingle_RESPONSE'
+};
+//ResultSingle end
+//ResultSingle start
+export const getResults = {
+    REQUEST:'getResults_REQUEST',
+    RESPONSE:'getResults_RESPONSE'
+};
+//ResultSingle end
 
 
 //PROFILE

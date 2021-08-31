@@ -7,7 +7,8 @@ import {
     createQuestion,
     deleteQuestion,
     publishQuestion,
-    unpublishQuestion
+    unpublishQuestion,
+    chooseTestMedia,
 } from "../actionTypes";
 const initialState = {
     questions: [],
@@ -41,6 +42,41 @@ export default(state = initialState, action) => {
                 ...state,
                 gettingTest: false,
                 tests: ((action.json || {}).tests || [])
+            }
+        case deleteTest.REQUEST:
+            return {
+                ...state,
+                gettingTest: true,
+            }
+        case deleteTest.RESPONSE:
+            if((action.json || {}).success){
+                return {
+                    ...state,
+                    gettingTest: false,
+                    tests: (state.tests || []).filter(test => (test._id || 'as').toString() !== ((action.json || {})._id || '').toString())
+                }
+            }else{
+                return {
+                    ...state,
+                    gettingTest: false
+                }
+            }
+        // case chooseTestMedia.REQUEST:
+        //     console.log(action.json);
+        //     if((action.json || {}).forWhat === 'testModalImage'){
+        //         return {
+        //             ...state,
+        //             modalImage: action.json.data[0]
+        //         };
+        //     }else{
+        //         return {
+        //             ...state,
+        //             cardImage: action.json.data[0]
+        //         };
+        //     }
+        case chooseTestMedia.REQUEST:
+            return {
+                ...state,
             }
         default:
             return state;

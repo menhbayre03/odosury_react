@@ -71,4 +71,22 @@ config.formatMoney = function (amount, decimalCount = 0, decimal = ".", thousand
     }
 };
 
+
+export function resultToLetter(num) {
+    let res = '';
+    if(num >=90){
+        res = 'A'
+    } else if(num >=80){
+        res = 'B'
+    } else if(num >=70){
+        res = 'C'
+    } else if(num >=60){
+        res = 'D'
+    } else {
+        res = 'F'
+    }
+    console.log(num, res);
+    return res;
+}
+
 export default config
