@@ -20,18 +20,59 @@ class ResultSingle extends Component {
         super(props);
         
         this.state = {
-            
+            certified: false
         }
     }
     componentDidMount() {
         const {match, dispatch} = this.props;
+        
         let cc = {
         };
         // dispatch(actions.getTests(cc));
         dispatch(actions.getTestSingle(cc, match.params.id));
+        // if(this.props.testResultSingle.result?.result <=70) {
+        //     this.setState({certified: true})
+        // }
+        // else {
+        //     this.setState({certified: false})
+        // } 
+        
     }
     render() {
-        const {testResultSingle:{test, loading}, test:{tests}} = this.props;
+         const {testResultSingle:{result, loading}} = this.props;
+        // console.log(this.props.testResultSingle.result.test)
+        console.log(this.state.certified)
+        let fakeLesson = [
+            {price: 25000, title: "fakeLesson 1"},
+            {price: 20000, title: "fakeLesson 2", isPremuim: true},
+            {price: 20000, title: "fakeLesson 3", isPremuim: false},
+            {price: 20000, title: "fakeLesson 4", isPremuim: false},
+            {price: 20000, title: "fakeLesson 5", isPremuim: true},
+
+        ]
+        let fakeTest = [
+            {price: 25000, title: "fakeTest 1", duration: 40, hasCertificate: true},
+            {price: 20000, title: "fakeTest 2", duration: 30, hasCertificate: false},
+            {price: 0, title: "fakeTest 3", duration: 20, hasCertificate: true},
+            {price: 1, title: "fakeTest 4", duration: 60, hasCertificate: false},
+        ]
+        function printGrade (score) {
+
+            if (score < 0 || score > 100) return 'INVALID SCORE';
+            if (score == 100) return 'A+';
+          
+            var decimal = score % 10;
+            score = Math.floor(score / 10);
+            var scores = ['F', 'F', 'F', 'F', 'F', 'F', 'D', 'C', 'B', 'A'];
+            var grade = scores[score];
+          
+            if (grade != 'F') {
+              if (decimal <= 2) grade += '-';
+              else if (decimal >= 8) grade += '+';
+            }
+
+            return grade;
+        }
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
@@ -52,11 +93,17 @@ class ResultSingle extends Component {
                                         <Col xl={6} lg={6} md={6} sm={12}>
                                             <h4 style={{ fontWeight: 600,
                                                         marginLeft: 20}}>
-                                                Жишээ тест 1
+                                                {result.test?.title}
                                             </h4>
                                         </Col>
                                         <Col xl={6} lg={6} md={6} sm={12}>
-                                            <button>СЕРТИФИКАТ АВАХ </button>
+                                            {
+                                                this.state.certified ?
+                                                    <button className="bigButton">СЕРТИФИКАТ АВАХ </button>
+                                                    :
+                                                    <button className="bigButton" disabled>СЕРТИФИКАТ АВАХ </button>
+                                            }
+                                            
                                         </Col>
                                     </Row>
                                     <div className="list">
@@ -72,18 +119,20 @@ class ResultSingle extends Component {
                                                         <li>
                                                             ДАВТАМЖ: Нэг удаа.
                                                         </li>
-                                                        <li>
-                                                            СЕРТИФИКАТ: Шаардлага хангасан.
-                                                        </li>
+                                                        
 
                                                     </ul>
                                                 </Col>
                                                 <Col xl={6} lg={6} md={6} sm={12}>
                                                     <ul>
                                                         <li>
-                                                            АВСАН ҮНЭЛГЭЭ: 92 A-                                                    </li>
+                                                            АВСАН ҮНЭЛГЭЭ: {result?.result} {result?.result ? printGrade(result?.result) : ''}
+                                                        </li>
                                                         <li>
-                                                            АВСАН ОНОО: 46/50
+                                                            АВСАН ОНОО: {result?.correctQuestions} / {result?.questionsNumber}
+                                                        </li>
+                                                        <li>
+                                                            СЕРТИФИКАТ: {result?.result >= 70 ? 'Шаардлага хангасан.' : 'Шаардлага хангаагүй.'}
                                                         </li>
                                                     </ul>
                                                 </Col>
@@ -106,7 +155,7 @@ class ResultSingle extends Component {
                                         </h5>
                                         <Row>
                                             {
-                                                (tests || []).map((item, index) => (
+                                                (fakeTest || []).map((item, index) => (
                                                     <Col xl={3} lg={4} md={6} sm={6} style={{marginBottom: 30}}>
                                                         <div key={index} className="testCard"
                                                             style={{background: 'url("/images/defaultTestCard1.png")', backgroundSize:'200px 110px'}}>
@@ -132,18 +181,18 @@ class ResultSingle extends Component {
                                         </h5>
                                         <Row>
                                             {
-                                                (tests || []).map((item, index) => (
+                                                (fakeLesson || []).map((item, index) => (
                                                     <Col xl={3} lg={4} md={6} sm={6} style={{marginBottom: 30}}>
                                                         <div key={index} className="testCard"
-                                                            style={{background: 'url("/images/defaultTestCard1.png")', backgroundSize:'200px 110px'}}>
+                                                            style={{background: 'url("/images/defaultLessonResult.png")', backgroundSize:'200px 110px'}}>
                                                             <div className="cardContent">
                                                                 {item.title}
                                                                 <br/>
-                                                                    Хугацаа: {item.duration} мин
+                                                                Тайлбар
                                                                 <br/>
                                                             <span style={{color: '#ffc107', fontSize: 14}}> Үнэ: {item.price}₮</span>
-                                                            <div className="certifyTagTest" style={item.hasCertificate? {} : {backgroundColor: '#dc3545', border: 'none', color: '#fff'}}> 
-                                                            {item.hasCertificate ? 'СЕРТИФИКАТТАЙ' : 'СЕРТИФИКАТГҮЙ'} </div>
+                                                            <div className="premuimTagResult" style={item.isPremuim? {} : {backgroundColor: '#62C757', border: 'none', color: '#fff'}}> 
+                                                            {item.isPremuim ? 'PREMUIM' : 'ҮНЭГҮЙ'} </div>
                                                             </div>
                                                         </div>
                                                     </Col>
