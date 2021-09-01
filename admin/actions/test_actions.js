@@ -55,6 +55,10 @@ export function unpublishQuestion(data = {}){
     let url = `/admin/api/unpublish/question`;
     return networkActions.requestPost(constants.unpublishQuestion, url, data);
 }
+export function getLessonsFromCategory(data = {}){
+    let url = `/admin/api/get/category/lessons`;
+    return networkActions.requestPost(constants.getLessonsFromCategory, url, data);
+}
 export function chooseMedia(data){
     return {
         type: constants.chooseTestMedia.REQUEST,

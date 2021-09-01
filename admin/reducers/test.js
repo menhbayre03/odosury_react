@@ -8,12 +8,18 @@ import {
     deleteQuestion,
     publishQuestion,
     unpublishQuestion,
+    getLessonsFromCategory,
+    getCategory,
     chooseTestMedia,
 } from "../actionTypes";
 const initialState = {
     questions: [],
     tests: [],
     gettingTest: false,
+    gettingCategories: false,
+    categories: [],
+    gettingLessons: false,
+    lessons: [],
 };
 
 export default(state = initialState, action) => {
@@ -59,6 +65,42 @@ export default(state = initialState, action) => {
                 return {
                     ...state,
                     gettingTest: false
+                }
+            }
+        case getCategory.REQUEST:
+            return {
+                ...state,
+                gettingCategories: true
+            }
+        case getCategory.RESPONSE:
+            if((action.json || {}).success){
+                return {
+                    ...state,
+                    gettingCategories: false,
+                    categories: ((action.json || {}).categories)
+                }
+            }else{
+                return {
+                    ...state,
+                    gettingCategories: false,
+                }
+            }
+        case getLessonsFromCategory.REQUEST:
+            return {
+                ...state,
+                gettingLessons: true
+            }
+        case getLessonsFromCategory.RESPONSE:
+            if((action.json || {}).success){
+                return {
+                    ...state,
+                    gettingLessons: false,
+                    lessons: ((action.json || {}).lessons)
+                }
+            }else{
+                return {
+                    ...state,
+                    gettingLessons: false
                 }
             }
         // case chooseTestMedia.REQUEST:

@@ -516,3 +516,7 @@ export const chooseTestMedia = {
     REQUEST: 'chooseTestMedia_REQUEST',
     RESPONSE: 'chooseTestMedia_RESPONSE'
 }
+export const getLessonsFromCategory = {
+    REQUEST: 'getLessonsFromCategory_REQUEST',
+    RESPONSE: 'getLessonsFromCategory_RESPONSE'
+}

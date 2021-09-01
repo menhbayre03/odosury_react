@@ -4,8 +4,12 @@ import config from '../../config';
 import {
     getTest, createTest, deleteTest,
     createQuestion, deleteQuestion, publishTest, publishQuestion,
-    unpublishQuestion, unpublishTest, chooseMedia
-} from '../../actions/test_actions'
+    unpublishQuestion, unpublishTest, chooseMedia, getLessonsFromCategory
+} from '../../actions/test_actions';
+import {
+    getCategory
+} from "../../actions/category_actions";
+
 const reducer = ({ main, test, media }) => ({ main, test, media });
 import MediaLib from "../media/MediaLib";
 import {
@@ -17,7 +21,7 @@ import {
     Switch, InputNumber
 } from 'antd';
 import {
-    PlusOutlined, EyeOutlined, EditOutlined, DeleteOutlined, CloseCircleOutlined, CheckOutlined, UploadOutlined
+    PlusOutlined, EyeOutlined, SaveOutlined, DeleteOutlined, CloseCircleOutlined, CheckOutlined, UploadOutlined
 } from '@ant-design/icons';
 import TestSingleQuestion from "./TestSingleQuestion";
 import TestSingleQuestions from "./TestSingleQuestions";
@@ -34,6 +38,10 @@ class Test extends React.Component {
             //FOR TEST
             _id: '',
             title: '',
+            category: {},
+            searchCategory: '',
+            lessons: [],
+            searchLesson: '',
             secret: true,
             oneTime: true,
             hasCertificate: false,
@@ -115,6 +123,7 @@ class Test extends React.Component {
                     secret: (data.test || {}).secret,
                     oneTime: (data.test || {}).oneTime,
                     hasCertificate: (data.test || {}).hasCertificate,
+                    category: (data.test || {}).category,
                     price: (data.test || {}).price,
                     duration: (data.test || {}).duration,
                     easyQuestion: ((data.test || {}).easyQuestion || []),
@@ -135,6 +144,7 @@ class Test extends React.Component {
                 loadingTest: true
             }, () => {
                 this.props.dispatch(getTest({slug: ((this.props.match || {}).params || {}).test}));
+                this.props.dispatch(getCategory({pageNum: 0, pageSize: 10}));
             });
         }
     }
@@ -148,9 +158,9 @@ class Test extends React.Component {
     }
     chooseMedia(data, type){
         if(this.state.forWhat === 'testModalImage'){
-            this.setState({modalImage: data[0]});
+            this.setState({modalImage: data[0], needUpdate: true});
         }else{
-            this.setState({cardImage: data[0]});
+            this.setState({cardImage: data[0], needUpdate: true});
         }
         // this.props.dispatch(chooseMedia({data: data, medType:type, forWhat:this.state.forWhat}));
     }
@@ -379,6 +389,12 @@ class Test extends React.Component {
                 hardQuestion: this.state.hardQuestion,
                 proQuestion: this.state.proQuestion,
             };
+            if((this.state.lessons || []).length > 0 && (!this.state.category || this.state.category === '')){
+                return config.get('emitter').emit('warning', 'Хичээл сонгосон тохиолдолд ангилал заавал сонгосон байх шаардлагатайг анхаарна уу.');
+            }else{
+                this.state.category && this.state.category !== '' ? test.category = this.state.category : null;
+            }
+            this.state.category && this.state.category !== '' && (this.state.lessons || []).length > 0 ? test.lessons = (this.state.lessons || []).map(lesson => lesson._id) : null;
             if(this.state.modalImage && (Object.keys(this.state.modalImage) || []).length > 0
                 && (this.state.modalImage || {})._id !== '') test.modalImage = (this.state.modalImage || {})._id;
             if(this.state.cardImage && (Object.keys(this.state.cardImage) || []).length > 0
@@ -547,7 +563,42 @@ class Test extends React.Component {
             </li>
         )
     }
+    findCategory(e){
+        const {test: {categories}} = this.props;
+        let found = {};
+        (categories || []).map(category => {
+            if((category._id || 'as').toString() === (e || '').toString()) found = category;
+        });
+        this.setState({
+            category: found, lessons: [], needUpdate: true
+        })
+    }
+    searchCategory(e){
+        clearTimeout(this.state.timeOutCategory);
+        let cc = {pageSize: 10, pageNum: 0, search: e};
+        let self = this;
+        let timeOutCategory = setTimeout(() => {self.props.dispatch(getCategory(cc))}, 300);
+        this.setState({timeOutCategory: timeOutCategory, searchCategory: e});
+    }
+    findLesson(e){
+        const {test: {lessons}} = this.props;
+        if((this.state.lessons || []).some(lesson => (lesson._id || 'as').toString() === (e || '').toString())){
+            this.setState({lessons: (this.state.lessons || []).filter(lesson => (lesson._id || 'as').toString() !== (e || '').toString())});
+        }else{
+            let found = {};
+            (lessons || []).map(lesson => {if((lesson._id || 'as').toString() === (e || '').toString()) found = lesson});
+            this.setState({lessons: [...(this.state.lessons || []), found], needUpdate: true});
+        }
+    }
+    searchLesson(e){
+        clearTimeout(this.state.timeOutLesson);
+        let cc = {pageSize: 10, pageNum: 0, search: e, category: (this.state.category || {})._id};
+        let self = this;
+        let timeOutLesson = setTimeout(() => {self.props.dispatch(getLessonsFromCategory(cc))}, 300);
+        this.setState({timeOutLesson: timeOutLesson, searchLesson: e});
+    }
     render() {
+        const {test: {categories, gettingCategories, gettingLessons, lessons}} = this.props;
         return (
             <React.Fragment>
                 <div>
@@ -591,7 +642,7 @@ class Test extends React.Component {
                                 {name: 'oneTime', value: this.state.oneTime},
                                 {name: 'hasCertificate', value: this.state.hasCertificate},
                             ]}
-                            onValuesChange={() => this.setState({needUpdate: true})}
+                            onValuesChange={(e) => this.setState({needUpdate: true})}
                         >
                             <Form.Item
                                 label='Шалгалтын нэр'
@@ -786,21 +837,195 @@ class Test extends React.Component {
                                     }
                                 </Row>
                             </div>
+                            <Row style={{marginTop: 10, marginBottom: 10}} gutter={[20, 0]} >
+                                <Col span={7} key={'test-category'}>
+                                    {
+                                        this.state.category && (Object.keys(this.state.category || {}).length || []) > 0 ?
+                                            <Tooltip
+                                                title={this.state.category?.title}
+                                            >
+                                                <div style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: '100%'}}>
+                                                    Ангилал:&nbsp;
+                                                    <b>{this.state.category?.title}</b>
+                                                </div>
+                                            </Tooltip>
+                                            :
+                                            <div>
+                                                Ангилал: <b>Сонгоогүй байна.</b>
+                                            </div>
+                                    }
+                                    <Select
+                                        showArrow={false}
+                                        key={'test-category'}
+                                        showSearch={true}
+                                        searchValue={this.state.searchCategory}
+                                        allowClear={false}
+                                        style={{ width: '100%' }}
+                                        placeholder={"Ангилалын нэрээр хайх."}
+                                        loading={gettingCategories}
+                                        onSelect={(e) => this.findCategory(e)}
+                                        defaultActiveFirstOption={false}
+                                        onSearch={this.searchCategory.bind(this)}
+                                        notFoundContent={<Empty description={<span style={{color: '#495057', userSelect: 'none'}}>Ангилал байхгүй байна.</span>} />}
+                                        filterOption={false}
+                                        value={null}
+                                    >
+                                        {
+                                            (categories || []).map(cate => <Select.Option key={cate._id} value={cate._id}>{cate.title}</Select.Option>)
+                                        }
+                                    </Select>
+                                </Col>
+                                <Col span={17} key={'test-lessons'}>
+                                    {
+                                        this.state.category && (Object.keys(this.state.category || {}).length || []) > 0 ?
+                                            <>
+                                                <div>
+                                                    Хичээлүүд:
+                                                </div>
+                                                <Select
+                                                    showArrow={false}
+                                                    key={'test-lesson'}
+                                                    showSearch={true}
+                                                    searchValue={this.state.searchLesson}
+                                                    allowClear={false}
+                                                    style={{ width: '500px' }}
+                                                    placeholder={"Хичээлийн нэрээр хайх."}
+                                                    loading={gettingLessons}
+                                                    onSelect={(e) => this.findLesson(e)}
+                                                    defaultActiveFirstOption={false}
+                                                    onSearch={this.searchLesson.bind(this)}
+                                                    notFoundContent={<Empty description={<span style={{color: '#495057', userSelect: 'none'}}>Хичээл байхгүй байна.</span>} />}
+                                                    filterOption={false}
+                                                    value={null}
+                                                    dropdownClassName={'admin-test-lesson-dropdown'}
+                                                    dropdownRender={(record) =>
+                                                        ((record.props || {}).options || []).length > 0 ?
+                                                            ((record.props || {}).options || []).map((opt, index) =>
+                                                                <Row
+                                                                    key={`multiple-column-select-column-${index}`}
+                                                                    className={
+                                                                        (this.state.lessons || []).some(lesson =>
+                                                                            (lesson._id || 'ds').toString() === opt.value) ? 'row active' : 'row'
+                                                                    }
+                                                                    onClick={() => this.findLesson(opt.value)}
+                                                                    style={{display: 'flex', alignItems: 'center'}}
+                                                                >
+                                                                    {
+                                                                        (
+                                                                            opt.children || []).map((child, ind) =>
+                                                                            typeof child === 'object' ?
+                                                                                <div style={{overflow: 'hidden', marginRight: '1%', width: '19%'}}
+                                                                                     key={`multiple-column-select-row-${ind}`}
+                                                                                >
+                                                                                    <img
+                                                                                        style={{
+                                                                                            width: '100%', maxWidth: 75,
+                                                                                            height: 'auto', objectFit: 'cover',
+                                                                                            objectPosition: 'center'
+                                                                                        }}
+                                                                                        src={(child.props || {}).src ?
+                                                                                            (child.props || {}).src
+                                                                                            :
+                                                                                            '/images/bg-hero.jpg'}
+                                                                                        onError={(e) => e.target.src = '/images/bg-hero.jpg'}
+                                                                                    />
+                                                                                </div>
+                                                                                :
+                                                                                <span
+                                                                                    key={`multiple-column-select-span-${ind}`}
+                                                                                    style={{
+                                                                                        display: 'inline-block',
+                                                                                        whiteSpace: 'nowrap', overflow: 'hidden',
+                                                                                        textOverflow: 'ellipsis', width: '80%'
+                                                                                    }}
+                                                                                >{child}</span>
+                                                                        )
+                                                                    }
+                                                                </Row>
+                                                            )
+                                                            :
+                                                            <Empty description={<span style={{color: '#495057', userSelect: 'none'}}>Хайлтын илэрц олдсонгүй!</span>} />
+                                                    }
+                                                >
+                                                    {
+                                                        (lessons || []).map(lesson =>
+                                                            <Select.Option key={lesson._id} value={lesson._id}>
+                                                                <img
+                                                                    style={{display: 'none'}}
+                                                                    src={(lesson.thumbnailSmall|| {}).path ?
+                                                                        `${config.get('hostMedia')}${(lesson.thumbnailSmall|| {}).path}`
+                                                                        :
+                                                                        '/images/bg-hero.jpg'}
+                                                                    onError={(e) => e.target.src = '/images/bg-hero.jpg'}
+                                                                />
+                                                                {lesson.title}
+                                                            </Select.Option>)
+                                                    }
+                                                </Select>
+                                            </>
+                                            :
+                                            <div style={{height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                                                <b>Ангилал сонгож хичээлүүдийг сонгоно уу.</b>
+                                            </div>
+                                    }
+                                </Col>
+                            </Row>
+                            {
+                                (this.state.lessons || []).length > 0 ?
+                                    <div className={'admin-test-lesson-div'}>
+                                        {
+                                            (this.state.lessons || []).map(lesson => (
+                                                <Popover
+                                                    title={'Хичээлийн мэдээлэл'}
+                                                    content={
+                                                        <div key={`video-${lesson._id}`} style={{width: 250, wordBreak: 'break-word'}}>
+                                                            <div>
+                                                                Ангилал: <b>{(this.state.category || {}).title}</b>
+                                                            </div>
+                                                            Хичээлийн нэр: <b>{lesson.title || ''}</b>
+                                                        </div>
+                                                    }
+                                                >
+                                                    <div key={lesson._id} className={'lesson'}>
+                                                        <img
+                                                            src={(lesson.thumbnailSmall|| {}).path ?
+                                                                `${config.get('hostMedia')}${(lesson.thumbnailSmall|| {}).path}`
+                                                                :
+                                                                '/images/bg-hero.jpg'} alt={'lesson-image'}
+                                                            onError={(e) => e.target.src = '/images/bg-hero.jpg'}
+                                                        />
+                                                        <span className={'title'}>
+                                                            {lesson.title}
+                                                        </span>
+                                                        <div className={'close'}
+                                                            onClick={() => {
+                                                                this.setState({
+                                                                    lessons: (this.state.lessons || []).filter(less => (less._id || 'as').toString() !== (lesson._id || '').toString())
+                                                                })
+                                                            }}
+                                                        ><CloseCircleOutlined /></div>
+                                                    </div>
+                                                </Popover>
+                                            ))
+                                        }
+                                    </div>
+                                    :
+                                    <div style={{width: '100%', padding: '10px 0', fontWeight: 'bold', fontSize: 16, textAlign: 'center'}}>
+                                        Хичээл сонгоогүй байна.
+                                    </div>
+                            }
                             <div
                                 key={'test-from-finish'}
                                 style={{textAlign: 'right'}}
                             >
-                                <Button onClick={() => {this.setState({needUpdate: true}, () => {
-                                    this.openMediaLib('image', 'testCardImage')
-                                })}} >
+                                <Button onClick={() => this.openMediaLib('image', 'testCardImage')} >
                                     <UploadOutlined /> {this.state.cardImage && (this.state.cardImage || {})._id ? 'Картны зураг солих' : 'Картны зураг'}
                                 </Button>
-                                <Button onClick={() => {this.setState({needUpdate: true}, () => {
-                                    this.openMediaLib('image', 'testModalImage')
-                                })}} style={{marginLeft: 20}}>
+                                <Button onClick={() => this.openMediaLib('image', 'testModalImage')} style={{marginLeft: 20}}>
                                     <UploadOutlined /> {this.state.modalImage && (this.state.modalImage || {})._id ? 'Модалын зураг солих' : 'Модалын зураг'}
                                 </Button>
                                 <Button
+                                    icon={<SaveOutlined />}
                                     style={{marginLeft: 20}}
                                     htmlType={'submit'}
                                     form={'test-single'}

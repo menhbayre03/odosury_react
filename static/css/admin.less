@@ -649,3 +649,54 @@ tr.ant-table-row.finished {
     border: none !important;
   }
 }
+
+.admin-test-lesson-dropdown{
+  padding: 3px;
+  .row{
+    &.active{
+      background-color: #6d6d6d;
+      color: white
+    }
+    &.active:hover{
+      background-color: #6d6d6d;
+    }
+    padding: 10px;
+    cursor: pointer;
+    transition: .3s;
+    &:hover{
+      background-color: #ccc;
+    }
+  }
+}
+.admin-test-lesson-div{
+  margin-top: 10px;
+  width: 100%;
+  overflow-x: auto;
+  padding-left: 20px;
+  .lesson{
+    display: inline-flex;
+    margin-right: 20px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    img{
+      object-fit: cover;
+      object-position: center;
+      width: 150px;
+      height: 85px;
+    }
+    span.title{
+      display: block;
+      text-decoration: underline;
+      width: 200px;
+      white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .close{
+      position: absolute; cursor: pointer; font-size: 20px; transform: translate(0px, -7px);
+      width: max-content; height: max-content;
+      color: red; top: 0; right: 0;
+    }
+  }
+}
