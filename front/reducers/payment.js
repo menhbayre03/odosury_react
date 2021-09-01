@@ -14,6 +14,7 @@ const initialState = {
     visible: false,
     type: '',
     lesson: {},
+    test: {},
     step: 1,
     method: '',
     paymentLaoding: true,
@@ -25,11 +26,13 @@ const initialState = {
 export default(state = initialState, action) => {
     switch (action.type) {
         case openPayment.REQUEST:
+            console.log('payment  reducer openpayment hit', action.json);
             return {
                 ...state,
                 visible:true,
                 type: action.json.type,
                 lesson: action.json.lesson || {},
+                test: action.json.test || {},
                 duration: action.json.duration,
             };
         case closePayment.REQUEST:
