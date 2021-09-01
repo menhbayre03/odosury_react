@@ -25,7 +25,14 @@ class Results extends Component {
         }
     }
     componentDidMount() {
-        const {match, dispatch} = this.props;
+        const {match, dispatch, main: {user}, history} = this.props;
+        console.log(history)
+        if(user && user._id) {
+            null
+        } else {
+            history.replace('/test', null);
+            config.get('emitter').emit('warning', 'Та нэвтэрч орно уу');
+        }
         let cc = {
             pageNum: this.state.pageNum,
             pageSize: this.state.pageSize
@@ -33,7 +40,7 @@ class Results extends Component {
         dispatch(actions.getResults(cc));
     }
     render() {
-        const {results:{results, loading, all}} = this.props;
+        const {results:{results, loading, all}, main:{user}} = this.props;
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>

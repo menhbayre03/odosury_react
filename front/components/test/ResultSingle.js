@@ -30,6 +30,7 @@ class ResultSingle extends Component {
         };
         // dispatch(actions.getTests(cc));
         dispatch(actions.getTestSingle(cc, match.params.id));
+        
         // if(this.props.testResultSingle.result?.result <=70) {
         //     this.setState({certified: true})
         // }
@@ -147,32 +148,7 @@ class ResultSingle extends Component {
                                         </div>
                                     </Row>
                                     <div className="recomm">
-                                        <h5 style={{
-                                            marginTop: '10px',
-                                            marginBottom: '40px'
-                                        }}>
-                                            Санал болгох тестүүд
-                                        </h5>
-                                        <Row>
-                                            {
-                                                (fakeTest || []).map((item, index) => (
-                                                    <Col xl={3} lg={4} md={6} sm={6} style={{marginBottom: 30}}>
-                                                        <div key={index} className="testCard"
-                                                            style={{background: 'url("/images/defaultTestCard1.png")', backgroundSize:'200px 110px'}}>
-                                                            <div className="cardContent">
-                                                                {item.title}
-                                                                <br/>
-                                                                    Хугацаа: {item.duration} мин
-                                                                <br/>
-                                                            <span style={{color: '#ffc107', fontSize: 14}}> Үнэ: {item.price}₮</span>
-                                                            <div className="certifyTagTest" style={item.hasCertificate? {} : {backgroundColor: '#dc3545', border: 'none', color: '#fff'}}> 
-                                                            {item.hasCertificate ? 'СЕРТИФИКАТТАЙ' : 'СЕРТИФИКАТГҮЙ'} </div>
-                                                            </div>
-                                                        </div>
-                                                    </Col>
-                                                ))
-                                            }
-                                        </Row>
+                                        
                                         <h5 style={{
                                             marginTop: '10px',
                                             marginBottom: '40px'
@@ -193,6 +169,32 @@ class ResultSingle extends Component {
                                                             <span style={{color: '#ffc107', fontSize: 14}}> Үнэ: {item.price}₮</span>
                                                             <div className="premuimTagResult" style={item.isPremuim? {} : {backgroundColor: '#62C757', border: 'none', color: '#fff'}}> 
                                                             {item.isPremuim ? 'PREMUIM' : 'ҮНЭГҮЙ'} </div>
+                                                            </div>
+                                                        </div>
+                                                    </Col>
+                                                ))
+                                            }
+                                        </Row>
+                                        <h5 style={{
+                                            marginTop: '10px',
+                                            marginBottom: '40px'
+                                        }}>
+                                            Санал болгох тестүүд
+                                        </h5>
+                                        <Row>
+                                            {
+                                                (fakeTest || []).map((item, index) => (
+                                                    <Col xl={3} lg={4} md={6} sm={6} style={{marginBottom: 30}}>
+                                                        <div key={index} className="testCard"
+                                                            style={{background: 'url("/images/defaultTestCard1.png")', backgroundSize:'200px 110px'}}>
+                                                            <div className="cardContent">
+                                                                {item.title}
+                                                                <br/>
+                                                                    Хугацаа: {item.duration} мин
+                                                                <br/>
+                                                            <span style={{color: '#ffc107', fontSize: 14}}> Үнэ: {item.price}₮</span>
+                                                            <div className="certifyTagTest" style={item.hasCertificate? {} : {backgroundColor: '#dc3545', border: 'none', color: '#fff'}}> 
+                                                            {item.hasCertificate ? 'СЕРТИФИКАТТАЙ' : 'СЕРТИФИКАТГҮЙ'} </div>
                                                             </div>
                                                         </div>
                                                     </Col>

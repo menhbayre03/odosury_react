@@ -154,8 +154,7 @@ class Test extends Component {
         )
     }
     render() {
-        const {test:{tests, loading, all, openTest}} = this.props;
-        const demoTest = [];
+        const {test:{tests, loading, all, openTest}, main:{user}} = this.props;
         // for (let i = 0; i < 10; i++) {
         //     demoTest.push({
         //         _id:i,
@@ -194,9 +193,15 @@ class Test extends Component {
                                             <h3>Тестүүд</h3>
                                         </div>
                                         <div className="testResults">
-                                            <Link to={'/test/results'}>
-                                                <button >ӨГСӨН ТЕСТҮҮД</button>
-                                            </Link>
+                                            {
+                                                user && user._id ? 
+                                                <Link to={'/test/results'}>
+                                                    <button >ӨГСӨН ТЕСТҮҮД</button>
+                                                </Link>
+                                                : 
+                                                null
+                                            }
+                                            
                                             
                                         </div>
                                         

@@ -93,27 +93,7 @@ class TestLaunch extends Component {
         const demoTest = [];
         let minutes = Math.floor(this.state.timer / 60);
         let seconds = this.state.timer - minutes*60;
-        // for (let i = 0; i < 10; i++) {
-        //     demoTest.push({
-        //         _id:i,
-        //         title: `test ${i+1}`,
-        //         price: 20000,
-        //         secret: true,
-        //         oneTime: true,
-        //         hasCertificate: false,
-        //         // *** ed nariig avchrahgu, orond n questionQuantity, questionDuration avchirna ***
-        //         // easyQuestion:[
-        //         //     {quantity:1, type:'selectOne'},
-        //         //     {quantity:1, type:'selectMany'},
-        //         // ],
-        //         // mediumQuestion:[
-        //         //     {quantity:1, type:'selectOne'},
-        //         //     {quantity:1, type:'selectMany'},
-        //         // ],
-        //         questionQuantity: 20,
-        //         questionDuration: 60,
-        //     });
-        // }
+        
         return (
             <React.Fragment>
                 <div className="testHeader1">
@@ -140,7 +120,7 @@ class TestLaunch extends Component {
                                                     Хугацаа: {minutes} : {seconds}
                                                     </div>
                                                     <div className="titleHeader">
-                                                        {openTest?.test?.title}
+                                                        {openTest?.title}
                                                     </div>
                                                     
                                                 </div>
