@@ -387,10 +387,24 @@
     padding: 40px 50px;
     background-color: #fff;
     border-radius: 20px;
+    ion-icon {
+        font-size: 24px;
+        position: relative;
+        margin-top: -2px;
+        margin-right: 5px;
+        color: #62C757;
+    }
+    ul {
+        display: inline-block;
+    }
     .list {
         padding: 30px;
         font-size: 16px;
         font-weight: 500;
+        .listItem {
+            display: flex;
+            flex-direction: row;
+        }
     }
     .bigButton {
         width: 250px;
@@ -425,4 +439,10 @@
 }
 button:focus {
  outline: none;
+}
+button:disabled,
+button[disabled] {
+    background-color: #ccc !important;
+    color: #fff !important;
+    cursor: not-allowed;
 }
