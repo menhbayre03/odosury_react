@@ -520,3 +520,7 @@ export const getLessonsFromCategory = {
     REQUEST: 'getLessonsFromCategory_REQUEST',
     RESPONSE: 'getLessonsFromCategory_RESPONSE'
 }
+export const getTimelinesFromLessons = {
+    REQUEST: 'getTimelinesFromLessons_REQUEST',
+    RESPONSE: 'getTimelinesFromLessons_RESPONSE'
+}

@@ -55,6 +55,13 @@ class TestSingleQuestions extends React.Component {
                                                         conf.getStatus(question.status)
                                                     }
                                                 </div>
+                                                {
+                                                    (question.timelines || []).map((timeline, ind) =>
+                                                        <Tag key={`${question._id}-question-${timeline._id}-${ind}`}>
+                                                            {timeline.title}
+                                                        </Tag>
+                                                    )
+                                                }
                                             </>
                                             :
                                             <>
@@ -74,6 +81,13 @@ class TestSingleQuestions extends React.Component {
                                                     <span className={'info'}>Төрөл: {conf.getType(question.type)}</span>
                                                     <span className={'info'}>Оноо: {question.point}</span>
                                                 </div>
+                                                {
+                                                    (question.timelines || []).map((timeline, ind) =>
+                                                        <Tag key={`${question._id}-question-${timeline._id}-${ind}`}>
+                                                            {timeline.title}
+                                                        </Tag>
+                                                    )
+                                                }
                                             </>
                                     }
                                 </React.Fragment>
@@ -148,6 +162,7 @@ class TestSingleQuestions extends React.Component {
                                                         questionAnswers: answers,
                                                         questionCorrectAnswer: correct,
                                                         questionTemp: '',
+                                                        timelines: question.timelines
                                                     }, false, 'edit');
                                                 }
                                             }}

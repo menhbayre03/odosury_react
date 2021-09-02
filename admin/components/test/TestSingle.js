@@ -4,7 +4,7 @@ import config from '../../config';
 import {
     getTest, createTest, deleteTest,
     createQuestion, deleteQuestion, publishTest, publishQuestion,
-    unpublishQuestion, unpublishTest, chooseMedia, getLessonsFromCategory
+    unpublishQuestion, unpublishTest, chooseMedia, getLessonsFromCategory, getTimelinesFromLessons
 } from '../../actions/test_actions';
 import {
     getCategory
@@ -27,6 +27,9 @@ import TestSingleQuestion from "./TestSingleQuestion";
 import TestSingleQuestions from "./TestSingleQuestions";
 import conf from "./include/conf";
 import SelectOne from "./include/SelectOne";
+import SelectCategory from "./include/SelectCategory";
+import SelectLesson from "./include/SelectLesson";
+import SelectTimeline from "./include/SelectTimeline";
 
 class Test extends React.Component {
     constructor(props) {
@@ -42,11 +45,14 @@ class Test extends React.Component {
             searchCategory: '',
             lessons: [],
             searchLesson: '',
+            timelines: [],
+            searchTimeline: '',
             secret: true,
             oneTime: true,
             hasCertificate: false,
             price: 0,
             duration: 0,
+            percent: 100,
             easyQuestion: [],
             mediumQuestion: [],
             hardQuestion: [],
@@ -111,6 +117,8 @@ class Test extends React.Component {
         this.propertyHandler = this.propertyHandler.bind(this);
         this.listItemHandler = this.listItemHandler.bind(this);
         this.clear = this.clear.bind(this);
+        this.changeParentState = this.changeParentState.bind(this);
+        this.dispatch = this.dispatch.bind(this);
     }
     componentDidMount() {
         let self = this;
@@ -121,9 +129,9 @@ class Test extends React.Component {
                     _id: (data.test || {})._id,
                     title: (data.test || {}).title,
                     secret: (data.test || {}).secret,
+                    percent: (data.test || {}).percent,
                     oneTime: (data.test || {}).oneTime,
                     hasCertificate: (data.test || {}).hasCertificate,
-                    category: (data.test || {}).category,
                     price: (data.test || {}).price,
                     duration: (data.test || {}).duration,
                     easyQuestion: ((data.test || {}).easyQuestion || []),
@@ -131,6 +139,8 @@ class Test extends React.Component {
                     hardQuestion: ((data.test || {}).hardQuestion || []),
                     proQuestion: ((data.test || {}).proQuestion || []),
                     questions: (data.questions || []),
+                    lessons: ((data.test || {}).lessons || []),
+                    category: ((data.test || {}).category || {}),
                     modalImage: ((data.test || {}).modalImage || {}),
                     cardImage: ((data.test || {}).cardImage || {}),
                     status: (data?.test?.status || 'idle')
@@ -144,7 +154,6 @@ class Test extends React.Component {
                 loadingTest: true
             }, () => {
                 this.props.dispatch(getTest({slug: ((this.props.match || {}).params || {}).test}));
-                this.props.dispatch(getCategory({pageNum: 0, pageSize: 10}));
             });
         }
     }
@@ -186,7 +195,8 @@ class Test extends React.Component {
             questionCorrectAnswer:  '',
             questionTemp: '',
             questionSubmitLoading: false,
-            testSubmitLoading: false
+            testSubmitLoading: false,
+            timelines: []
         })
     }
     // METHOD WHICH LETS US CHANGE PARENT'S STATE
@@ -372,6 +382,8 @@ class Test extends React.Component {
     submit(e){
         if(!this.state.title || this.state.title === ''){
             config.get('emitter').emit('warning', 'Шалгалтын нэрийг оруулна уу.');
+        }else if(this.state.hasCertificate && (!this.state.percent || this.state.percent === 0)){
+            config.get('emitter').emit('warning', 'Хувийг оруулна уу.');
         }else if(((this.state.easyQuestion || []).length + (this.state.mediumQuestion || []).length +
             (this.state.hardQuestion || []).length + (this.state.proQuestion || []).length) === 0){
             config.get('emitter').emit('warning', 'Шалгалтын асуултуудын тоог оруулна уу.');
@@ -388,13 +400,14 @@ class Test extends React.Component {
                 mediumQuestion: this.state.mediumQuestion,
                 hardQuestion: this.state.hardQuestion,
                 proQuestion: this.state.proQuestion,
+                percent: this.state.percent,
             };
-            if((this.state.lessons || []).length > 0 && (!this.state.category || this.state.category === '')){
-                return config.get('emitter').emit('warning', 'Хичээл сонгосон тохиолдолд ангилал заавал сонгосон байх шаардлагатайг анхаарна уу.');
-            }else{
-                this.state.category && this.state.category !== '' ? test.category = this.state.category : null;
+            if(this.state.category && Object.keys(this.state.category || {}).length !== 0 && (this.state.lessons || []).length === 0){
+                return config.get('emitter').emit('warning', 'Ангилал сонгосон тохиолдолд хичээл сонгох шаардлагатай');
             }
-            this.state.category && this.state.category !== '' && (this.state.lessons || []).length > 0 ? test.lessons = (this.state.lessons || []).map(lesson => lesson._id) : null;
+            this.state.category && Object.keys(this.state.category || {}).length !== 0 ? test.category = this.state.category._id : null;
+            this.state.category && Object.keys(this.state.category || {}).length !== 0 && (this.state.lessons || []).length > 0 ?
+                test.lessons = (this.state.lessons || []).map(lesson => lesson._id) : null;
             if(this.state.modalImage && (Object.keys(this.state.modalImage) || []).length > 0
                 && (this.state.modalImage || {})._id !== '') test.modalImage = (this.state.modalImage || {})._id;
             if(this.state.cardImage && (Object.keys(this.state.cardImage) || []).length > 0
@@ -429,11 +442,14 @@ class Test extends React.Component {
             config.get('emitter').emit('warning', 'Хариулт нь 1-ээс их, 21-ээс бага байх ёстой.');
         }else if(!this.state.questionCorrectAnswer || this.state.questionCorrectAnswer === ''){
             config.get('emitter').emit('warning', 'Зөв хариултыг оруулна уу.');
+        }else if(this.state.category && Object.keys(this.state.category || {}).length !== 0 &&
+            this.state.lessons && (this.state.lessons || []).length > 0 && (!this.state.timelines || (this.state.timelines || []).length === 0)){
+            config.get('emitter').emit('warning', 'Холбогдох хөтөлбөрийг оруулна уу.');
         }else{
             this.setState({
                 questionSubmitLoading: true
             }, () => {
-                this.props.dispatch(createQuestion({
+                let question = {
                     _id: this.state._id,
                     question_id: this.state.question_id,
                     type: this.state.questionType,
@@ -442,7 +458,11 @@ class Test extends React.Component {
                     points: this.state.questionPoint,
                     answers: this.state.questionAnswers,
                     correct: this.state.questionCorrectAnswer,
-                })).then(c => {
+                };
+                if(this.state.category && Object.keys(this.state.category || {}).length !== 0 && this.state.lessons && (this.state.lessons || []).length > 0
+                    && this.state.timelines && (this.state.timelines || []).length > 0)
+                    question.timelines = (this.state.timelines || []);
+                this.props.dispatch(createQuestion(question)).then(c => {
                     if((c.json || {}).success){
                         let questions;
                         if((c.json || {}).question_id && (c.json || {}).question_id !== ''){
@@ -466,7 +486,8 @@ class Test extends React.Component {
                             questionCorrectAnswer:  '',
                             questionTemp: '',
                             questions: questions,
-                            questionSubmitLoading: false
+                            questionSubmitLoading: false,
+                            timelines: [],
                         });
                     }else{
                         this.setState({questionSubmitLoading: false});
@@ -563,42 +584,65 @@ class Test extends React.Component {
             </li>
         )
     }
-    findCategory(e){
-        const {test: {categories}} = this.props;
-        let found = {};
-        (categories || []).map(category => {
-            if((category._id || 'as').toString() === (e || '').toString()) found = category;
-        });
-        this.setState({
-            category: found, lessons: [], needUpdate: true
-        })
+    // findCategory(e){
+    //     const {test: {categories}} = this.props;
+    //     let found = {};
+    //     (categories || []).map(category => {
+    //         if((category._id || 'as').toString() === (e || '').toString()) found = category;
+    //     });
+    //     this.setState({
+    //         category: found, lessons: [], needUpdate: true
+    //     })
+    // }
+    // searchCategory(e){
+    //     clearTimeout(this.state.timeOutCategory);
+    //     let cc = {pageSize: 10, pageNum: 0, search: e};
+    //     let self = this;
+    //     let timeOutCategory = setTimeout(() => {self.props.dispatch(getCategory(cc))}, 300);
+    //     this.setState({timeOutCategory: timeOutCategory, searchCategory: e});
+    // }
+    // findLesson(e){
+    //     const {test: {lessons}} = this.props;
+    //     if((this.state.lessons || []).some(lesson => (lesson._id || 'as').toString() === (e || '').toString())){
+    //         this.setState({lessons: (this.state.lessons || []).filter(lesson => (lesson._id || 'as').toString() !== (e || '').toString())});
+    //     }else{
+    //         let found = {};
+    //         (lessons || []).map(lesson => {if((lesson._id || 'as').toString() === (e || '').toString()) found = lesson});
+    //         this.setState({lessons: [...(this.state.lessons || []), found], needUpdate: true});
+    //     }
+    // }
+    // searchLesson(e){
+    //     clearTimeout(this.state.timeOutLesson);
+    //     let cc = {pageSize: 10, pageNum: 0, search: e, category: (this.state.category || {})._id};
+    //     let self = this;
+    //     let timeOutLesson = setTimeout(() => {self.props.dispatch(getLessonsFromCategory(cc))}, 300);
+    //     this.setState({timeOutLesson: timeOutLesson, searchLesson: e});
+    // }
+    // searchTimeline(e){
+    //     clearTimeout(this.state.timeOutTimeline);
+    //     let cc = {pageSize: 10, pageNum: 0, search: e, lessons: (this.state.lessons || []).map(lesson => lesson._id)};
+    //     let self = this;
+    //     let timeOutTimeline = setTimeout(() => {self.props.dispatch(getTimelinesFromLessons(cc))}, 300);
+    //     this.setState({timeOutTimeline: timeOutTimeline, searchTimeline: e});
+    // }
+    // findTimeline(e){
+    //     const {test: {timelines}} = this.props;
+    //     if((this.state.timelines || []).some(timeline => (timeline._id || 'as').toString() === (e || '').toString())){
+    //         this.setState({timelines: (this.state.timelines || []).filter(timeline => (timeline._id || 'as').toString() !== (e || '').toString())});
+    //     }else{
+    //         let found = {};
+    //         (timelines || []).map(timeline => {if((timeline._id || 'as').toString() === (e || '').toString()) found = timeline});
+    //         this.setState({timelines: [...(this.state.timelines || []), found]});
+    //     }
+    // }
+    changeParentState(e){
+        this.setState(e);
     }
-    searchCategory(e){
-        clearTimeout(this.state.timeOutCategory);
-        let cc = {pageSize: 10, pageNum: 0, search: e};
-        let self = this;
-        let timeOutCategory = setTimeout(() => {self.props.dispatch(getCategory(cc))}, 300);
-        this.setState({timeOutCategory: timeOutCategory, searchCategory: e});
-    }
-    findLesson(e){
-        const {test: {lessons}} = this.props;
-        if((this.state.lessons || []).some(lesson => (lesson._id || 'as').toString() === (e || '').toString())){
-            this.setState({lessons: (this.state.lessons || []).filter(lesson => (lesson._id || 'as').toString() !== (e || '').toString())});
-        }else{
-            let found = {};
-            (lessons || []).map(lesson => {if((lesson._id || 'as').toString() === (e || '').toString()) found = lesson});
-            this.setState({lessons: [...(this.state.lessons || []), found], needUpdate: true});
-        }
-    }
-    searchLesson(e){
-        clearTimeout(this.state.timeOutLesson);
-        let cc = {pageSize: 10, pageNum: 0, search: e, category: (this.state.category || {})._id};
-        let self = this;
-        let timeOutLesson = setTimeout(() => {self.props.dispatch(getLessonsFromCategory(cc))}, 300);
-        this.setState({timeOutLesson: timeOutLesson, searchLesson: e});
+    dispatch(e){
+        this.props.dispatch(e);
     }
     render() {
-        const {test: {categories, gettingCategories, gettingLessons, lessons}} = this.props;
+        const {test: {categories, gettingCategories, gettingLessons, lessons, gettingTimelines, timelines}} = this.props;
         return (
             <React.Fragment>
                 <div>
@@ -641,6 +685,7 @@ class Test extends React.Component {
                                 {name: 'secret', value: this.state.secret},
                                 {name: 'oneTime', value: this.state.oneTime},
                                 {name: 'hasCertificate', value: this.state.hasCertificate},
+                                {name: 'percent', value: this.state.percent},
                             ]}
                             onValuesChange={(e) => this.setState({needUpdate: true})}
                         >
@@ -723,6 +768,27 @@ class Test extends React.Component {
                                         onChange={(e) => this.setState({hasCertificate: e})}
                                     />
                                 </Form.Item>
+                                {
+                                    this.state.hasCertificate ?
+                                        <Form.Item
+                                            label='Хувь'
+                                            name='percent'
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: 'Шалгалтын хувийг оруулна уу'
+                                                }
+                                            ]}
+                                        >
+                                            <InputNumber
+                                                min={0} max={100}
+                                                value={this.state.percent}
+                                                onChange={(e) => this.setState({percent: e})}
+                                            />
+                                        </Form.Item>
+                                        :
+                                        null
+                                }
                             </div>
                             <div
                                 style={{marginRight: 20, marginLeft: 20}}
@@ -839,135 +905,21 @@ class Test extends React.Component {
                             </div>
                             <Row style={{marginTop: 10, marginBottom: 10}} gutter={[20, 0]} >
                                 <Col span={7} key={'test-category'}>
-                                    {
-                                        this.state.category && (Object.keys(this.state.category || {}).length || []) > 0 ?
-                                            <Tooltip
-                                                title={this.state.category?.title}
-                                            >
-                                                <div style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: '100%'}}>
-                                                    Ангилал:&nbsp;
-                                                    <b>{this.state.category?.title}</b>
-                                                </div>
-                                            </Tooltip>
-                                            :
-                                            <div>
-                                                Ангилал: <b>Сонгоогүй байна.</b>
-                                            </div>
-                                    }
-                                    <Select
-                                        showArrow={false}
-                                        key={'test-category'}
-                                        showSearch={true}
-                                        searchValue={this.state.searchCategory}
-                                        allowClear={false}
-                                        style={{ width: '100%' }}
-                                        placeholder={"Ангилалын нэрээр хайх."}
-                                        loading={gettingCategories}
-                                        onSelect={(e) => this.findCategory(e)}
-                                        defaultActiveFirstOption={false}
-                                        onSearch={this.searchCategory.bind(this)}
-                                        notFoundContent={<Empty description={<span style={{color: '#495057', userSelect: 'none'}}>Ангилал байхгүй байна.</span>} />}
-                                        filterOption={false}
-                                        value={null}
-                                    >
-                                        {
-                                            (categories || []).map(cate => <Select.Option key={cate._id} value={cate._id}>{cate.title}</Select.Option>)
-                                        }
-                                    </Select>
+                                    <SelectCategory
+                                        categoryParent={this.state.category}
+                                        changeParentState={this.changeParentState}
+                                        main={this.props.main} test={this.props.test}
+                                        dispatch={this.dispatch}
+                                    />
                                 </Col>
                                 <Col span={17} key={'test-lessons'}>
-                                    {
-                                        this.state.category && (Object.keys(this.state.category || {}).length || []) > 0 ?
-                                            <>
-                                                <div>
-                                                    Хичээлүүд:
-                                                </div>
-                                                <Select
-                                                    showArrow={false}
-                                                    key={'test-lesson'}
-                                                    showSearch={true}
-                                                    searchValue={this.state.searchLesson}
-                                                    allowClear={false}
-                                                    style={{ width: '500px' }}
-                                                    placeholder={"Хичээлийн нэрээр хайх."}
-                                                    loading={gettingLessons}
-                                                    onSelect={(e) => this.findLesson(e)}
-                                                    defaultActiveFirstOption={false}
-                                                    onSearch={this.searchLesson.bind(this)}
-                                                    notFoundContent={<Empty description={<span style={{color: '#495057', userSelect: 'none'}}>Хичээл байхгүй байна.</span>} />}
-                                                    filterOption={false}
-                                                    value={null}
-                                                    dropdownClassName={'admin-test-lesson-dropdown'}
-                                                    dropdownRender={(record) =>
-                                                        ((record.props || {}).options || []).length > 0 ?
-                                                            ((record.props || {}).options || []).map((opt, index) =>
-                                                                <Row
-                                                                    key={`multiple-column-select-column-${index}`}
-                                                                    className={
-                                                                        (this.state.lessons || []).some(lesson =>
-                                                                            (lesson._id || 'ds').toString() === opt.value) ? 'row active' : 'row'
-                                                                    }
-                                                                    onClick={() => this.findLesson(opt.value)}
-                                                                    style={{display: 'flex', alignItems: 'center'}}
-                                                                >
-                                                                    {
-                                                                        (
-                                                                            opt.children || []).map((child, ind) =>
-                                                                            typeof child === 'object' ?
-                                                                                <div style={{overflow: 'hidden', marginRight: '1%', width: '19%'}}
-                                                                                     key={`multiple-column-select-row-${ind}`}
-                                                                                >
-                                                                                    <img
-                                                                                        style={{
-                                                                                            width: '100%', maxWidth: 75,
-                                                                                            height: 'auto', objectFit: 'cover',
-                                                                                            objectPosition: 'center'
-                                                                                        }}
-                                                                                        src={(child.props || {}).src ?
-                                                                                            (child.props || {}).src
-                                                                                            :
-                                                                                            '/images/bg-hero.jpg'}
-                                                                                        onError={(e) => e.target.src = '/images/bg-hero.jpg'}
-                                                                                    />
-                                                                                </div>
-                                                                                :
-                                                                                <span
-                                                                                    key={`multiple-column-select-span-${ind}`}
-                                                                                    style={{
-                                                                                        display: 'inline-block',
-                                                                                        whiteSpace: 'nowrap', overflow: 'hidden',
-                                                                                        textOverflow: 'ellipsis', width: '80%'
-                                                                                    }}
-                                                                                >{child}</span>
-                                                                        )
-                                                                    }
-                                                                </Row>
-                                                            )
-                                                            :
-                                                            <Empty description={<span style={{color: '#495057', userSelect: 'none'}}>Хайлтын илэрц олдсонгүй!</span>} />
-                                                    }
-                                                >
-                                                    {
-                                                        (lessons || []).map(lesson =>
-                                                            <Select.Option key={lesson._id} value={lesson._id}>
-                                                                <img
-                                                                    style={{display: 'none'}}
-                                                                    src={(lesson.thumbnailSmall|| {}).path ?
-                                                                        `${config.get('hostMedia')}${(lesson.thumbnailSmall|| {}).path}`
-                                                                        :
-                                                                        '/images/bg-hero.jpg'}
-                                                                    onError={(e) => e.target.src = '/images/bg-hero.jpg'}
-                                                                />
-                                                                {lesson.title}
-                                                            </Select.Option>)
-                                                    }
-                                                </Select>
-                                            </>
-                                            :
-                                            <div style={{height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                                                <b>Ангилал сонгож хичээлүүдийг сонгоно уу.</b>
-                                            </div>
-                                    }
+                                    <SelectLesson
+                                        categoryParent={this.state.category}
+                                        changeParentState={this.changeParentState}
+                                        lessons={this.state.lessons}
+                                        main={this.props.main} test={this.props.test}
+                                        dispatch={this.dispatch}
+                                    />
                                 </Col>
                             </Row>
                             {
@@ -1177,6 +1129,13 @@ class Test extends React.Component {
                             :
                             null
                     }
+                    <SelectTimeline
+                        categoryParent={this.state.category}
+                        changeParentState={this.changeParentState}
+                        lessons={this.state.lessons} timelines={this.state.timelines}
+                        main={this.props.main} test={this.props.test}
+                        dispatch={this.dispatch}
+                    />
                 </Drawer>
                 {this.state.mediaType !== ''?
                     <MediaLib

@@ -10,6 +10,7 @@ import {
     unpublishQuestion,
     getLessonsFromCategory,
     getCategory,
+    getTimelinesFromLessons,
     chooseTestMedia,
 } from "../actionTypes";
 const initialState = {
@@ -20,6 +21,8 @@ const initialState = {
     categories: [],
     gettingLessons: false,
     lessons: [],
+    gettingTimelines: false,
+    timelines: []
 };
 
 export default(state = initialState, action) => {
@@ -101,6 +104,24 @@ export default(state = initialState, action) => {
                 return {
                     ...state,
                     gettingLessons: false
+                }
+            }
+        case getTimelinesFromLessons.REQUEST:
+            return {
+                ...state,
+                gettingTimelines: true
+            }
+        case getTimelinesFromLessons.RESPONSE:
+            if((action.json || {}).success){
+                return {
+                    ...state,
+                    gettingTimelines: false,
+                    timelines: ((action.json || {}).timelines)
+                }
+            }else{
+                return {
+                    ...state,
+                    gettingTimelines: false
                 }
             }
         // case chooseTestMedia.REQUEST:

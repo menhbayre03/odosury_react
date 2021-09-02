@@ -59,6 +59,10 @@ export function getLessonsFromCategory(data = {}){
     let url = `/admin/api/get/category/lessons`;
     return networkActions.requestPost(constants.getLessonsFromCategory, url, data);
 }
+export function getTimelinesFromLessons(data = {}){
+    let url = `/admin/api/get/lessons/timelines`;
+    return networkActions.requestPost(constants.getTimelinesFromLessons, url, data);
+}
 export function chooseMedia(data){
     return {
         type: constants.chooseTestMedia.REQUEST,
