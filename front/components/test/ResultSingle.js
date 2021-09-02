@@ -40,9 +40,9 @@ class ResultSingle extends Component {
         
     }
     render() {
-         const {testResultSingle:{result, loading}} = this.props;
+         const {testResultSingle:{result, loading, certified}} = this.props;
         // console.log(this.props.testResultSingle.result.test)
-        console.log(this.state.certified)
+        console.log(certified)
         let fakeLesson = [
             {price: 25000, title: "fakeLesson 1"},
             {price: 20000, title: "fakeLesson 2", isPremuim: true},
@@ -99,7 +99,7 @@ class ResultSingle extends Component {
                                         </Col>
                                         <Col xl={6} lg={6} md={6} sm={12}>
                                             {
-                                                this.state.certified ?
+                                                certified ?
                                                     <button className="bigButton">СЕРТИФИКАТ АВАХ </button>
                                                     :
                                                     <button className="bigButton" disabled>СЕРТИФИКАТ АВАХ </button>
@@ -112,13 +112,31 @@ class ResultSingle extends Component {
                                                 <Col xl={6} lg={6} md={6} sm={12}>
                                                     <ul>
                                                         <li>
-                                                            ХУГАЦАА: 60 минут
+                                                            <div className="listItem">
+                                                                <div>
+                                                                    <ion-icon name="alarm-outline"></ion-icon>
+                                                                </div>
+                                                                ХУГАЦАА: 60 минут
+                                                            </div>
                                                         </li>
                                                         <li>
-                                                            ҮНЭ: 20,000₮
+                                                            <div className="listItem">
+                                                                <div >
+                                                                    <ion-icon name="pricetags-outline"></ion-icon>
+                                                                </div>
+                                                                ҮНЭ: 20,000₮
+                                                            </div>
+                                                            
                                                         </li>
                                                         <li>
-                                                            ДАВТАМЖ: Нэг удаа.
+                                                            <div className="listItem">
+                                                                <div>
+                                                                    <ion-icon name="repeat"></ion-icon> 
+                                                                </div>
+                                                                ДАВТАМЖ: Нэг удаа.
+
+                                                            </div>
+                                                           
                                                         </li>
                                                         
 
@@ -127,13 +145,31 @@ class ResultSingle extends Component {
                                                 <Col xl={6} lg={6} md={6} sm={12}>
                                                     <ul>
                                                         <li>
-                                                            АВСАН ҮНЭЛГЭЭ: {result?.result} {result?.result ? printGrade(result?.result) : ''}
+                                                            <div className="listItem">
+                                                                <div>
+                                                                    <ion-icon name="star-half-outline"></ion-icon> 
+                                                                </div>
+                                                                АВСАН ҮНЭЛГЭЭ: {result?.result} {result?.result ? printGrade(result?.result) : ''}
+                                                            </div>
+                                                            
                                                         </li>
                                                         <li>
-                                                            АВСАН ОНОО: {result?.correctQuestions} / {result?.questionsNumber}
+                                                            <div className="listItem">
+                                                                <div>
+                                                                    <ion-icon name="checkmark-done-outline"></ion-icon>
+                                                                </div>
+                                                                АВСАН ОНОО: {result?.correctQuestions} / {result?.questionsNumber}
+                                                            </div>
+                                                            
                                                         </li>
                                                         <li>
-                                                            СЕРТИФИКАТ: {result?.result >= 70 ? 'Шаардлага хангасан.' : 'Шаардлага хангаагүй.'}
+                                                            <div className="listItem">
+                                                                <div>
+                                                                    <ion-icon name="reader-outline"></ion-icon>
+                                                                </div>
+                                                                СЕРТИФИКАТ: {certified ? 'Шаардлага хангасан.' : 'Шаардлага хангаагүй.'}
+                                                            </div>
+                                                            
                                                         </li>
                                                     </ul>
                                                 </Col>
@@ -142,9 +178,17 @@ class ResultSingle extends Component {
                                     <hr/>
                                     <Row>
                                         <div className="resultOpen">
-                                            <button>
-                                                ХАРИУ ХАРАХ
-                                            </button>
+                                            {
+                                                result?.test?.secret && !result?.test?.hasCertificate ? 
+                                                <button disabled>
+                                                    ХАРИУ ХАРАХ
+                                                </button>
+                                                :
+                                                <button>
+                                                    ХАРИУ ХАРАХ
+                                                </button>
+                                            }
+                                            
                                         </div>
                                     </Row>
                                     <div className="recomm">
