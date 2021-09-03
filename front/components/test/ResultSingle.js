@@ -114,7 +114,7 @@ class ResultSingle extends Component {
                                                         <li>
                                                             <div className="listItem">
                                                                 <div>
-                                                                    <ion-icon name="alarm-outline"></ion-icon>
+                                                                    <ion-icon name="hourglass-outline"></ion-icon>
                                                                 </div>
                                                                 ХУГАЦАА: 60 минут
                                                             </div>
@@ -171,6 +171,15 @@ class ResultSingle extends Component {
                                                             </div>
                                                             
                                                         </li>
+                                                        <li>
+                                                            <div className="listItem">
+                                                                <div>
+                                                                    <ion-icon name="time-outline"></ion-icon>
+                                                                </div>
+                                                                ДУУСГАСАН ОГНОО: {moment(result?.created).format("HH:mm:ss / MM-DD-YYYY")}
+                                                            </div>
+                                                            
+                                                        </li>
                                                     </ul>
                                                 </Col>
                                         </Row>
@@ -179,7 +188,7 @@ class ResultSingle extends Component {
                                     <Row>
                                         <div className="resultOpen">
                                             {
-                                                result?.test?.secret && !result?.test?.hasCertificate ? 
+                                                result?.secret || result?.hasCertificate ? 
                                                 <button disabled>
                                                     ХАРИУ ХАРАХ
                                                 </button>
@@ -201,18 +210,41 @@ class ResultSingle extends Component {
                                         </h5>
                                         <Row>
                                             {
-                                                (fakeLesson || []).map((item, index) => (
+                                                (result?.lessons || []).map((item, index) => (
                                                     <Col xl={3} lg={4} md={6} sm={6} style={{marginBottom: 30}}>
-                                                        <div key={index} className="testCard"
-                                                            style={{background: 'url("/images/defaultLessonResult.png")', backgroundSize:'200px 110px'}}>
-                                                            <div className="cardContent">
+                                                        <div key={index} className="lessonCard">
+                                                            {
+                                                                item.thumbnailSmall?.url && item.thumbnailSmall?.path ?
+                                                                    <img  src={`${item.thumbnailSmall.url}${item.thumbnailSmall.path}`} />
+                                                                :
+                                                                    <img src={'/images/defaultLessonResult.png'}/>
+                                                            }
+                                                                  
+                                                            <div className="lessonContent">
                                                                 {item.title}
                                                                 <br/>
-                                                                Тайлбар
-                                                                <br/>
-                                                            <span style={{color: '#ffc107', fontSize: 14}}> Үнэ: {item.price}₮</span>
-                                                            <div className="premuimTagResult" style={item.isPremuim? {} : {backgroundColor: '#62C757', border: 'none', color: '#fff'}}> 
-                                                            {item.isPremuim ? 'PREMUIM' : 'ҮНЭГҮЙ'} </div>
+                                                                {
+                                                                    item.sale ? 
+                                                                    <>
+                                                                        Үнэ:
+                                                                        <span style={{color: '#ffc107', fontSize: 15, fontWeight: 600}}>
+                                                                            <span style={{textDecoration: 'line-through', color: '#dc3545', fontSize: 12, fontWeight: 500}}>
+                                                                             &nbsp; {item.price}₮
+                                                                            </span> {item.sale}₮ 
+                                                                        </span> 
+                                                                    </> 
+                                                                    :
+                                                                    <>
+                                                                        Үнэ: 
+                                                                        <span style={{color: '#ffc107', fontSize: 14}}>
+                                                                        &nbsp; {item.price}₮
+                                                                        </span>
+                                                                    </>
+                                                                     
+                                                                }
+                                                                <div className="premuimTagResult" style={item.price> 1? {} : {backgroundColor: '#62C757', border: 'none', color: '#fff'}}> 
+                                                                    {item.price> 1 ? 'PREMUIM' : 'ҮНЭГҮЙ'}
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </Col>
