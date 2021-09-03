@@ -212,41 +212,43 @@ class ResultSingle extends Component {
                                             {
                                                 (result?.lessons || []).map((item, index) => (
                                                     <Col xl={3} lg={4} md={6} sm={6} style={{marginBottom: 30}}>
-                                                        <div key={index} className="lessonCard">
-                                                            {
-                                                                item.thumbnailSmall?.url && item.thumbnailSmall?.path ?
-                                                                    <img  src={`${item.thumbnailSmall.url}${item.thumbnailSmall.path}`} />
-                                                                :
-                                                                    <img src={'/images/defaultLessonResult.png'}/>
-                                                            }
-                                                                  
-                                                            <div className="lessonContent">
-                                                                {item.title}
-                                                                <br/>
+                                                        <Link to={'#'}>
+                                                            <div key={index} className="lessonCard">
                                                                 {
-                                                                    item.sale ? 
-                                                                    <>
-                                                                        Үнэ:
-                                                                        <span style={{color: '#ffc107', fontSize: 15, fontWeight: 600}}>
-                                                                            <span style={{textDecoration: 'line-through', color: '#dc3545', fontSize: 12, fontWeight: 500}}>
-                                                                             &nbsp; {item.price}₮
-                                                                            </span> {item.sale}₮ 
-                                                                        </span> 
-                                                                    </> 
+                                                                    item.thumbnailSmall?.url && item.thumbnailSmall?.path ?
+                                                                        <img  src={`${item.thumbnailSmall.url}${item.thumbnailSmall.path}`} />
                                                                     :
-                                                                    <>
-                                                                        Үнэ: 
-                                                                        <span style={{color: '#ffc107', fontSize: 14}}>
-                                                                        &nbsp; {item.price}₮
-                                                                        </span>
-                                                                    </>
-                                                                     
+                                                                        <img src={'/images/defaultLessonResult.png'}/>
                                                                 }
-                                                                <div className="premuimTagResult" style={item.price> 1? {} : {backgroundColor: '#62C757', border: 'none', color: '#fff'}}> 
-                                                                    {item.price> 1 ? 'PREMUIM' : 'ҮНЭГҮЙ'}
+                                                                    
+                                                                <div className="lessonContent">
+                                                                    {item.title}
+                                                                    <br/>
+                                                                    {
+                                                                        item.sale ? 
+                                                                        <>
+                                                                            Үнэ:
+                                                                            <span style={{color: '#ffc107', fontSize: 15, fontWeight: 600}}>
+                                                                                <span style={{textDecoration: 'line-through', color: '#dc3545', fontSize: 12, fontWeight: 500}}>
+                                                                                &nbsp; {item.price}₮
+                                                                                </span> {item.sale}₮ 
+                                                                            </span> 
+                                                                        </> 
+                                                                        :
+                                                                        <>
+                                                                            Үнэ: 
+                                                                            <span style={{color: '#ffc107', fontSize: 14}}>
+                                                                            &nbsp; {item.price}₮
+                                                                            </span>
+                                                                        </>
+                                                                        
+                                                                    }
+                                                                    <div className="premuimTagResult" style={item.price> 1? {} : {backgroundColor: '#62C757', border: 'none', color: '#fff'}}> 
+                                                                        {item.price> 1 ? 'PREMUIM' : 'ҮНЭГҮЙ'}
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </Link>
                                                     </Col>
                                                 ))
                                             }
