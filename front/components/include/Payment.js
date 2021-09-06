@@ -17,7 +17,6 @@ import * as actions from "../../actions/payment_actions";
 import {
 	validatePromoCode,
 	clearPromoCode,
-	buyEishFree
 } from "../../actions/promo_actions";
 import { Link } from "react-router-dom";
 import { validate } from "../../../../odosury_api/models/Teacher";
@@ -61,7 +60,7 @@ class Payment extends Component {
 	}
 
 	doIT(data) {
-        console.log('payment Doit', data);
+		console.log("payment Doit", data);
 		const {
 			main: { pendingTransactions }
 		} = this.props;
@@ -84,7 +83,7 @@ class Payment extends Component {
 				this.open(data);
 			}
 		} else if (data.type === "test") {
-			console.log('elif data test block', );
+			console.log("elif data test block");
 			let transes = pendingTransactions.filter(
 				(item) => item.type === "test"
 			);
@@ -108,7 +107,7 @@ class Payment extends Component {
 	}
 
 	open(data) {
-		console.log('payemnt', data);
+		console.log("payemnt", data);
 		const { dispatch } = this.props;
 		document.getElementsByClassName(
 			"main-main"
@@ -185,18 +184,12 @@ class Payment extends Component {
 		}
 	}
 	validatePromoCode(e) {
-		console.log('validatepromocode method hit', );
+		console.log("validatepromocode method hit");
 		e.preventDefault();
 		let data = {
 			code: this.state.code
 		};
 		this.props.dispatch(validatePromoCode(data));
-	}
-	buyEishFree() {
-		const {
-			main: { user }
-		} = this.props;
-		this.props.dispatch(buyEishFree());
 	}
 
 	setPaymentOld(trans, data) {
@@ -214,7 +207,9 @@ class Payment extends Component {
 			actions.setPaymentOld({
 				type: trans.type,
 				method: trans.method,
+				duration: trans.duration,
 				lesson_id: trans.lesson,
+				test_id: trans.test,
 				lesson: data.lesson
 			})
 		);
@@ -256,8 +251,6 @@ class Payment extends Component {
 				method,
 				paymentLaoding,
 				transaction,
-				buyingEishFree,
-				buyEishFreeSuccess
 			},
 			requests: {
 				promoIsValid,
@@ -453,61 +446,59 @@ class Payment extends Component {
 														? `${duration} сар`
 														: "1 жил"
 													: type === "eish"
-													? "1 сар"
+													? "1 жил"
 													: "1 жил"}
 											</span>
 										</p>
 									</div>
 									<div className="h4Container">
-										{type !== "eish" ? (
-											<div className="step-indicator">
-												<div
-													className="leStep"
-													style={{
-														backgroundColor: `rgba(${colors[0]})`
-													}}
-												></div>
-												<div className="leDot"></div>
-												<div
-													className={
-														step === 1
-															? "leStepCurrent leStep"
-															: step > 1
-															? "leStep"
-															: "leStepGray"
-													}
-													style={{
-														backgroundColor: `rgba(${colors[1]})`
-													}}
-												></div>
-												<div className="leDot"></div>
-												<div
-													className={
-														step === 2
-															? "leStepCurrent leStep"
-															: step > 2
-															? "leStep"
-															: "leStepGray"
-													}
-													style={{
-														backgroundColor: `rgba(${colors[2]})`
-													}}
-												></div>
-												<div className="leDot"></div>
-												<div
-													className={
-														step === 3
-															? "leStepCurrent leStep"
-															: step > 3
-															? "leStep"
-															: "leStepGray"
-													}
-													style={{
-														backgroundColor: `rgba(${colors[3]})`
-													}}
-												></div>
-											</div>
-										) : null}
+										<div className="step-indicator">
+											<div
+												className="leStep"
+												style={{
+													backgroundColor: `rgba(${colors[0]})`
+												}}
+											></div>
+											<div className="leDot"></div>
+											<div
+												className={
+													step === 1
+														? "leStepCurrent leStep"
+														: step > 1
+														? "leStep"
+														: "leStepGray"
+												}
+												style={{
+													backgroundColor: `rgba(${colors[1]})`
+												}}
+											></div>
+											<div className="leDot"></div>
+											<div
+												className={
+													step === 2
+														? "leStepCurrent leStep"
+														: step > 2
+														? "leStep"
+														: "leStepGray"
+												}
+												style={{
+													backgroundColor: `rgba(${colors[2]})`
+												}}
+											></div>
+											<div className="leDot"></div>
+											<div
+												className={
+													step === 3
+														? "leStepCurrent leStep"
+														: step > 3
+														? "leStep"
+														: "leStepGray"
+												}
+												style={{
+													backgroundColor: `rgba(${colors[3]})`
+												}}
+											></div>
+										</div>
 										{step === 1 ? (
 											<h4>Бүтээгдэхүүний тухай</h4>
 										) : step === 2 ? (
@@ -912,7 +903,7 @@ class Payment extends Component {
 							</div>
 						</div>
 						<div className="footer-payment">
-							{step === 1 && type !== "eish" ? (
+							{step === 1 ? (
 								<div className="promo-container">
 									<div>
 										{promoIsValid ? (
@@ -970,37 +961,7 @@ class Payment extends Component {
 									</Form>
 								</div>
 							) : null}
-							{type === "eish" && !buyEishFreeSuccess ? (
-								<Button
-									className="payment-button"
-									onClick={() => this.buyEishFree()}
-								>
-									{buyingEishFree ? (
-										<Spinner
-											animation="grow"
-											role="status"
-											size="xs"
-											className="promo-submit-spinner"
-										></Spinner>
-									) : (
-										"Үнэгүй авах"
-									)}
-								</Button>
-							) : buyEishFreeSuccess ? (
-								<div className="teacher-request-checkmark">
-									<div class="success-checkmark">
-										<div class="check-icon">
-											<span class="icon-line line-tip"></span>
-											<span class="icon-line line-long"></span>
-											<div class="icon-circle"></div>
-											<div class="icon-fix"></div>
-										</div>
-									</div>
-									<div className="teacher-request-text">
-										<p>ЭЕШ багц амжилттай идэвжлээ</p>
-									</div>
-								</div>
-							) : step === 1 ? (
+							{step === 1 ? (
 								<Button
 									className="payment-button"
 									onClick={() => this.setStep(2)}

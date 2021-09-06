@@ -7,7 +7,6 @@ import {
     openPayment,
     checkBankPayment,
     checkQpayPayment,
-    buyEishFree
 } from "../actionTypes";
 import config from "../config";
 const initialState = {
@@ -19,8 +18,6 @@ const initialState = {
     method: '',
     paymentLaoding: true,
     transaction: {},
-	buyingEishFree: false,
-	buyEishFreeSuccess: false
 };
 
 export default(state = initialState, action) => {
@@ -146,26 +143,6 @@ export default(state = initialState, action) => {
                         ...state,
                         paymentLaoding: false,
                     };
-                }
-            }
-        case buyEishFree.REQUEST:
-            return {
-                ...state,
-                buyingEishFree: true
-            }
-        case buyEishFree.RESPONSE:
-            if (action.json.success) {
-                config.get('emitter').emit('success', 'ЭЕШ багц идэвхжлээ!')
-                return {
-                    ...state,
-                    buyEishFreeSuccess: true,
-                    buyingEishFree: false,
-                    // visible: false
-                }
-            } else {
-                return {
-                    ...state,
-                    buyingEishFree: false
                 }
             }
         default:
