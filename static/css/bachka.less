@@ -2504,7 +2504,7 @@ button.react-share__ShareButton {
     }
     background: #151314;
     .mainSlider {
-        height: 400px;
+        height: auto;
         .swiper-slide {
             background-position: center;
             background-repeat: no-repeat;
@@ -2529,13 +2529,12 @@ button.react-share__ShareButton {
         border-radius: 5px;
     }
     .mainSlider-cont {
-        width: calc(100% - 520px);
+        width: 100%;
         position: relative;
         margin-right: auto;
         margin-left: auto;
         position: relative;
-        left: -4px;
-        height: 400px;
+        height: calc( 100vw*0.390625);
         h5 {
             color: #ffffff;
             font-size: 36px;
@@ -2544,40 +2543,35 @@ button.react-share__ShareButton {
             margin-top: 25px;
         }
         p {
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 22px;
+            font-weight: 100;
             color: #ffffff;
-            padding: 10px 20px;
-            text-align: center;
-            background: #00000017;
-            width: calc(100% + -126px);
-            margin: 0 auto;
-            margin-top: 20px;
+            padding: 10px 65px;
+            font-style: italic;
+            width: calc(48%);
+            margin-top: 80px;
             border-radius: 10px;
         }
         .banner-button {
             text-align: center;
-            margin-left: auto;
-            margin-right: auto;
             display: block;
-            margin-top: 40px;
             font-size: 18px;
-            text-transform: uppercase;
             font-weight: 600;
-            background: #d22f9e;
+            background: linear-gradient(90deg, rgba(210,47,158,1) 0%, rgba(242,232,233,1) 100%);
             border: none;
             outline: none;
+            border-radius: 50px;
             box-shadow: none;
-            padding: 5px 30px;
-            -webkit-transition: 0.3s;
-            -moz-transition: 0.3s;
-            -ms-transition: 0.3s;
-            -o-transition: 0.3s;
-            transition: 0.3s;
+            padding: 7px 50px;
+            // -webkit-transition: 0.3s;
+            // -moz-transition: 0.3s;
+            // -ms-transition: 0.3s;
+            // -o-transition: 0.3s;
+            // transition: 0.3s;
         }
         .banner-button:hover {
-            background: #fff;
-            color: #d22f9e;
+            background: #d22f9e;
+            color: #fff;
         }
     }
     .hero-pos {
@@ -2750,9 +2744,8 @@ audio {
     position: absolute;
     top: 0;
     left: -10%;
-    width: 160%;
+    width: 100%;
     height: 100%;
-    background-image: url(../images/bg-hero-10.jpg);
     background-position: center bottom;
     background-size: cover;
 }
@@ -3650,11 +3643,8 @@ span.section-3 {
     }
     .hero-new .mainSlider-cont {
         width: 100%;
-            height: 280px;
     }
-    .hero-new .mainSlider {
-        height: 280px;
-    }
+    
   .register-login {
     margin-top: 50px;
   }

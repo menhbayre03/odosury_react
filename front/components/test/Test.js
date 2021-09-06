@@ -292,7 +292,7 @@ class Test extends Component {
                                             }} 
                                         className="testPrimary" style={{marginLeft: '30px'}}
                                     >
-                                        Худалдаж авах
+                                        ХУДАЛДАЖ АВАХ
                                     </button>
                                 }
                             </div>
