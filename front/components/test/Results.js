@@ -21,12 +21,11 @@ class Results extends Component {
         super(props);
         this.state = {
             pageNum: 0,
-            pageSize: 5,
+            pageSize: 1,
         }
     }
     componentDidMount() {
         const {match, dispatch, main: {user}, history} = this.props;
-        console.log(history)
         if(user && user._id) {
             null
         } else {
@@ -39,8 +38,85 @@ class Results extends Component {
         };
         dispatch(actions.getResults(cc));
     }
+    pageHandler(current){
+        const {dispatch, match} = this.props;
+        let page = current - 1;
+        let cc  = {
+            search: this.state.search,
+            pageNum: page,
+            pageSize: this.state.pageSize,
+        };
+        this.setState({pageNum: page});
+        dispatch(actions.getResults(cc));
+    }
     render() {
         const {results:{results, loading, all}, main:{user}} = this.props;
+
+        let items = [];
+        if(Math.ceil((all || 0)/this.state.pageSize)<=10){
+            for (let i = 1; i <= Math.ceil((all || 0)/this.state.pageSize); i++) {
+                items.push(
+                    <a style={{cursor:'pointer'}} onClick={this.pageHandler.bind(this, i)} className={`page-numbers ${i === (this.state.pageNum+1) ? 'current' : null}`}><span>{i}</span></a>
+                    // <Pagination.Item onClick={this.nextWeek.bind(this, 'static',i)} active={i === (this.state.pageNum+1)}>{i}</Pagination.Item>
+                );
+            }
+        }else{
+            if((this.state.pageNum+1)===1 || (this.state.pageNum+1)===2 || (this.state.pageNum+1)===3 || (this.state.pageNum+1)===4){
+                for (let i = 1; i <= 5; i++) {
+                    items.push(
+                        <a style={{cursor:'pointer'}} onClick={this.pageHandler.bind(this, i)} className={`page-numbers ${i === (this.state.pageNum+1) ? 'current' : null}`}><span>{i}</span></a>
+                        // <Pagination.Item onClick={this.nextWeek.bind(this, 'static',i)} active={i === (this.state.pageNum+1)}>{i}</Pagination.Item>
+                    );
+                }
+                items.push(
+                    <a style={{cursor:'pointer'}} className="page-numbers"><span>...</span></a>
+                    // <Pagination.Ellipsis />
+                );
+                items.push(
+                    <a style={{cursor:'pointer'}} onClick={this.pageHandler.bind(this, Math.ceil((all || 0)/this.state.pageSize))} className={`page-numbers ${(this.state.pageNum+1) === Math.ceil((all || 0)/this.state.pageSize) ? 'current' : null}`}><span>{Math.ceil((all || 0)/this.state.pageSize)}</span></a>
+                    // <Pagination.Item onClick={this.nextWeek.bind(this, 'static',Math.ceil((all || 0)/this.state.pageSize))} active={(this.state.pageNum+1) === Math.ceil((all || 0)/this.state.pageSize)}>{Math.ceil((all || 0)/this.state.pageSize)}</Pagination.Item>
+                );
+            }else if( (this.state.pageNum+1)=== Math.ceil((all || 0)/this.state.pageSize) || (this.state.pageNum+1)=== Math.ceil((all || 0)/this.state.pageSize)-1 || (this.state.pageNum+1)=== Math.ceil((all || 0)/this.state.pageSize)-2 || (this.state.pageNum+1)=== Math.ceil((all || 0)/this.state.pageSize)-3){
+
+                items.push(
+                    <a style={{cursor:'pointer'}} onClick={this.pageHandler.bind(this, 1)} className={`page-numbers ${(this.state.pageNum+1) === 1 ? 'current' : null}`}><span>1</span></a>
+                    // <Pagination.Item onClick={this.nextWeek.bind(this, 'static',1)} active={(this.state.pageNum+1) === 1}>1</Pagination.Item>
+                );
+                items.push(
+                    <a style={{cursor:'pointer'}} className="page-numbers"><span>...</span></a>
+                    // <Pagination.Ellipsis />
+                );
+                for (let i = Math.ceil((all || 0)/this.state.pageSize)-4; i <= Math.ceil((all || 0)/this.state.pageSize); i++) {
+                    items.push(
+                        <a style={{cursor:'pointer'}} onClick={this.pageHandler.bind(this, i)} className={`page-numbers ${i === (this.state.pageNum+1) ? 'current' : null}`}><span>{i}</span></a>
+                        // <Pagination.Item onClick={this.nextWeek.bind(this, 'static',i)} active={i === (this.state.pageNum+1)}>{i}</Pagination.Item>
+                    );
+                }
+            }else {
+                items.push(
+                    <a style={{cursor:'pointer'}} onClick={this.pageHandler.bind(this, 1)} className={`page-numbers ${(this.state.pageNum+1) === 1 ? 'current' : null}`}><span>1</span></a>
+                    // <Pagination.Item onClick={this.nextWeek.bind(this, 'static',1)} active={(this.state.pageNum+1) === 1}>1</Pagination.Item>
+                );
+                items.push(
+                    <a style={{cursor:'pointer'}} className="page-numbers"><span>...</span></a>
+                    // <Pagination.Ellipsis />
+                );
+                for (let i = (this.state.pageNum+1)-2; i <= (this.state.pageNum+1)+2; i++) {
+                    items.push(
+                        <a style={{cursor:'pointer'}} onClick={this.pageHandler.bind(this, i)} className={`page-numbers ${i === (this.state.pageNum+1) ? 'current' : null}`}><span>{i}</span></a>
+                        // <Pagination.Item onClick={this.nextWeek.bind(this, 'static',i)} active={i === (this.state.pageNum+1)}>{i}</Pagination.Item>
+                    );
+                }
+                items.push(
+                    <a style={{cursor:'pointer'}} className="page-numbers"><span>...</span></a>
+                    // <Pagination.Ellipsis />
+                );
+                items.push(
+                    <a style={{cursor:'pointer'}} onClick={this.pageHandler.bind(this, Math.ceil((all || 0)/this.state.pageSize))} className={`page-numbers ${(this.state.pageNum+1) === Math.ceil((all || 0)/this.state.pageSize) ? 'current' : null}`}><span>{Math.ceil((all || 0)/this.state.pageSize)}</span></a>
+                    // <Pagination.Item onClick={this.nextWeek.bind(this, 'static',Math.ceil((all || 0)/this.state.pageSize))} active={(this.state.pageNum+1) === Math.ceil((all || 0)/this.state.pageSize)}>{Math.ceil((all || 0)/this.state.pageSize)}</Pagination.Item>
+                );
+            }
+        }
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
@@ -123,6 +199,17 @@ class Results extends Component {
                                     </div>
                                 </Col>
                             </Row>
+                            {
+                                items.length > 1 ? (
+                                    <div className="row mb60">
+                                        <div className="col-lg-12">
+                                            <nav className="navigation">
+                                                {items}
+                                            </nav>
+                                        </div>
+                                    </div>
+                                ) : null
+                            }
                 
                             </Loader>
                             </Col>
