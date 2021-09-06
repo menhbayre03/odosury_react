@@ -32,6 +32,7 @@ class Bundle extends Component {
 
     render() {
         const {main: {user}, profile: {bundles, lessons, loadingLessons}} = this.props;
+        console.log('what is love', bundles, "what is what", lessons);
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
@@ -68,26 +69,66 @@ class Bundle extends Component {
                                                     {/*        </div>*/}
                                                     {/*    ) : null*/}
                                                     {/*}*/}
-                                                    {
-                                                        lessons.length > 0 ? (
-                                                            <div>
-                                                                <h5 style={{fontSize:16, fontWeight: 600}}>Хичээлүүд:</h5>
-                                                                {
-                                                                    lessons.map((item , index) => (
-                                                                        <Link to={`/lesson/${item.slug}`} key={index} className={`history-item`}>
-                                                                            <div style={{display: 'inline-block'}}>
-                                                                                <span className="ind">{index+1}</span>
-                                                                                <span className="date">{item.title}</span>
-                                                                            </div>
-                                                                            <div style={{display: 'inline-block', float: 'right'}}>
-                                                                                <span className={`date`}>{moment(item.trans_date).format('YYYY/MM/DD')}</span>
-                                                                            </div>
-                                                                        </Link>
-                                                                    ))
-                                                                }
+                                                    {lessons.map((item, index) => (
+                                                        <Link
+                                                            to={item.type === "premium" ? `/premium` : item.type === "eish" ? `/eish` : `/lesson/${item.slug}`}
+                                                            key={index}
+                                                            className={`history-item`}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    display:
+                                                                        "inline-block"
+                                                                }}
+                                                            >
+                                                                <span className="ind">
+                                                                    {index + 1}
+                                                                </span>
+                                                                <span className="date">
+                                                                    {item.title
+                                                                        ? item.title
+                                                                        : item.type ===
+                                                                        "premium"
+                                                                        ? "Premium эрх"
+                                                                        : item.type ===
+                                                                        "eish"
+                                                                        ? "ЭЕШ Багц"
+                                                                        : null}
+                                                                </span>
                                                             </div>
-                                                        ) : null
-                                                    }
+                                                            <div
+                                                                style={{
+                                                                    display:
+                                                                        "inline-block",
+                                                                    float: "right"
+                                                                }}
+                                                            >
+                                                                <span
+                                                                    className={`date`}
+                                                                >
+                                                                    {moment(
+                                                                        item.trans_date
+                                                                    ).format(
+                                                                        "YYYY/MM/DD"
+                                                                    )}
+                                                                </span>
+                                                                <span
+                                                                    className={`date`}
+                                                                >
+                                                                    -
+                                                                </span>
+                                                                <span
+                                                                    className={`date`}
+                                                                >
+                                                                    {moment(
+                                                                        item.expires
+                                                                    ).format(
+                                                                        "YYYY/MM/DD"
+                                                                    )}
+                                                                </span>
+                                                            </div>
+                                                        </Link>
+                                                    ))}
                                                 </div>
                                             ) : (
                                                 <div className='empty-data'>

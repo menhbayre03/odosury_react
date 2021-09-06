@@ -1,0 +1,34 @@
+.navigation {
+  margin: 20px 0;
+  width: 100%;
+  text-align: right;
+  position: relative;
+  .page-numbers {
+    position: relative;
+    background-color: #eaf4fe;
+    display: inline-block;
+    margin: 0 12px 0 0;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    color: #2b3647;
+    font-size: 14px;
+    border-radius: 100%;
+    transition: all .3s ease;
+    font-weight: 700;
+    span {
+      position: relative;
+    }
+  }
+  .page-numbers.current {
+    background-color: #ffc000;
+    box-shadow: 10px 0 50px rgb(0 131 255 / 15%);
+    color: #2b3647;
+  }
+  .page-numbers:hover {
+    background-color: #ffc000;
+    color: #2b3647;
+    box-shadow: 10px 0 50px rgb(0 131 255 / 15%);
+  }
+}
