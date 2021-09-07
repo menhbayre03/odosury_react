@@ -50,6 +50,10 @@ export const uploadUserAvatar = {
     REQUEST:'uploadUserAvatar_REQUEST',
     RESPONSE:'uploadUserAvatar_RESPONSE',
 };
+export const updateUserStatus = {
+    REQUEST:'updateUserStatus_REQUEST',
+    RESPONSE:'updateUserStatus_RESPONSE',
+};
 
 
 export const openBundleModal = {

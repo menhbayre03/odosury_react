@@ -32,7 +32,6 @@ class Bundle extends Component {
 
     render() {
         const {main: {user}, profile: {bundles, lessons, loadingLessons}} = this.props;
-        console.log('what is love', bundles, "what is what", lessons);
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
