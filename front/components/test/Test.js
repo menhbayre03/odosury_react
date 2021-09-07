@@ -26,7 +26,8 @@ class Test extends Component {
             sort: {value: 'newest', name: 'Шинэ'},
             search: search,
             pageNum: 0,
-            pageSize: 1
+            pageSize: 1,
+            category: 'all',
         };
     }
 
@@ -49,7 +50,26 @@ class Test extends Component {
             e.preventDefault();
         }
         const {dispatch, match} = this.props;
-        dispatch(actions.getTests(match.params.slug, {sort: this.state.sort.value, search: this.state.search}));
+        let cc= {
+            // sort: this.state.sort.value,
+            search: this.state.search,
+            pageNum: 0,
+            pageSize: this.state.pageSize,
+            category: this.state.category,
+        };
+        this.setState({pageNum:0});
+        dispatch(actions.getTests(cc));
+    }
+    catClick(slug) {
+        const {dispatch, match} = this.props;
+        let cc= {
+            search: this.state.search,
+            pageNum: 0,
+            pageSize: this.state.pageSize,
+            category: slug,
+        };
+        this.setState({category:slug, pageNum: 0});
+        dispatch(actions.getTests(cc));
     }
     onChange(e) {
         this.setState({search: e.target.value})
@@ -104,7 +124,7 @@ class Test extends Component {
                                         placeholder="Хичээл хайх ..."
                                         value={this.state.search}
                                     />
-                                    <ion-icon  onClick={() => this.onSearch()} name="search-outline"/>
+                                    <ion-icon  onClick={(e) => this.onSearch(e)} name="search-outline"/>
                                 </form>
                             </div>
                         </div>
@@ -112,29 +132,32 @@ class Test extends Component {
                             <p>Ангилал</p>
                             <ul className="cate">
                                 <li className={'cate-item'}>
-                                    <Link to={`#`}>
-                                        {'all' === slug ? <ion-icon name="checkmark"/> : null}
-                                        <span>Бүгд </span>
-                                    </Link>
+                                    {/*<Link to={`#`}>*/}
+                                        <div onClick={this.catClick.bind(this, 'all')}>
+                                            {'all' === this.state.category ? <ion-icon name="checkmark"/> : null}
+                                            <span>Бүгд </span>
+                                        </div>
+                                    {/*</Link>*/}
                                 </li>
                                 {
                                     categories.map((item, ida) => (
-                                        item.slug === slug || item.child?.some(chd => chd.slug === slug) ? (
-                                            <li key={ida} className={item.slug === slug ? 'cate-item active' : 'cate-item'}>
-                                                <Link to={`#`}>
-                                                    {item.slug === slug ? <ion-icon name="checkmark"/> : null}
+                                        item.slug === this.state.category || item.child?.some(chd => chd.slug === this.state.category) ? (
+                                            <li key={ida} className={item.slug === this.state.category ? 'cate-item active' : 'cate-item'}>
+                                                <div onClick={this.catClick.bind(this, item._insertDescriptor())}>
+                                                    {item._id === this.state.category ? <ion-icon name="checkmark"/> : null}
                                                     <span>{item.title} </span>
-                                                </Link>
+                                                </div>
                                                 {
                                                     item.child && item.child.length > 0 ? (
                                                         <ul className="cate-child">
                                                             {
                                                                 item.child.map((child, ind) => (
-                                                                    <li key={ind} className={child.slug === slug ? 'cate-item active' : 'cate-item'}>
-                                                                        <Link to={`#`}>
-                                                                            {child.slug === slug ? <ion-icon name="checkmark"/> : null}
+                                                                    <li key={ind} className={child.slug === this.state.category ? 'cate-item active' : 'cate-item'}>
+
+                                                                        <div onClick={this.catClick.bind(this, item._id)}>
+                                                                            {item._id === this.state.category ? <ion-icon name="checkmark"/> : null}
                                                                             <span>{child.title} ({child.count})</span>
-                                                                        </Link>
+                                                                        </div>
                                                                     </li>
                                                                 ))
                                                             }
@@ -144,10 +167,10 @@ class Test extends Component {
                                             </li>
                                         ) : (
                                             <li key={ida} className={'cate-item'}>
-                                                <Link to={`#`}>
-                                                    {item.slug === slug ? <ion-icon name="checkmark"/> : null}
+                                                <div onClick={this.catClick.bind(this, item._id)}>
+                                                    {item._id === this.state.category ? <ion-icon name="checkmark"/> : null}
                                                     <span>{item.title} </span>
-                                                </Link>
+                                                </div>
                                             </li>
                                         )
                                     ))
@@ -167,6 +190,7 @@ class Test extends Component {
             search: this.state.search,
             pageNum: page,
             pageSize: this.state.pageSize,
+            category: this.state.category,
         };
         this.setState({pageNum: page});
         dispatch(actions.getTests(cc));
