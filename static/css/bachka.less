@@ -2504,7 +2504,7 @@ button.react-share__ShareButton {
     }
     background: #151314;
     .mainSlider {
-        height: 400px;
+        height: auto;
         .swiper-slide {
             background-position: center;
             background-repeat: no-repeat;
@@ -2529,13 +2529,12 @@ button.react-share__ShareButton {
         border-radius: 5px;
     }
     .mainSlider-cont {
-        width: calc(100% - 520px);
+        width: 100%;
         position: relative;
         margin-right: auto;
         margin-left: auto;
         position: relative;
-        left: -4px;
-        height: 400px;
+        height: calc( 100vw*0.390625);
         h5 {
             color: #ffffff;
             font-size: 36px;
@@ -2544,42 +2543,94 @@ button.react-share__ShareButton {
             margin-top: 25px;
         }
         p {
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 22px;
+            font-weight: 100;
             color: #ffffff;
-            padding: 10px 20px;
-            text-align: center;
-            background: #00000017;
-            width: calc(100% + -126px);
-            margin: 0 auto;
-            margin-top: 20px;
+            padding: 10px 65px;
+            font-style: italic;
+            margin-top: calc(100vw*0.045);
             border-radius: 10px;
         }
         .banner-button {
             text-align: center;
-            margin-left: auto;
-            margin-right: auto;
             display: block;
-            margin-top: 40px;
-            font-size: 18px;
-            text-transform: uppercase;
-            font-weight: 600;
-            background: #d22f9e;
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(90deg, rgba(210,47,158,1) 0%, rgba(242,232,233,1) 140%);
             border: none;
             outline: none;
+            border-radius: 50px;
             box-shadow: none;
-            padding: 5px 30px;
-            -webkit-transition: 0.3s;
-            -moz-transition: 0.3s;
-            -ms-transition: 0.3s;
-            -o-transition: 0.3s;
-            transition: 0.3s;
+            padding: 12px 100px;
+            // -webkit-transition: 0.3s;
+            // -moz-transition: 0.3s;
+            // -ms-transition: 0.3s;
+            // -o-transition: 0.3s;
+            // transition: 0.3s;
         }
+        
         .banner-button:hover {
-            background: #fff;
-            color: #d22f9e;
+            background: #d22f9e;
+            color: #fff;
+        }
+        .button2 {
+          margin: 30px auto;
         }
     }
+    .landingCont {
+      padding: calc(100vw*0.04);
+      width: 60%;
+      .landingHeader {
+          padding-left: 65px;
+          width: 400px;
+      }
+      .header2 {
+        margin-top: 80px;
+        padding: 20px 100px;
+        width: 95%;
+      }
+      p.header2 {
+        text-align: center;
+        margin-top: 15px;
+        font-size: 20px;
+        padding: 10px;
+      }
+      .header3 {
+        width: 720px;
+        margin: 10px auto;
+      }
+      .contactHome {
+          margin-top: 60px;
+          color: #fff;
+          width: 100%;
+          font-size: 20px;
+          font-weight: 300;
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          align-items: center;
+          justify-content: space-between;
+          padding: 10px 65px;
+          .item {
+              width: 175px;
+              display: inline-block;
+              span {
+                  margin-left: 25px;
+  
+              }
+          }
+          ion-icon {
+              color: #008fee;
+              font-size: 23px;
+              position: absolute;
+              margin-top: 2px;
+          }
+          
+      }
+      .contact2 {
+        margin-top: 25px;
+      }
+  }
     .hero-pos {
         position: absolute;
         top: 0;
@@ -2750,9 +2801,8 @@ audio {
     position: absolute;
     top: 0;
     left: -10%;
-    width: 160%;
+    width: 100%;
     height: 100%;
-    background-image: url(../images/bg-hero-10.jpg);
     background-position: center bottom;
     background-size: cover;
 }
@@ -3564,20 +3614,102 @@ span.section-3 {
   -o-transition: 0.4s ease-in-out;
   transition: 0.4s ease-in-out;
 }
+
+@media(max-width: 1500px) {
+  
+  .hero-new {
+    .mainSlider-cont  {
+        
+        p {
+            font-size: 16px;
+            
+        }
+        .banner-button {
+          padding: 7px 50px;
+          font-size: 17px;
+        }
+        
+        .landingCont {
+          .landingHeader {
+            width: 325px;
+          }
+          .header2 {
+            margin-top: 30px;
+            padding: 20px 80px;
+            width: 95%;
+          }
+          p.header2 {
+            margin-top: 15px;
+            font-size: 18px;
+            padding: 5px;
+          }
+          .header3 {
+            width: 500px;
+          }
+          .contactHome {
+            margin-top: 20px;
+          }
+          .contact2 {
+            margin-top: 15px;
+            font-size: 17px;
+          }
+        }
+        
+    }
+}
+
+}
 @media(max-width: 1200px){
+  
+  
     .hero-new {
         .mainSlider-cont  {
+            
             h5 {
                 font-size: 26px;
             }
             p {
                 font-size: 14px;
+                padding: 0px 45px
             }
             .banner-button {
                 font-size: 14px;
             }
+            .landingCont {
+              .landingHeader {
+                padding-left: 45px;
+                width: 250px;
+            }
+            .header2 {
+              margin-top: 20px;
+              padding: 5px 80px;
+            }
+            p.header2 {
+              font-size: 15px;
+              padding: 5px;
+            }
+            .header3 {
+              width: 400px;
+              margin: 10px auto;
+            }
+            
+            .contactHome {
+                margin-top: 20px;
+                font-size: 15px;
+                ion-icon {
+                    font-size: 17px;
+                }
+                .item {
+                    span {
+                      margin-left: 15px;
+                    }
+                }
+            }
+            
+          }
         }
     }
+    
   .profile-sidebar li span {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -3641,8 +3773,41 @@ span.section-3 {
     .hero-new {
         .mainSlider-cont  {
             .banner-button {
-                margin-top: 30px;
+                position: absolute;
+                top: 55%;
+                left: 51%;
             }
+            .button2 {
+              position: relative;
+              top: 0;
+              left: 0;
+            }
+            p {
+              font-size: 13px;
+              padding: 0px 35px
+            }
+            
+            .contact3 {
+              display: none;
+            }
+            .contact2 {
+              display: none;
+            }
+            .landingCont {
+              .landingHeader {
+                padding-left: 35px;
+              }
+              .header2 {
+                margin-top: 15px;
+              }
+              p.header2 {
+                font-size: 13px;
+              }
+              .header3 {
+                width: 300px;
+                margin: 10px auto;
+              }
+          }
         }
     }
     .hero-pos {
@@ -3650,11 +3815,8 @@ span.section-3 {
     }
     .hero-new .mainSlider-cont {
         width: 100%;
-            height: 280px;
     }
-    .hero-new .mainSlider {
-        height: 280px;
-    }
+    
   .register-login {
     margin-top: 50px;
   }
@@ -3787,6 +3949,35 @@ span.section-3 {
   }
   .premium-container .prem-txts {
     height: 590px;
+  }
+  .hero-new {
+    .mainSlider-cont  {
+      p {
+        font-size: 12px;
+        padding: 0px 15px
+      }
+      .button2 {
+        margin: 10px auto;
+      }
+      .landingCont {
+        .landingHeader {
+          width: 200px;
+          padding-left: 15px;
+        }
+        .header2 {
+          padding: 0px 25px;
+        }
+        p.header2 {
+          font-size: 12px;
+          width: 120%;
+          margin-left: -6vw;
+          padding: 5px;
+        }
+        .contactHome {
+          display: none;
+        }
+      }
+    }
   }
   .home-hero {
     height: 180px;
@@ -3970,12 +4161,13 @@ span.section-3 {
   .header .header-top .section-1 .logo img {
     height: 14px;
   }
+  
   .hero-new .mainSlider-cont p {
-    font-size: 12px;
-    margin-top: 10px;
-    font-weight: 600;
-    line-height: 14px;
-    padding: 10px;
+    font-size: 10px;
+    margin-top: 0px;
+    font-weight: 100;
+    line-height: 12px;
+    padding: 7px;
   }
   .hero-new .mainSlider-cont h5 {
       font-size: 18px;
@@ -3983,6 +4175,40 @@ span.section-3 {
   .header .header-top .section-1 {
       display: inline-block;
       max-width: 160px;
+  }
+  .hero-new {
+    .mainSlider-cont  {
+      .landingCont {
+        .landingHeader {
+          width: 200px;
+          padding-left: 7px;
+        }
+        .header3 {
+          width: 175px;
+          margin: 0px auto;
+        }
+        .header2 {
+          margin-top: 0px;
+          padding: 0px 30px;
+        }
+        p.header2 {
+          font-size: 8px;
+        }
+      }
+      .banner-button {
+        top: 30%;
+        padding: 5px 32px;
+      }
+      .button3 {
+          top: 35%;
+          left: 14%;
+      }
+      .button2 {
+        margin-top: 5px;
+        top: 0;
+        
+      }
+    }
   }
   .header .header-top .section-2 {
       display: flex;
@@ -4040,6 +4266,40 @@ span.section-3 {
   }
   .section-app {
     height: 230px;
+  }
+}
+
+@media(max-width: 430px) {
+  .hero-new {
+    .mainSlider-cont  {
+      .landingCont {
+        .landingHeader {
+          width: 150px;
+        }
+        .header3 {
+          margin-left: 0px;
+          width: 135px
+        }
+        p.header2 {
+          margin-top: 5px;
+          width: 150%;
+          margin-left: -14vw;
+        }
+      }
+      p {
+        margin-top: 10px;
+        font-size: 8px;
+      }
+      .banner-button {
+        top: 25%;
+        padding: 5px 20px;
+        font-size: 10px;
+      }
+      .button2 {
+        top: 0;
+        margin-top: -10px;
+      }
+    }
   }
 }
 

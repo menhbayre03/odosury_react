@@ -113,19 +113,142 @@ class Home extends Component {
                 <div className="hero-new">
                     <div style={{position: 'relative'}}>
                         <Swiper {...mainSlider}>
-                            <div className="mainSlider-inner">
-                                <Container>
-                                    <div className="mainSlider-cont">
-                                        <h5><span style={{color: 'gold'}}>PREMIUM</span> эрх гэж юу вэ?</h5>
-                                        <p>Бүх насныханд зориулагдсан ODOSURY онлайн сургалтын платформын хичээлүүдийг та нэг төлөлтөөр бүгдийг нь хүлээн авч үзэх боломжтой</p>
-                                        <Link to="/premium" style={{textDecoration: 'none'}}>
-                                            <Button className="banner-button">
-                                                дэлгэрэнгүй...
-                                            </Button>
-                                        </Link>
+
+                        <div className="mainSlider-inner">
+                                    <div className="mainSlider-cont"style={{
+                                        background: 'url(/images/backpage_2.png)',
+                                        backgroundSize: 'auto 100%',
+                                        display: 'flex',
+                                        justifyContent: 'center'
+                                    }}>
+                                        <div className="landingCont" style={{
+                                            
+                                        }}> 
+                                            <img className="header2" src="/images/logo.png" alt=""/>
+                                            <p className="header2">
+                                                БҮХ НАСНЫХАНД ЗОРИУЛАГДСАН ODOSURY ОНЛАЙН СУРГАЛТЫН ПЛАТФОРМЫН ХИЧЭЭЛҮҮДИЙГ ТА НЭГ ТӨЛӨЛТӨӨР БҮГДИЙГ НЬ ХҮЛЭЭН АВЧ ҮЗЭХ БОЛОМЖТОЙ.                                           </p>
+                                            
+                                            <div className="contactHome contact2">
+                                                <div className="item">
+                                                    <ion-icon name="globe"></ion-icon> &nbsp;
+                                                    <span >www.odosury.com</span>
+                                                    
+                                                </div>
+                                                <div className="item">
+                                                    <ion-icon name="mail"></ion-icon>&nbsp;
+                                                    <span>info@odosury.com</span>
+                                                    
+                                                </div>
+                                                <div className="item">
+                                                    <ion-icon name="call"></ion-icon>&nbsp;
+                                                    <span>8844-5020</span>
+                                                    
+                                                </div>
+                                            </div>
+                                            <Link to="/premium" style={{textDecoration: 'none'
+                                                }}>
+                                                <Button className="banner-button button2">
+                                                    PREMIUM ЭРХ
+                                                </Button>
+                                            </Link>
+
+                                        </div>  
+                                       
                                     </div>
-                                </Container>
                             </div>
+
+                            <div className="mainSlider-inner">
+                                    <div className="mainSlider-cont" style={{
+                                        background: 'url(/images/backpage_1.png)',
+                                       objectFit: 'cover',
+                                       backgroundSize: 'auto 100%'
+                                    }}>
+                                        <div className="landingCont">
+                                            <img className="landingHeader" src="/images/odosuryo.png" alt=""/>
+                                            <p>
+                                                ОЛОН ТӨРЛИЙН ХУВЬ ХҮНИЙ ХӨГЖЛИЙН БОЛОН МЭРГЭЖЛИЙН ХИЧЭЭЛҮҮДИЙГ БАГТААСАН БҮХ НАСНЫХАНД ЗОРИУЛСАН ОНЛАЙН СУРГАЛТЫН ПЛАТФОРМ.
+                                            </p>
+                                            <div className="contactHome">
+                                                <div className="item">
+                                                    <ion-icon name="globe"></ion-icon> &nbsp;
+                                                    <span>www.odosury.com</span>
+                                                    
+                                                </div>
+                                                <div className="item">
+                                                    <ion-icon name="mail"></ion-icon>&nbsp;
+                                                    <span>info@odosury.com</span>
+                                                    
+                                                </div> 
+                                                <div className="item">
+                                                    <ion-icon name="call"></ion-icon>&nbsp;
+                                                    <span>8844-5020</span>
+                                                    
+                                                </div>
+                                            </div>
+                                            <Link to="/premium" style={{textDecoration: 'none'
+                                                }}>
+                                                <Button className="banner-button" style={{
+                                                    margin: '50px auto'
+                                                }}>
+                                                    
+                                                    PREMIUM ЭРХ
+                                                </Button>
+                                            </Link>
+                                        </div>   
+                                    </div>
+                            </div>
+                            
+                            <div className="mainSlider-inner">
+                                    <div className="mainSlider-cont"style={{
+                                        background: 'url(/images/backpage_3.png)',
+                                        backgroundSize: 'auto 100%',
+                                        display: 'flex',
+                                        justifyContent: 'flex-end'
+                                    }}>
+                                        <div className="landingCont" style={{
+                                            
+                                        }}> 
+                                            <div style={{ display: 'flex',
+                                                            justifyContent: 'center'}}>
+                                                <img className="header3" src="/images/odosuryo.png" alt="" />
+                                            </div>
+                                           
+                                        
+                                            <p>
+                                                ОЛОН ТӨРЛИЙН ХУВЬ ХҮНИЙ ХӨГЖЛИЙН БОЛОН МЭРГЭЖЛИЙН ХИЧЭЭЛҮҮДИЙГ БАГТААСАН БҮХ НАСНЫХАНД ЗОРИУЛСАН ОНЛАЙН СУРГАЛТЫН ПЛАТФОРМ.
+                                            </p>
+                                            <div className="contactHome contact3">
+                                                <div className="item">
+                                                    <ion-icon name="globe"></ion-icon> &nbsp;
+                                                    <span>www.odosury.com</span>
+                                                    
+                                                </div>
+                                                <div className="item">
+                                                    <ion-icon name="mail"></ion-icon>&nbsp;
+                                                    <span>info@odosury.com</span>
+                                                    
+                                                </div>
+                                                <div className="item">
+                                                    <ion-icon name="call"></ion-icon>&nbsp;
+                                                    <span>8844-5020</span>
+                                                    
+                                                </div>
+                                            </div>
+                                            <Link to="/premium" style={{textDecoration: 'none'
+                                                }}>
+                                                <Button className="banner-button button3" style={{
+                                                    margin: '50px auto'
+                                                }}>
+                                                    PREMIUM ЭРХ
+                                                </Button>
+                                            </Link>
+
+                                        </div>  
+                                       
+                                    </div>
+                            </div>
+                           
+                            
                              {/*<div className="mainSlider-inner" >*/}
                              {/*    <Container>*/}
                              {/*        <div className="mainSlider-cont">*/}
@@ -140,19 +263,20 @@ class Home extends Component {
                              {/*    </Container>*/}
                              {/*</div>*/}
                         </Swiper>
-                        {/*<div style={{position: 'absolute', top: 0, width: '100%'}}>*/}
-                        {/*    <Container>*/}
-                        {/*        <div className="mainSlider-cont">*/}
-                        {/*            <div className="grid-next" id="nextMain">*/}
-                        {/*                <ion-icon name="chevron-forward"/>*/}
-                        {/*            </div>*/}
-                        {/*            <div className="grid-prev" id="prevMain">*/}
-                        {/*                <ion-icon name="chevron-back"/>*/}
-                        {/*            </div>*/}
-                        {/*        </div>*/}
-                        {/*    </Container>*/}
-                        {/*</div>*/}
-                        <div className="hero-pos">
+                        
+                        {/* <div style={{position: 'absolute', top: 0, width: '100%'}}>
+                           <Container>
+                               <div className="mainSlider-cont">
+                                   <div className="grid-next" id="nextMain">
+                                       <ion-icon name="chevron-forward"/>
+                                   </div>
+                                   <div className="grid-prev" id="prevMain">
+                                       <ion-icon name="chevron-back"/>
+                                   </div>
+                               </div>
+                           </Container>
+                        </div> */}
+                        {/* <div className="hero-pos">
                             <Container>
                                 <div className="hero-div">
                                     <div className="cates">
@@ -189,7 +313,7 @@ class Home extends Component {
                                     </div>
                                 </div>
                             </Container>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <Loader status={loading}>
