@@ -63,11 +63,12 @@ class Home extends Component {
         const mainSlider = {
             // effect: 'fade',
             autoplay: {
-               delay: 3000,
+               delay: 5000,
             },
             pagination: {
                 el: '.swiper-pagination',
                 type: 'bullets',
+                clickable: true
             },
             spaceBetween: 0,
             containerClass: 'swiper-container mainSlider',
@@ -75,7 +76,7 @@ class Home extends Component {
                 nextEl: "#nextMain",
                 prevEl: "#prevMain"
             },
-            speed: 600,
+            speed: 1000,
             parallax: true,
             parallaxEl: {
                 el: '.parallax-bg',
