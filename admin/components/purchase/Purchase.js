@@ -190,6 +190,7 @@ class Purchase extends React.Component {
                             <Option value={'success'}>Идэвхитэй</Option>
                             <Option value={'finished'}>Дууссан</Option>
                             <Option value={'pending'}>Хүлээгдэж буй</Option>
+                            <Option value={'expired'}>Дууссан</Option>
                         </Select>
                 )
             },

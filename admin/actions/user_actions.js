@@ -36,3 +36,7 @@ export function uploadUserAvatar(data, type, id) {
     let url = `/admin/api/${type}/upload/uploadUserAvatar/${id}`;
     return networkActions.requestUploadPostDirect(constants.uploadUserAvatar, url,  {}, null, data );
 }
+export function updateStatus(data) {
+    let url = `/admin/api/updateUserStatus`;
+    return networkActions.requestPost(constants.updateUserStatus,url, data);
+}

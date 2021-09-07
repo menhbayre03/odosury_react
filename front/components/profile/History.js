@@ -39,6 +39,8 @@ class Bundle extends Component {
                 return 'Амжилттай';
             case "finished":
                 return 'Дууссан';
+            case "expired":
+                return 'Дууссан';
             default:
                 return ''
         }
