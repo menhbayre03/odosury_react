@@ -21,7 +21,7 @@ class Results extends Component {
         super(props);
         this.state = {
             pageNum: 0,
-            pageSize: 1,
+            pageSize: 5,
         }
     }
     componentDidMount() {

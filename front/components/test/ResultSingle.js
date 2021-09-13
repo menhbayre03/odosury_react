@@ -31,12 +31,7 @@ class ResultSingle extends Component {
         // dispatch(actions.getTests(cc));
         dispatch(actions.getTestSingle(cc, match.params.id));
         
-        // if(this.props.testResultSingle.result?.result <=70) {
-        //     this.setState({certified: true})
-        // }
-        // else {
-        //     this.setState({certified: false})
-        // } 
+        
         
     }
     render() {
@@ -116,7 +111,7 @@ class ResultSingle extends Component {
                                                                 <div>
                                                                     <ion-icon name="hourglass-outline"></ion-icon>
                                                                 </div>
-                                                                ХУГАЦАА: 60 минут
+                                                                ХУГАЦАА: {result?.duration} минут
                                                             </div>
                                                         </li>
                                                         <li>
@@ -124,7 +119,7 @@ class ResultSingle extends Component {
                                                                 <div >
                                                                     <ion-icon name="pricetags-outline"></ion-icon>
                                                                 </div>
-                                                                ҮНЭ: 20,000₮
+                                                                ҮНЭ: {result?.price}₮
                                                             </div>
                                                             
                                                         </li>
@@ -133,7 +128,11 @@ class ResultSingle extends Component {
                                                                 <div>
                                                                     <ion-icon name="repeat"></ion-icon> 
                                                                 </div>
-                                                                ДАВТАМЖ: Нэг удаа.
+                                                                ДАВТАМЖ: { result?.oneTime ?
+                                                                    "Нэг удаа."
+                                                                    :
+                                                                    "Давтамжгүй."
+                                                                }
 
                                                             </div>
                                                            

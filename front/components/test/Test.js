@@ -26,7 +26,7 @@ class Test extends Component {
             sort: {value: 'newest', name: 'Шинэ'},
             search: search,
             pageNum: 0,
-            pageSize: 1,
+            pageSize: 5,
             category: 'all',
         };
     }
@@ -197,6 +197,7 @@ class Test extends Component {
     }
     render() {
         const {test:{tests, loading, all, openTest}, main:{user}} = this.props;
+        console.log(this.props.test)
 
         let items = [];
         if(Math.ceil((all || 0)/this.state.pageSize)<=10){
@@ -290,30 +291,30 @@ class Test extends Component {
                                         
                                     </div>
                                     <div className="list-items">
-                                    <Loader status={loading}>
-                                        <Row>
-                                        {   
-                                            (tests || []).map((item, index) => (
-                                                <Col lg={4} md={6} sm={6} style={{marginBottom: 30}}>
-                                                    <div key={index} className="testCard"
-                                                    // onClick={this.openConfirmModal.bind(this, item)}
-                                                    onClick={() => this.checkTransaction(item)}
-                                                    style={this.state.confirmModalData.backgroundImg ? {} : {background: 'url("/images/defaultTestCard1.png")', backgroundSize:'200px 110px'}}>
-                                                        <div className="cardContent">
-                                                         {item.title}
-                                                         <br/>
-                                                         Хугацаа: {item.duration} мин
-                                                         <br/>
-                                                        <span style={{color: '#ffc107', fontSize: 14}}>{item.price && item.price>0 ? `Үнэ: ${item.price}₮` : 'Үнэгүй'}</span>
-                                                        <div className="certifyTagTest" style={item.hasCertificate? {} : {backgroundColor: '#dc3545', border: 'none', color: '#fff'}}> 
-                                                        {item.hasCertificate ? 'СЕРТИФИКАТТАЙ' : 'СЕРТИФИКАТГҮЙ'} </div>
+                                        <Loader status={loading}>
+                                            <Row>
+                                            {   
+                                                (tests || []).map((item, index) => (
+                                                    <Col lg={4} md={6} sm={6} style={{marginBottom: 30}}>
+                                                        <div key={index} className="testCard"
+                                                        // onClick={this.openConfirmModal.bind(this, item)}
+                                                        onClick={() => this.checkTransaction(item)}
+                                                        style={this.state.confirmModalData.backgroundImg ? {} : {background: 'url("/images/defaultTestCard1.png")', backgroundSize:'200px 110px'}}>
+                                                            <div className="cardContent">
+                                                            {item.title}
+                                                            <br/>
+                                                            Хугацаа: {item.duration} мин
+                                                            <br/>
+                                                            <span style={{color: '#ffc107', fontSize: 14}}>{item.price && item.price>0 ? `Үнэ: ${item.price}₮` : 'Үнэгүй'}</span>
+                                                            <div className="certifyTagTest" style={item.hasCertificate? {} : {backgroundColor: '#dc3545', border: 'none', color: '#fff'}}> 
+                                                            {item.hasCertificate ? 'СЕРТИФИКАТТАЙ' : 'СЕРТИФИКАТГҮЙ'} </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </Col>
-                                            ))
-                                        }
-                                        </Row>
-                                    </Loader>
+                                                    </Col>
+                                                ))
+                                            }
+                                            </Row>
+                                        </Loader>
                                     </div>
                                     {
                                         items.length > 1 ? (
