@@ -20,7 +20,8 @@ class ResultSingle extends Component {
         super(props);
         
         this.state = {
-            certified: false
+            certified: false,
+            questionsOpen: false,
         }
     }
     componentDidMount() {
@@ -34,10 +35,15 @@ class ResultSingle extends Component {
         
         
     }
+    questions() {
+        if(this.state.questionsOpen) {
+            this.setState({questionsOpen: false})
+        } else this.setState({questionsOpen: true})
+    }
     render() {
          const {testResultSingle:{result, loading, certified}} = this.props;
         // console.log(this.props.testResultSingle.result.test)
-        console.log(certified)
+        console.log(this.state.questionsOpen)
         let fakeLesson = [
             {price: 25000, title: "fakeLesson 1"},
             {price: 20000, title: "fakeLesson 2", isPremuim: true},
@@ -69,6 +75,7 @@ class ResultSingle extends Component {
 
             return grade;
         }
+        
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
@@ -94,10 +101,10 @@ class ResultSingle extends Component {
                                         </Col>
                                         <Col xl={6} lg={6} md={6} sm={12}>
                                             {
-                                                certified ?
+                                                certified && result.hasCertificate ?
                                                     <button className="bigButton">СЕРТИФИКАТ АВАХ </button>
                                                     :
-                                                    <button className="bigButton" disabled>СЕРТИФИКАТ АВАХ </button>
+                                                    <button className="bigButton" disabled>СЕРТИФИКАТГҮЙ </button>
                                             }
                                             
                                         </Col>
@@ -166,7 +173,7 @@ class ResultSingle extends Component {
                                                                 <div>
                                                                     <ion-icon name="reader-outline"></ion-icon>
                                                                 </div>
-                                                                СЕРТИФИКАТ: {certified ? 'Шаардлага хангасан.' : 'Шаардлага хангаагүй.'}
+                                                                СЕРТИФИКАТ: {result?.hasCertificate && certified ? 'Шаардлага хангасан.' : !result.hasCertificate ? 'Сертификатгүй шалгалт.' : 'Шаардлага хангаагүй.'}
                                                             </div>
                                                             
                                                         </li>
@@ -186,14 +193,37 @@ class ResultSingle extends Component {
                                     <hr/>
                                     <Row>
                                         <div className="resultOpen">
+                                            <Col xl={12}>
+                                                {
+                                                    this.state.questionsOpen ? 
+                                                    <div>
+                                                    
+                                                    </div>
+                                                    : null
+                                                }
+                                                
+                                            </Col>
                                             {
                                                 result?.secret || result?.hasCertificate ? 
                                                 <button disabled>
-                                                    ХАРИУ ХАРАХ
+                                                   ХАРИУ ХАРАХ
                                                 </button>
                                                 :
-                                                <button>
-                                                    ХАРИУ ХАРАХ
+                                                <button onClick={()=>this.questions()}>
+                                                    {
+                                                        this.state.questionsOpen ?
+                                                            <ion-icon name="chevron-up-outline"
+                                                                style={{color: '#fff',
+                                                                position: 'absolute',
+                                                                fontSize: '23px',
+                                                                marginTop: '-2px'}}></ion-icon>
+                                                            :
+                                                            <ion-icon name="chevron-down-outline" 
+                                                                style={{color: '#fff',
+                                                                position: 'absolute',
+                                                                fontSize: '23px'}}></ion-icon>
+                                                    }
+                                                    <span style={{marginLeft: 23}}>ХАРИУ ХАРАХ</span> 
                                                 </button>
                                             }
                                             
