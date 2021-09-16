@@ -37,19 +37,22 @@ class TestLaunch extends Component {
         let self = this;
         this.getTestSeconds = config.get('emitter').addListener('testSingleGetSeconds', function(data) {
             if (data.success) {
-                self.setState({
-                    timer: data?.timer
-                }, () => {
-                    let interval = setInterval(() => {
-                        self.setState({
-                            timer: (self.state.timer - 1)
-                        })
-                        if(self.state.timer === 0)  {
-                            clearInterval(interval)
-                            self.endTest();
-                        }
-                     }, 1000)
-                });
+                if(data?.timer!==0) {
+                    self.setState({
+                        timer: data?.timer
+                    }, () => {
+                        let interval = setInterval(() => {
+                            self.setState({
+                                timer: (self.state.timer - 1)
+                            })
+                            if(self.state.timer === 1)  {
+                                clearInterval(interval)
+                                self.endTest();
+                            }
+                         }, 1000)
+                    });
+                }
+                
             }
         });
     }
@@ -107,17 +110,23 @@ class TestLaunch extends Component {
                     <Container>
                             <div className="container">
                                 <Row>
-                                    <Col xl={3} lg={3} md={6} sm={6}>
+                                    <Col xl={3} lg={3} md={12} sm={12}>
                                         <div className="sideBarPage">
                                             <TestSideBar answerSelect={this.selectingAnswer} answer={this.state.selectedAnswer} pageNum={this.state.questionMainNum} question={(openTest.questions || [])[this.state.questionMainNum]} changeNum={this.changingPage}/>
                                         </div>
                                     </Col>
-                                    <Col xl={8} lg={8} md={5}>
+                                    <Col xl={8} lg={8} md={12}>
                                         <div className="mainSection" >
                                             <Row>
                                                 <div className="headerTestLaunch">
                                                     <div className="timer" >
-                                                    Хугацаа: {minutes} : {seconds}
+                                                    Хугацаа: {
+                                                        minutes === 0 && seconds === 0 ?
+                                                        <span style={{color: '#f8513c'}}> Хугацаагүй </span>
+                                                        :
+                                                        <>{minutes} : {seconds}</>
+                                                        
+                                                    } 
                                                     </div>
                                                     <div className="titleHeader">
                                                         {openTest?.title}

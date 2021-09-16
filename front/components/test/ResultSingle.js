@@ -22,6 +22,7 @@ class ResultSingle extends Component {
         this.state = {
             certified: false,
             questionsOpen: false,
+            questionNumber: 0,
         }
     }
     componentDidMount() {
@@ -35,29 +36,32 @@ class ResultSingle extends Component {
         
         
     }
+    
     questions() {
         if(this.state.questionsOpen) {
             this.setState({questionsOpen: false})
         } else this.setState({questionsOpen: true})
     }
+    prevQuestion() {
+        console.log('hehe')
+        let number = this.state.questionNumber;
+        if(number>0) {
+            this.setState({questionNumber: number-1})
+        }
+    }
+    nextQuestion() {
+        let number = this.state.questionNumber;
+        let max=this.props.testResultSingle?.result?.questionsNumber;
+        if(number<max-1) {
+            
+            this.setState({questionNumber: number+1})
+        }
+    }
     render() {
          const {testResultSingle:{result, loading, certified}} = this.props;
         // console.log(this.props.testResultSingle.result.test)
-        console.log(this.state.questionsOpen)
-        let fakeLesson = [
-            {price: 25000, title: "fakeLesson 1"},
-            {price: 20000, title: "fakeLesson 2", isPremuim: true},
-            {price: 20000, title: "fakeLesson 3", isPremuim: false},
-            {price: 20000, title: "fakeLesson 4", isPremuim: false},
-            {price: 20000, title: "fakeLesson 5", isPremuim: true},
-
-        ]
-        let fakeTest = [
-            {price: 25000, title: "fakeTest 1", duration: 40, hasCertificate: true},
-            {price: 20000, title: "fakeTest 2", duration: 30, hasCertificate: false},
-            {price: 0, title: "fakeTest 3", duration: 20, hasCertificate: true},
-            {price: 1, title: "fakeTest 4", duration: 60, hasCertificate: false},
-        ]
+        console.log(this.state.questionNumber)
+        
         function printGrade (score) {
 
             if (score < 0 || score > 100) return 'INVALID SCORE';
@@ -96,7 +100,7 @@ class ResultSingle extends Component {
                                         <Col xl={6} lg={6} md={6} sm={12}>
                                             <h4 style={{ fontWeight: 600,
                                                         marginLeft: 20}}>
-                                                {result.test?.title}
+                                                {result?.title}
                                             </h4>
                                         </Col>
                                         <Col xl={6} lg={6} md={6} sm={12}>
@@ -155,7 +159,7 @@ class ResultSingle extends Component {
                                                                 <div>
                                                                     <ion-icon name="star-half-outline"></ion-icon> 
                                                                 </div>
-                                                                АВСАН ҮНЭЛГЭЭ: {result?.result} {result?.result ? printGrade(result?.result) : ''}
+                                                                АВСАН ҮНЭЛГЭЭ: {Math.round(result?.result)} {result?.result ? printGrade(result?.result) : ''}
                                                             </div>
                                                             
                                                         </li>
@@ -196,36 +200,131 @@ class ResultSingle extends Component {
                                             <Col xl={12}>
                                                 {
                                                     this.state.questionsOpen ? 
-                                                    <div>
-                                                    
-                                                    </div>
+                                                    <>
+                                                        <div className="paginationQues">
+                                                            {
+                                                                result.questions?.map((item, index) => (
+                                                                    <>
+                                                                        <div className="item" style={ item.selectOne_answer?.some((ans)=>  item.answer === ans._id && ans.isCorrect) ?
+                                                                                        {background: '#62C757'}
+                                                                                        :
+                                                                                        {background: '#f8513c'}
+                                                                            } onClick={()=>this.setState({questionNumber: index})}>
+                                                                            {index+1}
+                                                                        </div>
+                                                                    </> 
+                                                                ))
+                                                            }
+                                                        </div>
+                                                        <div className="question">
+                                                            <h4 style={{fontWeight: 600, fontSize: 21}}>{this.state.questionNumber+1}. {result.questions[this.state.questionNumber]?.selectOne_question?.text}</h4>
+                                                            <div className="questions">
+                                                            <ul>
+                                                            {
+                                                                result.questions[this.state.questionNumber]?.selectOne_answer.map((item, index) => (
+
+                                                                    <li> 
+                                                                        <div className="iconOut"> {
+                                                                            item.isCorrect && result.questions[this.state.questionNumber]?.answer === item._id ? 
+                                                                                <ion-icon name="checkmark-circle" style={{color: '#62C757'}} ></ion-icon>
+                                                                            :
+                                                                            !item.isCorrect && result.questions[this.state.questionNumber]?.answer === item._id ? <ion-icon name="close-circle"></ion-icon>
+                                                                            :
+                                                                            item.isCorrect && result.questions[this.state.questionNumber]?.answer !== item._id ? <ion-icon name="checkmark-circle" style={{color: '#aeaeae'}} ></ion-icon>
+                                                                            : null
+                                                                            }
+                                                                        </div>
+                                                                        
+                                                                        <div className="text">
+                                                                            {
+                                                                                item._id === result.questions[this.state.questionNumber]?.answer && item.isCorrect ? 
+                                                                                <span style={{
+                                                                                    color: '#62C757'
+                                                                                }}>
+                                                                                    {item.text}
+                                                                                </span>
+                                                                                :
+                                                                                item._id === result.questions[this.state.questionNumber]?.answer && !item.isCorrect ?
+                                                                                <>
+                                                                                <span style={{
+                                                                                    color: 'rgb(248, 81, 60)'
+                                                                                }}>
+                                                                                    {item.text}
+                                                                                </span>
+                                                                                </>
+                                                                                :
+                                                                                <>
+                                                                                    {item.text}
+                                                                                </>   
+                                                                            }
+                                                                            
+                                                                        </div>
+                                                                        
+                                                                    </li>
+                                                                    
+                                                                ))
+                                                            }
+                                                            </ul>
+                                                            </div>
+                                                            
+                                                            <div className="buttons" >
+                                                            
+                                                                <button className="chevron" onClick={()=> this.prevQuestion()}>ӨМНӨХ</button>
+                                                                <button className="chevron" onClick={()=> this.nextQuestion()}>ДАРААХ</button>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </>
                                                     : null
                                                 }
                                                 
                                             </Col>
-                                            {
-                                                result?.secret || result?.hasCertificate ? 
-                                                <button disabled>
-                                                   ХАРИУ ХАРАХ
-                                                </button>
-                                                :
-                                                <button onClick={()=>this.questions()}>
-                                                    {
-                                                        this.state.questionsOpen ?
-                                                            <ion-icon name="chevron-up-outline"
-                                                                style={{color: '#fff',
-                                                                position: 'absolute',
-                                                                fontSize: '23px',
-                                                                marginTop: '-2px'}}></ion-icon>
-                                                            :
-                                                            <ion-icon name="chevron-down-outline" 
-                                                                style={{color: '#fff',
-                                                                position: 'absolute',
-                                                                fontSize: '23px'}}></ion-icon>
-                                                    }
-                                                    <span style={{marginLeft: 23}}>ХАРИУ ХАРАХ</span> 
-                                                </button>
-                                            }
+                                            <div className="centerButton">
+                                                {
+                                                    result?.secret || result?.hasCertificate ? 
+                                                    <button className="openButton disabled" style={{backgroundColor: '#fff',
+                                                    color: '#aeaeae' }}>
+                                                        ХАРИУ ХАРАХ
+                                                        <br/>
+                                                        <ion-icon name="chevron-down-outline" 
+                                                            style={{
+                                                            position: 'absolute',
+                                                            fontSize: '23px',
+                                                            marginLeft: '-12px',
+                                                            marginTop: '-7px',
+                                                            color: '#aeaeae'}}></ion-icon>
+                                                    </button>
+                                                    :
+                                                    <button className="openButton" onClick={()=>this.questions()}>
+                                                        {
+                                                            this.state.questionsOpen ?
+                                                                <>
+                                                                    <ion-icon name="chevron-up-outline"
+                                                                        style={{
+                                                                        position: 'absolute',
+                                                                        fontSize: '23px',
+                                                                        marginTop: '2px',
+                                                                        marginLeft: '-12px',}}></ion-icon>
+                                                                    <br/>
+                                                                    ХАРИУ ХААХ 
+                                                                </>
+                                                                :
+                                                                <>
+                                                                    ХАРИУ ХАРАХ
+                                                                    <br/>
+                                                                    <ion-icon name="chevron-down-outline" 
+                                                                        style={{
+                                                                        position: 'absolute',
+                                                                        fontSize: '23px',
+                                                                        marginLeft: '-12px',
+                                                                        marginTop: '-7px'}}></ion-icon>
+                                                                    
+                                                                </>
+                                                        }
+                                                        
+                                                    </button>
+                                                }
+                                            </div>
                                             
                                         </div>
                                     </Row>
@@ -290,7 +389,7 @@ class ResultSingle extends Component {
                                         </h5>
                                         <Row>
                                             {
-                                                (fakeTest || []).map((item, index) => (
+                                                (result?.tests || []).map((item, index) => (
                                                     <Col xl={3} lg={4} md={6} sm={6} style={{marginBottom: 30}}>
                                                         <div key={index} className="testCard"
                                                             style={{background: 'url("/images/defaultTestCard1.png")', backgroundSize:'200px 110px'}}>

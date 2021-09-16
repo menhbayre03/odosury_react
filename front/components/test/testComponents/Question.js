@@ -20,7 +20,7 @@ class Question extends Component {
                     backgroundSize:'120% 475px'
                 }}>
                     <div className="question">
-                        <h4 style={{fontWeight: 600, fontSize: 21}}>{this.props.pageNum+1}. {question?.selectOne_question?.text}</h4>
+                        <h4 >{this.props.pageNum+1}. {question?.selectOne_question?.text}</h4>
                         <ul style={{marginTop: 15, marginLeft: 20}}>
                         {
                             question?.selectOne_answer.map((item, index) => (
@@ -31,7 +31,6 @@ class Question extends Component {
                                             {   
                                                 (question.answer === (question.selectOne_answer || {})[index]._id)  ?
                                                 <ion-icon name="checkmark-circle" style={{
-                                                    fontSize: 32,
                                                     position: 'absolute',
                                                     color: '#62C757',
                                                     marginLeft: '-3px',
@@ -42,9 +41,7 @@ class Question extends Component {
                                             }
                                             
                                         </div>
-                                        <div style={{
-                                            paddingLeft: '45px'
-                                        }}>{item?.text}</div>
+                                        <div className="padding">{item?.text}</div>
                                     </div>
                                     </li>
                             ))
@@ -54,19 +51,10 @@ class Question extends Component {
                     <div className="buttons">
                         <button className="prevButton"
                             onClick={() => this.props.pageNum !== 0 ? this.props.changeNum(this.props.pageNum-1, question._id, question.answer) : null}>
-                            <ion-icon style={{
-                            fontSize: 23,
-                            position: 'absolute',
-                            left: 140,
-                            top: 16 }} name="chevron-back-outline"></ion-icon> ӨМНӨХ АСУУЛТ</button>
+                            <ion-icon name="chevron-back-outline"></ion-icon> ӨМНӨХ АСУУЛТ</button>
                         <button className="nextButton"
                             onClick={() => this.props.pageNum !== questionLength ? this.props.changeNum(this.props.pageNum+1, question._id, question.answer) : null}> ДАРААГИЙН АСУУЛТ 
-                            <ion-icon style={{
-                                fontSize: 23,
-                                position: 'absolute',
-                                right: 140,
-                                top: 16
-                            }} name="chevron-forward-outline"></ion-icon></button>
+                            <ion-icon name="chevron-forward-outline"></ion-icon></button>
                     </div>
                 </div>
                 

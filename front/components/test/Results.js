@@ -123,7 +123,7 @@ class Results extends Component {
                 <div className="list-container" style={{minHeight: 'calc(100vh - 185px)'}}>
                     <Container>
                         <Row>
-                            <Col xl={9} lg={8} md={7} sm={12}>
+                            <Col xl={9} lg={10} md={12} sm={12}>
                                 <div className="list-content">
                                     <div className="list-header">
                                         <div>
@@ -133,12 +133,20 @@ class Results extends Component {
                                 </div>
                             <Loader>
                             <Row>
-                                <Col lg={10} md={10} sm={10} style={{marginBottom: 30}}>
+                                <Col lg={10} md={10} sm={12} style={{marginBottom: 30}}>
                                     
                                     <div className="resultList">
                                         {results?.map( (r) =>
                                             
-                                                <div className="resultItem">
+                                                <div className="resultItem" style={
+                                                    r.result>=80 && r.result<=100 ?
+                                                    {background: 'linear-gradient(to top right,transparent 50%,#28a745 0) top right/110px 110px no-repeat, #fff'}
+                                                    :
+                                                    r.result>=60 && r.result<80 ?
+                                                    {background: 'linear-gradient(to top right,transparent 50%,#007bff 0) top right/110px 110px no-repeat, #fff'}
+                                                    :
+                                                    null
+                                                }>
                                                     <Link to={`/test/result/${r._id}`}>
                                                     <h6 style={{fontWeight: 600, fontSize: 18}}>
                                                         {r.test && r.test.title? r.test.title : 'Тест'}
@@ -150,13 +158,7 @@ class Results extends Component {
                                                             <span style={{color: '#28a745'}}>  ОЛГОСОН</span>
                                                         </div>
                                                     </div>
-                                                    <div style={{position: 'absolute',
-                                                                color: '#fff',
-                                                                marginTop: '-60px',
-                                                                marginLeft: '520px',
-                                                                fontWeight: 700,
-                                                                }}
-                                                        className="textRotate"
+                                                    <div className="textRotate"
                                                     >
                                                         {/*{typeof r.result === 'number'?*/}
                                                         {/*    <React.Fragment>*/}
@@ -165,7 +167,7 @@ class Results extends Component {
                                                         {/*    :*/}
                                                         {/*    null*/}
                                                         {/*}*/}
-                                                        {r.result || 0}% {resultToLetter(r.result || 0)}
+                                                        {Math.round(r.result || 0)}% {resultToLetter(r.result || 0)}
                                                     </div>
                                                     </Link>
                                                 </div>
