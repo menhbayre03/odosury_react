@@ -560,6 +560,9 @@ a:hover {
             overflow-y: auto;
             padding: 30px;
             margin-bottom: 50px;
+            h4 {
+                font-size: 21;
+            }
             .questions {
                 ul {
                     display: block;
@@ -600,7 +603,7 @@ a:hover {
                 padding: 10px 0px;
                 position: absolute;
                 height: 100px;
-                bottom: -30px;
+                bottom: -50px;
                 background-color: #fff;
             }
         }
@@ -619,6 +622,96 @@ button[disabled] {
     cursor: not-allowed;
 }
 @media(max-width: 1200px) {
+    .resultSingle {
+        padding: 40px 35px;
+        ion-icon {
+            font-size: 24px;
+            margin-top: -1px;
+            margin-right: 5px;
+        }
+        .list {
+            padding: 25px;
+            font-size: 16px;
+            
+        }
+        .bigButton {
+            width: 230px;
+            height: 40px;
+            border-radius: 50px;
+            margin-left: 150px;
+        }
+        .resultOpen {
+            padding: 10px 50px;
+            width: 100%;
+            .paginationQues {
+                width: 100%;
+                font-size: 15px;
+                padding: 10px 80px;
+                margin-top: -5px;
+                .item {
+                    margin: 0px 5px;
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 30px;
+                }
+                .item:hover {
+                    cursor: pointer;
+                }
+            }
+            .openButton {
+                margin-top: -25px;
+                font-size: 14px;
+                
+            }
+            
+            .chevron {
+                width: 160px;
+                height: 35px;
+                border-radius: 35px;
+                font-size: 14px;
+            }
+            
+            .question {
+                height: 400px;
+                padding: 30px;
+                margin-bottom: 75px;
+                h4 {
+                    font-size: 19px;
+                }
+                .questions {
+                    padding: 20px 30px;
+                    li {
+                        font-size: 20px;
+                        margin: 10px 0px;
+                    }
+                    
+                    ion-icon {
+                        font-size: 24px;
+                        margin-left: -1px;
+                        margin-top: -1px;
+                    }
+                    .iconOut {
+                        min-width: 22px;
+                        height: 22px;
+                        border-radius: 15px;
+                    }
+                    .text {
+                        margin-left: 7px;
+                        font-size: 16px;
+                    }
+                }
+                .buttons {
+                    width: 90%;
+                    padding: 10px 0px;
+                    height: 100px;
+                    bottom: -60px;
+                }
+            }
+        }
+        .recomm {
+            padding: 15px 30px;
+        }
+    }
     .resultList {
         .resultItem {
             width: 90%;
@@ -677,6 +770,99 @@ button[disabled] {
 
 }
 @media(max-width: 992px) {
+    .resultSingle {
+        padding: 40px 35px;
+        ion-icon {
+            font-size: 22px;
+            margin-top: -1px;
+            margin-right: 5px;
+        }
+        .list {
+            padding: 20px;
+            font-size: 15px;
+        }
+        .bigButton {
+            width: 200px;
+            font-size: 14px;
+            height: 35px;
+            border-radius: 50px;
+            margin-left: 100px;
+        }
+        .resultOpen {
+            padding: 10px 0px;
+            width: 100%;
+            .paginationQues {
+                width: 100%;
+                font-size: 15px;
+                padding: 10px 20px;
+                margin-top: -5px;
+                .item {
+                    margin: 0px 5px;
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 30px;
+                }
+                .item:hover {
+                    cursor: pointer;
+                }
+            }
+            .openButton {
+                margin-top: -25px;
+                font-size: 14px;
+                
+            }
+            
+            .chevron {
+                width: 150px;
+                height: 30px;
+                border-radius: 35px;
+                font-size: 12px;
+            }
+            
+            .question {
+                height: 400px;
+                padding: 20px;
+                margin-bottom: 80px;
+                h4 {
+                    font-size: 18px;
+                }
+                .questions {
+                    padding: 20px 15px;
+                    li {
+                        font-size: 20px;
+                        margin: 10px 0px;
+                    }
+                    
+                    ion-icon {
+                        font-size: 22px;
+                        margin-left: -1px;
+                        margin-top: -1px;
+                    }
+                    .iconOut {
+                        min-width: 20px;
+                        height: 20px;
+                        border-radius: 15px;
+                    }
+                    .text {
+                        margin-left: 7px;
+                        font-size: 15px
+                    }
+                }
+                .buttons {
+                    width: 90%;
+                    padding: 10px 0px;
+                    height: 90px;
+                    bottom: -75px;
+                }
+            }
+        }
+        .recomm {
+            padding: 15px 30px;
+        }
+    }
+    .lessonCard .lessonContent {
+        font-size: 13px;
+    }
     .resultList {
         .resultItem {
             width: 90%;
@@ -774,6 +960,99 @@ button[disabled] {
     
 }
 @media(max-width: 768px) {
+    .resultSingle {
+        padding: 40px 35px;
+        ion-icon {
+            font-size: 22px;
+            margin-top: -1px;
+            margin-right: 5px;
+        }
+        .list {
+            padding: 20px;
+            font-size: 15px;
+            ul {
+                margin-bottom: 0px;
+            }
+        }
+        .bigButton {
+            width: 200px;
+            font-size: 14px;
+            margin-left: 200px;
+        }
+        .resultOpen {
+            padding: 10px 0px;
+            width: 100%;
+            .paginationQues {
+                width: 100%;
+                font-size: 15px;
+                padding: 10px 20px;
+                margin-top: -5px;
+                .item {
+                    margin: 0px 5px;
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 30px;
+                }
+                .item:hover {
+                    cursor: pointer;
+                }
+            }
+            .openButton {
+                margin-top: -25px;
+                font-size: 14px;
+                
+            }
+            
+            .chevron {
+                width: 130px;
+                height: 30px;
+                border-radius: 35px;
+                font-size: 12px;
+            }
+            
+            .question {
+                height: 400px;
+                padding: 20px;
+                margin-bottom: 80px;
+                h4 {
+                    font-size: 16px;
+                }
+                .questions {
+                    padding: 20px 15px;
+                    li {
+                        margin: 10px 0px;
+                    }
+                    
+                    ion-icon {
+                        font-size: 20px;
+                        margin-left: -1px;
+                        margin-top: -1px;
+                    }
+                    .iconOut {
+                        min-width: 18px;
+                        height: 18px;
+                        border-radius: 15px;
+                    }
+                    .text {
+                        margin-left: 7px;
+                        font-size: 13px
+                    }
+                }
+                .buttons {
+                    width: 90%;
+                    padding: 10px 0px;
+                    height: 90px;
+                    bottom: -75px;
+                }
+            }
+        }
+        .recomm {
+            padding: 15px 30px;
+        }
+    }
+    .lessonCard .lessonContent {
+        font-size: 13px;
+    }
     .resultList {
         .resultItem {
             width: 90%;
@@ -859,6 +1138,101 @@ button[disabled] {
     
 }
 @media(max-width: 576px) {
+    .resultSingle {
+        padding: 30px 25px;
+        h4 {
+            font-size: 18px;
+        }
+        ion-icon {
+            font-size: 20px;
+            margin-top: 0px;
+            margin-right: 5px;
+        }
+        .list {
+            padding: 20px;
+            font-size: 14px;
+            ul {
+                margin-bottom: 0px;
+            }
+        }
+        .bigButton {
+            width: 180px;
+            font-size: 14px;
+            margin-left: 180px;
+        }
+        .resultOpen {
+            padding: 10px 0px;
+            width: 100%;
+            .paginationQues {
+                width: 100%;
+                font-size: 15px;
+                padding: 10px 20px;
+                margin-top: -5px;
+                .item {
+                    margin: 0px 5px;
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 30px;
+                }
+                .item:hover {
+                    cursor: pointer;
+                }
+            }
+            .openButton {
+                font-size: 13px;
+                
+            }
+            
+            .chevron {
+                width: 130px;
+                height: 30px;
+                border-radius: 35px;
+                font-size: 12px;
+            }
+            
+            .question {
+                height: 400px;
+                padding: 10px;
+                margin-bottom: 80px;
+                h4 {
+                    font-size: 14px;
+                }
+                .questions {
+                    padding: 20px 15px;
+                    li {
+                        margin: 10px 0px;
+                    }
+                    
+                    ion-icon {
+                        font-size: 18px;
+                        margin-left: -1px;
+                        margin-top: -1px;
+                    }
+                    .iconOut {
+                        min-width: 16px;
+                        height: 16px;
+                        border-radius: 15px;
+                    }
+                    .text {
+                        margin-left: 7px;
+                        font-size: 12px
+                    }
+                }
+                .buttons {
+                    width: 90%;
+                    padding: 10px 0px;
+                    height: 90px;
+                    bottom: -75px;
+                }
+            }
+        }
+        .recomm {
+            padding: 10px 60px;
+        }
+    }
+    .lessonCard .lessonContent {
+        font-size: 13px;
+    }
     .resultList {
         .resultItem {
             height: 100px;
@@ -943,6 +1317,95 @@ button[disabled] {
     }
 }
 @media(max-width: 450px) {
+    .resultSingle {
+        padding: 30px 25px;
+        h4 {
+            font-size: 18px;
+        }
+        ion-icon {
+            font-size: 20px;
+            margin-top: 0px;
+            margin-right: 5px;
+        }
+        .list {
+            padding: 15px;
+            
+        }
+        .bigButton {
+            width: 180px;
+            font-size: 14px;
+            margin-left: 120px;
+        }
+        .resultOpen {
+            padding: 10px 0px;
+            width: 100%;
+            .paginationQues {
+                font-size: 12px;
+                padding: 10px 0px;
+                margin-top: -5px;
+                .item {
+                    margin: 0px 3px;
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 20px;
+                }
+            }
+            
+            
+            .chevron {
+                width: 120px;
+                height: 28px;
+                border-radius: 30px;
+                font-size: 11px;
+            }
+            
+            .question {
+                height: 400px;
+                padding: 10px;
+                margin-bottom: 80px;
+                h4 {
+                    font-size: 14px;
+                }
+                .questions {
+                    padding: 20px 10px;
+                    li {
+                        margin: 10px 0px;
+                    }
+                    
+                    ion-icon {
+                        font-size: 18px;
+                        margin-left: -1px;
+                        margin-top: -1px;
+                    }
+                    .iconOut {
+                        min-width: 16px;
+                        height: 16px;
+                        border-radius: 15px;
+                    }
+                    .text {
+                        margin-left: 7px;
+                        font-size: 11px
+                    }
+                }
+                .buttons {
+                    width: 90%;
+                    padding: 10px 0px;
+                    height: 90px;
+                    bottom: -75px;
+                }
+            }
+        }
+        .recomm {
+            padding: 10px 40px;
+            h5 {
+                font-size: 18px;
+                font-weight: 600;
+            }
+        }
+    }
+    .lessonCard .lessonContent {
+        font-size: 13px;
+    }
     .resultList {
         .resultItem {
             .body {

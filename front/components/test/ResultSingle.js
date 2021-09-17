@@ -217,7 +217,7 @@ class ResultSingle extends Component {
                                                             }
                                                         </div>
                                                         <div className="question">
-                                                            <h4 style={{fontWeight: 600, fontSize: 21}}>{this.state.questionNumber+1}. {result.questions[this.state.questionNumber]?.selectOne_question?.text}</h4>
+                                                            <h4 style={{fontWeight: 600}}>{this.state.questionNumber+1}. {result.questions[this.state.questionNumber]?.selectOne_question?.text}</h4>
                                                             <div className="questions">
                                                             <ul>
                                                             {

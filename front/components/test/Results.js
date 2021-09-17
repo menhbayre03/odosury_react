@@ -51,7 +51,6 @@ class Results extends Component {
     }
     render() {
         const {results:{results, loading, all}, main:{user}} = this.props;
-
         let items = [];
         if(Math.ceil((all || 0)/this.state.pageSize)<=10){
             for (let i = 1; i <= Math.ceil((all || 0)/this.state.pageSize); i++) {
@@ -154,8 +153,20 @@ class Results extends Component {
                                                     <div className="body">
                                                         <b>ШАЛГАЛТ ӨГСӨН ОГНОО:</b> {moment(r.created).format('DD/MM/YYYY H:mm')}
                                                         <div>
-                                                            <b>СЕРТИФИКАТ: </b> 
-                                                            <span style={{color: '#28a745'}}>  ОЛГОСОН</span>
+                                                            <b>СЕРТИФИКАТ: </b>
+                                                            {
+                                                                r.hasCertificate && r.result>=r.percent ? 
+                                                                <span style={{color: '#28a745'}}>ШААРДЛАГА ХАНГАСАН.</span>
+                                                                :
+                                                                r.hasCertificate && !r.result>=r.percent ?
+                                                                <span style={{color: 'rgb(248, 81, 60)'}}>ШААРДЛАГА ХАНГААГҮЙ.</span>
+                                                                :
+                                                                <span style={{color: 'rgb(248, 81, 60)'}}> БАЙХГҮЙ</span>
+                                                                
+                                                                
+
+                                                            }
+                                                            
                                                         </div>
                                                     </div>
                                                     <div className="textRotate"
