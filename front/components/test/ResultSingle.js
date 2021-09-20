@@ -205,7 +205,7 @@ class ResultSingle extends Component {
                                                             {
                                                                 result.questions?.map((item, index) => (
                                                                     <>
-                                                                        <div className="item" style={ item.selectOne_answer?.some((ans)=>  item.answer === ans._id && ans.isCorrect) ?
+                                                                        <div className={this.state.questionNumber === index ? 'item shadowItem' : 'item'} style={ item.selectOne_answer?.some((ans)=>  item.answer === ans._id && ans.isCorrect) ?
                                                                                         {background: '#62C757'}
                                                                                         :
                                                                                         {background: '#f8513c'}
