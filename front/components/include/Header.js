@@ -96,7 +96,10 @@ class Header extends Component {
                                             }} name="call"/><span style={{
                                                 fontSize: 14,
                                                 fontWeight: 600,
-                                            }}>+976 8844-5020</span></p>
+                                            }}>8844-5020</span> | <span style={{
+                                                fontSize: 14,
+                                                fontWeight: 600,
+                                            }}>8526-6060</span></p>
                                             {/*<form onSubmit={(e) => this.search(e)}>*/}
                                             {/*    <input onChange={(e) => this.setState({search: e.target.value})} style={{width: '100%'}} placeholder="Хичээл хайх ..."/>*/}
                                             {/*    <ion-icon onClick={(e) => this.search(e)} name="search-outline" style={{cursor: 'pointer'}}/>*/}

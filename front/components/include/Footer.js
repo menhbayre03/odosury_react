@@ -168,6 +168,9 @@ class Footer extends Component {
                                         <span style={{textDecoration: 'none', cursor: 'unset'}}>+976 8844-5020</span>
                                     </li>
                                     <li>
+                                        <span style={{textDecoration: 'none', cursor: 'unset'}}>+976 8526-6060</span>
+                                    </li>
+                                    <li>
                                         <a href="mailto:info@odosury.com" style={{textDecoration: 'none'}}>info@odosury.com</a>
                                     </li>
                                 </ul>
