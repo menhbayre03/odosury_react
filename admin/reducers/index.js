@@ -1,4 +1,4 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from "redux";
 import main from "./main";
 import lesson from "./lesson";
 import lessonLevel from "./lessonLevel";
@@ -11,27 +11,29 @@ import purchase from "./purchase";
 import audio from "./audio";
 import audioLevel from "./audioLevel";
 import audioCategory from "./audioCategory";
-import teacherRequest from './teacherRequest';
-import feedBack from './feedBack';
-import jobPost from './jobPost';
-import promo from './promo';
-import test from './test';
+import teacherRequest from "./teacherRequest";
+import feedBack from "./feedBack";
+import jobPost from "./jobPost";
+import promo from "./promo";
+import test from "./test";
+import partner from "./partner";
 export default combineReducers({
-    main: main,
-    lesson: lesson,
-    lessonLevel: lessonLevel,
-    teacher: teacher,
-    user: user,
-    category: category,
-    bundle: bundle,
-    media: media,
-    purchase: purchase,
-    audio: audio,
-    audioLevel: audioLevel,
-    audioCategory: audioCategory,
-    teacherRequest: teacherRequest,
-    feedBack: feedBack,
-    jobPost: jobPost,
-    promo: promo,
-    test: test,
+	main: main,
+	lesson: lesson,
+	lessonLevel: lessonLevel,
+	teacher: teacher,
+	user: user,
+	category: category,
+	bundle: bundle,
+	media: media,
+	purchase: purchase,
+	audio: audio,
+	audioLevel: audioLevel,
+	audioCategory: audioCategory,
+	teacherRequest: teacherRequest,
+	feedBack: feedBack,
+	jobPost: jobPost,
+	promo: promo,
+	test: test,
+	partner: partner
 });

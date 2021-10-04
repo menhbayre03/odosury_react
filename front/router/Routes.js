@@ -25,6 +25,8 @@ import Partner from "../components/Partner";
 import Policy from "../components/Policy";
 import Results from "../components/test/Results";
 import ResultSingle from "../components/test/ResultSingle";
+import Bundle from "../components/bundles/Bundle";
+import BundleSingle from "../components/bundles/BundleSingle";
 
 export default [
     {
@@ -169,6 +171,16 @@ export default [
             {
                 component: DoubleLogin,
                 path: '/warning',
+                exact: true
+            },
+            {
+                component: Bundle,
+                path: '/bundles',
+                exact: true
+            },
+            {
+                component: BundleSingle,
+                path: '/bundle/:slug',
                 exact: true
             },
             {

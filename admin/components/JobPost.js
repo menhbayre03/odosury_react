@@ -4,7 +4,6 @@ import {
 	Input,
 	Button,
 	Card,
-	Table,
 	Drawer,
 	Select,
 	Popconfirm,
@@ -17,7 +16,6 @@ import {
 } from "@ant-design/icons";
 import { connect } from "react-redux";
 import moment from "moment";
-import config from "../config";
 import {
 	submitJobPost,
 	getJobPost,
@@ -40,22 +38,9 @@ class JobPost extends Component {
 	}
 
 	componentDidMount() {
-		// let self = this;
 		this.props.dispatch(getJobPost());
-		// this.fuckaa = config
-		// 	.get("emitter")
-		// 	.addListener("submitJobDone", function () {
-		// 		console.log("aw");
-		// 		self.setState({
-		// 			opening: "",
-		// 			requirements: "",
-		// 			salary: "",
-		// 			misc: ""
-		// 		});
-		// 	});
 	}
 	componentWillUnmount() {
-		// this.fuckaa && this.fuckaa.remove();
 		this.closeDrawer();
 	}
 	submitJobPost(vals) {
@@ -74,7 +59,7 @@ class JobPost extends Component {
 		const {
 			jobPost: { jobposts, loadingJobPosts, drawerOpen }
 		} = this.props;
-		console.log(jobposts)
+		console.log(jobposts);
 		const children = [];
 		return (
 			<Card
@@ -103,7 +88,11 @@ class JobPost extends Component {
 						{jobposts.map((job) => {
 							return (
 								<Collapse accordion>
-									<Collapse.Panel header={job.opening} key={job._id} style={{padding: "20px"}}>
+									<Collapse.Panel
+										header={job.opening}
+										key={job._id}
+										style={{ padding: "20px" }}
+									>
 										<h4 className="JPdesc">Шаардлага:</h4>
 										<ul>
 											{job.requirements.map((rqr) => {
@@ -115,8 +104,12 @@ class JobPost extends Component {
 											})}
 										</ul>
 										<h4 className="JPdesc">Цалин:</h4>
-										<p className="JPcontent">{job.salary}</p>
-										<h4 className="JPdesc">Ажлын тайлбар:</h4>
+										<p className="JPcontent">
+											{job.salary}
+										</p>
+										<h4 className="JPdesc">
+											Ажлын тайлбар:
+										</h4>
 										<ul>
 											{job.misc.map((msc) => {
 												return (
