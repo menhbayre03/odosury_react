@@ -1,5 +1,10 @@
 import { bindActionCreators } from "redux";
-import { submitFeedback, submitTeacherRequest, validatePromoCode, clearPromoCode } from "../actionTypes";
+import {
+	submitFeedback,
+	submitTeacherRequest,
+	validatePromoCode,
+	clearPromoCode
+} from "../actionTypes";
 
 const initialState = {
 	feedback: [],
@@ -10,8 +15,11 @@ const initialState = {
 	successTeacherRequest: false,
 	validatingPromoCode: false,
 	promoIsValid: false,
-	appliedCode: '',
+	promoError: false,
+	appliedCode: "",
 	appliedDiscount: 0,
+	hash: "",
+	code: ""
 };
 export default (state = initialState, action) => {
 	switch (action.type) {
@@ -55,31 +63,37 @@ export default (state = initialState, action) => {
 			return {
 				...state,
 				validatingPromoCode: true,
-			}
+				promoError: false
+			};
 		case validatePromoCode.RESPONSE:
 			if (action.json.success) {
+				console.log("action json ", action.json);
 				return {
 					...state,
 					promoIsValid: true,
 					appliedCode: action.json.appliedCode,
 					appliedDiscount: action.json.appliedDiscount,
 					promocode: action.json.promocode,
+					hash: action.json.hash,
+					code: action.json.code,
 					validatingPromoCode: false,
-				}
+					promoError: false
+				};
 			} else {
 				return {
 					...state,
-					validatingPromoCode: false
-				}
+					validatingPromoCode: false,
+					promoError: true
+				};
 			}
 		case clearPromoCode.REQUEST:
 			return {
 				...state,
 				validatingPromoCode: false,
 				promoIsValid: false,
-				appliedCode: '',
-				appliedDiscount: 0,
-			}
+				appliedCode: "",
+				appliedDiscount: 0
+			};
 		default:
 			return state;
 	}

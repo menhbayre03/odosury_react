@@ -14,13 +14,9 @@ import {
 	Spinner
 } from "react-bootstrap";
 import * as actions from "../../actions/payment_actions";
-import {
-	validatePromoCode,
-	clearPromoCode,
-} from "../../actions/promo_actions";
-import { Link } from "react-router-dom";
-import { validate } from "../../../../odosury_api/models/Teacher";
+import { validatePromoCode, clearPromoCode } from "../../actions/promo_actions";
 import TestPayment from "./testPayment";
+import PromoInput from "./PromoInput";
 const reducer = ({ main, payment, requests }) => ({ main, payment, requests });
 
 class Payment extends Component {
@@ -164,7 +160,7 @@ class Payment extends Component {
 		const {
 			dispatch,
 			payment: { type, lesson = {}, test = {}, method, duration },
-			requests: { promocode }
+			requests: { promocode, hash, code }
 		} = this.props;
 		if (method === "qpay" || method === "bank") {
 			dispatch(
@@ -174,7 +170,13 @@ class Payment extends Component {
 					duration: duration,
 					lesson_id: lesson._id,
 					test_id: test._id,
-					promo_id: promocode ? promocode._id : null
+					promo_id: promocode ? promocode._id : null,
+					partnerCode: promocode
+						? {
+								code: code,
+								hash: hash
+						  }
+						: null
 				})
 			);
 		} else {
@@ -250,7 +252,7 @@ class Payment extends Component {
 				step,
 				method,
 				paymentLaoding,
-				transaction,
+				transaction
 			},
 			requests: {
 				promoIsValid,
@@ -903,64 +905,7 @@ class Payment extends Component {
 							</div>
 						</div>
 						<div className="footer-payment">
-							{step === 1 ? (
-								<div className="promo-container">
-									<div>
-										{promoIsValid ? (
-											<div className="coupon-valid">
-												Промо Код <b>{appliedCode}</b>{" "}
-												амжилттай идэвxжлээ
-											</div>
-										) : (
-											<p>
-												Та Промо Код оруулж хөнгөлөлт
-												эдлэх боломжтой
-											</p>
-										)}
-									</div>
-									<Form
-										className="promo-form"
-										onSubmit={this.validatePromoCode.bind(
-											this
-										)}
-									>
-										<Row>
-											<Col>
-												<Form.Control
-													size="sm"
-													type="text"
-													placeholder="Таны хөнгөлөлт энд"
-													onChange={(e) =>
-														this.setState({
-															code: e.target.value
-														})
-													}
-													value={this.state.code}
-												/>
-											</Col>
-											<Col>
-												<Button
-													size="sm"
-													type="submit"
-													className="promo-submit-button"
-												>
-													<span>
-														Промо Код ашиглах
-													</span>
-													{validatingPromoCode ? (
-														<Spinner
-															animation="grow"
-															role="status"
-															size="xs"
-															className="promo-submit-spinner"
-														></Spinner>
-													) : null}
-												</Button>
-											</Col>
-										</Row>
-									</Form>
-								</div>
-							) : null}
+							{step === 1 ? <PromoInput self={this} /> : null}
 							{step === 1 ? (
 								<Button
 									className="payment-button"

@@ -104,6 +104,11 @@ class index extends React.Component {
                                     <span>Промо Код</span>
                                 </Link>
                             </Menu.Item>
+                            <Menu.Item key="partners" icon={<CreditCardOutlined />}>
+                                <Link to="/admin/Partner">
+                                    <span>Хамтрагч байгууллага</span>
+                                </Link>
+                            </Menu.Item>
                             {/*<Menu.Item key="teachers" icon={<UserOutlined />}>*/}
                             {/*    <Link to="/admin/teachers">*/}
                             {/*        <span>Багш</span>*/}
@@ -158,11 +163,11 @@ class index extends React.Component {
                                     <span>Шалгалт</span>
                                 </Link>
                             </Menu.Item>
-                            {/*<Menu.Item key="bundles" icon={<LayoutFilled />}>*/}
-                            {/*    <Link to="/admin/bundles">*/}
-                            {/*        <span>Багц</span>*/}
-                            {/*    </Link>*/}
-                            {/*</Menu.Item>*/}
+                            <Menu.Item key="bundles" icon={<LayoutFilled />}>
+                                <Link to="/admin/bundles">
+                                    <span>Багц</span>
+                                </Link>
+                            </Menu.Item>
                             <Button style={{
                                 marginLeft: 'auto',
                                 marginRight: 'auto',

@@ -10,6 +10,7 @@ import payment from "./payment";
 import jobPost from "./jobPost";
 import requests from "./requests";
 import test from "./test";
+import bundle from "./bundle";
 import testLaunch from "./testLaunch";
 import Results from '../components/test/Results';
 import testResultSingle from './testResultSingle';
@@ -25,6 +26,7 @@ export default combineReducers({
     payment: payment,
     jobPost: jobPost,
     requests: requests,
+    bundle: bundle,
     test,
     testLaunch,
     testResultSingle,

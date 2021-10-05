@@ -43,7 +43,7 @@ class Feedback extends React.Component {
 			{
 				title: "Хүсэлт",
 				key: Math.random(),
-				width: '50%',
+				width: "50%",
 				render: (record) => record.feedback
 			},
 			{
@@ -65,7 +65,14 @@ class Feedback extends React.Component {
 				key: Math.random(),
 				fixed: "right",
 				width: "100px",
-				render: (record) => (record.status === 'active' ? <Tag color="#2db7f5">Харсан</Tag> : record.status === 'pending' ? <Tag color="#87d068">Хараагүй</Tag> : <Tag color="#fbfbfb">Бусад</Tag>)
+				render: (record) =>
+					record.status === "active" ? (
+						<Tag color="#2db7f5">Харсан</Tag>
+					) : record.status === "pending" ? (
+						<Tag color="#87d068">Хараагүй</Tag>
+					) : (
+						<Tag color="#fbfbfb">Бусад</Tag>
+					)
 			},
 			{
 				title: "action",
@@ -81,7 +88,7 @@ class Feedback extends React.Component {
 								)}
 								type="primary"
 								size="small"
-                                style={{margin: "5px"}}
+								style={{ margin: "5px" }}
 							>
 								Харсан
 							</Button>
