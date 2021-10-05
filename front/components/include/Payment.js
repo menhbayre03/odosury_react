@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import config from "../../config";
 import Loader from "../include/Loader";
@@ -171,10 +171,12 @@ class Payment extends Component {
 					lesson_id: lesson._id,
 					test_id: test._id,
 					promo_id: promocode ? promocode._id : null,
-					partnerCode: {
-						code: code,
-						hash: hash
-					}
+					partnerCode: promocode
+						? {
+								code: code,
+								hash: hash
+						  }
+						: null
 				})
 			);
 		} else {
