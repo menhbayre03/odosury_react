@@ -124,7 +124,7 @@ class Header extends Component {
                                     <ul>
                                         <li>
                                             <Link to={`/lessons/all`}>
-                                                Курс Сургалтууд
+                                                Курс Сургалт
                                             </Link>
                                         </li>
                                         <li>

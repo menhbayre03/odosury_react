@@ -140,7 +140,7 @@ class List extends Component {
                             <Col xl={9} lg={8} md={7} sm={12}>
                                 <div className="list-content">
                                     <div className="list-header">
-                                        <h3>Курс Сургалтууд</h3>
+                                        <h3>Курс Сургалт</h3>
                                         <Select
                                             placeholder="Эрэмбэ"
                                             valueField="value"
