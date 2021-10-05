@@ -28,6 +28,7 @@ class TestLaunch extends Component {
        
         this.changingPage = this.changingPage.bind(this);
         this.selectingAnswer = this.selectingAnswer.bind(this);
+        this.endTest = this.endTest.bind(this);
     }
     componentDidMount() {
         const {match, dispatch, testLaunch:{openTest, loading}} = this.props;
@@ -55,6 +56,7 @@ class TestLaunch extends Component {
                 
             }
         });
+        
     }
     componentWillUnmount() {
         const {testLaunch:{openTest}, dispatch} = this.props;
@@ -88,7 +90,13 @@ class TestLaunch extends Component {
 
     endTest(){
         const {testLaunch:{openTest, loading}} = this.props;
-        this.props.dispatch(actions.endTest({openTest:openTest}))
+        this.props.dispatch(actions.endTest({openTest:openTest})).then((e) => {
+            if (e.json.success) {
+                this.props.history.replace(`/test/result/${e.json.payload}`)
+            } else {
+                
+            }
+        })
     }
     render() {
         const {test: {tests}} = this.props;

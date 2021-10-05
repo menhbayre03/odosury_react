@@ -147,7 +147,7 @@ export function requestPost(requestActions,url,data,requestParams = null,header=
                 if(json.redirect){
                     window.location.assign('/'+json.redirect);
                 }
-                dispatch(requestEnd(json,requestActions));
+                return   dispatch(requestEnd(json,requestActions));
             })
             .catch(error => {
                 dispatch(requestEnd({success:false,error:error,data:data},requestActions));
