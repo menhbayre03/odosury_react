@@ -17,16 +17,35 @@ class PromoInput extends Component {
 		super(props);
 		this.state = {
 			code: "",
-			hash: ""
+			hash: "",
+			step: 1
 		};
+	}
+	componentDidUpdate(prevProps) {
+		const {
+			requests: { promoError }
+		} = this.props;
+		if (
+			this.props.requests.promoError &&
+			this.props.requests.promoError !== prevProps.requests.promoError
+		) {
+			this.setState({ step: 1, code: "", hash: "" });
+		} else {
+		}
 	}
 	validatePromoCode(e) {
 		console.log("validatepromocode method hit");
 		e.preventDefault();
-		let data = {
-			code: this.state.code
-		};
-		this.props.dispatch(validatePromoCode(data));
+
+		if (this.state.step === 1) {
+			this.setState({ step: 2 });
+		} else {
+			let data = {
+				code: this.state.code,
+				hash: this.state.hash
+			};
+			this.props.dispatch(validatePromoCode(data));
+		}
 	}
 	render() {
 		const {
@@ -38,6 +57,7 @@ class PromoInput extends Component {
 				appliedDiscount
 			}
 		} = this.props;
+		const { step } = this.state;
 		return (
 			<div className="promo-container">
 				<div>
@@ -45,8 +65,10 @@ class PromoInput extends Component {
 						<div className="coupon-valid">
 							Промо Код <b>{appliedCode}</b> амжилттай идэвxжлээ
 						</div>
-					) : (
+					) : step === 1 ? (
 						<p>Та Промо Код оруулж хөнгөлөлт эдлэх боломжтой</p>
+					) : (
+						<p>Нууцлал оруулна уу</p>
 					)}
 				</div>
 				<Form
@@ -54,20 +76,37 @@ class PromoInput extends Component {
 					onSubmit={this.validatePromoCode.bind(this)}
 				>
 					<Row>
-						<Col sm={5}>
-							<Form.Control
-								size="sm"
-								type="text"
-								placeholder="Код"
-								onChange={(e) =>
-									this.setState({
-										code: e.target.value
-									})
-								}
-								value={this.state.code}
-							/>
-						</Col>
-						<Col sm={5}>
+						{step === 1 ? (
+							<Col sm={6}>
+								<Form.Control
+									size="sm"
+									type="text"
+									placeholder="Код"
+									onChange={(e) =>
+										this.setState({
+											code: e.target.value
+										})
+									}
+									value={this.state.code}
+								/>
+							</Col>
+						) : step === 2 ? (
+							<Col sm={6}>
+								<Form.Control
+									size="sm"
+									type="text"
+									placeholder="Нууцлал"
+									onChange={(e) =>
+										this.setState({
+											hash: e.target.value
+										})
+									}
+									value={this.state.hash}
+								/>
+							</Col>
+						) : null}
+
+						{/* <Col sm={4}>
 							<Form.Control
 								size="sm"
 								type="text"
@@ -79,16 +118,19 @@ class PromoInput extends Component {
 								}
 								value={this.state.hash}
 							/>
-						</Col>
-					</Row>
-					<Row>
-						<Col>
+						</Col> */}
+						<Col sm={6}>
 							<Button
-								size="sm"
+								size="xs"
 								type="submit"
 								className="promo-submit-button"
 							>
-								<span>Промо Код ашиглах</span>
+								{/* <span>Промо</span> */}
+								{step === 1 ? (
+									<span>Промо Код ашиглах</span>
+								) : (
+									<span>Нууцлал оруулах</span>
+								)}
 								{validatingPromoCode ? (
 									<Spinner
 										animation="grow"
@@ -107,87 +149,3 @@ class PromoInput extends Component {
 }
 
 export default connect(reducer)(PromoInput);
-
-// function kek(props) {
-// 	const {
-// 		requests: { promoIsValid, validatingPromoCode, appliedCode }
-// 	} = props;
-// 	const [code, setcode] = useState("");
-// 	const [isValid, setisValid] = useState(null);
-// 	const [loading, setLoading] = useState(null);
-// 	const [appliedCode, setappliedCode] = useState(null);
-// 	// useEffect(() => {
-// 	// 	const delayDebounceFn = setTimeout(() => {
-// 	// 		console.log("wassup dawg");
-// 	// 	}, 1000);
-// 	// 	return () => clearTimeout(delayDebounceFn);
-// 	// }, [code]);
-// 	useEffect(() => {
-// 		setisValid(promoIsValid);
-// 	}, [promoIsValid]);
-// 	function validatePromoCode() {
-// 		console.log("validatepromocode method hit");
-// 		const { dispatch } = props;
-// 		// e.preventDefault();
-// 		let data = {
-// 			code: code
-// 		};
-// 		dispatch(validatePromoCode(data));
-// 	}
-// 	const {
-// 		requests: { promoIsValid, validatingPromoCode, appliedCode }
-// 	} = props;
-// 	return (
-// 		<div className="promo-container">
-// 			<div>
-// 				{isValid && isValid.length > 0 ? (
-// 					<div className="coupon-valid">
-// 						Промо Код <b>{appliedCode}</b> амжилттай идэвxжлээ
-// 					</div>
-// 				) : (
-// 					<p>Та Промо Код оруулж хөнгөлөлт эдлэх боломжтой</p>
-// 				)}
-// 			</div>
-// 			<Form
-// 				className="promo-form"
-// 				onSubmit={(event) => {
-// 					event.stopPropagation();
-// 					validatePromoCode();
-// 				}}
-// 				onSubmit={(event) => {
-// 					event.stopPropagation();
-// 					validatePromoCode();
-// 				}}
-// 			>
-// 				<Row>
-// 					<Col>
-// 						<Form.Control
-// 							size="sm"
-// 							type="text"
-// 							placeholder="Таны хөнгөлөлт энд"
-// 							onChange={(event) => setcode(event.target.value)}
-// 							value={code}
-// 						/>
-// 					</Col>
-// 					<Col>
-// 						<Button
-// 							size="sm"
-// 							type="submit"
-// 							className="promo-submit-button"
-// 						>
-// 							<span>Промо Код ашиглах</span>
-// 							{loading ? (
-// 								<Spinner
-// 									animation="grow"
-// 									role="status"
-// 									size="xs"
-// 									className="promo-submit-spinner"
-// 								></Spinner>
-// 							) : null}
-// 						</Button>
-// 					</Col>
-// 				</Row>
-// 			</Form>
-// 		</div>
-// 	);
-// }

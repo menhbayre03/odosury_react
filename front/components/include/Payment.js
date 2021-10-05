@@ -160,7 +160,7 @@ class Payment extends Component {
 		const {
 			dispatch,
 			payment: { type, lesson = {}, test = {}, method, duration },
-			requests: { promocode }
+			requests: { promocode, hash, code }
 		} = this.props;
 		if (method === "qpay" || method === "bank") {
 			dispatch(
@@ -170,7 +170,11 @@ class Payment extends Component {
 					duration: duration,
 					lesson_id: lesson._id,
 					test_id: test._id,
-					promo_id: promocode ? promocode._id : null
+					promo_id: promocode ? promocode._id : null,
+					partnerCode: {
+						code: code,
+						hash: hash
+					}
 				})
 			);
 		} else {
