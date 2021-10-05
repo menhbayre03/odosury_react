@@ -127,7 +127,7 @@ class Home extends Component {
                                         }}> 
                                             <img className="header2" src="/images/logo.png" alt=""/>
                                             <p className="header2">
-                                                БҮХ НАСНЫХАНД ЗОРИУЛАГДСАН ODOSURY ОНЛАЙН СУРГАЛТЫН ПЛАТФОРМЫН ХИЧЭЭЛҮҮДИЙГ ТА НЭГ ТӨЛӨЛТӨӨР БҮГДИЙГ НЬ ХҮЛЭЭН АВЧ ҮЗЭХ БОЛОМЖТОЙ.                                           </p>
+                                                БҮХ НАСНЫХАНД ЗОРИУЛАГДСАН ODOSURY ОНЛАЙН СУРГАЛТЫН ПЛАТФОРМЫН КУРС СУРГАЛТУУДЫГ ТА НЭГ ТӨЛӨЛТӨӨР БҮГДИЙГ НЬ ХҮЛЭЭН АВЧ ҮЗЭХ БОЛОМЖТОЙ.                                           </p>
                                             
                                             <div className="contactHome contact2">
                                                 <div className="item">
@@ -216,7 +216,7 @@ class Home extends Component {
                                            
                                         
                                             <p>
-                                                ОЛОН ТӨРЛИЙН ХУВЬ ХҮНИЙ ХӨГЖЛИЙН БОЛОН МЭРГЭЖЛИЙН ХИЧЭЭЛҮҮДИЙГ БАГТААСАН БҮХ НАСНЫХАНД ЗОРИУЛСАН ОНЛАЙН СУРГАЛТЫН ПЛАТФОРМ.
+                                                ОЛОН ТӨРЛИЙН ХУВЬ ХҮНИЙ ХӨГЖЛИЙН БОЛОН МЭРГЭЖЛИЙН КУРС СУРГАЛТУУДЫГ БАГТААСАН БҮХ НАСНЫХАНД ЗОРИУЛСАН ОНЛАЙН СУРГАЛТЫН ПЛАТФОРМ.
                                             </p>
                                             <div className="contactHome contact3">
                                                 <div className="item">
@@ -347,7 +347,7 @@ class Home extends Component {
                         featuredLessons && featuredLessons.length > 0 ? (
                             <div className="section-new">
                                 <Container style={{position: 'relative'}}>
-                                    <h3>Онцлох хичээлүүд</h3>
+                                    <h3>Онцлох курс сургалтууд</h3>
                                     <div>
                                         <Swiper {...gridSlider}>
                                             {

@@ -173,16 +173,16 @@ export default [
                 path: '/warning',
                 exact: true
             },
-            {
-                component: Bundle,
-                path: '/bundles',
-                exact: true
-            },
-            {
-                component: BundleSingle,
-                path: '/bundle/:slug',
-                exact: true
-            },
+            // {
+            //     component: Bundle,
+            //     path: '/bundles',
+            //     exact: true
+            // },
+            // {
+            //     component: BundleSingle,
+            //     path: '/bundle/:slug',
+            //     exact: true
+            // },
             {
                 component: NotFound,
                 path: '/not-found'

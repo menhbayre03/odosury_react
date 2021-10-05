@@ -124,7 +124,7 @@ class Header extends Component {
                                     <ul>
                                         <li>
                                             <Link to={`/lessons/all`}>
-                                                Хичээлүүд
+                                                Курс Сургалтууд
                                             </Link>
                                         </li>
                                         <li>
@@ -142,11 +142,11 @@ class Header extends Component {
                                                  }}>New</Badge>
                                              </Link>
                                          </li>
-                                        {/*<li>*/}
-                                        {/*    <Link to={`/test`}>*/}
-                                        {/*        Тест*/}
-                                        {/*    </Link>*/}
-                                        {/*</li>*/}
+                                        <li>
+                                           <Link to={`/test`}>
+                                               Тест
+                                           </Link>
+                                        </li>
                                         {/* <li>
                                             <Link to={`/bundles`}>
                                                 Багцууд
