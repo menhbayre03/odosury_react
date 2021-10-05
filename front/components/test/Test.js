@@ -197,7 +197,8 @@ class Test extends Component {
     }
     render() {
         const {test:{tests, loading, all, openTest}, main:{user}} = this.props;
-        console.log(this.props.test)
+        const {confirmModalData} = this.state
+        console.log('this.state.confirmModalData', this.state.confirmModalData.modalImage)
 
         let items = [];
         if(Math.ceil((all || 0)/this.state.pageSize)<=10){
@@ -294,12 +295,15 @@ class Test extends Component {
                                         <Loader status={loading}>
                                             <Row>
                                             {   
-                                                (tests || []).map((item, index) => (
-                                                    <Col lg={4} md={6} sm={6} style={{marginBottom: 30}}>
+                                                (tests || []).map((item, index) => {
+                                                    return <Col lg={4} md={6} sm={6} style={{marginBottom: 30}}>
                                                         <div key={index} className="testCard"
                                                         // onClick={this.openConfirmModal.bind(this, item)}
                                                         onClick={() => this.checkTransaction(item)}
-                                                        style={this.state.confirmModalData.backgroundImg ? {} : {background: 'url("/images/defaultTestCard1.png")', backgroundSize:'200px 110px'}}>
+                                                        style={{
+                                                            backgroundImage: ((item || {}).cardImage?.path ? `url("${item.cardImage.url}${item.cardImage.path}")` : "none"),
+                                                            backgroundSize:'200px 110px'
+                                                        }}>
                                                             <div className="cardContent">
                                                             {item.title}
                                                             <br/>
@@ -311,7 +315,7 @@ class Test extends Component {
                                                             </div>
                                                         </div>
                                                     </Col>
-                                                ))
+                                                })
                                             }
                                             </Row>
                                         </Loader>
@@ -342,7 +346,14 @@ class Test extends Component {
                         >
                         <div className="testModal">
                         <Modal.Body>
-                            <div style={ this.state.confirmModalData.backgroundImg ? {} : {background: 'url("/images/defaultTest2.jpg")', height: '320px',backgroundSize:'600px 320px',}}  className="modalMain">
+                            <div 
+                                // style={ this.state.confirmModalData.backgroundImg ? {} : {background: 'url("/images/defaultTest2.jpg")', height: '320px',backgroundSize:'600px 320px',}}
+                                style={{
+                                    backgroundImage: ((confirmModalData || {}).modalImage?.path ? `url("${confirmModalData.modalImage.url}${confirmModalData.modalImage.path}")` : "none"),
+                                    height: '320px',backgroundSize:'600px 320px'
+                                }}
+                                className="modalMain"
+                            >
                                 {/*<h4>Та <span>{this.state.confirmModalData.title}</span> тест өгөх гэж байна.</h4>*/}
                                 <h4><span>{this.state.confirmModalData.title}</span> </h4>
                                 <div style={{marginLeft: 25, position: 'absolute', top: '105px'}}>
