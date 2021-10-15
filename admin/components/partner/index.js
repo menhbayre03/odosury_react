@@ -7,7 +7,8 @@ import {
 	Drawer,
 	Select,
 	Popconfirm,
-	Table
+	Table,
+	Modal
 } from "antd";
 import {
 	fetchPartners,
@@ -21,7 +22,11 @@ import {
 import { connect } from "react-redux";
 import { PlusOutlined } from "@ant-design/icons";
 import Batch from "./Batch";
-import { togglePartnerDrawer } from "../../actions/partner_actions";
+import PartnerModal from "./PartnerModal";
+import {
+	togglePartnerDrawer,
+	togglePartnerModal
+} from "../../actions/partner_actions";
 
 const reducer = ({ partner }) => ({ partner });
 
@@ -29,7 +34,8 @@ class Partner extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			currentPartner: ""
+			currentPartner: "",
+			modalPartner: ""
 		};
 	}
 	componentDidMount() {
@@ -39,6 +45,12 @@ class Partner extends Component {
 		const { dispatch } = this.props;
 		this.setState({ currentPartner: data }, () => {
 			dispatch(togglePartnerDrawer());
+		});
+	}
+	toggleModal() {
+		const { dispatch } = this.props;
+		this.setState({ modalPartner: "opne" }, () => {
+			dispatch(togglePartnerModal());
 		});
 	}
 	render() {
@@ -56,13 +68,12 @@ class Partner extends Component {
 			{
 				title: "slug",
 				dataIndex: "slug",
-				key: "age"
+				key: "slug"
 			},
 			{
 				title: "Дэлгэрэнгүй",
-				key: "more",
+				key: Math.random(),
 				render: (txt, record, idx) => {
-					console.log("what are thooose", txt, record, idx);
 					return (
 						<Button onClick={() => this.toggleDrawer(record._id)}>
 							Дэлгэрэнгүй
@@ -74,21 +85,20 @@ class Partner extends Component {
 		const {
 			partner: { partners, fetchingPartners }
 		} = this.props;
-		console.log("state is ", this.state.currentPartner);
 		return (
 			<>
 				<Card
 					title={"Масс Промо"}
 					bordered={true}
-					// extra={
-					// 	<Button
-					// 		onClick={this.toggleDrawer.bind(this)}
-					// 		type={"primary"}
-					// 		icon={<PlusOutlined />}
-					// 	>
-					// 		Yo wtf
-					// 	</Button>
-					// }
+					extra={
+						<Button
+							onClick={this.toggleModal.bind(this)}
+							type={"primary"}
+							icon={<PlusOutlined />}
+						>
+							Хамтрагч нэмэх
+						</Button>
+					}
 					loading={fetchingPartners}
 				>
 					<div className="partner-body">
@@ -97,6 +107,9 @@ class Partner extends Component {
 				</Card>
 				{this.state.currentPartner !== "" ? (
 					<Batch partnerId={this.state.currentPartner} self={this} />
+				) : null}
+				{this.state.modalPartner !== "" ? (
+					<PartnerModal self={this} />
 				) : null}
 			</>
 		);

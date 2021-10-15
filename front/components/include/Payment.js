@@ -48,6 +48,10 @@ class Payment extends Component {
 					"main-main"
 				)[0].style.paddingRight = `unset`;
 				window.scrollTo(0, parseInt(scrollY || "0") * -1);
+				dispatch(clearPromoCode());
+				self.setState({
+					code: ""
+				});
 			});
 	}
 	componentWillUnmount() {

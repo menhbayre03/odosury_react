@@ -6,7 +6,8 @@ import {
 	deleteBatch,
 	submitPartner,
 	submitBatch,
-	togglePartnerDrawer
+	togglePartnerDrawer,
+	togglePartnerModal
 } from "../actionTypes";
 import config from "../config";
 const initialState = {
@@ -21,7 +22,8 @@ const initialState = {
 	submittingPartner: false,
 	submittingBatch: false,
 	successBatch: false,
-	drawerOpen: false
+	drawerOpen: false,
+	modalOpen: false
 };
 export default (state = initialState, action) => {
 	switch (action.type) {
@@ -38,9 +40,9 @@ export default (state = initialState, action) => {
 					fetchingPartners: false
 				};
 			} else {
-				config
-					.get("emitter")
-					.emit("warning", "Хамтрагчдийг авчрахаад алдаа гарлаа");
+				// config
+				// 	.get("emitter")
+				// 	.emit("warning", "Хамтрагчдийг авчрахаад алдаа гарлаа");
 				return {
 					...state,
 					fetchingPartners: false
@@ -52,6 +54,7 @@ export default (state = initialState, action) => {
 				fetchingBatches: true
 			};
 		case fetchBatches.RESPONSE:
+			console.log("fetchBatches response", action.json);
 			if (action.json.success) {
 				return {
 					...state,
@@ -59,9 +62,9 @@ export default (state = initialState, action) => {
 					fetchingBatches: false
 				};
 			} else {
-				config
-					.get("emitter")
-					.emit("warning", "Багц авчрахад алдаа гарлаа");
+				// config
+				// 	.get("emitter")
+				// 	.emit("warning", "Багц авчрахад алдаа гарлаа");
 				return {
 					...state,
 					fetchingBatches: false
@@ -140,10 +143,12 @@ export default (state = initialState, action) => {
 			};
 		case submitPartner.RESPONSE:
 			if (action.json.success) {
+				config.get("emitter").emit("success", "Амжилттай нэмэгдлээ");
 				return {
 					...state,
-					partners: [...state.partners, action.json.partner],
-					submittingPartner: false
+					partners: [...state.partners, action.json.newPartner],
+					submittingPartner: false,
+					modalOpen: false
 				};
 			} else {
 				config
@@ -151,7 +156,8 @@ export default (state = initialState, action) => {
 					.emit("warning", "Шинээр хадгалахад алдаа гарлаа");
 				return {
 					...state,
-					submittingPartner: false
+					submittingPartner: false,
+					modalOpen: false
 				};
 			}
 		case submitBatch.REQUEST:
@@ -182,6 +188,11 @@ export default (state = initialState, action) => {
 			return {
 				...state,
 				drawerOpen: !state.drawerOpen
+			};
+		case togglePartnerModal.REQUEST:
+			return {
+				...state,
+				modalOpen: !state.modalOpen
 			};
 		default:
 			return state;

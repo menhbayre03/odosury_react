@@ -1,22 +1,16 @@
 import React, { Component } from "react";
-import {
-	Form,
-	Input,
-	Button,
-	Card,
-	Drawer,
-	Select,
-	Popconfirm,
-	Collapse
-} from "antd";
+import { Button, Drawer, Table } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
-import moment from "moment";
 import {
 	fetchBatches,
-	togglePartnerDrawer
+	togglePartnerDrawer,
+	fetchCodes
 } from "../../actions/partner_actions";
 import Generator from "./Generator";
+import moment from "moment";
+const xls = require("xlsx");
+const utils = xls.utils;
 
 const reducer = ({ partner }) => ({ partner });
 
@@ -30,6 +24,7 @@ class Batch extends Component {
 
 	componentDidMount() {
 		const { dispatch, partnerId } = this.props;
+		console.log("batch didmount", partnerId);
 		dispatch(fetchBatches({ partnerId: partnerId }));
 	}
 	toggleDrawer() {
@@ -44,11 +39,98 @@ class Batch extends Component {
 			this.setState({ currentPage: "view" });
 		}
 	}
-	render() {
+	async print(id) {
 		const {
-			partner: { drawerOpen, batches },
+			dispatch,
+			partner: { codes },
 			partnerId
 		} = this.props;
+		dispatch(fetchCodes({ batchID: id })).then(
+			setTimeout(() => {
+				if (codes && codes.length > 0) {
+					let data = [];
+					for (const code of codes) {
+						data.push({
+							Код: code.generatedCode,
+							"Баталгаажуулах код": code.hash.slice(-8)
+						});
+					}
+					const ws = xls.utils.json_to_sheet(data);
+					const wb = xls.utils.book_new();
+					xls.utils.book_append_sheet(wb, ws, "Коднууд");
+					let asd = xls.writeFile(wb, `${partnerId}.xlsx`);
+					return asd;
+				}
+			}, 2000)
+		);
+	}
+	render() {
+		const columns = [
+			{
+				key: "_id",
+				title: "№",
+				render: (txt, record, idx) => idx + 1
+			},
+			{
+				title: "Нэр",
+				dataIndex: "name",
+				key: "name"
+			},
+			{
+				title: "Тоо, ширхэг",
+				dataIndex: "generatedAmount",
+				key: "generatedAmount"
+			},
+			{
+				title: "Нэг кодыг ашиглах тоо",
+				dataIndex: "useCountPerCode",
+				key: "useCountPerCode"
+			},
+			{
+				title: "Дээд үнэ",
+				dataIndex: "applicable",
+				key: "applicable"
+			},
+			{
+				title: "Хямдрал",
+				dataIndex: "applicable",
+				key: "applicable"
+			},
+			{
+				title: "Дуусах",
+				// dataIndex: "expirationDate",
+				key: "expirationDate",
+				render: (txt, record, idx) => {
+					return moment(record.expirationDate).format(
+						"DD/MM/YY-HH:MM"
+					);
+				}
+			},
+			{
+				title: "Үүсгэсэн",
+				// dataIndex: "created",
+				key: "created",
+				render: (txt, record, idx) => {
+					return moment(record.created).format("DD/MM/YY-HH:MM");
+				}
+			},
+			{
+				title: "Татах",
+				key: Math.random(),
+				render: (txt, record, idx) => {
+					return (
+						<Button onClick={() => this.print(record._id)}>
+							Татах
+						</Button>
+					);
+				}
+			}
+		];
+		const {
+			partner: { drawerOpen, batches, codes },
+			partnerId
+		} = this.props;
+		console.log("codesrender", codes);
 		const { currentPage } = this.state;
 		return (
 			<Drawer
@@ -68,10 +150,9 @@ class Batch extends Component {
 					) : (
 						<Button
 							onClick={() => console.log("howdy")}
-							type={"primary"}
 							icon={<PlusOutlined />}
 						>
-							Hi
+							Хаах
 						</Button>
 					)
 				}
@@ -80,17 +161,13 @@ class Batch extends Component {
 				{currentPage === "view" ? (
 					<div className="partner-drawer">
 						{batches && batches.length > 0 ? (
-							batches.map((batch) => {
-								return (
-									<div className="batch">{batch.name}</div>
-								);
-							})
+							<Table dataSource={batches} columns={columns} />
 						) : (
 							<div>Промо коднууд алга байна</div>
 						)}
 					</div>
 				) : (
-					<Generator />
+					<Generator partnerId={partnerId} />
 				)}
 			</Drawer>
 		);

@@ -1,19 +1,6 @@
 import React, { Component } from "react";
-import {
-	Form,
-	Input,
-	InputNumber,
-	Button,
-	Card,
-	Drawer,
-	Select,
-	Popconfirm,
-	Collapse,
-	DatePicker
-} from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Form, Input, InputNumber, Button, DatePicker } from "antd";
 import { connect } from "react-redux";
-import moment from "moment";
 import { submitBatch } from "../../actions/partner_actions";
 
 const reducer = ({ partner }) => ({ partner });
@@ -25,7 +12,8 @@ class Generator extends Component {
 	}
 	submit(e) {
 		console.log("E", e);
-		const { dispatch } = this.props;
+		const { dispatch, partnerId } = this.props;
+		e.partner = partnerId;
 		dispatch(submitBatch({ partnerBatch: e }));
 	}
 
@@ -41,12 +29,12 @@ class Generator extends Component {
 			<div className="partner-drawer">
 				{successBatch ? (
 					<div>
-						<div class="success-checkmark">
-							<div class="check-icon">
-								<span class="icon-line line-tip"></span>
-								<span class="icon-line line-long"></span>
-								<div class="icon-circle"></div>
-								<div class="icon-fix"></div>
+						<div className="success-checkmark">
+							<div className="check-icon">
+								<span className="icon-line line-tip"></span>
+								<span className="icon-line line-long"></span>
+								<div className="icon-circle"></div>
+								<div className="icon-fix"></div>
 							</div>
 						</div>
 						<div style={{ textAlign: "center" }}>
@@ -166,8 +154,12 @@ class Generator extends Component {
 						>
 							<Input />
 						</Form.Item>
-						<Form.Item wrapperCol={{ span: 24 }}>
+						<Form.Item
+							wrapperCol={{ span: 24 }}
+							style={{ float: "right"}}
+						>
 							<Button
+								type="primary"
 								htmlType="submit"
 								onClick={this.submit.bind(this)}
 							>

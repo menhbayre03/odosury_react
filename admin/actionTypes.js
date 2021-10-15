@@ -551,3 +551,7 @@ export const togglePartnerDrawer = {
 	REQUEST: "togglePartnerDrawer_REQUEST",
 	RESPONSE: "togglePartnerDrawer_RESPONSE"
 };
+export const togglePartnerModal = {
+	REQUEST: "togglePartnerModal",
+	RESPONSE: "togglePartnerModal"
+};
