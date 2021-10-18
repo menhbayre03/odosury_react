@@ -23,7 +23,7 @@ export function deleteBatch(data) {
 	return networkActions.requestPost(constants.deleteBatch, url, data);
 }
 export function submitPartner(data) {
-	console.log('data', data)
+	console.log("data", data);
 	let url = `/admin/api/partner/submitPartner`;
 	return networkActions.requestPost(constants.submitPartner, url, data);
 }
@@ -39,5 +39,10 @@ export function togglePartnerDrawer() {
 export function togglePartnerModal() {
 	return {
 		type: constants.togglePartnerModal.REQUEST
+	};
+}
+export function clearCodes() {
+	return {
+		type: constants.clearCodes.REQUEST
 	};
 }

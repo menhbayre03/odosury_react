@@ -7,7 +7,8 @@ import {
 	submitPartner,
 	submitBatch,
 	togglePartnerDrawer,
-	togglePartnerModal
+	togglePartnerModal,
+	clearCodes
 } from "../actionTypes";
 import config from "../config";
 const initialState = {
@@ -193,6 +194,11 @@ export default (state = initialState, action) => {
 			return {
 				...state,
 				modalOpen: !state.modalOpen
+			};
+		case clearCodes.REQUEST:
+			return {
+				...state,
+				codes: []
 			};
 		default:
 			return state;

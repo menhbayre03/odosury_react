@@ -552,6 +552,9 @@ export const togglePartnerDrawer = {
 	RESPONSE: "togglePartnerDrawer_RESPONSE"
 };
 export const togglePartnerModal = {
-	REQUEST: "togglePartnerModal",
-	RESPONSE: "togglePartnerModal"
+	REQUEST: "togglePartnerModal_REQUEST",
+	RESPONSE: "togglePartnerModal_RESPONSE"
 };
+export const clearCodes = {
+	REQUEST: "clearCodes_REQUEST",
+}

@@ -5,7 +5,8 @@ import { connect } from "react-redux";
 import {
 	fetchBatches,
 	togglePartnerDrawer,
-	fetchCodes
+	fetchCodes,
+	clearCodes
 } from "../../actions/partner_actions";
 import Generator from "./Generator";
 import moment from "moment";
@@ -29,6 +30,7 @@ class Batch extends Component {
 	}
 	toggleDrawer() {
 		const { dispatch, self } = this.props;
+		dispatch(clearCodes());
 		dispatch(togglePartnerDrawer());
 		self.setState({ currentPartner: "" });
 	}
@@ -45,8 +47,9 @@ class Batch extends Component {
 			partner: { codes },
 			partnerId
 		} = this.props;
-		dispatch(fetchCodes({ batchID: id })).then(
-			setTimeout(() => {
+		dispatch(clearCodes());
+		dispatch(fetchCodes({ batchID: id }))
+			.then(() => {
 				if (codes && codes.length > 0) {
 					let data = [];
 					for (const code of codes) {
@@ -61,8 +64,8 @@ class Batch extends Component {
 					let asd = xls.writeFile(wb, `${partnerId}.xlsx`);
 					return asd;
 				}
-			}, 2000)
-		);
+			})
+			.catch((err) => console.log("err", err))
 	}
 	render() {
 		const columns = [
