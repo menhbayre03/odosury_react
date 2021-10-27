@@ -138,7 +138,7 @@ class Eish extends Component {
                                     <Row className="justify-content-md-center">
                                         <Col md={6} className="sec-1">
                                             <p className="desc">ОНЦГОЙ ХЯМДРАЛ</p>
-                                            <p className="price"><span>149.000₮</span> {config.formatMoney(eishPrice)}₮</p>
+                                            <p className="price"><span>49.000₮</span> {config.formatMoney(eishPrice)}₮</p>
                                         </Col>
                                     </Row>
                                     <button onClick={() => premium ? console.log('gz') : eish ? console.log('hello') : user ? config.get('emitter').emit('paymentModal', {type: 'eish'}) : config.get('emitter').emit('openLogin', {type: 'eish'})}>
