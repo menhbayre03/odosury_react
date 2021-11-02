@@ -141,11 +141,11 @@ class User extends React.Component {
 				.get("emitter")
 				.emit("warning", "Хэрэглэгчийн эрх сонгоно уу!");
 		}
-		if (!user.status || (user.status && user.status.trim() === "")) {
-			return config
-				.get("emitter")
-				.emit("warning", "Хэрэглэгчийн статус сонгоно уу!");
-		}
+		// if (!user.status || (user.status && user.status.trim() === "")) {
+		// 	return config
+		// 		.get("emitter")
+		// 		.emit("warning", "Хэрэглэгчийн статус сонгоно уу!");
+		// }
 		if (!user._id) {
 			if (
 				!user.password ||
