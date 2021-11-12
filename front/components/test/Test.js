@@ -265,6 +265,7 @@ class Test extends Component {
                 );
             }
         }
+       
         return (
             <React.Fragment>
                 <Header location={this.props.location}/>
@@ -301,12 +302,13 @@ class Test extends Component {
                                                         // onClick={this.openConfirmModal.bind(this, item)}
                                                         onClick={() => this.checkTransaction(item)}
                                                         style={{
-                                                            backgroundImage: ((item || {}).cardImage?.path ? `url("${item.cardImage.url}${item.cardImage.path}")` : "none"),
-                                                            backgroundSize:'200px 110px'
+                                                            backgroundImage: ((item || {}).cardImage?.path ? `url("${item.cardImage.url}${item.cardImage.path}")` : 'url("/images/ching.jpg")'),
+                                                            backgroundSize:'cover',
+                                                            backgroundPosition: 'center center'
                                                         }}>
                                                             <div className="cardContent">
                                                             {item.title}
-                                                            <br/>
+                                                            <br/> 
                                                             Хугацаа: {item.duration} мин
                                                             <br/>
                                                             <span style={{color: '#ffc107', fontSize: 14}}>{item.price && item.price>0 ? `Үнэ: ${item.price}₮` : 'Үнэгүй'}</span>
@@ -349,8 +351,10 @@ class Test extends Component {
                             <div 
                                 // style={ this.state.confirmModalData.backgroundImg ? {} : {background: 'url("/images/defaultTest2.jpg")', height: '320px',backgroundSize:'600px 320px',}}
                                 style={{
-                                    backgroundImage: ((confirmModalData || {}).modalImage?.path ? `url("${confirmModalData.modalImage.url}${confirmModalData.modalImage.path}")` : "none"),
-                                    height: '320px',backgroundSize:'600px 320px'
+                                    background: ((confirmModalData || {}).modalImage?.path ? `url("${confirmModalData.modalImage.url}${confirmModalData.modalImage.path}")` : 'url("/images/defaultTest2.jpg")'),
+                                    height: 320,
+                                    backgroundSize:'cover',
+                                    backgroundPosition: 'center center'
                                 }}
                                 className="modalMain"
                             >
