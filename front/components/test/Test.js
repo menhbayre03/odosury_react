@@ -302,7 +302,7 @@ class Test extends Component {
                                                         // onClick={this.openConfirmModal.bind(this, item)}
                                                         onClick={() => this.checkTransaction(item)}
                                                         style={{
-                                                            backgroundImage: ((item || {}).cardImage?.path ? `url("${item.cardImage.url}${item.cardImage.path}")` : 'url("/images/ching.jpg")'),
+                                                            backgroundImage: ((item || {}).cardImage?.path ? `url("${item.cardImage.url}${item.cardImage.path}")` : 'url("/images/defaultTestCard1.png")'),
                                                             backgroundSize:'cover',
                                                             backgroundPosition: 'center center'
                                                         }}>
