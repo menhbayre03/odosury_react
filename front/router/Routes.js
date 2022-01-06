@@ -11,6 +11,7 @@ import ViewArea from "../components/lesson/ViewArea";
 import Test from "../components/test/Test";
 import TestLaunch from "../components/test/TestLaunch";
 // import Login from "../components/Login";
+import Contents  from "../components/Contents";
 import NotFound from "../components/NotFound";
 import Eish from "../components/Eish";
 import Premium from "../components/Premium";
@@ -75,6 +76,11 @@ export default [
             {
                 component: Eish,
                 path: '/eishPage',
+                exact: true
+            },
+            {
+                component: Contents,
+                path: '/content',
                 exact: true
             },
             {
