@@ -26,7 +26,7 @@ class Test extends Component {
             sort: {value: 'newest', name: 'Шинэ'},
             search: search,
             pageNum: 0,
-            pageSize: 5,
+            pageSize: 20,
             category: 'all',
         };
     }
@@ -322,7 +322,7 @@ class Test extends Component {
                                             </Row>
                                         </Loader>
                                     </div>
-                                    {
+                                    {this.state.pageSize <= (all || 0) &&
                                         items.length > 1 ? (
                                             <div className="row mb60">
                                                 <div className="col-lg-12">
