@@ -17,6 +17,8 @@ import jobPost from "./jobPost";
 import promo from "./promo";
 import test from "./test";
 import partner from "./partner";
+import knowledge from "./knowledge";
+import knowledgeCategory from "./knowledgeCategory";
 export default combineReducers({
 	main: main,
 	lesson: lesson,
@@ -35,5 +37,7 @@ export default combineReducers({
 	jobPost: jobPost,
 	promo: promo,
 	test: test,
+	knowledge: knowledge,
+	knowledgeCategory: knowledgeCategory,
 	partner: partner
 });

@@ -558,3 +558,69 @@ export const togglePartnerModal = {
 export const clearCodes = {
 	REQUEST: "clearCodes_REQUEST",
 }
+
+
+//knowledge admin start
+export const openKnowledgeModal = {
+	REQUEST:'openKnowledgeModal_REQUEST',
+};
+export const closeKnowledgeModal = {
+	REQUEST:'closeKnowledgeModal_REQUEST',
+};
+export const knowledgeChangeHandler = {
+	REQUEST:'knowledgeChangeHandler_REQUEST',
+};
+export const subKnowledgeChangeHandler = {
+	REQUEST:'subKnowledgeChangeHandler_REQUEST',
+};
+export const submitKnowledge = {
+	REQUEST:'submitKnowledge_REQUEST',
+	RESPONSE:'submitKnowledge_RESPONSE',
+};
+export const getKnowledge = {
+	REQUEST:'getKnowledge_REQUEST',
+	RESPONSE:'getKnowledge_RESPONSE',
+};
+export const deleteKnowledge = {
+	REQUEST:'deleteKnowledge_REQUEST',
+	RESPONSE:'deleteKnowledge_RESPONSE',
+};
+export const unmountAdminKnowledges = {
+	REQUEST:'unmountAdminKnowledges_REQUEST',
+};
+
+export const uploadKnowledgeImage = {
+	REQUEST: 'uploadKnowledgeImage_REQ',
+	PROGRESS: 'uploadKnowledgeImage_PROG',
+	RESPONSE: 'uploadKnowledgeImage_RES',
+};
+export const uploadKnowledgeAudio = {
+	REQUEST: 'uploadKnowledgeAudio_REQ',
+	PROGRESS: 'uploadKnowledgeAudio_PROG',
+	RESPONSE: 'uploadKnowledgeAudio_RES',
+};
+//knowledge admin end
+
+//knowledge category start
+export const openKnowledgeCategoryModal = {
+	REQUEST: "openKnowledgeCategoryModal_REQUEST"
+};
+export const closeKnowledgeCategoryModal = {
+	REQUEST: "closeKnowledgeCategoryModal_REQUEST"
+};
+export const knowledgeCategoryChangeHandler = {
+	REQUEST: "knowledgeCategoryChangeHandler_REQUEST"
+};
+export const submitKnowledgeCategory = {
+	REQUEST: "submitKnowledgeCategory_REQUEST",
+	RESPONSE: "submitKnowledgeCategory_RESPONSE"
+};
+export const getKnowledgeCategory = {
+	REQUEST: "getKnowledgeCategory_REQUEST",
+	RESPONSE: "getKnowledgeCategory_RESPONSE"
+};
+export const deleteKnowledgeCategory = {
+	REQUEST: "deleteKnowledgeCategory_REQUEST",
+	RESPONSE: "deleteKnowledgeCategory_RESPONSE"
+};
+//knowledge category end
