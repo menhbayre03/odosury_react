@@ -17,6 +17,8 @@ import Promo from "../components/Promo";
 import Test from "../components/test/Test";
 import TestSingle from "../components/test/TestSingle";
 import Partner from "../components/partner/index";
+import KnowledgeCategory from "../components/knowledge/KnowledgeCategory";
+import Knowledge from "../components/knowledge/Knowledge";
 export default [
 	{
 		component: index,
@@ -31,6 +33,16 @@ export default [
 			//     path: '/admin/teachers',
 			//     exact: true
 			// },
+			{
+				component: Knowledge,
+				path: "/admin/knowledge",
+				exact: true
+			},
+			{
+				component: KnowledgeCategory,
+				path: "/admin/knowledgeCategory",
+				exact: true
+			},
 			{
 				component: User,
 				path: "/admin/user",

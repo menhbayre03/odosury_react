@@ -13,6 +13,7 @@ import {
     LayoutFilled,
     DollarCircleFilled,
     DatabaseFilled,
+    FileSearchOutlined,
     FileTextFilled,
     CreditCardOutlined,
     DiffOutlined,
@@ -139,6 +140,18 @@ class index extends React.Component {
                                 </Menu.Item>
                                 <Menu.Item key="audioCategory" icon={<DatabaseFilled />}>
                                     <Link to="/admin/audioCategory">
+                                        <span>Ангилал</span>
+                                    </Link>
+                                </Menu.Item>
+                            </Menu.SubMenu>
+                            <Menu.SubMenu key="knowledge" icon={<FileSearchOutlined />} title="Танин мэдэхүй">
+                                <Menu.Item key="knowledge" icon={<FileTextFilled />}>
+                                    <Link to="/admin/knowledge">
+                                        <span>Танин мэдэхүй</span>
+                                    </Link>
+                                </Menu.Item>
+                                <Menu.Item key="knowledgeCategory" icon={<DatabaseFilled />}>
+                                    <Link to="/admin/knowledgeCategory">
                                         <span>Ангилал</span>
                                     </Link>
                                 </Menu.Item>
