@@ -147,11 +147,11 @@ class Header extends Component {
                                                Тест
                                            </Link>
                                         </li>
-                                        <li>
+                                        {/* <li>
                                             <Link to={`/content`}>
                                                 Танин мэдэхүй
                                             </Link>
-                                        </li>
+                                        </li> */}
                                     </ul>
                                 </div>
                             </div>
