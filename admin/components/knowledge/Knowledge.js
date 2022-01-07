@@ -72,11 +72,14 @@ class Knowledge extends React.Component {
         if(!knowledge.title || (knowledge.title && knowledge.title.trim() === '' )){
             return config.get('emitter').emit('warning', ("Нэр оруулна уу!"));
         }
-        if(!knowledge.category || (knowledge.category && knowledge.category.trim() === '' )){
+        if(!knowledge.category || (knowledge.category && knowledge.category._id && knowledge.category._id.trim() === '' )){
             return config.get('emitter').emit('warning', ("Ангилал сонгоно уу!"));
         }
         if(!knowledge.description || (knowledge.description && knowledge.description.trim() === '' )){
             return config.get('emitter').emit('warning', ("Тайлбар оруулна уу!"));
+        }
+        if(!knowledge.embed || (knowledge.embed && knowledge.embed.trim() === '' )){
+            return config.get('emitter').emit('warning', ("Youtube оруулна уу!"));
         }
 
         if(!knowledgeImage || !knowledgeImage._id){
@@ -548,6 +551,26 @@ class Knowledge extends React.Component {
                                 </Form.Item>
                             </Col>
                         </Row>
+                        <Row gutter={16}>
+                            <Col span={24}>
+                                <Form.Item
+                                    label='youtube'
+                                    tooltip="youtube info"
+                                    // labelCol={{span: 3}}
+                                >
+                                    <TextArea value={knowledge.embed ? knowledge.embed : ''} name='embed' rows={4}
+                                              onChange={(e) => this.onChangeHandler('embed', e.target.value)} allowClear
+                                              autoComplete='off'/>
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                        {knowledge.embed?
+                            <iframe width="420" height="315"
+                                    src={knowledge.embed}>
+                            </iframe>
+                            :
+                            null
+                        }
                         <Row gutter={16}>
                             <Col span={24}>
                                 <Form.Item

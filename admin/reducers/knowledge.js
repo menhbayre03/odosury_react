@@ -212,6 +212,7 @@ export default(state = initialState, action) => {
                                 run.title =  (action.json.data || {}).title;
                                 run.category = (action.json.data || {}).category;
                                 run.description= (action.json.data || {}).description;
+                                run.embed= (action.json.data || {}).embed;
                                 run.tinymce= (action.json.data || {}).tinymce;
                                 run.knowledgeImage= (action.json.data || {}).knowledgeImage;
                                 run.knowledgeAudio= ((action.json.data || {}).knowledgeAudio);
