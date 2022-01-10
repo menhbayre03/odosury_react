@@ -86,7 +86,7 @@ class Contents extends Component {
                                     <div onClick={() => this.changeVideo(idx)} 
                                         className={idx === this.state.index ? 'active cardCont' : 'cardCont'}>
                                         <div key={idx} className="card">
-                                            <img src={(item.knowledgeImage || {}).path ? `${(item.knowledgeImage  || {}).url}${(item.knowledgeImage  || {}).path}` : '/images/meta-image.jpg'} onError={(e) => e.target.src = `/images/meta-image.jpg`}/>
+                                            <img src={(item.knowledgeImage || {}).path ? `${(item.knowledgeImage  || {}).url}${(item.knowledgeImage  || {}).path}` : '/images/knowledgeCard.jpg'} onError={(e) => e.target.src = `/images/knowledgeCard.jpg`}/>
                                         </div>
                                         <div className="title">
                                             {item?.title}
