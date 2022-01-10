@@ -232,3 +232,12 @@ export const fetchBundleLessons = {
 	RESPONSE: "fetchBundleLessons_RESPONSE"
 };
 // BUNDLES END
+
+//KNOWLEDGE
+
+export const getKnowledge = {
+	REQUEST: "getKnowledge_REQUEST",
+	RESPONSE: "getKnowledge_RESPONSE"
+};
+
+//KNOWLEDGE END

@@ -16,6 +16,7 @@
         padding-bottom: 20%;
         background: url('/images/backContent.jpg') no-repeat;
         background-size: cover;
+        display: none;
     }
     .tanin {
         width: 100%;
@@ -68,13 +69,22 @@
        display: flex;
        flex-wrap: wrap;
         margin-bottom: 60px;
+        
        .cardCont {
+           cursor: pointer;
            margin: 15px;
+           
            .card {
-               width: 230px;
-               height: 125px;
-            
-           }
+                width: 230px;
+                height: 125px;
+                object-fit: cover;
+                overflow: hidden;
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
            .title {
                width: 220px;
                 font-size: 12px;
@@ -84,6 +94,16 @@
                 
             }
        }
+       .active {
+            border-radius: 5px;
+            .title {
+                font-weight: 800;
+            }
+            .card {
+                box-shadow: 0px 5px 15px #00000075;
+                border: 4px solid rgb(2 142 237);
+            }
+        }
     }
 }
 

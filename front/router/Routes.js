@@ -78,11 +78,11 @@ export default [
                 path: '/eishPage',
                 exact: true
             },
-            // {
-            //     component: Contents,
-            //     path: '/content',
-            //     exact: true
-            // },
+            {
+                component: Contents,
+                path: '/content',
+                exact: true
+            },
             {
                 component: Premium,
                 path: '/register',

@@ -15,6 +15,7 @@ import testLaunch from "./testLaunch";
 import Results from '../components/test/Results';
 import testResultSingle from './testResultSingle';
 import results from './results';
+import knowledge from './knowledge';
 export default combineReducers({
     main: main,
     auth: auth,
@@ -28,6 +29,7 @@ export default combineReducers({
     requests: requests,
     bundle: bundle,
     test,
+    knowledge: knowledge,
     testLaunch,
     testResultSingle,
     results,

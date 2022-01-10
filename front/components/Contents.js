@@ -3,119 +3,43 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Header from "./include/Header";
 import ReactPlayer from "react-player";
+import * as actions from '../actions/knowledge_actions';
 import Footer from "./include/Footer";
 import { Container, Row, Col, Button, Tabs, Tab, Accordion, Card, Spinner, Modal } from "react-bootstrap";
 import ReactStars from "react-rating-stars-component";
 import config from "../config";
 import Loader from "./include/Loader";
-const reducer = ({ main, home }) => ({ main, home });
+
+const reducer = ({ main, knowledge }) => ({ main, knowledge });
 
 class Contents extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            index: 0
+            index: 0,
+            slug: 'all',
+            id: 'all'
         };
     }
     componentDidMount() {
         config.get('ga').pageview(window.location.pathname + window.location.search);
         window.scroll(0, 0);
         const {dispatch, match} = this.props;
+        dispatch(actions.getKnowledge(this.state.slug, this.state.id));
         
     }
+
+    changeVideo(idx) {
+        if(idx !== this.state.index) {
+            this.setState({index: idx})
+        }
+    }
+
     render() {
-        let discoveries = [
-            {
-                title: "Numb - Linkin Park",
-                description: "This is just a video. And if you want to know more about it etc...",
-                url:'https://www.youtube.com/watch?v=kXYiU_JCYtU&ab_channel=LinkinPark',
-                created:"2022-01-04T04:28:08.220Z",
-                discoveryCategory:{
-                _id: "61d3ccd8c3f17d0cc42e8e29",
-                title: "numb",
-                },
-            },
-                {
-                title: "Three Days Grace - I Hate Everything About You",
-                description: "2 This is just a video. And if you want to know more about it etc...",
-                url:'https://www.youtube.com/watch?v=d8ekz_CSBVg&ab_channel=ThreeDaysGraceVEVO',
-                created:"2022-01-04T04:28:08.220Z",
-                discoveryCategory:{
-                _id: "61d3ccd8c3f17d0cc42e8e29",
-                title: "2nd video",
-                },
-            },
-            {
-                title: "Video 3",
-                description: "3 This is just a video. And if you want to know more about it etc...",
-                url:'https://www.youtube.com/watch?v=kXYiU_JCYtU&ab_channel=LinkinPark',
-                created:"2022-01-04T04:28:08.220Z",
-                discoveryCategory:{
-                    _id: "61d3ccd8c3f17d0cc42e8e29",
-                    title: "3rd video",
-                },
-            },
-            {
-                title: "Numb - Linkin Park",
-                description: "This is just a video. And if you want to know more about it etc...",
-                url:'https://www.youtube.com/watch?v=kXYiU_JCYtU&ab_channel=LinkinPark',
-                created:"2022-01-04T04:28:08.220Z",
-                discoveryCategory:{
-                    _id: "61d3ccd8c3f17d0cc42e8e29",
-                    title: "numb",
-                },
-            },
-            {
-                title: "Three Days Grace - I Hate Everything About You",
-                description: "2 This is just a video. And if you want to know more about it etc...",
-                url:'https://www.youtube.com/watch?v=d8ekz_CSBVg&ab_channel=ThreeDaysGraceVEVO',
-                created:"2022-01-04T04:28:08.220Z",
-                discoveryCategory:{
-                    _id: "61d3ccd8c3f17d0cc42e8e29",
-                    title: "2nd video",
-                },
-            },
-            {
-                title: "Video 3",
-                description: "3 This is just a video. And if you want to know more about it etc...",
-                url:'https://www.youtube.com/watch?v=kXYiU_JCYtU&ab_channel=LinkinPark',
-                created:"2022-01-04T04:28:08.220Z",
-                discoveryCategory:{
-                _id: "61d3ccd8c3f17d0cc42e8e29",
-                title: "3rd video",
-                },
-            },
-            {
-                title: "Numb - Linkin Park",
-                description: "This is just a video. And if you want to know more about it etc...",
-                url:'https://www.youtube.com/watch?v=kXYiU_JCYtU&ab_channel=LinkinPark',
-                created:"2022-01-04T04:28:08.220Z",
-                discoveryCategory:{
-                    _id: "61d3ccd8c3f17d0cc42e8e29",
-                    title: "numb",
-                },
-            },
-            {
-                title: "Three Days Grace - I Hate Everything About You",
-                description: "2 This is just a video. And if you want to know more about it etc...",
-                url:'https://www.youtube.com/watch?v=d8ekz_CSBVg&ab_channel=ThreeDaysGraceVEVO',
-                created:"2022-01-04T04:28:08.220Z",
-                discoveryCategory:{
-                    _id: "61d3ccd8c3f17d0cc42e8e29",
-                    title: "2nd video",
-                },
-            },
-            {
-                    title: "Video 3",
-                    description: "3 This is just a video. And if you want to know more about it etc...",
-                    url:'https://www.youtube.com/watch?v=kXYiU_JCYtU&ab_channel=LinkinPark',
-                    created:"2022-01-04T04:28:08.220Z",
-                    discoveryCategory:{
-                    _id: "61d3ccd8c3f17d0cc42e8e29",
-                    title: "3rd video",
-                    },
-            }
-        ];
+        const {knowledge: {knowledges, loading}} = this.props;
+        console.log(knowledges);
+        
+        
        
         // const parser = new DOMParser();
         // const video = parser.parseFromString((discoveries || [])[0]?.embed,  "text/html");
@@ -124,7 +48,7 @@ class Contents extends Component {
         return (
             <>
             <Header location={this.props.location}/>
-            <Loader>
+            <Loader status={loading}>
                 <Container>
                     <div className="taninMedehui">
                         <div className="contentHeader">
@@ -145,23 +69,24 @@ class Contents extends Component {
                                 className="react-player"
                                 width={'100%'}
                                 height={'100%'}
-                                url={(discoveries || [])[this.state.index].url} />
+                                url={((knowledges || [])[this.state.index] || []).embed} />
                         </div>
                         <div className="videoDesc">
                             <h5 className="title">
-                                {(discoveries || [])[this.state.index].title} 
+                                {((knowledges || [])[this.state.index] || []).title} 
                             </h5>
                             <p className="desc">
-                                {(discoveries || [])[this.state.index].description} 
+                                {((knowledges || [])[this.state.index]|| []).description} 
                             </p>
                         </div>
 
                         <div className="contents">
                             {
-                                (discoveries || []).map((item, idx) => (
-                                    <div className="cardCont">
+                                (knowledges || []).map((item, idx) => (
+                                    <div onClick={() => this.changeVideo(idx)} 
+                                        className={idx === this.state.index ? 'active cardCont' : 'cardCont'}>
                                         <div key={idx} className="card">
-                                            
+                                            <img src={(item.knowledgeImage || {}).path ? `${(item.knowledgeImage  || {}).url}${(item.knowledgeImage  || {}).path}` : '/images/meta-image.jpg'} onError={(e) => e.target.src = `/images/meta-image.jpg`}/>
                                         </div>
                                         <div className="title">
                                             {item?.title}
