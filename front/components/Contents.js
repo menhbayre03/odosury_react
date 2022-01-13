@@ -31,6 +31,7 @@ class Contents extends Component {
 
     changeVideo(idx) {
         if(idx !== this.state.index) {
+            window.scroll(0, 0)
             this.setState({index: idx})
         }
     }
