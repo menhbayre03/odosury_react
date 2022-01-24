@@ -27,33 +27,42 @@ class Bundle extends Component {
     }
 
     componentDidMount() {
-        config.get('ga').pageview(window.location.pathname + window.location.search);
-        document.body.classList.add('hide-mess');
-        window.scroll(0, 0);
-        let self = this;
-        const {dispatch, location, match, main: {user}} = this.props;
-        dispatch(actions.getViewArea(match.params.slug));
-        this.setProgram = config.get('emitter').addListener('setProgram', function (lessonView) {
-            let aa = 0;
-            setTimeout(function () {
-                if((location.state || {}).levelIndex != null && (location.state || {}).programIndex != null) {
-                    let prog =(lessonView.levels || [])[location.state.levelIndex].programs[location.state.programIndex];
-                    self.setState({program: prog.timeline, activeIndex: location.state.levelIndex.toString()}, () => dispatch(actions.setProgress(lessonView._id, prog)));
-                } else {
-                    (lessonView.levels || []).map((item, index) => {
-                        item.programs.map((prog, indP) => {
-                            if((prog.passed_users || []).indexOf(user._id) < 0 && aa === 0) {
-                                aa = 1;
-                                self.setState({program: prog.timeline, activeIndex: index.toString()}, () => dispatch(actions.setProgress(lessonView._id, prog)));
-                            } else if(index+1 === (lessonView.levels || []).length && indP+1 === item.programs.length && aa === 0) {
-                                aa = 1;
-                                self.setState({program: (lessonView.levels || [])[0].programs[0].timeline, activeIndex: '0'.toString()}, () => dispatch(actions.setProgress(lessonView._id, prog)));
-                            }
+        if(Object.keys(((this.props.main || {}).user || {}) || {}).length > 0){
+            config.get('ga').pageview(window.location.pathname + window.location.search);
+            document.body.classList.add('hide-mess');
+            window.scroll(0, 0);
+            let self = this;
+            const {dispatch, location, match, main: {user}} = this.props;
+            dispatch(actions.getViewArea(match.params.slug));
+            this.setProgram = config.get('emitter').addListener('setProgram', function (lessonView) {
+                let aa = 0;
+                setTimeout(function () {
+                    if((location.state || {}).levelIndex != null && (location.state || {}).programIndex != null) {
+                        let prog =(lessonView.levels || [])[location.state.levelIndex].programs[location.state.programIndex];
+                        self.setState({program: prog.timeline, activeIndex: location.state.levelIndex.toString()}, () => dispatch(actions.setProgress(lessonView._id, prog)));
+                    } else {
+                        (lessonView.levels || []).map((item, index) => {
+                            item.programs.map((prog, indP) => {
+                                if((prog.passed_users || []).indexOf(user._id) < 0 && aa === 0) {
+                                    aa = 1;
+                                    self.setState({program: prog.timeline, activeIndex: index.toString()}, () => dispatch(actions.setProgress(lessonView._id, prog)));
+                                } else if(index+1 === (lessonView.levels || []).length && indP+1 === item.programs.length && aa === 0) {
+                                    aa = 1;
+                                    self.setState({program: (lessonView.levels || [])[0].programs[0].timeline, activeIndex: '0'.toString()}, () => dispatch(actions.setProgress(lessonView._id, prog)));
+                                }
+                            })
                         })
-                    })
-                }
-            }, 100)
-        })
+                    }
+                }, 100)
+            });
+        } else {
+            if((window.location.pathname.split("/") || []).length > 0){
+                const [name1, lesson, view, lessonName] = window.location.pathname.split("/");
+                window.location.assign("/"+lesson+"/"+lessonName);
+            } else {
+                window.location.assign("/");
+            }
+        }
     }
     componentWillUnmount() {
         document.body.classList.remove('hide-mess');
