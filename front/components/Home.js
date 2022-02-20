@@ -6,7 +6,7 @@ import Footer from "./include/Footer";
 import Loader from "./include/Loader";
 import GridItem from "./include/GridItem";
 import GridItemAudio from "./include/GridItemAudio";
-import { Button, Container, Row, Col } from "react-bootstrap";
+import { Button, Container, Row, Col, Modal } from "react-bootstrap";
 import Swiper from "react-id-swiper";
 import * as actions from '../actions/home_actions';
 import config from "../config";
@@ -17,7 +17,8 @@ class Home extends Component {
         super(props);
         this.state = {
             top: 6,
-            up: false
+            up: false,
+            showLanding: true
         };
     }
     componentDidMount() {
@@ -425,6 +426,15 @@ class Home extends Component {
                     }
                 </Loader>
                 <Footer/>
+                <Modal size="lg" dialogClassName="landingModal" show={this.state.showLanding} onHide={() => this.setState({showLanding: false})}>
+                    <Modal.Body>
+                        <div className="modalCont">
+                            <img src="/images/odosuryModal.jpg" />
+                            
+                        </div>
+                        
+                    </Modal.Body>
+                </Modal>
             </React.Fragment>
         );
     }
