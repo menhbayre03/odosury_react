@@ -412,7 +412,7 @@ export default function TestPayment(self, props) {
 												</p>
 												<p>
 													<span>ДАНСНЫ ДУГААР:</span>
-													<span>5069405809</span>
+													<span>5069405796</span>
 												</p>
 												<p>
 													<span>ДАНС ЭЗЭМШИГЧ:</span>

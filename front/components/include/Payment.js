@@ -854,8 +854,11 @@ class Payment extends Component {
 																	ДАНСНЫ
 																	ДУГААР:
 																</span>
+																{/*<span>*/}
+																{/*	5069405809*/}
+																{/*</span>*/}
 																<span>
-																	5069405809
+																	5069405796
 																</span>
 															</p>
 															<p>
