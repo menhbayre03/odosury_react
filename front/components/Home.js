@@ -71,12 +71,12 @@ class Home extends Component {
                 type: 'bullets',
                 clickable: true
             },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev'
+            },
             spaceBetween: 0,
             containerClass: 'swiper-container mainSlider',
-            navigation: {
-                nextEl: "#nextMain",
-                prevEl: "#prevMain"
-            },
             speed: 1000,
             parallax: true,
             parallaxEl: {
@@ -86,10 +86,10 @@ class Home extends Component {
         };
         const gridWatching = {
             slidesPerView: 1,
-            // navigation: {
-            //     nextEl: "#nextWatching",
-            //     prevEl: "#prevWatching"
-            // },
+            navigation: {
+                nextEl: "#nextWatching",
+                prevEl: "#prevWatching"
+            },
             disable: true,
             slidesPerGroup: 1,
             spaceBetween: 30,
