@@ -78,7 +78,7 @@ class Header extends Component {
 					e.preventDefault();
 					onClick(e);
 				}}>
-					<span style={{ top: 4,marginRight:10 }} className="userrOn">
+					<span style={{ top: 4,marginRight:15 }} className="userrOn">
 						<ion-icon
 							style={{ top: 4, fontSize: 18, marginRight: 5 }}
 							name="notifications"
@@ -269,9 +269,18 @@ class Header extends Component {
 													NotifToggle
 												}
 												>
-													Мэдээ
+													Мэдэгдэл
 												</Dropdown.Toggle>
 												<Dropdown.Menu variant='dark'>
+													{
+														this.state.showNotf === false ? 
+														<div className='empty-data'>
+															<div className='emtry-text'>
+																Мэдээлэл байхгүй байна
+															</div>
+														</div>
+														:null
+													}
 												</Dropdown.Menu>
 											</Dropdown>
 													<Link to="/profile/info">
