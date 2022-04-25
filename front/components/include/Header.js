@@ -60,17 +60,43 @@ class Header extends Component {
 							/>
 							<span
 								style={{
-										textTransform: "lowercase",
+										textTransform: "capitalize",
 										display: "unset",
 										position: "unset",
 										border: "none"
 										}}
 										>
+								{children}						
 							</span>
 						</span>
 					</a>
 				</div>
-		  ));
+		));
+		const NotifToggle = React.forwardRef(({ children, onClick }, ref) => (
+			<div className="user-menu">
+				<a ref={ref} onClick={(e)=>{
+					e.preventDefault();
+					onClick(e);
+				}}>
+					<span style={{ top: 4,marginRight:10 }} className="userrOn">
+						<ion-icon
+							style={{ top: 4, fontSize: 18, marginRight: 5 }}
+							name="notifications"
+						/>
+						<span
+							style={{
+									textTransform: "capitalize",
+									display: "unset",
+									position: "unset",
+									border: "none"
+									}}
+									>
+										{children}						
+						</span>
+					</span>
+				</a>
+			</div>
+		));
 		return (
 			<div>
 				<div className={`header ${this.state.trans ? "trans" : ""}`}>
@@ -165,10 +191,12 @@ class Header extends Component {
 								<div className="header-menu">
 									{isMobile ? (
 											<Dropdown>
-												<Dropdown.Toggle as={
-													CustomToggle
-												}>
-													menu
+												<Dropdown.Toggle 
+													as={
+														CustomToggle
+													}
+												>
+													Цэс
 												</Dropdown.Toggle>
 												<Dropdown.Menu variant='dark'>
 													<Dropdown.Item>
@@ -197,7 +225,6 @@ class Header extends Component {
 													</Dropdown.Item>
 												</Dropdown.Menu>
 											</Dropdown>
-										
 									) : (
 										<ul>
 											<li>
@@ -237,8 +264,18 @@ class Header extends Component {
 										<li>
 											{(user || {})._id ? (
 												<div className="user-menu">
+											<Dropdown>
+												<Dropdown.Toggle as={
+													NotifToggle
+												}
+												>
+													Мэдээ
+												</Dropdown.Toggle>
+												<Dropdown.Menu variant='dark'>
+												</Dropdown.Menu>
+											</Dropdown>
 													<Link to="/profile/info">
-														<span style={{ top: 4 }} className="userrOn">
+														<span style={{ top: 4,marginRight:5 }} className="userrOn">
 															<ion-icon
 																style={{ top: 4, fontSize: 18, marginRight: 10 }}
 																name="person"

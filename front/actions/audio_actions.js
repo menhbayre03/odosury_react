@@ -22,3 +22,7 @@ export function clearAudio() {
         type: constants.clearAudio.REQUEST
     }
 }
+export function rateAudio(lesson_id,data){
+    let url = `/api/audio/rateAudio/${lesson_id}`;
+    return networkActions.requestPost(constants.rateLesson,url,data)
+}

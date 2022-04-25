@@ -30,3 +30,7 @@ export function verifyDevice(data) {
     let url = `/api/lesson/verifyDevice`;
     return networkActions.requestGet(constants.verifyDevice, url, data)
 }
+export function rateLesson(lesson_id,data){
+    let url = `/api/lesson/rateLesson/${lesson_id}`;
+    return networkActions.requestPost(constants.rateLesson,url,data)
+}

@@ -57,6 +57,10 @@ export const verifyDevice = {
 	REQUEST: "verifyDevice_REQ",
 	RESPONSE: "verifyDevice_RES"
 };
+export const rateLesson = {
+	REQUEST:"rateLesson_REQ",
+	RESPONSE:"rateLesson_RES"
+}
 
 //LESSON END
 

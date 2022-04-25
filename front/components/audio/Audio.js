@@ -46,7 +46,8 @@ class Audio extends Component {
 	render() {
 		const {
 			main: { user = {} },
-			audio: { lesson, rating, lessonLoading }
+			audio: { lesson, rating, lessonLoading },
+			dispatch
 		} = this.props;
 		let mediaUrl = "";
 		if ((lesson.audio || {}).path) {
@@ -59,6 +60,13 @@ class Audio extends Component {
 				"&token=" +
 				Cookies.get("token") +
 				"&intro=yes";
+		}
+		function ratingChange(newRating){
+			let data = {
+				rating:newRating,
+				commen:""
+			}
+			dispatch(actions.rateAudio(lesson._id,data))
 		}
 		return (
 			<React.Fragment>
@@ -122,7 +130,7 @@ class Audio extends Component {
 														>
 															{rating.toFixed(1)}
 														</span>
-														<ReactStars count={5} value={rating} size={16} />
+														<ReactStars count={5} value={rating} onChange={ratingChange} size={16} />
 														<span style={{ fontSize: 16, color: "#bdbdbd", marginLeft: 25 }}>
 															<ion-icon
 																style={{

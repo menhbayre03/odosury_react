@@ -93,6 +93,13 @@ class Lesson extends Component {
 				"&token=" +
 				Cookies.get("token");
 		}
+		function ratingChanged(newRating){
+			let data = {
+				rating:newRating,
+				comment:""
+			}
+			dispatch(actions.rateLesson(lesson._id,data))
+		}
 		return (
 			<React.Fragment>
 				<Header location={this.props.location} />
@@ -179,7 +186,7 @@ class Lesson extends Component {
 														>
 															{rating.toFixed(1)}
 														</span>
-														<ReactStars count={5} value={rating} size={16} />
+														<ReactStars count={5} value={rating} onChange={ratingChanged} size={16} />
 														<span
 															style={{
 																fontSize: 16,
