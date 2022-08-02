@@ -14,12 +14,13 @@ import { DeleteFilled, PlusOutlined, EditFilled, UploadOutlined, CaretLeftFilled
 import MediaLib from "../media/MediaLib";
 const { TextArea } = Input;
 const { Option } = Select;
-const SortableItem = SortableElement(( {value ,needRemove, removeTimeline, openEditTimeline, downloadFile, dis, indexes}) => {
+const SortableItem = SortableElement(( {value ,needRemove, removeTimeline, openEditTimeline, downloadFile, downloadingIds, dis, indexes}) => {
+    let downloading = downloadingIds.some(r => r == value.timeline._id);
     return (
         <div className='sortable-item'>
             {indexes.progIdx+1}. {value.timeline.title}
             <span>
-                <Button loading={value.timeline.loading || dis.props.editTimelineLoader} style={{marginRight: 10}} size='small' type="default" key='downloadTimeline' icon={<CloudDownloadOutlined />}
+                <Button loading={downloading} disabled={downloading} style={{marginRight: 10}} size='small' type="default" key='downloadTimeline' icon={<CloudDownloadOutlined />}
                         onClick={downloadFile.bind(this, value.timeline)}
                 >
                     Татах
@@ -56,6 +57,7 @@ class LessonLevels extends React.Component {
             loading: false,
             mediaType: '',
             foodImage: null,
+            downloadingIds: []
         };
         this.editor = null;
         this.editorCb = null;
@@ -260,12 +262,12 @@ class LessonLevels extends React.Component {
             x.open("GET", url, true);
             x.responseType = 'blob';
             x.onload = function (e) {
-                console.log(x);
                 Download(x.response, (file.title || 'down'), "application/octet-stream");
             }
             x.send();
 
         }, 1000);
+        this.setState({downloadingIds: [...this.state.downloadingIds, file._id]})
     }
 
     render() {
@@ -374,6 +376,7 @@ class LessonLevels extends React.Component {
                                                     <SortableItem
                                                         key={prog._id}
                                                         value={prog}
+                                                        downloadingIds={this.state.downloadingIds}
                                                         index={index}
                                                         collection={idx}
                                                         removeTimeline={this.removeTimeline}
