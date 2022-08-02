@@ -1,22 +1,29 @@
 import React from "react";
 import { connect } from 'react-redux';
 import config from "../../config";
+var Download = require('downloadjs');
 import * as actions from "../../actions/lessonLevel_actions";
 import arrayMove from 'array-move';
 import { Link } from 'react-router-dom';
 import { Editor } from '@tinymce/tinymce-react';
+import Cookies from "js-cookie";
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 const reducer = ({ main, lessonLevel }) => ({ main, lessonLevel });
-import { Card, Button, Modal, Form, Popconfirm, Input, Select, InputNumber, message, Progress } from 'antd';
-import { DeleteFilled, PlusOutlined, EditFilled, UploadOutlined, LoadingOutlined, CaretLeftFilled } from '@ant-design/icons'
+import { Card, Button, Modal, Form, Popconfirm, Input, Select, InputNumber } from 'antd';
+import { DeleteFilled, PlusOutlined, EditFilled, UploadOutlined, CaretLeftFilled, CloudDownloadOutlined } from '@ant-design/icons'
 import MediaLib from "../media/MediaLib";
 const { TextArea } = Input;
 const { Option } = Select;
-const SortableItem = SortableElement(( {value ,needRemove, removeTimeline, openEditTimeline, dis, indexes}) => {
+const SortableItem = SortableElement(( {value ,needRemove, removeTimeline, openEditTimeline, downloadFile, dis, indexes}) => {
     return (
         <div className='sortable-item'>
             {indexes.progIdx+1}. {value.timeline.title}
             <span>
+                <Button loading={value.timeline.loading || dis.props.editTimelineLoader} style={{marginRight: 10}} size='small' type="default" key='downloadTimeline' icon={<CloudDownloadOutlined />}
+                        onClick={downloadFile.bind(this, value.timeline)}
+                >
+                    Татах
+                </Button>
                 <Button loading={value.timeline.loading || dis.props.editTimelineLoader} style={{marginRight: 10}} size='small' type="default" key='updateTimeline' icon={<EditFilled />}
                         onClick={openEditTimeline.bind(this, 'update', needRemove.levelIndex, value.timeline)}
                 >
@@ -54,6 +61,7 @@ class LessonLevels extends React.Component {
         this.editorCb = null;
         this.removeTimeline = this.removeTimeline.bind(this);
         this.openEditTimeline = this.openEditTimeline.bind(this);
+        this.downloadFile = this.downloadFile.bind(this);
         this.onSortEnd = this.onSortEnd.bind(this);
     }
     componentDidMount() {
@@ -243,6 +251,23 @@ class LessonLevels extends React.Component {
     chooseMedia(data, type){
         this.props.dispatch(actions.chooseMedia({data: data, medType:type}));
     }
+
+
+    downloadFile(file){
+        var url = config.get('hostMedia')+"/api/download/video/?media_id="+file.video+"&token="+Cookies.get('token');
+        setTimeout(() => {
+            var x = new XMLHttpRequest();
+            x.open("GET", url, true);
+            x.responseType = 'blob';
+            x.onload = function (e) {
+                console.log(x);
+                Download(x.response, (file.title || 'down'), "application/octet-stream");
+            }
+            x.send();
+
+        }, 1000);
+    }
+
     render() {
         let { lessonLevel:{editTimelineLoader, openEditTimeline, status, lesson, openModalLevel, level, orderLoader, openModalLevelTimline, timeline, timelineSubmitLoader, timelineVideo, timelineVideoProgress, videoUploadLoadingT, timelineAudio, timelinePdf, timelineAudioProgress, audioUploadLoadingT , timelineFile, timelineFileProgress, fileUploadLoadingT } } = this.props;
         // const uploadButtonVideo = (
@@ -353,6 +378,7 @@ class LessonLevels extends React.Component {
                                                         collection={idx}
                                                         removeTimeline={this.removeTimeline}
                                                         openEditTimeline={this.openEditTimeline}
+                                                        downloadFile={this.downloadFile}
                                                         dis={this}
                                                         needRemove={{levelIndex:run._id, program:prog.timeline._id}}
                                                         indexes={{levelIdx: idx, progIdx: index}}
