@@ -439,7 +439,7 @@ export default function TestPayment(self, props) {
 												</p>
 												<p>
 													<span>ХОЛБОГДОХ УТАС:</span>
-													<span>8844-5020</span>
+													<span>8080-1779</span>
 												</p>
 											</div>
 										</div>

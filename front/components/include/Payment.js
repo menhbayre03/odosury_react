@@ -899,7 +899,7 @@ class Payment extends Component {
 																	УТАС:
 																</span>
 																<span>
-																	8844-5020
+																	8080-1779
 																</span>
 															</p>
 														</div>

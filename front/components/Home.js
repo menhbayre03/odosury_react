@@ -143,7 +143,7 @@ class Home extends Component {
                                                 </div>
                                                 <div className="item">
                                                     <ion-icon name="call"></ion-icon>&nbsp;
-                                                    <span>8844-5020</span>
+                                                    <span>8080-1779</span>
                                                     
                                                 </div>
                                             </div>
@@ -183,7 +183,7 @@ class Home extends Component {
                                                 </div> 
                                                 <div className="item">
                                                     <ion-icon name="call"></ion-icon>&nbsp;
-                                                    <span>8844-5020</span>
+                                                    <span>8080-1779</span>
                                                     
                                                 </div>
                                             </div>
@@ -232,7 +232,7 @@ class Home extends Component {
                                                 </div>
                                                 <div className="item">
                                                     <ion-icon name="call"></ion-icon>&nbsp;
-                                                    <span>8844-5020</span>
+                                                    <span>8080-1779</span>
                                                     
                                                 </div>
                                             </div>

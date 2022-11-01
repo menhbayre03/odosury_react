@@ -49,10 +49,10 @@ class Partner extends Component {
 								<div
 									className="partnericon"
 									onClick={() => {
-										window.open("tel:+97688445020");
+										window.open("tel:+97680801779");
 									}}
 								>
-									+976 8844-5020
+									+976 8080-1779
 								</div>
 								<div
 									className="partnericon"
