@@ -18,7 +18,7 @@ class Home extends Component {
         this.state = {
             top: 6,
             up: false,
-            showLanding: true
+            // showLanding: true
         };
     }
     componentDidMount() {
@@ -426,7 +426,7 @@ class Home extends Component {
                     }
                 </Loader>
                 <Footer/>
-                <Modal size="lg" dialogClassName="landingModal" show={this.state.showLanding} onHide={() => this.setState({showLanding: false})}>
+                {/* <Modal size="lg" dialogClassName="landingModal" show={this.state.showLanding} onHide={() => this.setState({showLanding: false})}>
                     <Modal.Body>
                         <div className="modalCont">
                             <img src="/images/odosuryModal.jpg" />
@@ -434,7 +434,7 @@ class Home extends Component {
                         </div>
                         
                     </Modal.Body>
-                </Modal>
+                </Modal> */}
             </React.Fragment>
         );
     }
