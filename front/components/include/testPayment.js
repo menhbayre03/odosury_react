@@ -14,7 +14,7 @@ import Loader from "../include/Loader";
 import QRCode from "react-qr-code";
 
 export default function TestPayment(self, props) {
-	console.log('testpayment componenthit', );
+	console.log('testpayment componenthit',);
 	const {
 		main: { eishPrice },
 		payment: {
@@ -91,7 +91,7 @@ export default function TestPayment(self, props) {
 								<span className="leftT">Тест</span>
 							</p>
 							{appliedDiscount ||
-							(type === "test" && test.sale > 0) ? (
+								(type === "test" && test.sale > 0) ? (
 								<p>
 									<span className="rigthT">Үнэ: </span>
 									<span className="leftT trough">
@@ -108,22 +108,22 @@ export default function TestPayment(self, props) {
 										-
 										{test.sale > 0
 											? `${config.formatMoney(
-													(test.sale *
-														appliedDiscount) /
-														100
-											  )}₮ (${appliedDiscount}%)`
+												(test.sale *
+													appliedDiscount) /
+												100
+											)}₮ (${appliedDiscount}%)`
 											: `${config.formatMoney(
-													(test.price *
-														appliedDiscount) /
-														100
-											  )}₮ (-${appliedDiscount}%)`}
+												(test.price *
+													appliedDiscount) /
+												100
+											)}₮ (-${appliedDiscount}%)`}
 									</span>
 								</p>
 							) : null}
 							<p>
 								<span className="rigthT">
 									{appliedDiscount ||
-									(type === "test") & (test.sale > 0)
+										(type === "test") & (test.sale > 0)
 										? "Хямдарсан үнэ: "
 										: "Үнэ: "}
 								</span>
@@ -131,16 +131,16 @@ export default function TestPayment(self, props) {
 									{appliedDiscount > 0
 										? test.sale > 0
 											? useDiscount(
-													test.sale,
-													appliedDiscount
-											  )
+												test.sale,
+												appliedDiscount
+											)
 											: useDiscount(
-													test.price,
-													appliedDiscount
-											  )
+												test.price,
+												appliedDiscount
+											)
 										: test.sale > 0
-										? `${config.formatMoney(test.sale)}₮`
-										: `${config.formatMoney(test.price)}₮`}
+											? `${config.formatMoney(test.sale)}₮`
+											: `${config.formatMoney(test.price)}₮`}
 								</span>
 							</p>
 							<p>
@@ -166,8 +166,8 @@ export default function TestPayment(self, props) {
 										step === 1
 											? "leStepCurrent leStep"
 											: step > 1
-											? "leStep"
-											: "leStepGray"
+												? "leStep"
+												: "leStepGray"
 									}
 									style={{
 										backgroundColor: `rgba(${colors[1]})`
@@ -179,8 +179,8 @@ export default function TestPayment(self, props) {
 										step === 2
 											? "leStepCurrent leStep"
 											: step > 2
-											? "leStep"
-											: "leStepGray"
+												? "leStep"
+												: "leStepGray"
 									}
 									style={{
 										backgroundColor: `rgba(${colors[2]})`
@@ -192,8 +192,8 @@ export default function TestPayment(self, props) {
 										step === 3
 											? "leStepCurrent leStep"
 											: step > 3
-											? "leStep"
-											: "leStepGray"
+												? "leStep"
+												: "leStepGray"
 									}
 									style={{
 										backgroundColor: `rgba(${colors[3]})`
@@ -214,10 +214,9 @@ export default function TestPayment(self, props) {
 								<img
 									src={
 										(test.thumbnailSmall || {}).path
-											? `${
-													(test.thumbnailSmall || {})
-														.url
-											  }${test.thumbnailSmall.path}`
+											? `${(test.thumbnailSmall || {})
+												.url
+											}${test.thumbnailSmall.path}`
 											: "/images/defaultTestCard1.png"
 									}
 									onError={(e) =>
@@ -262,17 +261,15 @@ export default function TestPayment(self, props) {
 							<div>
 								<div className="paymentMethod">
 									<div
-										className={`bank method ${
-											method === "bank" ? "active" : ""
-										}`}
+										className={`bank method ${method === "bank" ? "active" : ""
+											}`}
 										onClick={() => self.setMethod("bank")}
 									>
 										<span>₮</span>Дансны шилжүүлэг
 									</div>
 									<div
-										className={`qpay method ${
-											method === "qpay" ? "active" : ""
-										}`}
+										className={`qpay method ${method === "qpay" ? "active" : ""
+											}`}
 										onClick={() => self.setMethod("qpay")}
 									>
 										<img
@@ -301,7 +298,7 @@ export default function TestPayment(self, props) {
 												"QR код авхад алдаа гарлаа."
 											)}
 											{transaction.status ===
-											"success" ? (
+												"success" ? (
 												<p
 													className="status"
 													style={{
@@ -378,7 +375,7 @@ export default function TestPayment(self, props) {
 												</p>
 											</div>
 											{transaction.status ===
-											"success" ? (
+												"success" ? (
 												<p
 													className="status"
 													style={{
@@ -412,7 +409,9 @@ export default function TestPayment(self, props) {
 												</p>
 												<p>
 													<span>ДАНСНЫ ДУГААР:</span>
-													<span>5069405796</span>
+													{/* <span>5069405796</span> */}
+													<span>5069405809</span>
+
 												</p>
 												<p>
 													<span>ДАНС ЭЗЭМШИГЧ:</span>

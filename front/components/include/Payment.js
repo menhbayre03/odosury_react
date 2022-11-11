@@ -177,9 +177,9 @@ class Payment extends Component {
 					promo_id: promocode ? promocode._id : null,
 					partnerCode: promocode
 						? {
-								code: code,
-								hash: hash
-						  }
+							code: code,
+							hash: hash
+						}
 						: null
 				})
 			);
@@ -339,13 +339,13 @@ class Payment extends Component {
 												{type === "premium"
 													? "Premium багц"
 													: type === "eish"
-													? "ЭЕШ багц"
-													: lesson.title}
+														? "ЭЕШ багц"
+														: lesson.title}
 											</span>
 										</p>
 										{appliedDiscount ||
-										(type === "lesson" &&
-											lesson.sale > 0) ? (
+											(type === "lesson" &&
+												lesson.sale > 0) ? (
 											<p>
 												<span className="rigthT">
 													Үнэ:{" "}
@@ -353,13 +353,13 @@ class Payment extends Component {
 												<span className="leftT trough">
 													{type === "premium"
 														? `${config.formatMoney(
-																premiumPrice
-														  )}₮`
+															premiumPrice
+														)}₮`
 														: type === "eish"
-														? `149'000₮`
-														: `${config.formatMoney(
+															? `149'000₮`
+															: `${config.formatMoney(
 																lesson.price
-														  )}₮`}
+															)}₮`}
 												</span>
 											</p>
 										) : null}
@@ -372,34 +372,34 @@ class Payment extends Component {
 													-
 													{type === "premium"
 														? `${config.formatMoney(
-																(premiumPrice *
-																	appliedDiscount) /
-																	100
-														  )}₮ (${appliedDiscount}%)`
+															(premiumPrice *
+																appliedDiscount) /
+															100
+														)}₮ (${appliedDiscount}%)`
 														: type === "eish"
-														? `${config.formatMoney(
+															? `${config.formatMoney(
 																(eishPrice *
 																	appliedDiscount) /
+																100
+															)}₮ (${appliedDiscount}%)`
+															: lesson.sale > 0
+																? `${config.formatMoney(
+																	(lesson.sale *
+																		appliedDiscount) /
 																	100
-														  )}₮ (${appliedDiscount}%)`
-														: lesson.sale > 0
-														? `${config.formatMoney(
-																(lesson.sale *
-																	appliedDiscount) /
+																)}₮ (${appliedDiscount}%)`
+																: `${config.formatMoney(
+																	(lesson.price *
+																		appliedDiscount) /
 																	100
-														  )}₮ (${appliedDiscount}%)`
-														: `${config.formatMoney(
-																(lesson.price *
-																	appliedDiscount) /
-																	100
-														  )}₮ (-${appliedDiscount}%)`}
+																)}₮ (-${appliedDiscount}%)`}
 												</span>
 											</p>
 										) : null}
 										<p>
 											<span className="rigthT">
 												{appliedDiscount ||
-												(type === "lesson") &
+													(type === "lesson") &
 													(lesson.sale > 0)
 													? "Хямдарсан үнэ: "
 													: "Үнэ: "}
@@ -408,38 +408,38 @@ class Payment extends Component {
 												{appliedDiscount > 0
 													? type === "premium"
 														? useDiscount(
-																premiumPrice,
-																appliedDiscount
-														  )
+															premiumPrice,
+															appliedDiscount
+														)
 														: type === "eish"
-														? useDiscount(
+															? useDiscount(
 																eishPrice,
 																appliedDiscount
-														  )
-														: lesson.sale > 0
-														? useDiscount(
-																lesson.sale,
-																appliedDiscount
-														  )
-														: useDiscount(
-																lesson.price,
-																appliedDiscount
-														  )
+															)
+															: lesson.sale > 0
+																? useDiscount(
+																	lesson.sale,
+																	appliedDiscount
+																)
+																: useDiscount(
+																	lesson.price,
+																	appliedDiscount
+																)
 													: type === "premium"
-													? `${config.formatMoney(
+														? `${config.formatMoney(
 															premiumPrice
-													  )}₮`
-													: type === "eish"
-													? `${config.formatMoney(
-															eishPrice
-													  )}₮`
-													: lesson.sale > 0
-													? `${config.formatMoney(
-															lesson.sale
-													  )}₮`
-													: `${config.formatMoney(
-															lesson.price
-													  )}₮`}
+														)}₮`
+														: type === "eish"
+															? `${config.formatMoney(
+																eishPrice
+															)}₮`
+															: lesson.sale > 0
+																? `${config.formatMoney(
+																	lesson.sale
+																)}₮`
+																: `${config.formatMoney(
+																	lesson.price
+																)}₮`}
 											</span>
 										</p>
 										<p>
@@ -452,8 +452,8 @@ class Payment extends Component {
 														? `${duration} сар`
 														: "1 жил"
 													: type === "eish"
-													? "1 жил"
-													: "1 жил"}
+														? "1 жил"
+														: "1 жил"}
 											</span>
 										</p>
 									</div>
@@ -471,8 +471,8 @@ class Payment extends Component {
 													step === 1
 														? "leStepCurrent leStep"
 														: step > 1
-														? "leStep"
-														: "leStepGray"
+															? "leStep"
+															: "leStepGray"
 												}
 												style={{
 													backgroundColor: `rgba(${colors[1]})`
@@ -484,8 +484,8 @@ class Payment extends Component {
 													step === 2
 														? "leStepCurrent leStep"
 														: step > 2
-														? "leStep"
-														: "leStepGray"
+															? "leStep"
+															: "leStepGray"
 												}
 												style={{
 													backgroundColor: `rgba(${colors[2]})`
@@ -497,8 +497,8 @@ class Payment extends Component {
 													step === 3
 														? "leStepCurrent leStep"
 														: step > 3
-														? "leStep"
-														: "leStepGray"
+															? "leStep"
+															: "leStepGray"
 												}
 												style={{
 													backgroundColor: `rgba(${colors[3]})`
@@ -629,16 +629,14 @@ class Payment extends Component {
 															lesson.thumbnailSmall ||
 															{}
 														).path
-															? `${
-																	(
-																		lesson.thumbnailSmall ||
-																		{}
-																	).url
-															  }${
-																	lesson
-																		.thumbnailSmall
-																		.path
-															  }`
+															? `${(
+																lesson.thumbnailSmall ||
+																{}
+															).url
+															}${lesson
+																.thumbnailSmall
+																.path
+															}`
 															: "/images/default-lesson.jpg"
 													}
 													onError={(e) =>
@@ -652,11 +650,10 @@ class Payment extends Component {
 										<div>
 											<div className="paymentMethod">
 												<div
-													className={`bank method ${
-														method === "bank"
+													className={`bank method ${method === "bank"
 															? "active"
 															: ""
-													}`}
+														}`}
 													onClick={() =>
 														this.setMethod("bank")
 													}
@@ -665,11 +662,10 @@ class Payment extends Component {
 													шилжүүлэг
 												</div>
 												<div
-													className={`qpay method ${
-														method === "qpay"
+													className={`qpay method ${method === "qpay"
 															? "active"
 															: ""
-													}`}
+														}`}
 													onClick={() =>
 														this.setMethod("qpay")
 													}
@@ -687,7 +683,7 @@ class Payment extends Component {
 										<Loader status={paymentLaoding}>
 											{(transaction || {})._id ? (
 												transaction.method ===
-												"qpay" ? (
+													"qpay" ? (
 													<div className="qrPayment">
 														{(
 															transaction.qpay ||
@@ -707,7 +703,7 @@ class Payment extends Component {
 															"QR код авхад алдаа гарлаа."
 														)}
 														{transaction.status ===
-														"success" ? (
+															"success" ? (
 															<p
 																className="status"
 																style={{
@@ -806,7 +802,7 @@ class Payment extends Component {
 															</p>
 														</div>
 														{transaction.status ===
-														"success" ? (
+															"success" ? (
 															<p
 																className="status"
 																style={{
@@ -858,7 +854,8 @@ class Payment extends Component {
 																{/*	5069405809*/}
 																{/*</span>*/}
 																<span>
-																	5069405796
+																	{/* 5069405796 */}
+																	5069405809
 																</span>
 															</p>
 															<p>
