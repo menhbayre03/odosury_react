@@ -4,8 +4,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const WebpackAssetsManifest = require("webpack-assets-manifest");
 const WebpackBundleAnalyzer = require("webpack-bundle-analyzer");
-// const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 module.exports = {
     mode: "production",
     entry: {
@@ -43,7 +42,7 @@ module.exports = {
                     ecma: 6,
                 },
             }),
-            new CssMinimizerPlugin({}),
+            new OptimizeCSSAssetsPlugin({}),
         ],
     },
     module: {
