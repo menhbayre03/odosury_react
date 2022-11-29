@@ -32,6 +32,7 @@
     "clean-webpack-plugin": "^4.0.0",
     "cross-env": "^7.0.3",
     "css-loader": "^6.4.0",
+    "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.4.0",
     "less": "^4.1.2",
     "less-loader": "^10.2.0",
@@ -46,8 +47,7 @@
     "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.3.1",
-    "webpack-hot-middleware": "^2.25.1",
-    "file-loader": "^6.2.0"
+    "webpack-hot-middleware": "^2.25.1"
   },
   "dependencies": {
     "@tinymce/tinymce-react": "^3.6.0",
@@ -55,6 +55,7 @@
     "array-move": "^2.2.2",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
+    "css-minimizer-webpack-plugin": "^4.2.2",
     "downloadjs": "^1.4.7",
     "express": "^4.17.1",
     "facebook-login": "^1.4.1",
