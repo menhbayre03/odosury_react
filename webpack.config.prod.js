@@ -1,39 +1,38 @@
-var path = require('path');
-var webpack = require('webpack');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const WebpackAssetsManifest = require('webpack-assets-manifest');
+var path = require("path");
+var webpack = require("webpack");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+const WebpackAssetsManifest = require("webpack-assets-manifest");
+const WebpackBundleAnalyzer = require("webpack-bundle-analyzer");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 module.exports = {
-    mode: 'production',
+    mode: "production",
     entry: {
-        front: [
-            './front/index'
-        ],
-        admin: [
-            './admin/index'
-        ]
+        front: ["./front/index"],
+        admin: ["./admin/index"],
     },
     output: {
-        path: path.resolve(__dirname, './static/dist'),
+        path: path.resolve(__dirname, "./static/dist"),
         filename: "[name].[hash].js",
-        chunkFilename: '[id]-[chunkhash].js',
-        publicPath: '/dist/'
+        chunkFilename: "[id]-[chunkhash].js",
+        publicPath: "/dist/",
     },
     plugins: [
+        new WebpackBundleAnalyzer.BundleAnalyzerPlugin(),
         new CleanWebpackPlugin(),
         new webpack.DefinePlugin({
-            'process.env': {
-                'NODE_ENV': JSON.stringify('production')
-            }
+            "process.env": {
+                NODE_ENV: JSON.stringify("production"),
+            },
         }),
-        new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /ja|it/),
-        new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.optimize.AggressiveMergingPlugin(),
+
         new WebpackAssetsManifest({
-            output: `${path.resolve(__dirname, './static/')}/manifest.json`,
+            output: `${path.resolve(__dirname, "./static/")}/manifest.json`,
             merge: true,
-            publicPath: '/dist/'
-        })
+            publicPath: "/dist/",
+        }),
     ],
     optimization: {
         minimize: true,
@@ -43,51 +42,54 @@ module.exports = {
                 terserOptions: {
                     ecma: 6,
                 },
-            })
+            }),
+            new OptimizeCSSAssetsPlugin({}),
         ],
     },
     module: {
         noParse: [/jszip.js$/],
         rules: [
             {
-                test: /\.(js|jsx)$/,
-                loader: 'babel-loader',
-                include: [path.resolve(__dirname, './front'), path.resolve(__dirname, './admin')]
+                test: /\.?js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        presets: ["@babel/preset-env", "@babel/preset-react"],
+                    },
+                },
             },
             {
                 test: /\.less$/,
                 use: [
-                    'style-loader',
-                    'css-loader',
+                    "style-loader",
+                    "css-loader",
                     {
-                        loader: 'less-loader',
+                        loader: "less-loader",
                         options: {
                             sourceMap: true,
                             lessOptions: {
                                 javascriptEnabled: true,
                             },
                         },
-                    }
-                ],
-            },
-            {
-                test: /\.css$/,
-                use: [
-                    {loader: "style-loader"}, {loader: "css-loader"}
-                ]
-            },
-            {
-                test: /\.(woff|woff2|ttf|eot|svg)(\?[\s\S]+)?$/,
-                loader: "url-loader?limit=10000&name=fonts/[name].[ext]"
-            },
-            {
-                test: /\.(png|jpe?g|gif)$/i,
-                use: [
-                    {
-                        loader: 'file-loader',
                     },
                 ],
-            }
-        ]
-    }
+            },
+            {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
+            },
+            {
+                test: /\.(png|jpg|gif|svg|woff|woff2|ttf|eot|svg)(\?[\s\S]+)?$/,
+                use: [
+                    {
+                        loader: "url-loader",
+                        options: {
+                            limit: 8192,
+                        },
+                    },
+                ],
+            },
+        ],
+    },
 };
