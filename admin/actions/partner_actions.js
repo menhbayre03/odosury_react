@@ -6,7 +6,6 @@ export function fetchPartners() {
 	return networkActions.requestGet(constants.fetchPartners, url);
 }
 export function fetchBatches(data) {
-	console.log("admin partner actions fetchBatches data", data);
 	let url = `/admin/api/partner/fetchBatches`;
 	return networkActions.requestGet(constants.fetchBatches, url, data);
 }
@@ -23,7 +22,6 @@ export function deleteBatch(data) {
 	return networkActions.requestPost(constants.deleteBatch, url, data);
 }
 export function submitPartner(data) {
-	console.log("data", data);
 	let url = `/admin/api/partner/submitPartner`;
 	return networkActions.requestPost(constants.submitPartner, url, data);
 }

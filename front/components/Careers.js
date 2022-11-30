@@ -32,7 +32,6 @@ class Careers extends Component {
 		const {
 			jobPost: { jobposts, loadingJobPosts }
 		} = this.props;
-		console.log(jobposts);
 		const renderJobs = (jobposts) => {
 			return (
 				<tr>

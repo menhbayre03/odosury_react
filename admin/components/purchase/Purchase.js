@@ -105,7 +105,6 @@ class Purchase extends React.Component {
             dispatch,
             purchase:{ status, transactions, all = 0, pageNum = 1, submitTransLoader, openModal, searchLoader, searchResult, item }
         } = this.props;
-        console.log('admin transactionsss', transactions);
         let pagination = {
             total : all,
             current: pageNum,
@@ -254,7 +253,6 @@ class Purchase extends React.Component {
                         rowExpandable: record => !!record.lesson || record.custom || !!record.test,
                         expandedRowRender: (record, index) =>
                             {
-                                console.log('record is admin', record.test);
                                 return <Row key={index} gutter={[8, 8]}>
                                 {
                                     record.custom ?

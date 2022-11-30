@@ -22,7 +22,6 @@ class Feedback extends React.Component {
 	}
 	deleteFeedback(data) {
 		this.props.dispatch(deleteFeedback(data));
-		console.log(data);
 	}
 	completedFeedback(data) {
 		this.props.dispatch(completedFeedback(data));

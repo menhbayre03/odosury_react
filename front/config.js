@@ -85,7 +85,6 @@ export function resultToLetter(num) {
     } else {
         res = 'F'
     }
-    console.log(num, res);
     return res;
 }
 

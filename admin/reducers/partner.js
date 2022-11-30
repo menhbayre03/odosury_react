@@ -55,7 +55,6 @@ export default (state = initialState, action) => {
 				fetchingBatches: true
 			};
 		case fetchBatches.RESPONSE:
-			console.log("fetchBatches response", action.json);
 			if (action.json.success) {
 				return {
 					...state,
@@ -162,13 +161,11 @@ export default (state = initialState, action) => {
 				};
 			}
 		case submitBatch.REQUEST:
-			console.log("partner red submitBatch");
 			return {
 				...state,
 				submittingBatch: true
 			};
 		case submitBatch.RESPONSE:
-			console.log("partner red response", action.json);
 			if (action.json.success) {
 				return {
 					...state,

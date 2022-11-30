@@ -1,7 +1,6 @@
 import * as networkActions from "./networkActions";
 import * as constants from "../actionTypes";
 export function validatePromoCode(data) {
-	console.log("promo actions validate hit", data);
 	let url = `/api/partner/verifyCode/`;
 	return networkActions.requestPost(constants.validatePromoCode, url, data);
 }

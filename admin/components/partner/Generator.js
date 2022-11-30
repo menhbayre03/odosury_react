@@ -11,7 +11,6 @@ class Generator extends Component {
 		this.state = {};
 	}
 	submit(e) {
-		console.log("E", e);
 		const { dispatch, partnerId } = this.props;
 		e.partner = partnerId;
 		dispatch(submitBatch({ partnerBatch: e }));
@@ -24,7 +23,6 @@ class Generator extends Component {
 			partner: { drawerOpen, batches, submittingBatch, successBatch },
 			partnerId
 		} = this.props;
-		console.log("successbatch", successBatch);
 		return (
 			<div className="partner-drawer">
 				{successBatch ? (
