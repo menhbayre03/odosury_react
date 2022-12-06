@@ -25,26 +25,28 @@ import {
 	deletePromoCode,
 	restorePromoCode
 } from "../actions/promo_actions";
+import{fetchBatches} from "../actions/partner_actions"
 
-const reducer = ({ promo }) => ({ promo });
+const reducer = ({ promo,partner }) => ({ promo,partner });
 
 class PromoCode extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			code: "",
-			discount: ""
+			discount: "",
+			promo:""
 		};
 	}
 
 	componentDidMount() {
 		this.props.dispatch(getPromoCode());
+		this.props.dispatch(fetchBatches());
 	}
 	submitPromoCode(vals) {
 		this.props.dispatch(submitPromoCode({ ...vals }));
 	}
 	deletePromoCode(data) {
-		console.log(data);
 		this.props.dispatch(deletePromoCode({ ...data }));
 	}
 	restorePromoCode(data) {
@@ -59,6 +61,9 @@ class PromoCode extends Component {
 				submittingPromoCode,
 				loadingPromoCode,
 				deletingPromoCode
+			},
+			partner:{
+				batches:batches
 			}
 		} = this.props;
 		const columns = [
@@ -146,6 +151,8 @@ class PromoCode extends Component {
 				)
 			}
 		];
+		const promosOfBatches = (batches ||[]).map((batch)=>{return{value:batch._id,label:batch.name}})
+		console.log("edited dxata",promosOfBatches)
 		return (
 			<Card
 				title={"Промо Код"}
@@ -211,6 +218,21 @@ class PromoCode extends Component {
 							allowClear
 							autoComplete="off"
 							className="PCinput"
+						/>
+					</Form.Item>
+					<Form.Item name="promo" label="Промо">
+						<Select
+							placeholder="Холбох промо кодоо сонгоно уу"
+							value={this.state.promo}
+							onChange={(e) => {
+								this.setState({
+									promo: e
+								});
+							}}
+							allowClear
+							autoComplete="off"
+							className="PCinput"
+							options={promosOfBatches}
 						/>
 					</Form.Item>
 					<Button

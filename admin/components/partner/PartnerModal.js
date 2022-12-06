@@ -17,19 +17,16 @@ class PartnerModal extends Component {
 
 	componentDidMount() {}
 	toggleModal() {
-		console.log("toggleModal");
 		const { dispatch, self } = this.props;
 		self.setState({ modalPartner: "" }, () =>
 			dispatch(togglePartnerModal())
 		);
 	}
 	submit(e) {
-		console.log("e", e);
 		const { dispatch } = this.props;
 		dispatch(submitPartner({ partner: e }));
 	}
 	render() {
-		console.log("hi");
 		const {
 			partner: { modalOpen }
 		} = this.props;

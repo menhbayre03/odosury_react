@@ -25,7 +25,6 @@ class Batch extends Component {
 
 	componentDidMount() {
 		const { dispatch, partnerId } = this.props;
-		console.log("batch didmount", partnerId);
 		dispatch(fetchBatches({ partnerId: partnerId }));
 	}
 	toggleDrawer() {
@@ -133,7 +132,6 @@ class Batch extends Component {
 			partner: { drawerOpen, batches, codes },
 			partnerId
 		} = this.props;
-		console.log("codesrender", codes);
 		const { currentPage } = this.state;
 		return (
 			<Drawer

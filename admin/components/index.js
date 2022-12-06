@@ -42,7 +42,6 @@ class index extends React.Component {
     };
     async flush() {
         const result = await actions.flush();
-        console.log(result)
     };
     render() {
         let { main:{user}, location, route: {routes} } = this.props;

@@ -35,7 +35,6 @@ class MediaLib extends React.Component {
     getMedia(nums = -1 , search = false){
         let type = this.props.type;
         const {media: {medias}, data = [], forWhat} = this.props;
-        console.log(forWhat)
         type = type.replace('s', '');
         let dta = {type, forWhat:forWhat};
         const {name, year, selectedMonth, lesson} = this.state;
