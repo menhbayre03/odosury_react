@@ -374,12 +374,12 @@ class Purchase extends React.Component {
                     columns={columns}
                     pagination={pagination}
                     expandable={{
-                        rowExpandable: record => !!record.lesson || record.custom || !!record.test,
-                        expandedRowRender: (record, index) =>
-                            {
-                                return <Row key={index} gutter={[8, 8]}>
-                                {
-                                    record.custom ?
+                        rowExpandable: (record) =>
+                            !!record.lesson || record.custom || !!record.test,
+                        expandedRowRender: (record, index) => {
+                            return (
+                                <Row key={index} gutter={[8, 8]}>
+                                    {record.custom ? (
                                         <Col span={24}>
                                             <Card title={"Тайлбар: "} size={"small"}>
                                                 <List.Item>
