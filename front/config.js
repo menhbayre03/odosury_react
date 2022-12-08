@@ -1,9 +1,10 @@
-var {EventEmitter} = require('fbemitter');
+var { EventEmitter } = require("fbemitter");
 let config = {};
 let configList = {
     emitter: new EventEmitter(),
-    host:process.env.NODE_ENV == 'development' ? 'http://odosury.mn' : 'https://odosury.com',
-    hostMedia:process.env.NODE_ENV == 'development' ? 'http://cdn.odosury.mn' : 'https://cdn.odosury.com',
+    host: process.env.NODE_ENV == "development" ? "http://odosury.mn" : "https://odosury.com",
+    hostMedia:
+        process.env.NODE_ENV == "development" ? "http://odosury.mn/" : "https://odosury.com/",
 };
 let alphabet = {
     A: 1,
@@ -31,10 +32,10 @@ let alphabet = {
     W: 23,
     X: 24,
     Y: 25,
-    Z: 26
+    Z: 26,
 };
 
-config.lton = function(l) {
+config.lton = function (l) {
     // l[0]*26^n + l[1]*26^(n-1) + ... l[l.length - 1]*26^(0) + 26^(n-1) + ... + 26^1
     var n = l.length;
     var o = 0;
@@ -48,44 +49,60 @@ config.lton = function(l) {
 config.config = function (data) {
     configList = {
         ...configList,
-        ...data
-    }
+        ...data,
+    };
 };
 config.get = function (option) {
     return configList[option];
 };
 
-config.formatMoney = function (amount, decimalCount = 0, decimal = ".", thousands = "'", sign = "") {
+config.formatMoney = function (
+    amount,
+    decimalCount = 0,
+    decimal = ".",
+    thousands = "'",
+    sign = ""
+) {
     try {
         decimalCount = Math.abs(decimalCount);
         decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
 
         const negativeSign = amount < 0 ? "-" : "";
 
-        let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
-        let j = (i.length > 3) ? i.length % 3 : 0;
+        let i = parseInt((amount = Math.abs(Number(amount) || 0).toFixed(decimalCount))).toString();
+        let j = i.length > 3 ? i.length % 3 : 0;
 
-        return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) + sign : "");
+        return (
+            negativeSign +
+            (j ? i.substr(0, j) + thousands : "") +
+            i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) +
+            (decimalCount
+                ? decimal +
+                  Math.abs(amount - i)
+                      .toFixed(decimalCount)
+                      .slice(2) +
+                  sign
+                : "")
+        );
     } catch (e) {
-        console.log(e)
+        console.log(e);
     }
 };
 
-
 export function resultToLetter(num) {
-    let res = '';
-    if(num >=90){
-        res = 'A'
-    } else if(num >=80){
-        res = 'B'
-    } else if(num >=70){
-        res = 'C'
-    } else if(num >=60){
-        res = 'D'
+    let res = "";
+    if (num >= 90) {
+        res = "A";
+    } else if (num >= 80) {
+        res = "B";
+    } else if (num >= 70) {
+        res = "C";
+    } else if (num >= 60) {
+        res = "D";
     } else {
-        res = 'F'
+        res = "F";
     }
     return res;
 }
 
-export default config
+export default config;

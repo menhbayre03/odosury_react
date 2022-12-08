@@ -73,7 +73,6 @@ export default class AmjiltVideo extends Component {
                 config={{
                     file: {
                         attributes: {
-                            forceAudio: this.props.isAudio,
                             controlsList: "nodownload",
                         },
                     },

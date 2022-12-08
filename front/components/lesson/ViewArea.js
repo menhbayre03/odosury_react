@@ -109,8 +109,7 @@ class Bundle extends Component {
     }
 
     downloadFile(zip) {
-        let url =
-            config.get("hostMedia") + "/api/zip/" + zip._id + "?token=" + Cookies.get("token");
+        let url = config.get("hostMedia") + "api/zip/" + zip._id + "?token=" + Cookies.get("token");
         setTimeout(() => {
             var x = new XMLHttpRequest();
             x.open("GET", url, true);
@@ -229,7 +228,7 @@ class Bundle extends Component {
         if (program.video) {
             mediaUrl =
                 config.get("hostMedia") +
-                "/api/video/show/" +
+                "api/video/show/" +
                 program.video._id +
                 "?lessonId=" +
                 lessonView._id +
@@ -239,7 +238,7 @@ class Bundle extends Component {
         if (program.audio) {
             mediaUrl =
                 config.get("hostMedia") +
-                "/api/audio/show/" +
+                "api/audio/show/" +
                 program.audio._id +
                 "?lessonId=" +
                 lessonView._id +
@@ -249,7 +248,7 @@ class Bundle extends Component {
         if (program.pdf) {
             mediaUrl =
                 config.get("hostMedia") +
-                "/api/pdf/show/" +
+                "api/pdf/show/" +
                 program.pdf._id +
                 "?lessonId=" +
                 lessonView._id +
@@ -316,39 +315,10 @@ class Bundle extends Component {
                                 />
                             ) : null}
                             {program.video && mediaUrl && program.type === "video" ? (
-                                <AmjiltVideo src={mediaUrl} isAws={!!program.video.location} />
+                                <AmjiltVideo src={mediaUrl} isAws={true} />
                             ) : null}
                             {program.audio && mediaUrl && program.type === "audio" ? (
-                                <div>
-                                    <div style={{ padding: "0px 20px 10px" }}>
-                                        <ReactPlayer
-                                            playing
-                                            controls
-                                            onError={() =>
-                                                config
-                                                    .get("emitter")
-                                                    .emit("warning", "Хандах эрх хүрэхгүй байна.")
-                                            }
-                                            playIcon={
-                                                <ion-icon
-                                                    style={{ fontSize: 74, color: "#fff" }}
-                                                    name="play-circle"
-                                                />
-                                            }
-                                            height={60}
-                                            width={"100%"}
-                                            url={mediaUrl}
-                                            config={{
-                                                file: {
-                                                    forceAudio: true,
-                                                    attributes: {
-                                                        controlsList: "nodownload",
-                                                    },
-                                                },
-                                            }}
-                                        />
-                                    </div>
-                                </div>
+                                <AmjiltVideo src={mediaUrl} isAws={true} isAudio={true} />
                             ) : null}
                             {program.pdf && mediaUrl && program.type === "pdf" ? (
                                 <div className={"PdfView"}>

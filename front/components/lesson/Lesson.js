@@ -95,9 +95,7 @@ class Lesson extends Component {
                 "yes" +
                 "&token=" +
                 Cookies.get("token");
-            if (lesson.video.location) {
-                mediaAws = true;
-            }
+            mediaAws = true;
         }
         function ratingChanged(newRating) {
             let data = {
