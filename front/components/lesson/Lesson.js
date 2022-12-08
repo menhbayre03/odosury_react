@@ -87,7 +87,7 @@ class Lesson extends Component {
         if (lesson.video) {
             mediaUrl =
                 (lesson.video || {}).url +
-                "/api/video/show/" +
+                "api/video/show/" +
                 lesson.video._id +
                 "?lessonId=" +
                 lesson._id +
