@@ -34,7 +34,7 @@ export default [
         component: Main,
         routes: [
             {
-                component: Home,
+                component: List,
                 path: '/',
                 exact: true
             },
@@ -59,7 +59,7 @@ export default [
                 exact: true
             },
             {
-                component: Home,
+                component: List,
                 path: '/api/reset/password/:token',
                 exact: true
             },
