@@ -131,13 +131,33 @@ class List extends Component {
             <React.Fragment>
                 <Header location={this.props.location}/>
                 <div className="list-container" style={{minHeight: 'calc(100vh - 185px)'}}>
+                
                     <Container>
+                    <div className="eish-head" style={{
+                                backgroundImage: 'url("/images/eish-bg.jpg")',
+                                margin: '0 auto 30px auto',
+                                // width: 860,
+                                maxWidth: '100%',
+                                display: 'flex',
+                                justifyContent: 'flex-start',
+                                alignItems: 'flex-end',
+                                height: isMobile ? 220 : 360
+                            }}>
+                                <img src="/images/eish.png" alt="" style={{margin: 'unset', width: 620, maxWidth: '70%', height: 'auto'}}/>
+                                <h4>ЭЕШ БАГЦ</h4>
+                                <p>Амжилт кибер сургуулийн мэргэжлийн багш нараар бэлтгэгдсэн ЭЕШ-ийн хичээлүүд 99'000₮</p>
+                                <Link to="/premium" style={{ textDecoration: "none" }}>
+                                <button>PREMIUM БАГЦ АВАХ</button>
+								</Link>
+                            </div>
+                    
                         <Row>
                             {
                                 isMobile ? (
                                     this.renderSidebar()
                                 ) : null
                             }
+                            
                             <Col xl={9} lg={8} md={7} sm={12}>
                                 <div className="list-content">
                                     <div className="list-header">
@@ -158,24 +178,9 @@ class List extends Component {
                                             className="bad-select"
                                             onChange={(values) => this.setState({sort: values[0]})}
                                         />
+                                        
                                     </div>
-                            <div className="eish-head" style={{
-                                backgroundImage: 'url("/images/eish-bg.jpg")',
-                                margin: '0 auto 30px auto',
-                                width: 860,
-                                maxWidth: '100%',
-                                display: 'flex',
-                                justifyContent: 'flex-start',
-                                alignItems: 'flex-end',
-                                height: isMobile ? 220 : 360
-                            }}>
-                                <img src="/images/eish.png" alt="" style={{margin: 'unset', width: 620, maxWidth: '70%', height: 'auto'}}/>
-                                <h4>ЭЕШ БАГЦ</h4>
-                                <p>Амжилт кибер сургуулийн мэргэжлийн багш нараар бэлтгэгдсэн ЭЕШ-ийн хичээлүүд 99'000₮</p>
-                                <Link to="/premium" style={{ textDecoration: "none" }}>
-                                <button>PREMIUM БАГЦ АВАХ</button>
-								</Link>
-                            </div>
+                            
                             
                                     <div className="list-items maraa">
                                         <Loader status={loading}>
