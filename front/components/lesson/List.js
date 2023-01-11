@@ -28,16 +28,16 @@ class List extends Component {
         config.get('ga').pageview(window.location.pathname + window.location.search);
         window.scroll(0, 0);
         const {dispatch, match} = this.props;
-        dispatch(actions.getList(match.params.slug, {sort: this.state.sort.value, search: this.state.search}));
+        dispatch(actions.getList(match.params.slug || 'all', {sort: this.state.sort.value, search: this.state.search}));
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         const {dispatch, match} = this.props;
         if(match.params.slug !== prevProps.match.params.slug) {
-            dispatch(actions.getList(match.params.slug, {sort: this.state.sort.value, search: this.state.search}));
+            dispatch(actions.getList(match.params.slug || 'all', {sort: this.state.sort.value, search: this.state.search}));
         }
         if(this.state.sort.value !== prevState.sort.value) {
-            dispatch(actions.getList(match.params.slug, {sort: this.state.sort.value, search: this.state.search}));
+            dispatch(actions.getList(match.params.slug || 'all', {sort: this.state.sort.value, search: this.state.search}));
         }
     }
 
@@ -46,7 +46,7 @@ class List extends Component {
             e.preventDefault();
         }
         const {dispatch, match} = this.props;
-        dispatch(actions.getList(match.params.slug, {sort: this.state.sort.value, search: this.state.search}));
+        dispatch(actions.getList(match.params.slug || 'all', {sort: this.state.sort.value, search: this.state.search}));
     }
 
     onChange(e) {
@@ -55,7 +55,7 @@ class List extends Component {
 
     renderSidebar() {
         const {main: {categories}} = this.props;
-        let slug = this.props.match.params.slug;
+        let slug = this.props.match.params.slug || 'all';
         return (
             <Col xl={3} lg={4} md={5} sm={12} style={{marginBottom: 30}}>
                 <div className="list-sidebar">
@@ -78,6 +78,7 @@ class List extends Component {
                                 <li className={'cate-item'}>
                                     <Link to={`/lessons/all`}>
                                         {'all' === slug ? <ion-icon name="checkmark"/> : null}
+                                        {console.log(categories,'here')}
                                         <span>Бүгд ({(categories || []).reduce((total, item) => total + ((item || {}).child || []).reduce((total, aa) => total + (aa || {}).count, (item || {}).count), 0)})</span>
                                     </Link>
                                 </li>
@@ -130,13 +131,33 @@ class List extends Component {
             <React.Fragment>
                 <Header location={this.props.location}/>
                 <div className="list-container" style={{minHeight: 'calc(100vh - 185px)'}}>
+                
                     <Container>
+                    <div className="eish-head" style={{
+                                backgroundImage: 'url("/images/eish-bg.jpg")',
+                                margin: '0 auto 30px auto',
+                                // width: 860,
+                                maxWidth: '100%',
+                                display: 'flex',
+                                justifyContent: 'flex-start',
+                                alignItems: 'flex-end',
+                                height: isMobile ? 220 : 360
+                            }}>
+                                <img src="/images/eish.png" alt="" style={{margin: 'unset', width: 620, maxWidth: '70%', height: 'auto'}}/>
+                                <h4>ЭЕШ БАГЦ</h4>
+                                <p>Амжилт кибер сургуулийн мэргэжлийн багш нараар бэлтгэгдсэн ЭЕШ-ийн хичээлүүд 99'000₮</p>
+                                <Link to="/premium" style={{ textDecoration: "none" }}>
+                                <button>PREMIUM БАГЦ АВАХ</button>
+								</Link>
+                            </div>
+                    
                         <Row>
                             {
                                 isMobile ? (
                                     this.renderSidebar()
                                 ) : null
                             }
+                            
                             <Col xl={9} lg={8} md={7} sm={12}>
                                 <div className="list-content">
                                     <div className="list-header">
@@ -157,7 +178,10 @@ class List extends Component {
                                             className="bad-select"
                                             onChange={(values) => this.setState({sort: values[0]})}
                                         />
+                                        
                                     </div>
+                            
+                            
                                     <div className="list-items maraa">
                                         <Loader status={loading}>
                                             <Row>

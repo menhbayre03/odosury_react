@@ -34,7 +34,7 @@ export default [
         component: Main,
         routes: [
             {
-                component: Home,
+                component: List,
                 path: '/',
                 exact: true
             },
@@ -59,7 +59,7 @@ export default [
                 exact: true
             },
             {
-                component: Home,
+                component: List,
                 path: '/api/reset/password/:token',
                 exact: true
             },
@@ -73,11 +73,11 @@ export default [
                 path: '/premium',
                 exact: true
             },
-            {
-                component: Eish,
-                path: '/eishPage',
-                exact: true
-            },
+            // {
+            //     component: Eish,
+            //     path: '/eishPage',
+            //     exact: true
+            // },
             {
                 component: Contents,
                 path: '/content',
@@ -104,11 +104,11 @@ export default [
                 path: '/audio/:slug',
                 exact: true
             },
-            {
-                component: ListEish,
-                path: '/eish',
-                exact: true
-            },
+            // {
+            //     component: ListEish,
+            //     path: '/eish',
+            //     exact: true
+            // },
             {
                 component: List,
                 path: '/lessons/:slug',

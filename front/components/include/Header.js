@@ -202,7 +202,7 @@ class Header extends Component {
 													<Dropdown.Item>
 														<Link to={`/lessons/all`}>Курс Сургалт</Link>
 													</Dropdown.Item>
-													<Dropdown.Item>
+													{/* <Dropdown.Item>
 														<Link to={`/audios/all`}>Сонсдог ном</Link>
 													</Dropdown.Item>
 													<Dropdown.Item>
@@ -222,7 +222,7 @@ class Header extends Component {
 													</Dropdown.Item>
 													<Dropdown.Item>
 														<Link to={`/content`}>Танин мэдэхүй</Link>
-													</Dropdown.Item>
+													</Dropdown.Item> */}
 												</Dropdown.Menu>
 											</Dropdown>
 									) : (
@@ -230,7 +230,7 @@ class Header extends Component {
 											<li>
 												<Link to={`/lessons/all`}>Курс Сургалт</Link>
 											</li>
-											<li>
+											{/* <li>
 												<Link to={`/audios/all`}>Сонсдог ном</Link>
 											</li>
 											<li>
@@ -253,7 +253,7 @@ class Header extends Component {
 											</li>
 											<li>
 												<Link to={`/content`}>Танин мэдэхүй</Link>
-											</li>
+											</li> */}
 										</ul>
 									)}
 								</div>
