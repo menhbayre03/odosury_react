@@ -4,7 +4,7 @@ let configList = {
     emitter: new EventEmitter(),
     host: process.env.NODE_ENV == "development" ? "http://odosury.mn" : "https://odosury.com",
     hostMedia:
-        process.env.NODE_ENV == "development" ? "http://odosury.mn/" : "https://odosury.com/",
+        process.env.NODE_ENV == "development" ? "http://odosury.mn/" : "https://cdn.odosury.com/",
     socketUrl:
         process.env.NODE_ENV == "development" ? "http://odosury.mn:8080" : "https://odosury.com",
     fbApi: {},
