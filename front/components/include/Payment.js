@@ -661,7 +661,7 @@ class Payment extends Component {
 													<span>₮</span>Дансны
 													шилжүүлэг
 												</div>
-												<div
+												{/* <div
 													className={`qpay method ${method === "qpay"
 															? "active"
 															: ""
@@ -676,7 +676,7 @@ class Payment extends Component {
 													/>
 													QPAY үйлчилгээ ашиглан
 													шилжүүлэх.
-												</div>
+												</div> */}
 											</div>
 										</div>
 									) : (
@@ -855,7 +855,7 @@ class Payment extends Component {
 																{/*</span>*/}
 																<span>
 																	{/* 5069405796 */}
-																	5069405809
+																	5084614905
 																</span>
 															</p>
 															<p>
@@ -864,8 +864,9 @@ class Payment extends Component {
 																	ЭЗЭМШИГЧ:
 																</span>
 																<span>
-																	Том-Амжилт
-																	ХХК
+																	{/* Том-Амжилт
+																	ХХКxx */}
+																	Одоо сурья Амжилт
 																</span>
 															</p>
 															<p>
