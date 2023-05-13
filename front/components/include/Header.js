@@ -154,7 +154,7 @@ class Header extends Component {
 													fontWeight: 600
 												}}
 											>
-												8080-3910asdas
+												8080-3910
 											</span>{" "}
 											|{" "}
 											<span
