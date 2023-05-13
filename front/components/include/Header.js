@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import config from "../../config";
-import { Button, Container, Col, Row, Badge,Dropdown } from "react-bootstrap";
+import { Button, Container, Col, Row, Badge, Dropdown } from "react-bootstrap";
 import { isMobile } from "react-device-detect";
 import { Drawer } from "antd";
 import DropdownItem from "react-bootstrap/DropdownItem";
@@ -44,54 +44,54 @@ class Header extends Component {
 		e.preventDefault();
 		config.get("history").push(`/lessons/all`, { search: this.state.search });
 	}
-	
+
 	render() {
 		const { user = {}, premium, categories } = this.props;
 		const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-				<div className="user-menu">
-					<a ref={ref} onClick={(e)=>{
+			<div className="user-menu">
+				<a
+					ref={ref}
+					onClick={(e) => {
 						e.preventDefault();
 						onClick(e);
-					}}>
-						<span style={{ top: 4 }} className="userrOn">
-							<ion-icon
-								style={{ top: 4, fontSize: 18, marginRight: 10 }}
-								name="list-outline"
-							/>
-							<span
-								style={{
-										textTransform: "capitalize",
-										display: "unset",
-										position: "unset",
-										border: "none"
-										}}
-										>
-								{children}						
-							</span>
+					}}
+				>
+					<span style={{ top: 4 }} className="userrOn">
+						<ion-icon style={{ top: 4, fontSize: 18, marginRight: 10 }} name="list-outline" />
+						<span
+							style={{
+								textTransform: "capitalize",
+								display: "unset",
+								position: "unset",
+								border: "none"
+							}}
+						>
+							{children}
 						</span>
-					</a>
-				</div>
+					</span>
+				</a>
+			</div>
 		));
 		const NotifToggle = React.forwardRef(({ children, onClick }, ref) => (
 			<div className="user-menu">
-				<a ref={ref} onClick={(e)=>{
-					e.preventDefault();
-					onClick(e);
-				}}>
-					<span style={{ top: 4,marginRight:15 }} className="userrOn">
-						<ion-icon
-							style={{ top: 4, fontSize: 18, marginRight: 5 }}
-							name="notifications"
-						/>
+				<a
+					ref={ref}
+					onClick={(e) => {
+						e.preventDefault();
+						onClick(e);
+					}}
+				>
+					<span style={{ top: 4, marginRight: 15 }} className="userrOn">
+						<ion-icon style={{ top: 4, fontSize: 18, marginRight: 5 }} name="notifications" />
 						<span
 							style={{
-									textTransform: "capitalize",
-									display: "unset",
-									position: "unset",
-									border: "none"
-									}}
-									>
-										{children}						
+								textTransform: "capitalize",
+								display: "unset",
+								position: "unset",
+								border: "none"
+							}}
+						>
+							{children}
 						</span>
 					</span>
 				</a>
@@ -108,10 +108,7 @@ class Header extends Component {
 										<img src="/images/odosuryo.png" alt="" />
 									</Link>
 								</div>
-								<div
-									className="category-menu"
-									style={{ display: "inline-block", position: "relative" }}
-								>
+								<div className="category-menu" style={{ display: "inline-block", position: "relative" }}>
 									<Button onClick={() => this.setState({ cate: !this.state.cate })}>
 										<span>Ангилал</span>
 										<ion-icon name="caret-down-outline" />
@@ -157,7 +154,7 @@ class Header extends Component {
 													fontWeight: 600
 												}}
 											>
-												8080-1779
+												8080-3910
 											</span>{" "}
 											|{" "}
 											<span
@@ -166,7 +163,7 @@ class Header extends Component {
 													fontWeight: 600
 												}}
 											>
-												8080-1779
+												8080-3910
 											</span>
 										</p>
 										{/*<form onSubmit={(e) => this.search(e)}>*/}
@@ -190,19 +187,13 @@ class Header extends Component {
 							<div className="section-1">
 								<div className="header-menu">
 									{isMobile ? (
-											<Dropdown>
-												<Dropdown.Toggle 
-													as={
-														CustomToggle
-													}
-												>
-													Цэс
-												</Dropdown.Toggle>
-												<Dropdown.Menu variant='dark'>
-													<Dropdown.Item>
-														<Link to={`/lessons/all`}>Курс Сургалт</Link>
-													</Dropdown.Item>
-													{/* <Dropdown.Item>
+										<Dropdown>
+											<Dropdown.Toggle as={CustomToggle}>Цэс</Dropdown.Toggle>
+											<Dropdown.Menu variant="dark">
+												<Dropdown.Item>
+													<Link to={`/lessons/all`}>Курс Сургалт</Link>
+												</Dropdown.Item>
+												{/* <Dropdown.Item>
 														<Link to={`/audios/all`}>Сонсдог ном</Link>
 													</Dropdown.Item>
 													<Dropdown.Item>
@@ -223,8 +214,8 @@ class Header extends Component {
 													<Dropdown.Item>
 														<Link to={`/content`}>Танин мэдэхүй</Link>
 													</Dropdown.Item> */}
-												</Dropdown.Menu>
-											</Dropdown>
+											</Dropdown.Menu>
+										</Dropdown>
 									) : (
 										<ul>
 											<li>
@@ -264,31 +255,19 @@ class Header extends Component {
 										<li>
 											{(user || {})._id ? (
 												<div className="user-menu">
-											<Dropdown>
-												<Dropdown.Toggle as={
-													NotifToggle
-												}
-												>
-													Мэдэгдэл
-												</Dropdown.Toggle>
-												<Dropdown.Menu variant='dark'>
-													{
-														this.state.showNotf === false ? 
-														<div className='empty-data'>
-															<div className='emtry-text'>
-																Мэдээлэл байхгүй байна
-															</div>
-														</div>
-														:null
-													}
-												</Dropdown.Menu>
-											</Dropdown>
+													<Dropdown>
+														<Dropdown.Toggle as={NotifToggle}>Мэдэгдэл</Dropdown.Toggle>
+														<Dropdown.Menu variant="dark">
+															{this.state.showNotf === false ? (
+																<div className="empty-data">
+																	<div className="emtry-text">Мэдээлэл байхгүй байна</div>
+																</div>
+															) : null}
+														</Dropdown.Menu>
+													</Dropdown>
 													<Link to="/profile/info">
-														<span style={{ top: 4,marginRight:5 }} className="userrOn">
-															<ion-icon
-																style={{ top: 4, fontSize: 18, marginRight: 10 }}
-																name="person"
-															/>
+														<span style={{ top: 4, marginRight: 5 }} className="userrOn">
+															<ion-icon style={{ top: 4, fontSize: 18, marginRight: 10 }} name="person" />
 															{isMobile ? " " : "Профайл"}
 															<span
 																style={{
